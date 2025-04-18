@@ -72,7 +72,9 @@ const Navbar = () => {
                 </div>
                 <div className="flex justify-center w-full ">
                   <button className="w-full py-2 px-4">
-                    <h3 className="text-gray-700 font-medium text-lg">Lihat Semua</h3>
+                    <Link to="/notifikasi">
+                      <h3 className="text-gray-700 font-medium text-lg">Lihat Semua</h3>
+                    </Link>
                   </button>
                 </div>
               </div>
