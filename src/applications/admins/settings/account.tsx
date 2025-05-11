@@ -1,0 +1,47 @@
+import SideNavigation from "../../../components/adminNavigation/sideNavigation";
+import HeaderNavigation from "../../../components/adminNavigation/headerNavigation";
+import ButtonAdd from "../../../components/button/linkButton";
+import useAccount from "./hooks/useAccount";
+// import { useState } from "react";
+import TableAccount from "./components/tableAccount";
+import { useModal } from "../../../hooks/useModal";
+import ModalWarning from "../../../components/modal/modalWarning";
+
+const Account = () => {
+  const { users, limit, totalPages, currentPage, totalValue, handleDeleteUser } = useAccount();
+  const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message } = useModal();
+  const handleModal = (id: number | null, types: string) => {
+    if (types === "Delete") {
+      setId(id);
+      handleOpenModal(id, "DeleteUser");
+      setMessage("Apakah Anda Yakin Ingin Menghapus User Ini?");
+    }
+  };
+
+  return (
+    <>
+      <main className="flex flex-row w-full h-full bg-GREY01">
+        <div className="min-h-full w-[16%] bg-white">
+          <SideNavigation />
+        </div>
+        <div className="w-[84%]  border ">
+          <HeaderNavigation />
+          <div className="container mt-16 w-full">
+            <div className="bg-white p-6 rounded-md w-full">
+              <div className="flex flex-row justify-between mb-20">
+                <span className="text-3xl font-semibold">Pengaturan Akun</span>
+                <ButtonAdd url={"/pengaturan/akun/tambah/user"} />
+              </div>
+              <div className="">
+                <TableAccount data={users} limit={limit} totalPages={totalPages} currentPage={currentPage} totalTerms={totalValue} handleModal={handleModal} />
+              </div>
+              <ModalWarning modal={activeModal === "DeleteUser" || activeModal === "DeleteTerms"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteUser} />
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default Account;

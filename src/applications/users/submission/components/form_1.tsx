@@ -1,6 +1,16 @@
-import React from "react";
+import FieldDropdown from "../../../../components/input/FieldDropDown";
+import NextButton from "./nextButton";
 
-const Form_1 = () => {
+export type FormStepProps = {
+  // currentStep: number;
+  // setCurrentStep: (step: number) => void;
+  submissionType: string;
+  error: boolean;
+  handleChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void;
+  handleNextStep: () => void;
+};
+
+const Form_1 = ({ submissionType, error, handleChange, handleNextStep }: FormStepProps) => {
   return (
     <div className="flex flex-col">
       <div>
@@ -10,22 +20,24 @@ const Form_1 = () => {
         </div>
       </div>
       <div className="mt-20">
-        <label className="text-xl">
-          Jenis Pengajuan <span className="text-RED01">*</span>
-        </label>
-        <select
-          id="countries"
-          required
-          className="bg-gray-50 border mt-3 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          <option value="" disabled hidden>
-            Pilih Jenis Pengajuan
-          </option>
-          <option value="US">Hak Cipta</option>
-          <option value="CA">Paten</option>
-          <option value="FR">Merek</option>
-          <option value="DE">Desain Industri</option>
-        </select>
+        <FieldDropdown
+          label="Jenis Pengajuan"
+          name="role"
+          type="select"
+          value={submissionType}
+          onChange={handleChange}
+          options={[
+            { label: "Hak Cipta", value: "Hak Cipta" },
+            { label: "Paten", value: "Paten" },
+            { label: "Merek", value: "Merek" },
+            { label: "Desain Industri", value: "Desain Industri" },
+          ]}
+          error={error}
+          need
+        />
+      </div>
+      <div className="mt-20 w-full flex justify-end">
+        <NextButton onClick={handleNextStep} />
       </div>
     </div>
   );

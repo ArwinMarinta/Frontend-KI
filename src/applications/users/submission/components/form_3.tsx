@@ -1,42 +1,57 @@
-import React from "react";
+import NextButton from "./nextButton";
+import PrevButton from "./prevButton";
+import FormReview from "./formReview";
+import FormCopyright from "./formCopyright";
 
-const Form_3 = ({ submissionType }: { submissionType: string }) => {
+import { FormSubmissionCopyright, FormSubmissionCopyrightError } from "../../../../types/copyright";
+import { FormAdditionalBrand, FormSubmissionBrand, FormSubmissionBrandError } from "../../../../types/brandType";
+import FormBrand from "./formBrand";
+
+export interface Form3Type {
+  submissionType: string;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
+  draftPatent?: File | null;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  errorDraftPatent?: boolean;
+  handleNextStep: () => void;
+  formCopyright: FormSubmissionCopyright;
+  formCopyrightError: FormSubmissionCopyrightError;
+  handleChangeAdditional: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormAdditionalBrand) => void;
+  formBrand?: FormSubmissionBrand;
+  formBrandError?: FormSubmissionBrandError;
+  formAdditionalBrand?: FormAdditionalBrand[];
+}
+
+const Form_3 = ({ submissionType, currentStep, setCurrentStep, draftPatent, handleChange, errorDraftPatent, handleNextStep, formCopyright, formCopyrightError, handleChangeAdditional, formBrand, formBrandError, formAdditionalBrand }: Form3Type) => {
   return (
     <div className="flex flex-col">
       <div>
-        {(submissionType === "Paten" || submissionType === "DesainIndustri") && (
+        {(submissionType === "Paten" || submissionType === "Desain Industri") && (
           <div className="flex flex-col items-center mt-20">
             <h2 className="text-[32px] font-semibold">Dokumen Pengajuan Review</h2>
             <p className="text-justify mt-3">Permohonan anda akan di review terlebih dahulu oleh pihak Sentra Kekayaan Intelektual ITK</p>
           </div>
         )}
-        {(submissionType === "HakCipta" || submissionType === "Merek") && (
+        {(submissionType === "Hak Cipta" || submissionType === "Merek") && (
           <div className="flex flex-col items-center mt-20">
             <h2 className="text-[32px] font-semibold">Dokumen Pengajuan</h2>
-            <p className="text-justify mt-3">
-              Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.
-              <br /> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.
+            <p className="text-justify mt-3 flex flex-col w-full items-center">
+              <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
+              <span> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</span>
             </p>
           </div>
         )}
       </div>
       <div className="mt-20">
-        <label className="text-xl">
-          Jenis Pengajuan <span className="text-RED01">*</span>
-        </label>
-        <select
-          id="countries"
-          required
-          className="bg-gray-50 border mt-3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          <option value="" disabled hidden>
-            Pilih Jenis Pengajuan
-          </option>
-          <option value="US">Hak Cipta</option>
-          <option value="CA">Paten</option>
-          <option value="FR">Merek</option>
-          <option value="DE">Desain Industri</option>
-        </select>
+        {(submissionType === "Paten" || submissionType === "Desain Industri") && <FormReview draftPatent={draftPatent} handleChange={handleChange} errorDraftPatent={errorDraftPatent} />}
+        {submissionType === "Hak Cipta" && <FormCopyright formCopyright={formCopyright} formCopyrightError={formCopyrightError} handleChange={handleChange} />}
+        {submissionType === "Merek" && <FormBrand formBrand={formBrand} formBrandError={formBrandError} handleChange={handleChange} handleChangeAdditional={handleChangeAdditional} formAdditionalBrand={formAdditionalBrand} />}
+      </div>
+
+      <div className="mt-20 w-full flex-row gap-6 flex justify-end">
+        <PrevButton onClick={() => setCurrentStep(currentStep - 1)} />
+        <NextButton onClick={handleNextStep} />
       </div>
     </div>
   );

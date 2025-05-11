@@ -1,0 +1,59 @@
+import HeaderNavigation from "../../../components/adminNavigation/headerNavigation";
+import SideNavigation from "../../../components/adminNavigation/sideNavigation";
+import CreateButton from "../../../components/button/createButton";
+import FieldDropdown from "../../../components/input/FieldDropDown";
+import Field from "../../../components/input/fieldInput";
+import FieldPassword from "../../../components/input/fieldPassword";
+import useUserCreate from "./hooks/useUserCreate";
+
+const CreateAccount = () => {
+  const { formUser, handleChange, errors, handleSubmit } = useUserCreate();
+  return (
+    <>
+      <main className="flex flex-row w-full h-full bg-GREY01">
+        <div className="min-h-full w-[16%] bg-white">
+          <SideNavigation />
+        </div>
+        <div className="w-[84%]  border ">
+          <HeaderNavigation />
+          <div className="container  py-16 w-full">
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-md w-full">
+              <div className="flex flex-row justify-between mb-20">
+                <span className="text-3xl font-semibold">Tambah Pengguna</span>
+              </div>
+              <div className="flex flex-col gap-6">
+                <Field label="Nama Lengkap" value={formUser.fullname || ""} name="fullname" type="text" placeholder="Sentra Kekayaan Intelektual" onChange={handleChange} error={errors.fullname} need />
+                <Field label="Email" value={formUser.email || ""} name="email" type="email" placeholder="sentra@example.com" onChange={handleChange} error={errors.email} need />
+                <FieldDropdown
+                  label="Role"
+                  name="role"
+                  type="select"
+                  value={formUser.role}
+                  onChange={handleChange}
+                  options={[
+                    { label: "Super Admin", value: "superAdmin" },
+                    { label: "Admin", value: "admin" },
+                    { label: "User", value: "user" },
+                  ]}
+                  error={errors.role}
+                  need
+                />
+                <Field label="Nomor Telphone" value={formUser.phoneNumber || ""} name="phoneNumber" type="text" placeholder="" onChange={handleChange} />
+                <Field label="Instansi" value={formUser.institution || ""} name="institution" type="text" placeholder="" onChange={handleChange} />
+                <Field label="Fakultas" value={formUser.faculty || ""} name="faculty" type="text" placeholder="" onChange={handleChange} />
+                <Field label="Prodi" value={formUser.studyProgram || ""} name="studyProgram" type="text" placeholder="" onChange={handleChange} />
+                <FieldPassword label="Password" value={formUser.password || ""} name="password" type="password" placeholder="********" onChange={handleChange} error={errors.password} need />
+                <FieldPassword label="Konfirmasi Password" value={formUser.confirmPassword || ""} name="confirmPassword" type="password" placeholder="********" onChange={handleChange} error={errors.confirmPassword} need />
+              </div>
+              <div className="w-full flex justify-end mt-12">
+                <CreateButton type="submit" label="Tambah" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default CreateAccount;
