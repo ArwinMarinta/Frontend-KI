@@ -1,135 +1,57 @@
-import { Datepicker } from "flowbite-react";
 import React from "react";
+import BackButton from "../../../../../components/button/backButton";
+import Field from "../../../../../components/input/fieldInput";
+import { FormComplatePatenSubmission, FormComplatePatenSubmissionErrors } from "../../../../../types/submissionType";
+import FieldDropdown from "../../../../../components/input/FieldDropDown";
+import { brandClassOptions } from "../../../../../data/brand";
+import InputFile from "../field/InputFile";
 
-const FormComplatePatent = () => {
+interface FormComplatePatentProps {
+  formComplatePaten: FormComplatePatenSubmission;
+  formComplatePatenError: FormComplatePatenSubmissionErrors;
+  handleChangeComplatePaten: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+}
+
+const FormComplatePatent = ({ formComplatePaten, formComplatePatenError, handleChangeComplatePaten }: FormComplatePatentProps) => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="w-full">
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Judul Invensi <span className="text-RED01">*</span>
-        </label>
-        <input type="text" id="first_name" className="bg-gray-50 border border-BORDER01  text-base rounded-md focus:ring-PRIMARY01 focus:border-PRIMARY01 block w-full p-2 " placeholder="John" required />
+    <>
+      <div className="grid grid-cols-3 items-center h-24">
+        <div>
+          <BackButton url={"/histori-pengajuan"} />
+        </div>
+        <h1 className="text-center text-3xl w-full font-bold">Progress Pengajuan Hak Paten</h1>
       </div>
-
-      <div>
-        <div className="flex flex-row w-full gap-6">
-          <div className="w-full">
-            <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-              Jenis Paten <span className="text-RED01">*</span>
-            </label>
-            <select id="countries" required className="bg-gray-50 border mt-3 border-BORDER01 text-gray-900 text-base rounded-md focus:ring-PRIMARY01 focus:border-PRIMARY01 block w-full p-2 ">
-              <option value="" disabled hidden>
-                Pilih Jenis Pengajuan
-              </option>
-              <option value="Hak Cipta">Hak Cipta</option>
-              <option value="Paten">Paten</option>
-              <option value="Merek">Merek</option>
-              <option value="Desain Industri">Desain Industri</option>
-            </select>
-          </div>
-          <div className="w-full">
-            <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-              Sub-Jenis Paten <span className="text-RED01">*</span>
-            </label>
-            <select id="countries" required className="bg-gray-50 border mt-3 border-BORDER01 text-gray-900 text-base rounded-md focus:ring-PRIMARY01 focus:border-PRIMARY01 block w-full p-2 ">
-              <option value="" disabled hidden>
-                Pilih Jenis Pengajuan
-              </option>
-              <option value="Hak Cipta">Hak Cipta</option>
-              <option value="Paten">Paten</option>
-              <option value="Merek">Merek</option>
-              <option value="Desain Industri">Desain Industri</option>
-            </select>
+      <form className="flex flex-col gap-6">
+        <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="titleInvention" type="text" placeholder="" need error={!!formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />
+        <div className="flex flex-row gap-6">
+          <div className="flex flex-row w-full gap-6">
+            <FieldDropdown
+              label="Jenis Paten"
+              name="patentTypeId"
+              type="select"
+              value={formComplatePaten.patentTypeId?.toString() || ""}
+              onChange={handleChangeComplatePaten}
+              options={
+                brandClassOptions?.map((item) => ({
+                  label: item.label,
+                  value: item.value,
+                })) ?? []
+              }
+              error={!!formComplatePatenError.patentTypeId}
+              need
+            />
+            <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={!!formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} />
           </div>
         </div>
-      </div>
-
-      <div>
-        <div className="flex flex-row w-full gap-6">
-          <div className="w-full">
-            <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-              Negara Pertama Kali Diumumkan <span className="text-RED01">*</span>
-            </label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-BORDER01  text-base rounded-md focus:ring-PRIMARY01 focus:border-PRIMARY01 block w-full p-2 " placeholder="John" required />
-          </div>
-          <div className="w-full">
-            <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-              Kota Pertama Kali Diumumkan <span className="text-RED01">*</span>
-            </label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-BORDER01  text-base rounded-md focus:ring-PRIMARY01 focus:border-PRIMARY01 block w-full p-2 " placeholder="John" required />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div className="w-full">
-          <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-            Waktu Pertama Kali Diumumkan <span className="text-RED01">*</span>
-          </label>
-          <Datepicker
-            language="id"
-            theme={{
-              root: {
-                input: {
-                  field: {
-                    input: {
-                      base: "!bg-gray-50 !border !border-BORDER01 focus:!ring-PRIMARY01 focus:!border-PRIMARY01 !text-base !rounded-md block !w-full p-2 ",
-                    },
-                  },
-                },
-              },
-            }}
-          />
-        </div>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Dokumen Paten Keseluruhan <span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Deskripsi<span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Abstrak <span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Gambar Invensi <span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Surat Pernyataan Kepemilikan Invensi <span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-
-      <div>
-        <label htmlFor="first_name" className="block mb-2 text-lg font-medium ">
-          Surat Pengalihan Hak Atas Invensi <span className="text-RED01">*</span>
-        </label>
-        <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file"></input>
-        <span className="">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
-      </div>
-    </div>
+        <InputFile label="Klaim" value={formComplatePaten.claim} name="claim" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.claim} need />
+        <InputFile label="Deskripsi" value={formComplatePaten.description} name="description" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.description} need />
+        <InputFile label="Abstrak" value={formComplatePaten.abstract} name="abstract" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.abstract} need />
+        <InputFile label="Gambar Invensi" value={formComplatePaten.inventionImage} name="inventionImage" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.inventionImage} need />
+        <InputFile label="Surat Pernyataan Kepemilikan Invensi" value={formComplatePaten.statementInventionOwnership} name="statementInventionOwnership" required onChange={handleChangeComplatePaten} error={!!form} need />
+        <InputFile label="Surat Pengalihan Hak Invensi" value={formComplatePaten.le} name="labelBrand" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.entirePatentDocument} need />
+        <InputFile label="Label Merek" value={formComplatePaten.entirePatentDocument} name="labelBrand" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.entirePatentDocument} need />
+      </form>
+    </>
   );
 };
 

@@ -11,7 +11,7 @@ import usePersonalData from "../hooks/usePersonalData";
 import useDraftSubmission from "../hooks/useDraftSubmission";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../service/store";
-import { createSubmissionCopyright, createSubmissionIndustrialDesign, createSubmissionPaten } from "../../../../service/actions/submissionAction";
+import { createSubmissionBrand, createSubmissionCopyright, createSubmissionIndustrialDesign, createSubmissionPaten } from "../../../../service/actions/submissionAction";
 import useCopyright from "../hooks/useCopyright";
 import useBrand from "../hooks/useBrand";
 
@@ -22,7 +22,7 @@ const Submission = () => {
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError } = usePersonalData();
   const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent } = useDraftSubmission();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData } = useCopyright();
-  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand } = useBrand();
+  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, validateBrandData, setFormBrandError, formBrandError } = useBrand();
 
   const handleNextStep1 = () => {
     if (submissionType.trim() === "") {
@@ -103,14 +103,32 @@ const Submission = () => {
         setCurrentStep(currentStep + 1);
       }
     }
+
+    if (submissionType === "Merek") {
+      const error = validateBrandData(formBrand);
+      const hasError = Object.values(error).includes(true);
+
+      if (hasError) {
+        setFormBrandError(error);
+        return;
+      }
+
+      if (currentStep < 3) {
+        setCurrentStep(currentStep + 1);
+      }
+    }
   };
 
   const handleSubmit = () => {
+    if (submissionType === "Hak Cipta") {
+      dispatch(createSubmissionCopyright(1, personalData, formCopyright));
+    }
     if (submissionType === "Paten") {
       dispatch(createSubmissionPaten(2, personalData, draftPatent));
     }
-    if (submissionType === "Hak Cipta") {
-      dispatch(createSubmissionCopyright(1, personalData, formCopyright));
+
+    if (submissionType === "Merek") {
+      dispatch(createSubmissionBrand(3, personalData, formBrand, formAdditionalBrand));
     }
     if (submissionType === "Desain Industri") {
       dispatch(createSubmissionIndustrialDesign(4, personalData, draftPatent));
@@ -154,6 +172,11 @@ const Submission = () => {
                 handleChangeAdditional={handleChangeAdditionalBrand}
                 formBrand={formBrand}
                 formAdditionalBrand={formAdditionalBrand}
+                tempAdditionalBrand={tempAdditionalBrand}
+                addAdditionalBrand={addAdditionalBrand}
+                tempAdditionalBrandError={tempAdditionalBrandError}
+                handleDeleteAttempBrand={handleDeleteAttempBrand}
+                formBrandError={formBrandError}
               />
             )}
             {currentStep === 3 && <Form_4 currentStep={currentStep} setCurrentStep={setCurrentStep} submissionType={submissionType} personalData={personalData} draftPatent={draftPatent} handleSubmit={handleSubmit} formCopyright={formCopyright} />}

@@ -10,9 +10,9 @@ const useSubmissionType = () => {
     setSubmissionType(value);
 
     if (value.trim() === "") {
-      setError(true); // Menandakan bahwa input kosong
+      setError(true);
     } else {
-      setError(false); // Menandakan bahwa input valid
+      setError(false);
     }
   };
 

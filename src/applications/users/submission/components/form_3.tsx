@@ -4,7 +4,7 @@ import FormReview from "./formReview";
 import FormCopyright from "./formCopyright";
 
 import { FormSubmissionCopyright, FormSubmissionCopyrightError } from "../../../../types/copyright";
-import { FormAdditionalBrand, FormSubmissionBrand, FormSubmissionBrandError } from "../../../../types/brandType";
+import { FormAdditionalBrand, FormAdditionalBrandError, FormSubmissionBrand, FormSubmissionBrandError } from "../../../../types/brandType";
 import FormBrand from "./formBrand";
 
 export interface Form3Type {
@@ -17,13 +17,35 @@ export interface Form3Type {
   handleNextStep: () => void;
   formCopyright: FormSubmissionCopyright;
   formCopyrightError: FormSubmissionCopyrightError;
-  handleChangeAdditional: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormAdditionalBrand) => void;
+  handleChangeAdditional: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   formBrand?: FormSubmissionBrand;
   formBrandError?: FormSubmissionBrandError;
   formAdditionalBrand?: FormAdditionalBrand[];
+  tempAdditionalBrand?: FormAdditionalBrand;
+  addAdditionalBrand: () => void;
+  tempAdditionalBrandError: FormAdditionalBrandError;
+  handleDeleteAttempBrand: (index: number) => void;
 }
 
-const Form_3 = ({ submissionType, currentStep, setCurrentStep, draftPatent, handleChange, errorDraftPatent, handleNextStep, formCopyright, formCopyrightError, handleChangeAdditional, formBrand, formBrandError, formAdditionalBrand }: Form3Type) => {
+const Form_3 = ({
+  submissionType,
+  currentStep,
+  setCurrentStep,
+  draftPatent,
+  handleChange,
+  errorDraftPatent,
+  handleNextStep,
+  formCopyright,
+  formCopyrightError,
+  handleChangeAdditional,
+  formBrand,
+  formBrandError,
+  formAdditionalBrand,
+  tempAdditionalBrand,
+  addAdditionalBrand,
+  tempAdditionalBrandError,
+  handleDeleteAttempBrand,
+}: Form3Type) => {
   return (
     <div className="flex flex-col">
       <div>
@@ -46,7 +68,19 @@ const Form_3 = ({ submissionType, currentStep, setCurrentStep, draftPatent, hand
       <div className="mt-20">
         {(submissionType === "Paten" || submissionType === "Desain Industri") && <FormReview draftPatent={draftPatent} handleChange={handleChange} errorDraftPatent={errorDraftPatent} />}
         {submissionType === "Hak Cipta" && <FormCopyright formCopyright={formCopyright} formCopyrightError={formCopyrightError} handleChange={handleChange} />}
-        {submissionType === "Merek" && <FormBrand formBrand={formBrand} formBrandError={formBrandError} handleChange={handleChange} handleChangeAdditional={handleChangeAdditional} formAdditionalBrand={formAdditionalBrand} />}
+        {submissionType === "Merek" && (
+          <FormBrand
+            formBrand={formBrand}
+            formBrandError={formBrandError}
+            handleChange={handleChange}
+            handleChangeAdditional={handleChangeAdditional}
+            formAdditionalBrand={formAdditionalBrand}
+            tempAdditionalBrand={tempAdditionalBrand}
+            addAdditionalBrand={addAdditionalBrand}
+            tempAdditionalBrandError={tempAdditionalBrandError}
+            handleDeleteAttempBrand={handleDeleteAttempBrand}
+          />
+        )}
       </div>
 
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">

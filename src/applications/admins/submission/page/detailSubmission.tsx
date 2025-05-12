@@ -1,12 +1,13 @@
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
-import useDetailSubmussion from "../hooks/useDetailSubmussion";
+import useDetailSubmussion from "../../../../hooks/useDetailSubmussion";
 import Button from "../../../users/submissionHistory/components/button";
 import GeneralInformation from "../components/generalInformation";
 import PersonalDataSubmission from "../components/personalDataSubmission";
 import DocumentSubmissionPatent from "../components/documentSubmissionPatent";
 import DocumentSubmissionCopyright from "../components/documentSubmissionCopyright";
 import DocumentSubmissionIndutrialDesign from "../components/documentSubmissionIndutrialDesign";
+import DocumentSubmissionBrand from "../components/documentSubmissionBrand";
 
 const DetailSubmission = () => {
   const { detailSubmission, current, handleChange } = useDetailSubmussion();
@@ -36,6 +37,7 @@ const DetailSubmission = () => {
                     {detailSubmission?.submission.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
                     {detailSubmission?.submission.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
                     {detailSubmission?.submission.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
+                    {detailSubmission?.submission.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
                   </>
                 )}
               </div>

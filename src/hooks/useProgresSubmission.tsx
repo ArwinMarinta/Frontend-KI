@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { AppDispatch, RootState } from "../../../../service/store";
-import { getProgresSubmission } from "../../../../service/actions/submissionAction";
+import { AppDispatch, RootState } from "../service/store";
+import { getProgresSubmission } from "../service/actions/submissionAction";
 
 const useProgresSubmission = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +18,7 @@ const useProgresSubmission = () => {
 
   return {
     progresSubmission,
+    id,
   };
 };
 

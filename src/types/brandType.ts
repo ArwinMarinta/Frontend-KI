@@ -11,7 +11,7 @@ export type FormBrand = {
 
 export type FormSubmissionBrand = {
   applicationType: string;
-  brandType: string;
+  brandType: number | null;
   referenceName: string;
   elementColor: string;
   translate: string;
@@ -30,6 +30,10 @@ export type FormSubmissionBrand = {
 export type FormAdditionalBrand = {
   additionalDescriptions: string;
   additionalFiles: File | null;
+};
+export type FormAdditionalBrandError = {
+  additionalDescriptions: boolean;
+  additionalFiles: boolean;
 };
 
 export type FormSubmissionBrandError = {

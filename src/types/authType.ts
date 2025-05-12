@@ -5,7 +5,7 @@ export interface FormChangePassword {
 }
 
 export interface FormChangePasswordErros {
-  password: boolean;
+  password: string | null;
   newPassword: string | null;
   confirmPassword: string | null;
 }

@@ -55,7 +55,7 @@ const ManageDownload = () => {
                       accessor: "document",
                       render: (item: DocumentType) =>
                         item.document ? (
-                          <a href={`${API_FILE}/${item.cover}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          <a href={`${API_FILE}/image/${item.cover}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                             Lihat File
                           </a>
                         ) : (
@@ -67,7 +67,7 @@ const ManageDownload = () => {
                       accessor: "document",
                       render: (item: DocumentType) =>
                         item.document ? (
-                          <a href={`${API_FILE}/${item.document}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          <a href={`${API_FILE}/documents/${item.document}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                             Lihat File
                           </a>
                         ) : (

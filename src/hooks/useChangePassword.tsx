@@ -15,7 +15,7 @@ const useChangePassword = () => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<FormChangePasswordErros>({
-    password: false,
+    password: null,
     newPassword: null,
     confirmPassword: null,
   });
@@ -61,14 +61,14 @@ const useChangePassword = () => {
     e.preventDefault();
 
     const validationErrors = {
-      password: form.password.trim() === "",
+      password: form.password.trim() === "" ? "Password tidak boleh kosong" : null,
       newPassword: form.newPassword.trim() === "" ? "Password tidak boleh kosong" : null,
       confirmPassword: form.password !== form.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null,
     };
 
     setErrors(validationErrors);
 
-    if (!Object.values(validationErrors).includes(true)) {
+    if (Object.values(validationErrors).every((error) => error === null)) {
       dispatch(changePassword(form));
     }
   };

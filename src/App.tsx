@@ -11,11 +11,11 @@ import ForgotPassword from "./applications/authentication/forgotPassword/forgotP
 import RessetPassword from "./applications/authentication/forgotPassword/ressetPassword";
 import VerifyEmail from "./applications/authentication/register/verifyEmail";
 import UserProfile from "./applications/users/profile/userProfile";
-import SubmissionHistory from "./applications/users/submissionHistory/submissionHistory";
-import Assignment from "./applications/users/assignment/reviewerAssignment";
+import SubmissionHistory from "./applications/users/submissionHistory/page/submissionHistory";
+import Assignment from "./applications/users/assignment/page/reviewerAssignment";
 import ChangePassword from "./applications/authentication/changePassoword/changePassword";
-import SubmissionProgress from "./applications/users/submissionHistory/submissionProgress";
-import SubmissionDetail from "./applications/users/submissionHistory/submissionDetail";
+
+import SubmissionDetail from "./applications/users/submissionHistory/page/submissionDetail";
 import SubmissionComplete from "./applications/users/submission/page/submissionComplete";
 
 //url admin
@@ -52,6 +52,9 @@ import ReplyHelpCenter from "./applications/admins/informations/page/replyHelpCe
 import ProfileAdmin from "./applications/admins/profile/page/profile";
 import ProgresSubmission from "./applications/admins/submission/page/progresSubmission";
 import DetailSubmission from "./applications/admins/submission/page/detailSubmission";
+import SubmissionProgress from "./applications/users/submissionHistory/page/submissionProgress";
+import ReviewerProgress from "./applications/users/assignment/page/reviewerProgress";
+import ReviewerUpdateProgres from "./applications/users/assignment/page/reviewerUpdateProgres";
 
 function App() {
   return (
@@ -73,10 +76,13 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/histori-pengajuan" element={<SubmissionHistory />} />
         <Route path="/penugasan" element={<Assignment />} />
+        <Route path="/penugasan/progress/:id" element={<ReviewerProgress />} />
+        <Route path="/penugasan/progress/ubah/:id" element={<ReviewerUpdateProgres />} />
         <Route path="/ubah-password" element={<ChangePassword />} />
-        <Route path="/histori-pengajuan/progress" element={<SubmissionProgress />} />
-        <Route path="/histori-pengajuan/detail" element={<SubmissionDetail />} />
-        <Route path="/histori-pengajuan/lengkapi" element={<SubmissionComplete />} />
+        <Route path="/histori-pengajuan/progress/:id" element={<SubmissionProgress />} />
+        <Route path="/histori-pengajuan/detail/:id" element={<SubmissionDetail />} />
+        <Route path="/lengkapi-berkas-pengajuan" element={<SubmissionComplete />} />
+
         {/* url admin */}
         <Route path="/dashboard" element={<Dashboard />} />
 

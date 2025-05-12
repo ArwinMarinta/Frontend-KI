@@ -12,6 +12,7 @@ export interface Review {
   user: User | null;
   reviewer: User | null;
   submission: Submission | null;
+  progress: SubmissionProgress[];
 }
 
 export interface Submission {
@@ -28,7 +29,7 @@ export interface Submission {
   updatedAt: string;
   patent: PatentType | null;
   copyright: CopyrightType | null;
-  brand: string | null;
+  brand: SubmissionBrand | null;
   industrialDesign: IndustrialDesignType | null;
   submissionType: TypeSubmission;
   personalDatas: PersonalData[];
@@ -210,24 +211,38 @@ export type SubmissionPatent = {
   contohCiptaan: string;
 };
 
-export type SubmissionBrand = {
-  tipePermohonan: string;
-  tipeMerek: string;
-  namaRefrensiLabel: string;
-  unsurWarnaLabel: string;
-  terjemahanBahasaAsing: string;
-  pengucapanHurufNonLatin: string;
+export interface SubmissionBrand {
+  id: number;
+  applicationType: string;
+  brandTypeId: number;
+  referenceName: string;
+  elementColor: string;
+  translate: string;
+  pronunciation: string;
   disclaimer: string;
-  deskripsiMerek: string;
-  jenisDokumen: string;
-  keterangan: string;
-  labelMerek: string;
-  fileUnggahan: string;
-  tandaTanganPermohonan: string;
-  suratKeranganUmkm: string;
-  suratPernyataanUmkm: string;
-  labelBrand: LabelBrand[];
-};
+  description: string;
+  documentType: string;
+  information: string;
+  labelBrand: string | null;
+  fileUploade: string | null;
+  signature: string | null;
+  InformationLetter: string | null;
+  letterStatment: string | null;
+  createdAt: string;
+  updatedAt: string;
+  additionalDatas: BrandFile[];
+}
+
+export interface BrandFile {
+  id: number;
+  brandId: number;
+  fileName: string;
+  size: string;
+  description: string;
+  file: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface FormPersonalData {
   id: number;
@@ -253,4 +268,66 @@ export interface FormPersonalData {
   twitter: string | null;
   address: string;
   // ktpName: string;
+}
+
+export interface FormUpdateProgress {
+  reviewStatus: string;
+  comments: string;
+  paymentCode: string;
+  fileNames: string[];
+  files: File[];
+}
+
+export interface FormUpdateProgressErrors {
+  reviewStatus?: string | null;
+  paymentCode?: string | null;
+  files?: string | null;
+}
+
+export interface FormComplateIndustrialDesign {
+  titleDesign: string;
+  type: string;
+  typeDesignId: number;
+  subtypeDesignId: number;
+  claim: string;
+  looksPerspective: File | null;
+  frontView: File | null;
+  backView: File | null;
+  rightSideView: File | null;
+  lefttSideView: File | null;
+  topView: File | null;
+  downView: File | null;
+  moreImages: File | null;
+  letterTransferDesignRights: File | null;
+  designOwnershipLetter: File | null;
+  // createdAt: string; // ISO date string
+  // updatedAt: string; // ISO date string
+  // typeDesign: Record<string, any> | null;
+  // subTypeDesign: Record<string, any> | null;
+}
+
+export interface FormComplatePatenSubmission {
+  entirePatentDocument: File | null;
+  inventionTitle: string;
+  patentTypeId: number | string | null;
+  numberClaims: number | string | null;
+  description: File | null;
+  abstract: File | null;
+  claim: File | null;
+  inventionImage: File | null;
+  statementInventionOwnership: File | null;
+  letterTransferRightsInvention: File | null;
+}
+
+export interface FormComplatePatenSubmissionErrors {
+  entirePatentDocument?: string | null;
+  inventionTitle?: string | null;
+  patentTypeId?: string | null;
+  numberClaims?: string | null;
+  description?: string | null;
+  abstract?: string | null; 
+  claim?: string | null;
+  inventionImage?: string | null;
+  statementInventionOwnership?: string | null;
+  letterTransferRightsInvention?: string | null;
 }

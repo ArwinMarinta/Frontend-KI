@@ -58,7 +58,7 @@ const useProfile = () => {
     if (token) {
       dispatch(getMe());
     }
-  }, [dispatch, navigate, token]);
+  }, [dispatch, token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -103,7 +103,7 @@ const useProfile = () => {
     }
   };
 
-  return { user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors };
+  return { user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate };
 };
 
 export default useProfile;

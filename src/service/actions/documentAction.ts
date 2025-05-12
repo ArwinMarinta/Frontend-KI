@@ -203,7 +203,7 @@ export const createDocument = (title: string, file: File | null, cover: File | n
         formData.append("document", file);
       }
       if (cover) {
-        formData.append("document", cover);
+        formData.append("cover", cover);
       }
 
       await axios.post(`${API_URL}/document/by-type/${name}`, formData, {

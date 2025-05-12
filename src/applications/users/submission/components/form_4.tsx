@@ -4,6 +4,8 @@ import Field from "../../../../components/input/fieldInput";
 import { FormPersonalData } from "../../../../types/submissionType";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
 import { FormSubmissionCopyright } from "../../../../types/copyright";
+import { RootState } from "../../../../service/store";
+import { useSelector } from "react-redux";
 
 export type FormStepProps = {
   currentStep: number;
@@ -17,6 +19,11 @@ export type FormStepProps = {
 };
 
 const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, draftPatent, handleSubmit, formCopyright }: FormStepProps) => {
+  const { type, subtype } = useSelector((state: RootState) => state.landing.submissionType.copyright);
+
+  const typeLabel = type?.find((item) => String(item.id) === String(formCopyright?.typeCreation))?.title ?? "-";
+  const subtypeLabel = subtype?.find((item) => String(item.id) === String(formCopyright?.subTypeCreation))?.title ?? "-";
+
   return (
     <div className="flex flex-col">
       <div>
@@ -28,8 +35,30 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
           </p>
         </div>
       </div>
+
       <div className="mt-20 flex flex-col gap-10">
         <Field label="Jenis Pengajuan" value={submissionType} name="faculty" type="text" placeholder="" readOnly />
+
+        {submissionType === "Paten" || (submissionType === "Desain Industri" && <Field label="Drat Review Pengajuan" value={draftPatent ? draftPatent.name : ""} name="twitter" type="text" placeholder="" readOnly />)}
+        {submissionType === "Hak Cipta" && (
+          <div className="flex flex-col gap-6">
+            <Field label="Judul Penelitian" value={formCopyright?.titleInvention ?? ""} name="twitter" type="text" placeholder="" readOnly />
+            <div className="flex flex-row gap-6">
+              <Field label="Jenis Ciptaan" value={typeLabel} name="twitter" type="text" placeholder="" readOnly />
+              <Field label="Sub-Jenis Ciptaan" value={subtypeLabel} name="twitter" type="text" placeholder="" readOnly />
+            </div>
+            <div className="flex flex-row gap-6">
+              <Field label="Negara Pertama Kali Diumumkan" value={formCopyright?.countryFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
+              <Field label="Kota Pertama Kali Diumumkan" value={formCopyright?.cityFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
+            </div>
+            <Field label="Waktu Pertama Kali Diumumkan" value={formCopyright?.timeFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
+            <Field label="Surat Pernyataan" value={formCopyright?.statementLetter ? formCopyright.statementLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
+            <Field label="surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ? formCopyright.letterTransferCopyright.name : ""} name="twitter" type="text" placeholder="" readOnly />
+            <Field label="Contoh Ciptaan" value={formCopyright?.exampleCreation ? formCopyright.exampleCreation.name : ""} name="twitter" type="text" placeholder="" readOnly />
+          </div>
+        )}
+
+        {submissionType === "Merek"}
         <div className="flex flex-col gap-8">
           {personalData.map((item, index) => (
             <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
@@ -74,24 +103,6 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
               <Field label="Twitter" value={item.ktp ? item.ktp.name : ""} name="twitter" type="text" placeholder="" readOnly />
             </div>
           ))}
-          {submissionType === "Paten" || (submissionType === "Desain Industri" && <Field label="Drat Review Pengajuan" value={draftPatent ? draftPatent.name : ""} name="twitter" type="text" placeholder="" readOnly />)}
-          {submissionType === "Hak Cipta" && (
-            <div className="flex flex-col gap-6">
-              <Field label="Judul Penelitian" value={formCopyright?.titleInvention ?? ""} name="twitter" type="text" placeholder="" readOnly />
-              <div className="flex flex-row gap-6">
-                <Field label="Jenis Ciptaan" value={formCopyright?.typeCreation ?? ""} name="twitter" type="text" placeholder="" readOnly />
-                <Field label="Sub-Jenis Ciptaan" value={formCopyright?.subTypeCreation ?? ""} name="twitter" type="text" placeholder="" readOnly />
-              </div>
-              <div className="flex flex-row gap-6">
-                <Field label="Negara Pertama Kali Diumumkan" value={formCopyright?.typeCreation ?? ""} name="twitter" type="text" placeholder="" readOnly />
-                <Field label="Kota Pertama Kali Diumumkan" value={formCopyright?.subTypeCreation ?? ""} name="twitter" type="text" placeholder="" readOnly />
-              </div>
-              <Field label="Waktu Pertama Kali Diumumkan" value={formCopyright?.timeFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="Surat Pernyataan" value={formCopyright?.statementLetter ? formCopyright.statementLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ? formCopyright.letterTransferCopyright.name : ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="Contoh Ciptaan" value={formCopyright?.exampleCreation ? formCopyright.exampleCreation.name : ""} name="twitter" type="text" placeholder="" readOnly />
-            </div>
-          )}
         </div>
       </div>
       <div className="mt-20 w-full flex flex-row justify-end gap-6">

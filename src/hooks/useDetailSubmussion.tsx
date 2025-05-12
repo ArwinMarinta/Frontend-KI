@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../service/store";
-import { getDetailSubmission } from "../../../../service/actions/submissionAction";
+import { AppDispatch, RootState } from "../service/store";
+import { getDetailSubmission } from "../service/actions/submissionAction";
 import { useParams } from "react-router-dom";
-import { setNullDetail } from "../../../../service/reducers/submissionReducer";
+import { setNullDetail } from "../service/reducers/submissionReducer";
 
 const useDetailSubmussion = () => {
   const { id } = useParams<{ id: string }>();

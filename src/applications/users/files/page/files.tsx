@@ -1,7 +1,7 @@
 import Navbar from "../../../../components/navigations/navbar";
 import FileImage from "../../../../assets/images/files.webp";
-import FileUnduhan from "../../../../assets/images/file_unduhan.png";
 import useDocument from "../hooks/useDocument";
+import { API_FILE } from "../../../../config/config";
 
 const Files = () => {
   const { category, doc, handleCategoryChange } = useDocument();
@@ -45,30 +45,23 @@ const Files = () => {
                 </div>
               </form>
               <div className="grid grid-cols-3 gap-16 mt-10">
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
-                <div className="flex flex-col">
-                  <img src={FileUnduhan} />
-                  <span className="mt-4">Panduan - Hak Kekayaan Intelektual 2024 V2.pdf</span>
-                </div>
+                {doc?.map((item) => (
+                  <div key={item.id} className="flex flex-col">
+                    <div className="relative group w-full">
+                      <img src={`${API_FILE}/image/${item.cover}`} alt="cover" className="border border-BORDER01 rounded-md w-full h-[350px] object-cover" />
+
+                      {/* Overlay hitam transparan */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+
+                      {/* Tombol Unduh */}
+                      <a href={`${API_FILE}/image/${item.cover}`} download className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button className="bg-white text-black px-3 py-1 rounded shadow font-medium text-sm">Unduh</button>
+                      </a>
+                    </div>
+
+                    <span className="mt-4">{item.title}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </section>

@@ -19,8 +19,8 @@ export interface SubCopyrightType {
 
 export interface FormSubmissionCopyright {
   titleInvention: string;
-  typeCreation: string;
-  subTypeCreation: string;
+  typeCreation: number | null;
+  subTypeCreation: number | null;
   countryFirstAnnounced: string;
   cityFirstAnnounced: string;
   timeFirstAnnounced: string;

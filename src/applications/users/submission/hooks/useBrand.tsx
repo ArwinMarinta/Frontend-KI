@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { FormAdditionalBrand, FormSubmissionBrand } from "../../../../types/brandType";
+import { FormAdditionalBrand, FormAdditionalBrandError, FormSubmissionBrand } from "../../../../types/brandType";
 
 const useBrand = () => {
   const [formBrand, setFormBrand] = useState<FormSubmissionBrand>({
     applicationType: "",
-    brandType: "",
+    brandType: null,
     referenceName: "",
     elementColor: "",
     translate: "",
@@ -27,10 +27,7 @@ const useBrand = () => {
     additionalFiles: null,
   });
 
-  const [tempAdditionalBrandError, setTempAdditionalBrandError] = useState<{
-    additionalDescriptions: boolean;
-    additionalFiles: boolean;
-  }>({
+  const [tempAdditionalBrandError, setTempAdditionalBrandError] = useState<FormAdditionalBrandError>({
     additionalDescriptions: false,
     additionalFiles: false,
   });
@@ -52,6 +49,28 @@ const useBrand = () => {
     InformationLetter: false,
     letterStatment: false,
   });
+
+  const validateBrandData = (data: FormSubmissionBrand) => {
+    const error = {
+      applicationType: data.applicationType.trim() === "",
+      brandType: data.brandType === null,
+      referenceName: data.referenceName.trim() === "",
+      elementColor: data.elementColor.trim() === "",
+      translate: data.translate.trim() === "",
+      pronunciation: data.pronunciation.trim() === "",
+      disclaimer: data.disclaimer.trim() === "",
+      description: data.description.trim() === "",
+      documentType: data.documentType.trim() === "",
+      information: data.information.trim() === "",
+      labelBrand: data.labelBrand === null || data.labelBrand === undefined,
+      fileUploade: data.fileUploade === null || data.fileUploade === undefined,
+      signature: data.signature === null || data.signature === undefined,
+      InformationLetter: data.InformationLetter === null || data.InformationLetter === undefined,
+      letterStatment: data.letterStatment === null || data.letterStatment === undefined,
+    };
+
+    return error;
+  };
 
   const handleChangeBrand = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -81,17 +100,36 @@ const useBrand = () => {
     }
   };
 
-  const handleChangeAdditionalBrand = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof FormAdditionalBrand) => {
+  const handleChangeAdditionalBrand = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const name = e.target.name as keyof FormAdditionalBrand;
+
     if (e.target.type === "file") {
-      const file = (e.target as HTMLInputElement).files?.[0] || null;
+      const input = e.target as HTMLInputElement;
+      const file = input.files?.[0] || null;
+
       setTempAdditionalBrand((prev) => ({
         ...prev,
-        [field]: file,
+        [name]: file,
       }));
+
+      setTempAdditionalBrandError((prev) => ({
+        ...prev,
+        [name]: !file,
+      }));
+
+      // Reset input agar bisa pilih file yang sama lagi nanti
+      input.value = "";
     } else {
+      const value = e.target.value;
+
       setTempAdditionalBrand((prev) => ({
         ...prev,
-        [field]: e.target.value,
+        [name]: value,
+      }));
+
+      setTempAdditionalBrandError((prev) => ({
+        ...prev,
+        [name]: value.trim() === "",
       }));
     }
   };
@@ -119,6 +157,10 @@ const useBrand = () => {
     });
   };
 
+  const handleDeleteAttempBrand = (index: number) => {
+    setFormAdditionalBrand((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return {
     formBrand,
     formAdditionalBrand,
@@ -129,6 +171,9 @@ const useBrand = () => {
     addAdditionalBrand,
     handleChangeAdditionalBrand,
     tempAdditionalBrandError,
+    tempAdditionalBrand,
+    handleDeleteAttempBrand,
+    validateBrandData,
   };
 };
 

@@ -4,8 +4,8 @@ import { FormSubmissionCopyright } from "../../../../types/copyright";
 const useCopyright = () => {
   const [formCopyright, setFormCopyright] = useState<FormSubmissionCopyright>({
     titleInvention: "",
-    typeCreation: "",
-    subTypeCreation: "",
+    typeCreation: null,
+    subTypeCreation: null,
     countryFirstAnnounced: "",
     cityFirstAnnounced: "",
     timeFirstAnnounced: "",
@@ -30,8 +30,8 @@ const useCopyright = () => {
   const validateCopyrightData = (data: FormSubmissionCopyright) => {
     const error = {
       titleInvention: data.titleInvention.trim() === "",
-      typeCreation: data.typeCreation.trim() === "",
-      subTypeCreation: data.subTypeCreation.trim() === "",
+      typeCreation: data.typeCreation === null,
+      subTypeCreation: data.subTypeCreation === null,
       countryFirstAnnounced: data.countryFirstAnnounced.trim() === "",
       cityFirstAnnounced: data.cityFirstAnnounced.trim() === "",
       timeFirstAnnounced: data.timeFirstAnnounced.trim() === "",

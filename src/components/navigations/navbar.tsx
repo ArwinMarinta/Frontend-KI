@@ -15,7 +15,7 @@ import useProfile from "../../hooks/useProfile";
 const Navbar = () => {
   const location = useLocation();
 
-  const { user } = useProfile();
+  const { user, token } = useProfile();
 
   return (
     <nav className="w-full flex justify-center fixed top-0  z-50 bg-white">
@@ -29,16 +29,16 @@ const Navbar = () => {
             <ul className="flex flex-row gap-6">
               {NavbarData.map((data) => (
                 <li key={data.id} className={`${location.pathname === data.url ? "underline underline-offset-8 decoration-[3px] decoration-PRIMARY01" : ""}`}>
-                  <a className="text-base font-medium" href={data.url}>
+                  <Link to={data.url} className="text-base font-medium">
                     {data.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        {user === null && (
+        {token === null && (
           <div className="flex flex-row">
             <Link to="/login">
               <button className="bg-PRIMARY01 py-2 px-4 rounded-md text-white ">Masuk</button>

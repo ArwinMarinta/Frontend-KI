@@ -1,7 +1,7 @@
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import TimelineHistory from "../../../users/submissionHistory/components/progress/timelineHistory";
-import useProgresSubmission from "../hooks/useProgresSubmission";
+import useProgresSubmission from "../../../../hooks/useProgresSubmission";
 
 const ProgresSubmission = () => {
   const { progresSubmission } = useProgresSubmission();

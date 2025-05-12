@@ -3,6 +3,10 @@ import FieldDropdown from "../../../../components/input/FieldDropDown";
 import Field from "../../../../components/input/fieldInput";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
 import InputFile from "./field/InputFile";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../service/store";
+import { useEffect } from "react";
+import { getSubTypeCopyright, getTypeCopyright } from "../../../../service/actions/landingAction";
 
 interface FormCopyrightProps {
   formCopyright?: FormSubmissionCopyright;
@@ -11,6 +15,19 @@ interface FormCopyrightProps {
 }
 
 const FormCopyright = ({ formCopyright, formCopyrightError, handleChange }: FormCopyrightProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { type, subtype } = useSelector((state: RootState) => state.landing.submissionType.copyright);
+
+  useEffect(() => {
+    dispatch(getTypeCopyright());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (formCopyright?.typeCreation) {
+      dispatch(getSubTypeCopyright(formCopyright.typeCreation));
+    }
+  }, [dispatch, formCopyright?.typeCreation]);
+
   return (
     <div className="flex flex-col gap-6">
       <Field label="Judul Ciptaan" value={formCopyright?.titleInvention || ""} name="titleInvention" type="text" placeholder="" need error={formCopyrightError?.titleInvention} onChange={handleChange} />
@@ -21,12 +38,14 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange }: Form
             label="Jenis Hak Cipta"
             name="typeCreation"
             type="select"
-            value={formCopyright?.typeCreation ?? ""}
+            value={String(formCopyright?.typeCreation ?? null)}
             onChange={handleChange}
-            options={[
-              { label: "Musik", value: "Musik" },
-              { label: "Alat Daerah", value: "Alat Daerah" },
-            ]}
+            options={
+              type?.map((item) => ({
+                label: item.title,
+                value: item.id,
+              })) ?? []
+            }
             error={formCopyrightError?.typeCreation}
             need
           />
@@ -34,12 +53,14 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange }: Form
             label="Sub-Jenis Hak Cipta"
             name="subTypeCreation"
             type="select"
-            value={formCopyright?.subTypeCreation ?? ""}
+            value={String(formCopyright?.subTypeCreation ?? null)}
             onChange={handleChange}
-            options={[
-              { label: "Musik Rock", value: "Musik Rock" },
-              { label: "Musik Jazz", value: "Musik Jazz" },
-            ]}
+            options={
+              subtype?.map((item) => ({
+                label: item.title,
+                value: item.id,
+              })) ?? []
+            }
             error={formCopyrightError?.subTypeCreation}
             need
           />

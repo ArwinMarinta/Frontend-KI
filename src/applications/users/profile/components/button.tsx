@@ -1,16 +1,15 @@
-import { Link } from "react-router-dom";
-import { ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-interface ButtonProps {
-  text: string;
-  icon?: ReactNode;
-  url: string;
-}
+const NavLinkButton = ({ url, icon, text }: { url: string; icon: React.ReactNode; text: string }) => {
+  const location = useLocation();
+  const isActive = location.pathname === url;
 
-const Button = ({ text, icon, url }: ButtonProps) => {
   return (
     <Link to={url} className="w-full">
-      <button className="py-2 px-4 bg-PRIMARY01 w-full flex gap-2 text-white font-medium rounded-md items-center">
+      <button
+        className={`py-2 px-4 w-full flex gap-2 font-medium rounded-md items-center
+          ${isActive ? "bg-PRIMARY01 text-white" : "bg-white text-PRIMARY01 border border-PRIMARY01"}`}
+      >
         <div>{icon}</div>
         <span>{text}</span>
       </button>
@@ -18,4 +17,4 @@ const Button = ({ text, icon, url }: ButtonProps) => {
   );
 };
 
-export default Button;
+export default NavLinkButton;
