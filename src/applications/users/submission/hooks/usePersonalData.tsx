@@ -178,6 +178,16 @@ const usePersonalData = () => {
       },
     ]);
   };
+  const removeContributor = (index: number) => {
+    if (personalData.length <= 1) {
+      return;
+    }
+    const updatedData = personalData.filter((_, i) => i !== index);
+    const updatedError = personalDataError.filter((_, i) => i !== index);
+
+    setPersonalData(updatedData);
+    setPersonalDataError(updatedError);
+  };
   return {
     personalData,
     addContributor,
@@ -185,6 +195,8 @@ const usePersonalData = () => {
     validatePersonalData,
     personalDataError,
     setPersonalDataError,
+    setPersonalData,
+    removeContributor,
   };
 };
 

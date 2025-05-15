@@ -8,9 +8,13 @@ import Button from "./components/button";
 import { IoIosWarning } from "react-icons/io";
 import useHome from "./hooks/useHome";
 import { formatDateRange } from "../../../utils/formatDate";
+import { Link } from "react-router-dom";
+import useProfile from "../../../hooks/useProfile";
+import { FiArrowRightCircle } from "react-icons/fi";
 
 const Home = () => {
   const { period } = useHome();
+  const { token, user } = useProfile();
   return (
     <>
       <Navbar />
@@ -28,7 +32,26 @@ const Home = () => {
                 <h1 className="text-3xl xl:text-5xl font-bold text-start">
                   Selamat Datang di Sentra <br /> Kekayaan Intelektual ITK
                 </h1>
-                <p className="text-lg xl:text-xl mt-8 text-justify w-[80%] ">Sentra Kekayaan Intelektual (KI) ITK hadir untuk melindungi ide dan inovasi Anda. Kami memberikan layanan pengelolaan KI yang mencakup Hak Cipta, Paten, Merek, dan Desain Industri.</p>
+                <p className="text-lg xl:text-xl mt-8 text-justify w-[80%] mb-10 ">Sentra Kekayaan Intelektual (KI) ITK hadir untuk melindungi ide dan inovasi Anda. Kami memberikan layanan pengelolaan KI yang mencakup Hak Cipta, Paten, Merek, dan Desain Industri.</p>
+
+                {token ? (
+                  user?.role === "superAdmin" || user?.role === "admin" ? (
+                    <Link to="/dashboard" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
+                      <span>Ajukan</span>
+                      <FiArrowRightCircle />
+                    </Link>
+                  ) : (
+                    <Link to="/dashboard/pengajuan" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
+                      <span>Ajukan</span>
+                      <FiArrowRightCircle />
+                    </Link>
+                  )
+                ) : (
+                  <Link to="/login" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
+                    <span>Ajukan</span>
+                    <FiArrowRightCircle />
+                  </Link>
+                )}
               </div>
             </div>
           </div>

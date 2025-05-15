@@ -15,14 +15,13 @@ export type FormStepProps = {
   draftPatent?: File | null;
   handleSubmit: () => void;
   formCopyright?: FormSubmissionCopyright;
-  // handleNextStep: () => void;
 };
 
 const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, draftPatent, handleSubmit, formCopyright }: FormStepProps) => {
-  const { type, subtype } = useSelector((state: RootState) => state.landing.submissionType.copyright);
+  const { typeCopy, subTypeCopy } = useSelector((state: RootState) => state.landing.submissionType.copyright);
 
-  const typeLabel = type?.find((item) => String(item.id) === String(formCopyright?.typeCreation))?.title ?? "-";
-  const subtypeLabel = subtype?.find((item) => String(item.id) === String(formCopyright?.subTypeCreation))?.title ?? "-";
+  const typeLabel = typeCopy?.find((item) => String(item.id) === String(formCopyright?.typeCreation))?.title ?? "-";
+  const subtypeLabel = subTypeCopy?.find((item) => String(item.id) === String(formCopyright?.subTypeCreation))?.title ?? "-";
 
   return (
     <div className="flex flex-col">
@@ -37,9 +36,7 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
       </div>
 
       <div className="mt-20 flex flex-col gap-10">
-        <Field label="Jenis Pengajuan" value={submissionType} name="faculty" type="text" placeholder="" readOnly />
-
-        {submissionType === "Paten" || (submissionType === "Desain Industri" && <Field label="Drat Review Pengajuan" value={draftPatent ? draftPatent.name : ""} name="twitter" type="text" placeholder="" readOnly />)}
+        {(submissionType === "Paten" || submissionType === "Desain Industri") && <Field label="Drat Review Pengajuan" value={draftPatent ? draftPatent.name : ""} name="twitter" type="text" placeholder="" readOnly />}
         {submissionType === "Hak Cipta" && (
           <div className="flex flex-col gap-6">
             <Field label="Judul Penelitian" value={formCopyright?.titleInvention ?? ""} name="twitter" type="text" placeholder="" readOnly />
@@ -90,17 +87,21 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
                 <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" readOnly />
                 <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" readOnly />
               </div>
-              <div className="flex flex-col lg:flex-row lg:gap-6">
-                <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" readOnly />
-                <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" readOnly />
-              </div>
-              <div className="flex flex-col lg:flex-row lg:gap-6">
-                <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" readOnly />
-                <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" readOnly />
-              </div>
+              {submissionType === "Merek" && (
+                <>
+                  <div className="flex flex-col lg:flex-row lg:gap-6">
+                    <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" readOnly />
+                    <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" readOnly />
+                  </div>
+                  <div className="flex flex-col lg:flex-row lg:gap-6">
+                    <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" readOnly />
+                    <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" readOnly />
+                  </div>
+                </>
+              )}
 
               <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} readOnly />
-              <Field label="Twitter" value={item.ktp ? item.ktp.name : ""} name="twitter" type="text" placeholder="" readOnly />
+              <Field label="KTP" value={typeof item.ktp === "string" ? item.ktp : ""} name="twitter" type="text" placeholder="" readOnly />
             </div>
           ))}
         </div>

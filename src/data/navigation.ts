@@ -10,23 +10,23 @@ export const NavbarData: NavbarItem[] = [
     name: "Beranda",
     url: "/",
   },
+  // {
+  //   id: 2,
+  //   name: "Permohonan",
+  //   url: "/pengajuan",
+  // },
   {
     id: 2,
-    name: "Permohonan",
-    url: "/pengajuan",
-  },
-  {
-    id: 3,
     name: "Unduhan",
     url: "/unduhan",
   },
   {
-    id: 4,
+    id: 3,
     name: "FAQ",
     url: "/frequently-asked-question",
   },
   {
-    id: 5,
+    id: 4,
     name: "Hubungi Kami",
     url: "/hubungi-kami",
   },

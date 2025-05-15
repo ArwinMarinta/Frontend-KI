@@ -24,6 +24,7 @@ const useDraftSubmission = () => {
     handleDraftPatenChange,
     errorDraftPatent,
     setErrorDraftPatent,
+    setDraftPatent,
   };
 };
 

@@ -4,18 +4,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 const useComplate = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { type, submissionId, submissionType } = location.state || {};
+  const { types, submissionId, submissionType } = location.state || {};
+  console.log(types, submissionType, submissionId);
   useEffect(() => {
-    if (!type || !submissionType || !submissionId) {
+    // const invalidTypes = ["Merek", "Hak Cipta"];
+    if (!types || !submissionType || !submissionId) {
       navigate("*");
     }
-  }, [type, submissionType, submissionId, navigate]);
+    // if (types === "Lengkapi Berkas" && invalidTypes.includes(submissionType)) {
+    //   navigate("*");
+    // }
+  }, [types, submissionType, submissionId, navigate]);
 
-  console.log(type);
-  console.log(submissionId);
-  console.log(submissionType);
   return {
-    type,
+    types,
     submissionId,
     submissionType,
   };

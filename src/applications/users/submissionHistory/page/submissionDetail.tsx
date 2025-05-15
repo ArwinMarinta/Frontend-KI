@@ -1,4 +1,3 @@
-import Navbar from "../../../../components/navigations/navbar";
 import BackButton from "../../../../components/button/backButton";
 import useDetailSubmussion from "../../../../hooks/useDetailSubmussion";
 import Button from "../components/button";
@@ -8,18 +7,51 @@ import DocumentSubmissionPatent from "../../../admins/submission/components/docu
 import DocumentSubmissionCopyright from "../../../admins/submission/components/documentSubmissionCopyright";
 import DocumentSubmissionIndutrialDesign from "../../../admins/submission/components/documentSubmissionIndutrialDesign";
 import DocumentSubmissionBrand from "../../../admins/submission/components/documentSubmissionBrand";
+import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
+import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 
 const SubmissionDetail = () => {
-  const { detailSubmission, current, handleChange } = useDetailSubmussion();
+  const { detailSubmission, current, handleChange, submissionType, toSlug, status, terms } = useDetailSubmussion();
   return (
     <>
-      <Navbar />
-      <main className="flex w-full h-full justify-center">
+      <div className="flex flex-row w-full h-full bg-gray-100">
+        <div className="min-h-full w-[16%] bg-white">
+          <SideSubmisson />
+        </div>
+        <div className="w-[84%]  border  ">
+          <HeaderNavigation />
+          <div className="container  mt-16">
+            <div className="bg-white p-8">
+              <div className="grid grid-cols-3 items-center h-24 ">
+                <div>{status === "Riwayat" ? <BackButton url={`/histori-pengajuan/${toSlug(submissionType)}`} /> : <BackButton url={`/penugasan`} />}</div>
+                <h1 className="text-center text-3xl w-full font-bold">Riwayat Pengajuan</h1>
+              </div>
+              <div className="flex flex-row w-full justify-center mb-10">
+                <Button label="Informasi Umum" isActive={current === "Informasi Umum"} onClick={() => handleChange("Informasi Umum")} />
+                <Button label="Data Diri" isActive={current === "Data Diri"} onClick={() => handleChange("Data Diri")} />
+                <Button label="Dokumen Pengajuan" isActive={current === "Dokumen Pengajuan"} onClick={() => handleChange("Dokumen Pengajuan")} />
+              </div>
+              <div>
+                {current === "Informasi Umum" && <GeneralInformation terms={terms} data={detailSubmission} />}
+                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission.personalDatas} />}
+                {current === "Dokumen Pengajuan" && (
+                  <>
+                    {detailSubmission?.submission.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
+                    {detailSubmission?.submission.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
+                    {detailSubmission?.submission.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
+                    {detailSubmission?.submission.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <Navbar /> */}
+      {/* <main className="flex w-full h-full justify-center">
         <div className="container flex flex-col py-32 h-full gap-8 ">
           <div className="grid grid-cols-3 items-center h-24">
-            <div>
-              <BackButton url={"/histori-pengajuan"} />
-            </div>
+            <div>{status === "Riwayat" ? <BackButton url={`/histori-pengajuan/${toSlug(submissionType)}`} /> : <BackButton url={`/penugasan`} />}</div>
             <h1 className="text-center text-3xl w-full font-bold">Riwayat Pengajuan</h1>
           </div>
           <div className="flex flex-row w-full justify-center mb-10">
@@ -40,7 +72,7 @@ const SubmissionDetail = () => {
             )}
           </div>
         </div>
-      </main>
+      </main> */}
     </>
   );
 };

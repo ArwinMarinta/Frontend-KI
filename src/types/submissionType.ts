@@ -179,7 +179,15 @@ export interface SubmissionProgress {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
-  revisionFile: [];
+  revisionFile: FileAttachment[] | null;
+}
+export interface FileAttachment {
+  id: number;
+  progressId: number;
+  fileName: string;
+  file: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface TermsCondition {
@@ -260,7 +268,7 @@ export interface FormPersonalData {
   ward: string;
   postalCode: string;
   phoneNumber: string;
-  ktp: File | null;
+  ktp: string | File | null;
   isLeader: boolean;
   facebook: string | null;
   whatsapp: string | null;
@@ -284,12 +292,12 @@ export interface FormUpdateProgressErrors {
   files?: string | null;
 }
 
-export interface FormComplateIndustrialDesign {
+export interface FormComplateIndustDesign {
   titleDesign: string;
   type: string;
   typeDesignId: number;
   subtypeDesignId: number;
-  claim: string;
+  claim: string[];
   looksPerspective: File | null;
   frontView: File | null;
   backView: File | null;
@@ -306,8 +314,26 @@ export interface FormComplateIndustrialDesign {
   // subTypeDesign: Record<string, any> | null;
 }
 
+export interface FormDesignSubmissionErrors {
+  titleDesign?: string | null;
+  type?: string | null;
+  typeDesignId?: string | null;
+  subtypeDesignId?: string | null;
+  claim?: string | null;
+  looksPerspective?: string | null;
+  frontView?: string | null;
+  backView?: string | null;
+  rightSideView?: string | null;
+  lefttSideView?: string | null;
+  topView?: string | null;
+  downView?: string | null;
+  moreImages?: string | null;
+  letterTransferDesignRights?: string | null;
+  designOwnershipLetter?: string | null;
+}
+
 export interface FormComplatePatenSubmission {
-  entirePatentDocument: File | null;
+  // entirePatentDocument: File | null;
   inventionTitle: string;
   patentTypeId: number | string | null;
   numberClaims: number | string | null;
@@ -320,12 +346,12 @@ export interface FormComplatePatenSubmission {
 }
 
 export interface FormComplatePatenSubmissionErrors {
-  entirePatentDocument?: string | null;
+  // entirePatentDocument?: string | null;
   inventionTitle?: string | null;
   patentTypeId?: string | null;
   numberClaims?: string | null;
   description?: string | null;
-  abstract?: string | null; 
+  abstract?: string | null;
   claim?: string | null;
   inventionImage?: string | null;
   statementInventionOwnership?: string | null;

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./applications/users/home/home";
-import Submission from "./applications/users/submission/page/submission";
+// import Submission from "./applications/users/submission/page/submission";
 import Files from "./applications/users/files/page/files";
 import Faq from "./applications/users/faq/page/faq";
 import Contact from "./applications/users/contact_us/page/contact";
@@ -55,6 +55,12 @@ import DetailSubmission from "./applications/admins/submission/page/detailSubmis
 import SubmissionProgress from "./applications/users/submissionHistory/page/submissionProgress";
 import ReviewerProgress from "./applications/users/assignment/page/reviewerProgress";
 import ReviewerUpdateProgres from "./applications/users/assignment/page/reviewerUpdateProgres";
+import SubmissionUpdate from "./applications/users/submissionHistory/page/submissionUpdate";
+import SubmissionUserCopytight from "./applications/users/submission/page/submissionUserCopytight";
+import DashboardUser from "./applications/users/submission/page/dashboardUser";
+import SubmissionUserPaten from "./applications/users/submission/page/submissionUserPaten";
+import SubmissionUserBrand from "./applications/users/submission/page/submissionUserBrand";
+import SubmissionUserIndusDesign from "./applications/users/submission/page/submissionUserIndusDesign";
 
 function App() {
   return (
@@ -63,7 +69,7 @@ function App() {
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
-        <Route path="/pengajuan" element={<Submission />} />
+        {/* <Route path="/pengajuan" element={<Submission />} /> */}
         <Route path="/unduhan" element={<Files />} />
         <Route path="/frequently-asked-question" element={<Faq />} />
         <Route path="/hubungi-kami" element={<Contact />} />
@@ -74,18 +80,28 @@ function App() {
         <Route path="/resset-password/:token" element={<RessetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/histori-pengajuan" element={<SubmissionHistory />} />
-        <Route path="/penugasan" element={<Assignment />} />
-        <Route path="/penugasan/progress/:id" element={<ReviewerProgress />} />
-        <Route path="/penugasan/progress/ubah/:id" element={<ReviewerUpdateProgres />} />
-        <Route path="/ubah-password" element={<ChangePassword />} />
-        <Route path="/histori-pengajuan/progress/:id" element={<SubmissionProgress />} />
-        <Route path="/histori-pengajuan/detail/:id" element={<SubmissionDetail />} />
-        <Route path="/lengkapi-berkas-pengajuan" element={<SubmissionComplete />} />
 
+        <Route path="/penugasan" element={<Assignment />} />
+        <Route path="/penugasan/progress" element={<ReviewerProgress />} />
+        <Route path="/penugasan/progress/ubah" element={<ReviewerUpdateProgres />} />
+        <Route path="/ubah-password" element={<ChangePassword />} />
+
+        {/* dashboard pengajuan user */}
+        <Route path="/dashboard/pengajuan" element={<DashboardUser />} />
+        <Route path="/pengajuan/hak-cipta" element={<SubmissionUserCopytight />} />
+        <Route path="/pengajuan/paten" element={<SubmissionUserPaten />} />
+        <Route path="/pengajuan/merek" element={<SubmissionUserBrand />} />
+        <Route path="/pengajuan/desain-industri" element={<SubmissionUserIndusDesign />} />
+
+        {/* history */}
+
+        <Route path="/histori-pengajuan/progress" element={<SubmissionProgress />} />
+        <Route path="/histori-pengajuan/detail" element={<SubmissionDetail />} />
+        <Route path="/histori-pengajuan/ubah" element={<SubmissionUpdate />} />
+        <Route path="/lengkapi-berkas-pengajuan" element={<SubmissionComplete />} />
+        <Route path="/histori-pengajuan/:type" element={<SubmissionHistory />} />
         {/* url admin */}
         <Route path="/dashboard" element={<Dashboard />} />
-
         {/* permohonan */}
         <Route path="/permohonan/hak-cipta" element={<SubmissionCopyright />} />
         <Route path="/permohonan/paten" element={<SubmissionPatent />} />
@@ -94,7 +110,6 @@ function App() {
         <Route path="/permohonan/jenis/progres" element={<ProgresSubmission />} />
         <Route path="/permohonan/:name/detail/:id" element={<DetailSubmission />} />
         <Route path="/permohonan/:name/progres/:id" element={<ProgresSubmission />} />
-
         {/* Kategori dan jenis kekayaan intelektual */}
         <Route path="/kategori/kekayaan-intelektual" element={<IprCategory />} />
         <Route path="/kategori/hak-cipta" element={<CopyrightCategory />} />
@@ -115,20 +130,16 @@ function App() {
         <Route path="/manajemen/kategori/unduhan" element={<ManageCategoryDownload />} />
         {/* syarat dan ketentuan */}
         <Route path="/manajemen/syarat-ketentuan-pendanaan" element={<ManageTermConditionalFunding />} />
-
         {/* Pusat Bantuan */}
         <Route path="/informasi/pusat-bantuan" element={<HelpCenter />} />
         <Route path="/informasi/pusat-bantuan/balas/:ids" element={<ReplyHelpCenter />} />
-
         <Route path="/informasi/laporan-analisis" element={<ReportsAnalitic />} />
-
         <Route path="/informasi/log-aktivitas" element={<LogActivity />} />
         {/* pengaturan akun */}
         <Route path="/pengaturan/akun" element={<Account />} />
         <Route path="/pengaturan/akun/detail/user" element={<DetailAccount />} />
         <Route path="/pengaturan/akun/tambah/user" element={<CreateAccount />} />
         <Route path="/pengaturan/akun/ubah/user" element={<UpdateAccount />} />
-
         {/* Profile Admin */}
         <Route path="/profile/admin" element={<ProfileAdmin />} />
       </Routes>

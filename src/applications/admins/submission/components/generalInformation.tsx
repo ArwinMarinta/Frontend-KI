@@ -1,15 +1,14 @@
 import { DetailSubmissionType } from "../../../../types/submissionType";
 import Field from "../../../../components/input/fieldInput";
 import { formatIndonesianDate } from "../../../../utils/formatDate";
-import useTerms from "../../managements/hooks/useTerms";
+import { TermType } from "../../../../types/termsType";
 
 interface GeneralType {
   data: DetailSubmissionType | null;
+  terms: TermType[] | null;
 }
 
-const GeneralInformation = ({ data }: GeneralType) => {
-  const { terms } = useTerms();
-
+const GeneralInformation = ({ data, terms }: GeneralType) => {
   const selectedIds = new Set(data?.submission.termsConditions?.map((term) => term.id));
   return (
     <div className="flex flex-col gap-4">
@@ -20,7 +19,7 @@ const GeneralInformation = ({ data }: GeneralType) => {
       </div>
       <div className="flex flex-row gap-6">
         <Field label="Skema Pendanaan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Periode Pengajuan" value={data?.submission.brand || ""} name="fullname" type="text" placeholder="" readOnly />
+        <Field label="Periode Pengajuan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
 
       <div className="flex flex-col gap-2">

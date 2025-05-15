@@ -6,6 +6,7 @@ import { CopyrightType, SubCopyrightType } from "../../types/copyright";
 import { IndustialDesignSubType, IndustialDesignType } from "../../types/industrialDesignType";
 import { CategoryPatent } from "../../types/patentType";
 import { CategoryBrandType } from "../../types/brandType";
+import { TermType } from "../../types/termsType";
 
 interface LandingState {
   home: {
@@ -30,20 +31,22 @@ interface LandingState {
   };
   submissionType: {
     copyright: {
-      type: CopyrightType[] | null;
-      subtype: SubCopyrightType[] | null;
+      typeCopy: CopyrightType[] | null;
+      subTypeCopy: SubCopyrightType[] | null;
     };
     indusDesign: {
-      type: IndustialDesignType[] | null;
-      subtype: IndustialDesignSubType[] | null;
+      typeDesign: IndustialDesignType[] | null;
+      subtypeDesain: IndustialDesignSubType[] | null;
     };
     paten: {
-      type: CategoryPatent[] | null;
+      typePaten: CategoryPatent[] | null;
     };
     brand: {
-      type: CategoryBrandType[] | null;
+      typeBrand: CategoryBrandType[] | null;
     };
   };
+  terms: TermType[] | null;
+  qouta: Group[] | null;
 }
 
 const initialState: LandingState = {
@@ -69,20 +72,22 @@ const initialState: LandingState = {
   },
   submissionType: {
     copyright: {
-      type: null,
-      subtype: null,
+      typeCopy: null,
+      subTypeCopy: null,
     },
     indusDesign: {
-      type: null,
-      subtype: null,
+      typeDesign: null,
+      subtypeDesain: null,
     },
     paten: {
-      type: null,
+      typePaten: null,
     },
     brand: {
-      type: null,
+      typeBrand: null,
     },
   },
+  terms: null,
+  qouta: null,
 };
 
 const landingSlice = createSlice({
@@ -107,9 +112,15 @@ const landingSlice = createSlice({
     setSubmissionType: (state, action) => {
       state.submissionType = action.payload;
     },
+    setTermsLanding: (state, action) => {
+      state.terms = action.payload;
+    },
+    setQuota: (state, action) => {
+      state.qouta = action.payload;
+    },
   },
 });
 
-export const { setHome, setFaq, setFaqCategory, setDoc, setDocCategory, setSubmissionType } = landingSlice.actions;
+export const { setQuota, setHome, setFaq, setFaqCategory, setDoc, setDocCategory, setSubmissionType, setTermsLanding } = landingSlice.actions;
 
 export default landingSlice.reducer;

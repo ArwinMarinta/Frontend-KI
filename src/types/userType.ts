@@ -23,7 +23,7 @@ export interface User2 {
   phoneNumber: string | null;
   faculty: string | null;
   studyProgram: string | null;
-  role: "superAdmin" | "admin" | "user";
+  role: "superAdmin" | "admin" | "user" | "reviewer";
 }
 
 export interface User3 {

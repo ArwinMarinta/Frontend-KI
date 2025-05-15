@@ -18,7 +18,7 @@ const authSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       if (action.payload) {
-        setCookie("token", action.payload, 1);
+        setCookie("token", action.payload, 0.25);
       } else {
         removeCookie("token");
       }

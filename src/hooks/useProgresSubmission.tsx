@@ -1,24 +1,31 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../service/store";
 import { getProgresSubmission } from "../service/actions/submissionAction";
 
 const useProgresSubmission = () => {
-  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const { submissionId, submissionType } = location.state || {};
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { progresSubmission } = useSelector((state: RootState) => state.submission);
 
   useEffect(() => {
     if (token) {
-      dispatch(getProgresSubmission(id));
+      dispatch(getProgresSubmission(submissionId));
     }
-  }, [token, dispatch, id]);
+  }, [token, dispatch, submissionId]);
+
+  const toSlug = (text: string): string => {
+    return text.toLowerCase().replace(/\s+/g, "-");
+  };
 
   return {
     progresSubmission,
-    id,
+    submissionType,
+    toSlug,
+    submissionId,
   };
 };
 

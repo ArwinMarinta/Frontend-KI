@@ -2,10 +2,11 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setBrandData, setCopyrightData, setDetailSubmission, setIndustrialDesignData, setPatentData, setProgresSubmission } from "../reducers/submissionReducer";
-import { FormPersonalData, FormUpdateProgress } from "../../types/submissionType";
+import { FormComplateIndustDesign, FormComplatePatenSubmission, FormPersonalData, FormUpdateProgress } from "../../types/submissionType";
 import { FormSubmissionCopyright } from "../../types/copyright";
 import { FormAdditionalBrand, FormSubmissionBrand } from "../../types/brandType";
 import { getUserSubmission } from "./historyAction";
+import { FormSchema } from "../../types/schemaPayment";
 
 export const getSubmissionPatent = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -172,6 +173,7 @@ export const getDetailSubmission = (id: string | undefined): AppThunk => {
     }
   };
 };
+
 export const getProgresSubmission = (id: string | undefined): AppThunk => {
   return async (dispatch, getState) => {
     try {
@@ -231,7 +233,7 @@ export const deleteSubmission = (id: number | string | null, type: string, curre
     }
   };
 };
-export const deleteSubmissionUser = (id: number | string | null, type: string, currentPage: number, limit: number): AppThunk => {
+export const deleteSubmissionUser = (id: number | string | null, type: string | undefined, currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
       console.log(id);
@@ -282,6 +284,7 @@ export const createSubmissionPaten = (submissionType: number, formPersonalData: 
         formData.append(`personalDatas[${index}][ward]`, data.ward);
         formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        formData.append(`personalDatas[${index}][address]`, data.address);
         // Lampirkan file KTP jika ada
         // if (data.ktp) {
         //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
@@ -298,6 +301,150 @@ export const createSubmissionPaten = (submissionType: number, formPersonalData: 
       }
 
       const response = await axios.post(`${API_URL}/patent`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data.message);
+      alert(response.data.status);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const complateSubmissionPatent = (id: number, document: FormComplatePatenSubmission): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      console.log(id);
+
+      const formData = new FormData();
+      formData.append("inventionTitle", document.inventionTitle);
+      if (document.patentTypeId) formData.append("patentTypeId", document.patentTypeId.toString());
+      if (document.numberClaims) formData.append("numberClaims", document.numberClaims?.toString());
+      if (document.claim) formData.append("claim", document.claim);
+      if (document.description) formData.append("description", document.description);
+      if (document.abstract) formData.append("abstract", document.abstract);
+      if (document.inventionImage) formData.append("inventionImage", document.inventionImage);
+      if (document.statementInventionOwnership) formData.append("statementInventionOwnership", document.statementInventionOwnership);
+      if (document.letterTransferRightsInvention) formData.append("letterTransferRightsInvention", document.letterTransferRightsInvention);
+
+      const response = await axios.patch(`${API_URL}/patent/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data.message);
+      alert(response.data.status);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const complateSubmissionIndusDesign = (id: number, document: FormComplateIndustDesign): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      console.log(document);
+
+      const formData = new FormData();
+      formData.append("titleDesign", document.titleDesign);
+      formData.append("type", document.type);
+      formData.append("typeDesignId", document.typeDesignId.toString());
+      formData.append("subtypeDesignId", document.subtypeDesignId.toString());
+      formData.append("claim", JSON.stringify(document.claim));
+
+      if (document.looksPerspective) formData.append("looksPerspective", document.looksPerspective);
+      if (document.frontView) formData.append("frontView", document.frontView);
+      if (document.backView) formData.append("backView", document.backView);
+      if (document.rightSideView) formData.append("rightSideView", document.rightSideView);
+      if (document.lefttSideView) formData.append("lefttSideView", document.lefttSideView);
+      if (document.topView) formData.append("topView", document.topView);
+      if (document.downView) formData.append("downView", document.downView);
+      if (document.moreImages) formData.append("moreImages", document.moreImages);
+      if (document.designOwnershipLetter) formData.append("designOwnershipLetter", document.designOwnershipLetter);
+      if (document.letterTransferDesignRights) formData.append("letterTransferDesignRights", document.letterTransferDesignRights);
+
+      const response = await axios.patch(`${API_URL}/design-industri/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data.message);
+      alert(response.data.status);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateSubmissionPaten = (id: number, submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+      formData.append("submissionTypeId", submissionType.toString());
+
+      formPersonalData.forEach((data, index) => {
+        formData.append(`personalDatas[${index}][name]`, data.name);
+        formData.append(`personalDatas[${index}][email]`, data.email);
+        formData.append(`personalDatas[${index}][faculty]`, data.faculty ?? "");
+        formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram ?? "");
+        formData.append(`personalDatas[${index}][institution]`, data.institution);
+        formData.append(`personalDatas[${index}][work]`, data.work);
+        formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        formData.append(`personalDatas[${index}][province]`, data.province);
+        formData.append(`personalDatas[${index}][city]`, data.city);
+        formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        formData.append(`personalDatas[${index}][ward]`, data.ward);
+        formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        // formData.append(`personalDatas[${index}][address]`, data.address);
+        // Lampirkan file KTP jika ada
+        // if (data.ktp) {
+        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
+        // }
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktp", data.ktp); // append setiap file KTP dengan nama field yang sama
+        }
+      });
+      if (drafDocument) {
+        formData.append("draftPatentApplicationFile", drafDocument);
+      }
+
+      const response = await axios.patch(`${API_URL}/patent/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -340,6 +487,7 @@ export const createSubmissionIndustrialDesign = (submissionType: number, formPer
         formData.append(`personalDatas[${index}][ward]`, data.ward);
         formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        formData.append(`personalDatas[${index}][address]`, data.address);
       });
 
       formPersonalData.forEach((data) => {
@@ -395,6 +543,7 @@ export const createSubmissionCopyright = (submissionType: number, formPersonalDa
         formData.append(`personalDatas[${index}][ward]`, data.ward);
         formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        formData.append(`personalDatas[${index}][address]`, data.address);
         // Lampirkan file KTP jika ada
         // if (data.ktp) {
         //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
@@ -489,6 +638,7 @@ export const createSubmissionBrand = (submissionType: number, formPersonalData: 
         formData.append(`personalDatas[${index}][ward]`, data.ward);
         formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        formData.append(`personalDatas[${index}][address]`, data.address);
       });
 
       formPersonalData.forEach((data) => {
@@ -556,6 +706,40 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
       dispatch(getDetailSubmission(id));
 
       alert("success");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+      console.log(form);
+
+      const response = await axios.patch(
+        `${API_URL}/user-submission/submission-schema/${id}`,
+        {
+          periodId: form.periodId,
+          groupId: form.groupId,
+          submissionScheme: form.submissionScheme,
+          termsConditionId: form.termsConditionId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(response.data.message);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

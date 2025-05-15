@@ -1,15 +1,15 @@
 import Logo from "../../assets/logo_ki.webp";
 import { NavbarData } from "../../data/navigation";
-import ProfileImage from "../../assets/images/profile.webp";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
-import { Dropdown } from "flowbite-react";
-import { IoIosSettings } from "react-icons/io";
-import { BiTask } from "react-icons/bi";
-import { FiLogOut } from "react-icons/fi";
+// import ProfileImage from "../../assets/images/profile.webp";
+// import { IoMdNotificationsOutline } from "react-icons/io";
+// import { IoClose } from "react-icons/io5";
+// import { Dropdown } from "flowbite-react";
+// import { IoIosSettings } from "react-icons/io";
+// import { BiTask } from "react-icons/bi";
+// import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { RiHistoryLine } from "react-icons/ri";
+// import { RiHistoryLine } from "react-icons/ri";
 import useProfile from "../../hooks/useProfile";
 
 const Navbar = () => {
@@ -53,14 +53,19 @@ const Navbar = () => {
                 <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-medium">Dashboard</button>
               </Link>
             )}
+            {user.role !== "superAdmin" && user.role !== "admin" && (
+              <Link to="/dashboard/pengajuan">
+                <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-medium">Dashboard</button>
+              </Link>
+            )}
 
-            {user?.role !== "superAdmin" && user?.role !== "admin" && (
+            {/* {user?.role !== "superAdmin" && user?.role !== "admin" && (
               <div className="hidden lg:block">
                 <div className="flex flex-row gap-6 ">
-                  {/* <button onClick={() => setNotificationOpen(!notificationOpen)} className="relative">
+                  <button onClick={() => setNotificationOpen(!notificationOpen)} className="relative">
                 <IoMdNotificationsOutline className="text-3xl" />
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center ">3</span>
-              </button> */}
+              </button>
 
                   <Dropdown
                     label=""
@@ -142,7 +147,7 @@ const Navbar = () => {
                   </Dropdown>
                 </div>
               </div>
-            )}
+            )} */}
           </>
         )}
       </div>

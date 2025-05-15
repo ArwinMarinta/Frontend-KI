@@ -2,7 +2,7 @@ import React from "react";
 
 interface FileProps {
   label: string;
-  value: File | null;
+  value: File | null | undefined;
   name: string;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

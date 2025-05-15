@@ -4,19 +4,22 @@ import FieldTextarea from "../../../../components/input/fieldTextArea";
 import InputFile from "./field/InputFile";
 import NextButton from "./nextButton";
 import { IoAddCircleSharp } from "react-icons/io5";
+import PrevButton from "./prevButton";
 
 export type FormStepProps = {
-  // currentStep: number;
-  // setCurrentStep: (step: number) => void;
+  submissionType: string;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
   personalData: FormPersonalData[];
   // setPersonalData: React.Dispatch<React.SetStateAction<FormPersonalData[]>>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormPersonalData) => void;
   addContributor: () => void;
+  removeContributor: (id: number) => void;
   handleNextStep: () => void;
   error: Array<Record<string, boolean>>;
 };
 
-const Form_2 = ({ personalData, handleChange, addContributor, handleNextStep, error }: FormStepProps) => {
+const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error }: FormStepProps) => {
   return (
     <div className="flex flex-col">
       <div>
@@ -29,49 +32,63 @@ const Form_2 = ({ personalData, handleChange, addContributor, handleNextStep, er
         </div>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 mt-24">
         {personalData.map((item, index) => (
-          <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChange(e, index, "name")} error={error[index].name} need />
-              <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChange(e, index, "email")} error={error[index].email} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Instansi" value={item.institution} name="institution" type="text" placeholder="" onChange={(e) => handleChange(e, index, "institution")} error={error[index].institution} need />
-              <Field label="Pekerjaan" value={item.work} name="work" type="text" placeholder="" onChange={(e) => handleChange(e, index, "work")} error={error[index].work} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Instansi" value={item.faculty || ""} name="faculty" type="text" placeholder="" onChange={(e) => handleChange(e, index, "faculty")} error={error[index].faculty} need />
-              <Field label="Pekerjaan" value={item.studyProgram || ""} name="studyProgram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "studyProgram")} error={error[index].studyProgram} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Negara Kebangsaan" value={item.nationalState} name="nationalState" type="text" placeholder="" onChange={(e) => handleChange(e, index, "nationalState")} error={error[index].nationalState} need />
-              <Field label="Negara Tempat Tingggal" value={item.countryResidence} name="countryResidence" type="text" placeholder="" onChange={(e) => handleChange(e, index, "countryResidence")} error={error[index].countryResidence} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Provinsi" value={item.province} name="province" type="text" placeholder="" onChange={(e) => handleChange(e, index, "province")} error={error[index].province} need />
-              <Field label="Kota/Kabupaten" value={item.city} name="city" type="text" placeholder="" onChange={(e) => handleChange(e, index, "city")} error={error[index].city} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Kecamatan" value={item.subdistrict} name="subdistrict " type="text" placeholder="" onChange={(e) => handleChange(e, index, "subdistrict")} error={error[index].subdistrict} need />
-              <Field label="Kelurahan" value={item.ward} name="ward" type="text" placeholder="" onChange={(e) => handleChange(e, index, "ward")} error={error[index].ward} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChange(e, index, "postalCode")} error={error[index].postalCode} need />
-              <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChange(e, index, "phoneNumber")} error={error[index].phoneNumber} need />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChange(e, index, "facebook")} error={error[index].facebook} />
-              <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChange(e, index, "whatsapp")} error={error[index].whatsapp} />
-            </div>
-            <div className="flex flex-col lg:flex-row lg:gap-6">
-              <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "instagram")} error={error[index].instagram} />
-              <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" onChange={(e) => handleChange(e, index, "twitter")} error={error[index].twitter} />
-            </div>
+          <>
+            <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChange(e, index, "name")} error={error[index]?.name} need />
+                <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChange(e, index, "email")} error={error[index].email} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Instansi" value={item.institution} name="institution" type="text" placeholder="" onChange={(e) => handleChange(e, index, "institution")} error={error[index].institution} need />
+                <Field label="Pekerjaan" value={item.work} name="work" type="text" placeholder="" onChange={(e) => handleChange(e, index, "work")} error={error[index].work} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Instansi" value={item.faculty || ""} name="faculty" type="text" placeholder="" onChange={(e) => handleChange(e, index, "faculty")} error={error[index].faculty} need />
+                <Field label="Pekerjaan" value={item.studyProgram || ""} name="studyProgram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "studyProgram")} error={error[index].studyProgram} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Negara Kebangsaan" value={item.nationalState} name="nationalState" type="text" placeholder="" onChange={(e) => handleChange(e, index, "nationalState")} error={error[index].nationalState} need />
+                <Field label="Negara Tempat Tingggal" value={item.countryResidence} name="countryResidence" type="text" placeholder="" onChange={(e) => handleChange(e, index, "countryResidence")} error={error[index].countryResidence} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Provinsi" value={item.province} name="province" type="text" placeholder="" onChange={(e) => handleChange(e, index, "province")} error={error[index].province} need />
+                <Field label="Kota/Kabupaten" value={item.city} name="city" type="text" placeholder="" onChange={(e) => handleChange(e, index, "city")} error={error[index].city} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Kecamatan" value={item.subdistrict} name="subdistrict" type="text" placeholder="" onChange={(e) => handleChange(e, index, "subdistrict")} error={error[index].subdistrict} need />
+                <Field label="Kelurahan" value={item.ward} name="ward" type="text" placeholder="" onChange={(e) => handleChange(e, index, "ward")} error={error[index].ward} need />
+              </div>
+              <div className="flex flex-col lg:flex-row lg:gap-6">
+                <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChange(e, index, "postalCode")} error={error[index].postalCode} need />
+                <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChange(e, index, "phoneNumber")} error={error[index].phoneNumber} need />
+              </div>
+              {submissionType === "Merek" && (
+                <>
+                  <div className="flex flex-col lg:flex-row lg:gap-6">
+                    <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChange(e, index, "facebook")} error={error[index].facebook} />
+                    <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChange(e, index, "whatsapp")} error={error[index].whatsapp} />
+                  </div>
+                  <div className="flex flex-col lg:flex-row lg:gap-6">
+                    <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "instagram")} error={error[index].instagram} />
+                    <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" onChange={(e) => handleChange(e, index, "twitter")} error={error[index].twitter} />
+                  </div>
+                </>
+              )}
 
-            <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index].address} need />
-            <InputFile label="KTP" value={item.ktp} name={`ktp_${index}`} required onChange={(e) => handleChange(e, index, "ktp")} accept=".jpg, .jpeg, .png, .webp" error={error[index].ktp} need />
-          </div>
+              <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index].address} need />
+              <InputFile label="KTP" value={item.ktp instanceof File ? item.ktp : undefined} name={`ktp_${index}`} required onChange={(e) => handleChange(e, index, "ktp")} accept=".jpg, .jpeg, .png, .webp" error={error[index].ktp} need placeholder={`${item.ktp ?? ""}`} />
+
+              {personalData.length > 1 && index !== 0 ? (
+                <div className="flex justify-end mt-10">
+                  <button onClick={() => removeContributor(index)} className="bg-RED01 py-1 px-4 text-white rounded-md">
+                    Hapus
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          </>
         ))}
       </div>
 
@@ -83,7 +100,7 @@ const Form_2 = ({ personalData, handleChange, addContributor, handleNextStep, er
       </div>
 
       <div className="mt-20 w-full flex flex-row justify-end gap-6">
-        {/* <PrevButton onClick={() => setCurrentStep(currentStep - 1)} /> */}
+        <PrevButton onClick={() => setCurrentStep(currentStep - 1)} />
         <NextButton onClick={handleNextStep} />
       </div>
     </div>

@@ -1,40 +1,37 @@
 import NextButton from "./nextButton";
-import PrevButton from "./prevButton";
 import FormReview from "./formReview";
 import FormCopyright from "./formCopyright";
-
 import { FormSubmissionCopyright, FormSubmissionCopyrightError } from "../../../../types/copyright";
 import { FormAdditionalBrand, FormAdditionalBrandError, FormSubmissionBrand, FormSubmissionBrandError } from "../../../../types/brandType";
 import FormBrand from "./formBrand";
 
 export interface Form3Type {
-  submissionType: string;
-  currentStep: number;
+  submissionType?: string;
+  currentStep?: number;
   setCurrentStep: (step: number) => void;
   draftPatent?: File | null;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   errorDraftPatent?: boolean;
-  handleNextStep: () => void;
-  formCopyright: FormSubmissionCopyright;
-  formCopyrightError: FormSubmissionCopyrightError;
-  handleChangeAdditional: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleNextStep3?: () => void;
+  formCopyright?: FormSubmissionCopyright;
+  formCopyrightError?: FormSubmissionCopyrightError;
+  handleChangeAdditional?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   formBrand?: FormSubmissionBrand;
   formBrandError?: FormSubmissionBrandError;
   formAdditionalBrand?: FormAdditionalBrand[];
   tempAdditionalBrand?: FormAdditionalBrand;
-  addAdditionalBrand: () => void;
-  tempAdditionalBrandError: FormAdditionalBrandError;
-  handleDeleteAttempBrand: (index: number) => void;
+  addAdditionalBrand?: () => void;
+  tempAdditionalBrandError?: FormAdditionalBrandError;
+  handleDeleteAttempBrand?: (index: number) => void;
 }
 
 const Form_3 = ({
   submissionType,
-  currentStep,
-  setCurrentStep,
+
   draftPatent,
   handleChange,
   errorDraftPatent,
-  handleNextStep,
+  handleNextStep3,
   formCopyright,
   formCopyrightError,
   handleChangeAdditional,
@@ -84,8 +81,7 @@ const Form_3 = ({
       </div>
 
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">
-        <PrevButton onClick={() => setCurrentStep(currentStep - 1)} />
-        <NextButton onClick={handleNextStep} />
+        <NextButton onClick={handleNextStep3} />
       </div>
     </div>
   );

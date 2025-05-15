@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setDoc, setDocCategory, setFaq, setFaqCategory, setSubmissionType } from "../reducers/landingReducer";
+import { setDoc, setDocCategory, setFaq, setFaqCategory, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
 
 export const getFaqLanding = (title: string | undefined, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -139,22 +139,21 @@ export const getTypeCopyright = (): AppThunk => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       dispatch(
         setSubmissionType({
           copyright: {
-            type: responseType.data?.typeCreation,
-            subtype: null,
+            typeCopy: responseType.data?.typeCreation ?? null,
+            subTypeCopy: null,
           },
           indusDesign: {
-            type: null,
-            subtype: null,
+            typeDesign: null,
+            subtypeDesain: null,
           },
           paten: {
-            type: null,
+            typePaten: null,
           },
           brand: {
-            type: null,
+            typeBrand: null,
           },
         })
       );
@@ -174,7 +173,7 @@ export const getSubTypeCopyright = (id: number | null | undefined): AppThunk => 
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
-      const { type } = getState().landing.submissionType.copyright;
+      const { typeCopy } = getState().landing.submissionType.copyright;
 
       const responseType = await axios.get(`${API_URL}/copyright/sub-type/not-pagination/${id}`, {
         headers: {
@@ -185,18 +184,18 @@ export const getSubTypeCopyright = (id: number | null | undefined): AppThunk => 
       dispatch(
         setSubmissionType({
           copyright: {
-            type: type ?? null,
-            subtype: responseType.data?.subTypeCreation ?? null,
+            typeCopy: typeCopy ?? null,
+            subTypeCopy: responseType.data?.subTypeCreation ?? null,
           },
           indusDesign: {
-            type: null,
-            subtype: null,
+            typeDesign: null,
+            subtypeDesain: null,
           },
           paten: {
-            type: null,
+            typePaten: null,
           },
           brand: {
-            type: null,
+            typeBrand: null,
           },
         })
       );
@@ -211,6 +210,90 @@ export const getSubTypeCopyright = (id: number | null | undefined): AppThunk => 
     }
   };
 };
+
+export const getTypeIndusDesign = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const responseType = await axios.get(`${API_URL}/design-industri/type/not-pagination`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(
+        setSubmissionType({
+          copyright: {
+            typeCopy: null,
+            subTypeCopy: null,
+          },
+          indusDesign: {
+            typeDesign: responseType.data.typeDesigns ?? null,
+            subtypeDesain: null,
+          },
+          paten: {
+            typePaten: null,
+          },
+          brand: {
+            typeBrand: null,
+          },
+        })
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getSubTypeIndusDesign = (id: number | null | undefined): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+      const { typeDesign } = getState().landing.submissionType.indusDesign;
+
+      const responseType = await axios.get(`${API_URL}/design-industri/sub-type/not-pagination/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(
+        setSubmissionType({
+          copyright: {
+            typeCopy: null,
+            subTypeCopy: null,
+          },
+          indusDesign: {
+            typeDesign: typeDesign ?? null,
+            subtypeDesain: responseType.data?.subTypeDesign ?? null,
+          },
+          paten: {
+            typePaten: null,
+          },
+          brand: {
+            typeBrand: null,
+          },
+        })
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
 export const getTypeBrand = (): AppThunk => {
   return async (dispatch, getState) => {
     try {
@@ -221,25 +304,112 @@ export const getTypeBrand = (): AppThunk => {
           Authorization: `Bearer ${token}`,
         },
       });
+      dispatch(
+        setSubmissionType({
+          copyright: {
+            typeCopy: null,
+            subTypeCopy: null,
+          },
+          indusDesign: {
+            typeDesign: null,
+            subtypeDesain: null,
+          },
+          paten: {
+            typePaten: null,
+          },
+          brand: {
+            typeBrand: response.data?.brandTypes ?? null,
+          },
+        })
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const getTypePaten = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/patent/type/not-pagination`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       dispatch(
         setSubmissionType({
           copyright: {
-            type: null,
-            subtype: null,
+            typeCopy: null,
+            subTypeCopy: null,
           },
           indusDesign: {
-            type: null,
-            subtype: null,
+            typeDesign: null,
+            subtypeDesain: null,
           },
           paten: {
-            type: null,
+            typePaten: response.data.patentTypes ?? null,
           },
           brand: {
-            type: response.data?.brandTypes ?? null,
+            typeBrand: null,
           },
         })
       );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getTermsLanding = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/terms/not-pagination`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(setTermsLanding(response.data.terms ?? null));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getQuotaLanding = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const responseType = await axios.get(`${API_URL}/period/this-year`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(setQuota(responseType.data.periods[0].group ?? null));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

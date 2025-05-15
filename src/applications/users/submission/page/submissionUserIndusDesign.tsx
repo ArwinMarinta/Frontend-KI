@@ -1,0 +1,100 @@
+import React from "react";
+import useSubmissionType from "../hooks/useSubmissionType";
+import useDraftSubmission from "../hooks/useDraftSubmission";
+import usePersonalData from "../hooks/usePersonalData";
+import { createSubmissionIndustrialDesign } from "../../../../service/actions/submissionAction";
+import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
+import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
+import Stepper from "../components/stepper";
+import FormReview from "../components/formReview";
+import Form_2 from "../components/form_2";
+import Form_4 from "../components/form_4";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../service/store";
+
+const SubmissionUserIndusDesign = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  // const { currentStep, submissionType, setCurrentStep, setSubmissionType } = useSubmission();
+  const { error, currentStep, setCurrentStep } = useSubmissionType();
+  const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent } = useDraftSubmission();
+
+  const handleNextStep2 = () => {
+    const updatedErrors = personalData.map(validatePersonalData);
+
+    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+
+    if (hasError) {
+      const newErrors = updatedErrors.map((error) => ({
+        name: error.name === true,
+        email: error.email === true,
+        faculty: error.faculty === true,
+        studyProgram: error.studyProgram === true,
+        institution: error.institution === true,
+        work: error.work === true,
+        nationalState: error.nationalState === true,
+        countryResidence: error.countryResidence === true,
+        province: error.province === true,
+        city: error.city === true,
+        subdistrict: error.subdistrict === true,
+        ward: error.ward === true,
+        postalCode: error.postalCode === true,
+        phoneNumber: error.phoneNumber === true,
+        ktp: error.ktp === true,
+        facebook: error.facebook === true,
+        whatsapp: error.whatsapp === true,
+        instagram: error.instagram === true,
+        twitter: error.twitter === true,
+        address: error.address === true,
+      }));
+
+      setPersonalDataError(newErrors);
+
+      return;
+    }
+
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleNextStep1 = () => {
+    if (draftPatent === null) {
+      setErrorDraftPatent(true);
+      return;
+    }
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+  const handleSubmit = () => {
+    dispatch(createSubmissionIndustrialDesign(4, personalData, draftPatent));
+  };
+
+  return (
+    <div className="flex flex-row w-full h-full bg-gray-100">
+      <div className="min-h-full w-[16%] bg-white">
+        <SideSubmisson />
+      </div>
+      <div className="w-[84%]  border ">
+        <HeaderNavigation />
+        <div className="container  mt-16 ">
+          <div className=" p-16 rounded-md bg-white">
+            <div className="flex justify-center mb-10">
+              <h1 className="text-[48px] font-bold mb-20">Formulir Pengajuan Hak Cipta</h1>
+            </div>
+            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
+            {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} />}
+            {currentStep === 1 && (
+              <Form_2 submissionType="Paten" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />
+            )}
+
+            {currentStep === 2 && <Form_4 currentStep={currentStep} setCurrentStep={setCurrentStep} submissionType="Paten" personalData={personalData} handleSubmit={handleSubmit} draftPatent={draftPatent} />}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SubmissionUserIndusDesign;

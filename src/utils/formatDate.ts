@@ -1,4 +1,4 @@
-export function formatIndonesianDate(isoString: string | undefined): string {
+export function formatIndonesianDate(isoString: string | null | undefined): string {
   if (!isoString) return "";
 
   const date = new Date(isoString);

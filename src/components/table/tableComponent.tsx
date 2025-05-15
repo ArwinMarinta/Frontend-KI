@@ -48,7 +48,7 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
                   {col.label}
                 </th>
               ))}
-              {actions?.length > 0 && <th className="px-4 py-2 text-left border-b">Aksi</th>}
+              {actions?.length > 0 && <th className="px-4 py-2 text-left border-b ">Aksi</th>}
             </tr>
           </thead>
           <tbody>
@@ -61,7 +61,7 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
                   </td>
                 ))}
                 {actions?.length > 0 && (
-                  <td className="px-4 py-2 border-b">
+                  <td className="px-4 py-2 border-b ">
                     <div className="flex gap-2">
                       {actions.map((action, i) => (
                         <span key={i} onClick={() => action.onClick(item)}>

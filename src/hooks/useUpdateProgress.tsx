@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../service/store";
 import { useState } from "react";
 import { FormUpdateProgress, FormUpdateProgressErrors } from "../types/submissionType";
 import { updateReviewerSubmissionProgress } from "../service/actions/submissionAction";
 
 const useUpdateProgress = () => {
-  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const { submissionId } = location.state || {};
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
 
@@ -82,16 +83,20 @@ const useUpdateProgress = () => {
 
   const handleUpdateProgress = () => {
     const validationErrors = {
-      reviewStatus: formUpdateProgress.reviewStatus.trim() === "" ? "Status tidak boleh kosong" : null,
+      reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
+      paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
     };
     setFormErrors(validationErrors);
-    if (Object.values(validationErrors).every((error) => error === null)) {
-      dispatch(updateReviewerSubmissionProgress(id, formUpdateProgress));
+
+    const hasErrors = Object.values(validationErrors).some((error) => error !== null);
+
+    if (!hasErrors) {
+      dispatch(updateReviewerSubmissionProgress(submissionId, formUpdateProgress));
     }
   };
 
   return {
-    id,
+    submissionId,
     dispatch,
     token,
     handleChange,
