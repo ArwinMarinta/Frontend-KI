@@ -1,9 +1,23 @@
+import { useLocation } from "react-router-dom";
 import BackButton from "../../../../../components/button/backButton";
 
 import Field from "../../../../../components/input/fieldInput";
+import { ConfirmPaymentError, ConfirmPaymentForm } from "../../hooks/useConfirmPayment";
 import InputFile from "../field/InputFile";
 
-const FormConfimPayment = () => {
+export interface ConfirmPaymentProps {
+  formConfirmPayment: ConfirmPaymentForm;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  formConfirmPaymentErrors: ConfirmPaymentError;
+  handleSubmitPayment: () => void;
+}
+
+const FormConfimPayment = ({ formConfirmPayment, handleChange, formConfirmPaymentErrors, handleSubmitPayment }: ConfirmPaymentProps) => {
+  const location = useLocation();
+  const { billingCode, paymentSchema, paymentId } = location.state || {};
+
+  console.log(paymentSchema);
+  console.log(paymentId);
   return (
     <>
       <div className="grid grid-cols-[auto_1fr_auto] items-center h-24">
@@ -14,11 +28,14 @@ const FormConfimPayment = () => {
         <div></div>
       </div>
       <div className="flex flex-col gap-6">
-        <Field label="Kode Pembayaran Anda" value="9079643" name="titleInvention" type="text" placeholder="" readOnly />
-        <InputFile label="Klaim" value="" name="claim" required need />
+        <Field label="Skema Pendanaan" value={paymentSchema ?? "-"} name="titleInvention" type="text" placeholder="" readOnly />
+        <Field label="Kode Pembayaran Anda" value={billingCode || "-"} name="titleInvention" type="text" placeholder="" readOnly />
+        <InputFile label="Bukti Pembayaran" value={formConfirmPayment.proofPayment} onChange={handleChange} error={!!formConfirmPaymentErrors.proofPayment} name="proofPayment" required need />
       </div>
       <div className="flex justify-end mt-6">
-        <button className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">Kirim</button>
+        <button onClick={handleSubmitPayment} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+          Kirim
+        </button>
       </div>
     </>
   );

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { getQuotaLanding, getTermsLanding } from "../../../../service/actions/landingAction";
+
 import { FormSchema, FormSchemaErrors } from "../../../../types/schemaPayment";
 import { updateSubmissionSchema } from "../../../../service/actions/submissionAction";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import { toSlug } from "../../../../utils/toSlug";
 
 const useSchemaPayment = () => {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { submissionId } = location.state || {};
+  const { loading, setLoading } = useLoadingProses();
+  const navigate = useNavigate();
+  const { submissionId, submissionType } = location.state || {};
   const { terms } = useSelector((state: RootState) => state.landing);
   const { qouta } = useSelector((state: RootState) => state.landing);
   const [formSchemaPayment, setFormSchemaPayment] = useState<FormSchema>({
@@ -87,23 +91,26 @@ const useSchemaPayment = () => {
     });
   };
 
-  const handleSubmitSchema = () => {
+  const handleSubmitSchema = async () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) {
       setFormSchemaPaymentErrors(errors);
       return;
     }
-
-    dispatch(updateSubmissionSchema(submissionId, formSchemaPayment));
+    setLoading(true);
+    try {
+      await dispatch(updateSubmissionSchema(submissionId, formSchemaPayment));
+      setFormSchemaPayment({
+        periodId: null,
+        groupId: null,
+        submissionScheme: "",
+        termsConditionId: [],
+      });
+      navigate(`/histori-pengajuan/${toSlug(submissionType)}`);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  useEffect(() => {
-    dispatch(getTermsLanding());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getQuotaLanding());
-  }, [dispatch]);
 
   return {
     formSchemaPayment,
@@ -114,6 +121,8 @@ const useSchemaPayment = () => {
     terms,
     handleSubmitSchema,
     qouta,
+    navigate,
+    loading,
   };
 };
 

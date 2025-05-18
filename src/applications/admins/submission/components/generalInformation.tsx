@@ -11,19 +11,18 @@ interface GeneralType {
 const GeneralInformation = ({ data, terms }: GeneralType) => {
   const selectedIds = new Set(data?.submission.termsConditions?.map((term) => term.id));
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <Field label="Jenis Pengajuan" value={data?.submission.submissionType?.title || "-"} name="fullname" type="text" placeholder="" readOnly />
-      <div className="flex flex-row gap-6">
+      <div className="flex lg:flex-row flex-col w-full gap-6">
         <Field label="Awal Pengajuan" value={formatIndonesianDate(data?.createdAt) || "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Selesai Pengajuan" value={formatIndonesianDate(data?.updatedAt) || "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
-      <div className="flex flex-row gap-6">
+      <div className="flex lg:flex-row flex-col w-full gap-6">
         <Field label="Skema Pendanaan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Periode Pengajuan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="block text-base font-medium">Prasyarat Penerima Pendanaan</label>
         {data?.submission.submissionScheme && data.submission.submissionScheme === "pendanaan" && (
           <>
             <label className="block text-base font-medium">Prasyarat Penerima Pendanaan</label>

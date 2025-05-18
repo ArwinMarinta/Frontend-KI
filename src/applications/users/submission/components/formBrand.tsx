@@ -30,18 +30,16 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
   useEffect(() => {
     dispatch(getTypeBrand());
   }, [dispatch]);
+
   return (
     <>
-      <div className="flex flex-col items-center mt-20 mb-24">
-        <h2 className="text-[32px] font-semibold">Dokumen Pengajuan</h2>
-        <p className="text-justify mt-3 flex flex-col w-full items-center">
-          <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
-          <span> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</span>
-        </p>
+      <div className="flex flex-col items-center lg:mt-20 mt-10">
+        <h2 className="lg:text-[32px] font-semibold text-2xl">Dokumen Pengajuan</h2>
+        <p className="text-justify mt-3 items-center">Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar. Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</p>
       </div>
-      <div className="flex flex-col w-full gap-6">
+      <div className="flex flex-col w-full gap-6 lg:mt-24 mt-16">
         <div>
-          <div className="flex flex-row w-full gap-6">
+          <div className="flex lg:flex-row flex-col w-full gap-6">
             <FieldDropdown
               label="Tipe Permohonan"
               name="applicationType"
@@ -75,11 +73,11 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
           </div>
         </div>
 
-        <div className="flex flex-row w-full gap-6">
+        <div className="flex lg:flex-row flex-col w-full gap-6">
           <Field label="Nama Refrensi Label Merek" value={formBrand?.referenceName || ""} name="referenceName" type="text" placeholder="" need error={formBrandError?.elementColor} onChange={handleChange} />
           <Field label="Unsur Warna Dalam Label Merek" value={formBrand?.elementColor || ""} name="elementColor" type="text" placeholder="Contoh: Hitam, Putih dan Biru, Kuning, Merah" need error={formBrandError?.elementColor} onChange={handleChange} />
         </div>
-        <div className="flex flex-row w-full gap-6">
+        <div className="flex lg:flex-row flex-col w-full gap-6">
           <Field label="Disclaimer (Tidak dilindungin)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
           <FieldDropdown
             label="Jenis Dokumen"
@@ -98,7 +96,7 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
           />
         </div>
 
-        <div className="flex flex-row w-full gap-6">
+        <div className="flex lg:flex-row flex-col w-full gap-6">
           <Field label="Terjemahan Jika Menggunakan Bahasa Asing" value={formBrand?.translate || ""} name="translate" type="text" placeholder="" need error={formBrandError?.translate} onChange={handleChange} />
           <Field label="Pengucapan Jika Menggunakan Huruf Non-Latin" value={formBrand?.pronunciation || ""} name="pronunciation" type="text" placeholder="" need error={formBrandError?.pronunciation} onChange={handleChange} />
         </div>
@@ -153,7 +151,7 @@ Jika bukan, isi dengan tanda strip -."
                     <td className="px-4 py-2 border-b">{item.additionalDescriptions}</td>
                     <td className="px-4 py-2 border-b">
                       {" "}
-                      <button onClick={() => handleDeleteAttempBrand(index)} className="bg-PRIMARY01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
+                      <button onClick={() => handleDeleteAttempBrand(index)} className="bg-RED01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
                         Hapus
                       </button>
                     </td>

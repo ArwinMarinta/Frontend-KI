@@ -10,7 +10,7 @@ const DocumentSubmission = ({ data }: DocumentType) => {
   return (
     <div className="flex flex-col gap-6">
       <Field label="Judul Invensi" value={data?.inventionTitle || "-"} name="fullname" type="text" placeholder="" readOnly />
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Jenis Paten" value={data?.patentType || "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Jumlah Klaim" value={String(data?.numberClaims || "-")} name="fullname" type="text" placeholder="" readOnly />
       </div>

@@ -11,7 +11,7 @@ const DocumentSubmissionIndutrialDesign = ({ data }: DocumentType) => {
     <div className="flex flex-col gap-6">
       <Field label="Judul Desain Industri" value={data?.titleDesign || "-"} name="fullname" type="text" placeholder="" readOnly />
       <Field label="Tipe Desain Industri" value={data?.type || "-"} name="fullname" type="text" placeholder="" readOnly />
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Jenis Desain Industri" value={data?.typeDesign || "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Sub-Jenis Desain Industri" value={String(data?.subTypeDesign || "-")} name="fullname" type="text" placeholder="" readOnly />
       </div>

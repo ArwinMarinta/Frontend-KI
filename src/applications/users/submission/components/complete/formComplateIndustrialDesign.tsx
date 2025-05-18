@@ -4,14 +4,13 @@ import { FormComplateIndustDesign, FormDesignSubmissionErrors } from "../../../.
 import InputFile from "../field/InputFile";
 import { claimOptions, designTypes } from "../../../../../data/indusDesign";
 import useComplate from "../../hooks/useComplate";
-import { IndustialDesignSubType, IndustialDesignType } from "../../../../../types/industrialDesignType";
 import { toSlug } from "../../../../../utils/toSlug";
 import { Link } from "react-router-dom";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../service/store";
 
 interface FormComplateDesignProps {
-  typeDesign: IndustialDesignType[] | null;
-  subtypeDesain: IndustialDesignSubType[] | null;
   formIndustDesign: FormComplateIndustDesign;
   formIndustDesignError: FormDesignSubmissionErrors;
   handleChangeComplateIndusDesign: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
@@ -19,8 +18,9 @@ interface FormComplateDesignProps {
   handleClaimCheckboxChange: (label: string) => void;
 }
 
-const FormComplateIndustrialDesign = ({ typeDesign, subtypeDesain, formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleSubmitComplateIndusDesign, handleClaimCheckboxChange }: FormComplateDesignProps) => {
+const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleSubmitComplateIndusDesign, handleClaimCheckboxChange }: FormComplateDesignProps) => {
   const { submissionType } = useComplate();
+  const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing.submissionType.indusDesign);
   return (
     <>
       <div className="grid grid-cols-3 items-center h-24">

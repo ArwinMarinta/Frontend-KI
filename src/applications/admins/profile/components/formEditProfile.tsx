@@ -19,7 +19,7 @@ const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleS
         <Field label="Fakultas" value={form.faculty} name="faculty" type="text" placeholder="" onChange={handleChange} error={errors.faculty} />
         <Field label="Prodi" value={form.studyProgram} name="studyProgram" type="text" placeholder="" onChange={handleChange} error={errors.studyProgram} />
       </div>
-      <div className="flex flex-row gap-4 justify-end">
+      <div className="flex flex-row gap-4 justify-end mt-10">
         <button className="py-1 px-4 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium" onClick={() => handleStatusChange("Detail", "profile")}>
           Kembali
         </button>

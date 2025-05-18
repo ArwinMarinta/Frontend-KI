@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormComplatePatenSubmission, FormComplatePatenSubmissionErrors } from "../../../../types/submissionType";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../service/store";
-
-import { complateSubmissionPatent } from "../../../../service/actions/submissionAction";
-import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../service/store";
+import { complateSubmissionPatent, revisionSubmissionPaten } from "../../../../service/actions/submissionAction";
+import { useLocation, useNavigate } from "react-router-dom";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import { processFile } from "../../../../utils/formatFile";
 
 const useComplatePaten = () => {
   const location = useLocation();
-  const { patenId } = location.state || {};
-
+  const { patenId, types } = location.state || {};
+  const { loading, setLoading } = useLoadingProses();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { detailPaten } = useSelector((state: RootState) => state.landing);
 
   const [formComplatePaten, setFormComplatePaten] = useState<FormComplatePatenSubmission>({
     // entirePatentDocument: null,
@@ -83,22 +86,94 @@ const useComplatePaten = () => {
     }
   };
 
-  const handleSubmitComplatePatent = () => {
+  const handleSubmitComplatePatent = async () => {
     const errors = validateComplatePaten(formComplatePaten);
     const hasErrors = Object.values(errors).some((error) => error !== null);
     if (hasErrors) {
       setFormComplatePatenError(errors);
       return;
     }
-    dispatch(complateSubmissionPatent(patenId, formComplatePaten));
+
+    if (types === "Lengkapi Berkas") {
+      setLoading(true);
+      try {
+        await dispatch(complateSubmissionPatent(patenId, formComplatePaten));
+        setFormComplatePaten({
+          inventionTitle: "",
+          patentTypeId: "",
+          numberClaims: "",
+          description: null,
+          abstract: null,
+          claim: null,
+          inventionImage: null,
+          statementInventionOwnership: null,
+          letterTransferRightsInvention: null,
+        });
+        navigate("/histori-pengajuan/paten");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (types === "Revisi") {
+      setLoading(true);
+      try {
+        await dispatch(revisionSubmissionPaten(detailPaten?.id, formComplatePaten));
+        setFormComplatePaten({
+          inventionTitle: "",
+          patentTypeId: "",
+          numberClaims: "",
+          description: null,
+          abstract: null,
+          claim: null,
+          inventionImage: null,
+          statementInventionOwnership: null,
+          letterTransferRightsInvention: null,
+        });
+        navigate("/histori-pengajuan/paten");
+      } finally {
+        setLoading(false);
+      }
+    }
   };
+
+  useEffect(() => {
+    const initForm = async () => {
+      if (!detailPaten || types !== "Revisi") return;
+
+      const description = await processFile(detailPaten.description);
+      const abstract = await processFile(detailPaten.abstract);
+      const claim = await processFile(detailPaten.claim);
+      const inventionImage = await processFile(detailPaten.inventionImage);
+      const statement = await processFile(detailPaten.statementInventionOwnership);
+      const letter = await processFile(detailPaten.letterTransferRightsInvention);
+
+      setFormComplatePaten({
+        inventionTitle: detailPaten.inventionTitle || "",
+        patentTypeId: detailPaten.patentTypeId || "",
+        numberClaims: detailPaten.numberClaims || "",
+        description,
+        abstract,
+        claim,
+        inventionImage,
+        statementInventionOwnership: statement,
+        letterTransferRightsInvention: letter,
+      });
+    };
+
+    initForm();
+  }, [detailPaten, types]);
 
   return {
     formComplatePaten,
     formComplatePatenError,
     handleChangeComplatePaten,
     handleSubmitComplatePatent,
+    loading,
     patenId,
+    validateComplatePaten,
+    setFormComplatePatenError,
+    detailPaten,
   };
 };
 

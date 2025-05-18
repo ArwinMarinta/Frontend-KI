@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setDoc, setDocCategory, setFaq, setFaqCategory, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
+import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
 
 export const getFaqLanding = (title: string | undefined, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -410,6 +410,41 @@ export const getQuotaLanding = (): AppThunk => {
       });
 
       dispatch(setQuota(responseType.data.periods[0].group ?? null));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getDetailSubmissionLanding = (type: string, id: string | undefined): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/user-submission/get-by-id/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (type === "Hak Cipta") {
+        dispatch(setDetailCopyright(response?.data?.userSubmission?.submission?.copyright ?? null));
+      }
+      if (type === "Paten") {
+        dispatch(setDetailPaten(response.data.userSubmission.submission.patent ?? null));
+      }
+      if (type === "Merek") {
+        dispatch(setDetailBrand(response.data.userSubmission.submission.brand ?? null));
+      }
+      if (type === "Desain Industri") {
+        dispatch(setDetailDesign(response.data.userSubmission.submission.industrialDesign ?? null));
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

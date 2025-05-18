@@ -10,14 +10,14 @@ const ReviewerProgress = () => {
 
   return (
     <>
-      <div className="flex flex-row w-full h-full bg-gray-100">
-        <div className="min-h-full w-[16%] bg-white">
+      <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+        <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
           <SideSubmisson />
         </div>
-        <div className="w-[84%]  border  ">
+        <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
-          <div className="container  mt-16  ">
-            <div className="bg-white p-8">
+          <div className="px-4 lg:px-12  py-8  ">
+            <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="grid grid-cols-3 items-center h-24 mb-16">
                 <div>
                   <BackButton url={"/penugasan"} />

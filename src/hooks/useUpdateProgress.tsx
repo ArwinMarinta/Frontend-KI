@@ -1,13 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../service/store";
 import { useState } from "react";
 import { FormUpdateProgress, FormUpdateProgressErrors } from "../types/submissionType";
 import { updateReviewerSubmissionProgress } from "../service/actions/submissionAction";
+import useLoadingProses from "./useLoadingProses";
 
 const useUpdateProgress = () => {
   const location = useLocation();
+  const { loading, setLoading } = useLoadingProses();
   const { submissionId } = location.state || {};
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
 
@@ -81,17 +84,31 @@ const useUpdateProgress = () => {
     }));
   };
 
-  const handleUpdateProgress = () => {
+  const handleUpdateProgress = async () => {
     const validationErrors = {
       reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
       paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
     };
+    const hasErrors = Object.values(validationErrors).some((error) => error !== null);
     setFormErrors(validationErrors);
 
-    const hasErrors = Object.values(validationErrors).some((error) => error !== null);
+    if (hasErrors) return;
 
-    if (!hasErrors) {
-      dispatch(updateReviewerSubmissionProgress(submissionId, formUpdateProgress));
+    setLoading(true);
+    try {
+      await dispatch(updateReviewerSubmissionProgress(submissionId, formUpdateProgress));
+
+      setFormUpdateProgress({
+        reviewStatus: "",
+        comments: "",
+        paymentCode: "",
+        fileNames: [],
+        files: [],
+      });
+
+      navigate("/penugasan/progress", { state: { submissionId: submissionId } });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,6 +122,7 @@ const useUpdateProgress = () => {
     handleFileChange,
     handleRemoveFile,
     handleUpdateProgress,
+    loading,
   };
 };
 

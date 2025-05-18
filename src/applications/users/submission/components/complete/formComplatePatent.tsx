@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Field from "../../../../../components/input/fieldInput";
 import { FormComplatePatenSubmission, FormComplatePatenSubmissionErrors } from "../../../../../types/submissionType";
 import FieldDropdown from "../../../../../components/input/FieldDropDown";
@@ -6,9 +5,8 @@ import InputFile from "../field/InputFile";
 import { Link } from "react-router-dom";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { toSlug } from "../../../../../utils/toSlug";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../../service/store";
-import { getTypePaten } from "../../../../../service/actions/landingAction";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../service/store";
 
 interface FormComplatePatentProps {
   submissionType: string;
@@ -19,11 +17,7 @@ interface FormComplatePatentProps {
 }
 
 const FormComplatePatent = ({ submissionType, formComplatePaten, formComplatePatenError, handleChangeComplatePaten, handleSubmitComplatePatent }: FormComplatePatentProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const { typePaten } = useSelector((state: RootState) => state.landing.submissionType.paten);
-  useEffect(() => {
-    dispatch(getTypePaten());
-  }, [dispatch]);
 
   return (
     <>
@@ -35,7 +29,7 @@ const FormComplatePatent = ({ submissionType, formComplatePaten, formComplatePat
           </button>
         </Link>
 
-        <h1 className="text-center text-3xl w-full font-bold">Formulir Pendaftaran Paten</h1>
+        <h1 className="text-center text-3xl w-full font-bold">Formulir Lengkapi Berkas Paten</h1>
       </div>
       <div className="flex flex-col gap-6">
         <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="inventionTitle" type="text" placeholder="" need error={!!formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />

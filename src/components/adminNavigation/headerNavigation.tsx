@@ -9,10 +9,10 @@ import useProfile from "../../hooks/useProfile";
 import { FaCaretDown } from "react-icons/fa";
 
 const HeaderNavigation = () => {
-  const { user } = useProfile();
+  const { user, handleLogout } = useProfile();
   return (
     <nav className="w-full sticky py-6 border-b z-50 top-0 bg-white">
-      <div className="container flex flex-row justify-between items-center">
+      <div className="px-4 lg:px-12 flex flex-row justify-between items-center">
         <div>
           <h1 className="font-semibold text-PRIMARY01 text-2xl">Hi, Admin</h1>
         </div>
@@ -42,15 +42,8 @@ const HeaderNavigation = () => {
                   <IoIosSettings className="text-xl text-[#B2B2B2]" />
                   <span className="text-[#111B29] font-medium">Profile</span>
                 </Link>
-                {/* <Link to="/profile" className="flex flex-row py-3 hover:bg-gray-100 px-4 gap-4 items-center">
-                  <RiHistoryLine className="text-xl text-[#B2B2B2]" />
-                  <span className="text-[#111B29] font-medium">Ubah Password</span>
-                </Link>
-                <button className="flex flex-row py-3 hover:bg-gray-100 px-4 gap-4 items-center">
-                  <BiTask className="text-xl text-[#B2B2B2]" />
-                  <span className="text-[#111B29] font-medium">Penugasan</span>
-                </button> */}
-                <button className="flex flex-row py-3 hover:bg-gray-100 px-4 gap-4 items-center">
+
+                <button onClick={handleLogout} className="flex flex-row py-3 hover:bg-gray-100 px-4 gap-4 items-center">
                   <FiLogOut className="text-xl text-PRIMARY03" />
                   <span className="font-medium text-PRIMARY03">Keluar</span>
                 </button>

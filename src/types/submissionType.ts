@@ -23,17 +23,30 @@ export interface Submission {
   industrialDesignId: number | null;
   brandId: number | null;
   periodId: number | null;
-  comments: string | null;
   submissionScheme: string | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
+  payment: Payment | null;
   patent: PatentType | null;
-  copyright: CopyrightType | null;
+  copyright: SubmissionCopyrightType | null;
   brand: SubmissionBrand | null;
   industrialDesign: IndustrialDesignType | null;
   submissionType: TypeSubmission;
   personalDatas: PersonalData[];
   termsConditions: TermsCondition[] | null;
+}
+
+export interface Payment {
+  id: number;
+  userId: number;
+  submissionId: number;
+  billingCode: string | null;
+  proofPayment: string;
+  paymentStatus: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 }
 
 export interface DetailSubmissionType {
@@ -83,7 +96,7 @@ export interface PersonalData {
   updatedAt: string;
 }
 
-export interface CopyrightType {
+export interface SubmissionCopyrightType {
   id: number;
   titleInvention: string;
   typeCreationId: number | null;

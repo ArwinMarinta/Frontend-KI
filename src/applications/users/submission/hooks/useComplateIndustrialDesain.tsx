@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { FormComplateIndustDesign, FormDesignSubmissionErrors } from "../../../../types/submissionType";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-// import { useLocation } from "react-router-dom";
-import { getSubTypeIndusDesign, getTypeIndusDesign } from "../../../../service/actions/landingAction";
-import { complateSubmissionIndusDesign } from "../../../../service/actions/submissionAction";
-import { useLocation } from "react-router-dom";
+import { complateSubmissionIndusDesign, revisionSubmissionIndustrialDesign } from "../../../../service/actions/submissionAction";
+import { useLocation, useNavigate } from "react-router-dom";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import { processFile } from "../../../../utils/formatFile";
 
 const useComplateIndustrialDesain = () => {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { designId } = location.state || {};
-  console.log(designId);
-  const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing.submissionType.indusDesign);
+  const { loading, setLoading } = useLoadingProses();
+  const { designId, types } = location.state || {};
+  const navigate = useNavigate();
+  const { detailDesign } = useSelector((state: RootState) => state.landing);
 
   const [formIndustDesign, setFormIndustDesign] = useState<FormComplateIndustDesign>({
     titleDesign: "",
@@ -101,35 +102,117 @@ const useComplateIndustrialDesain = () => {
     }
   };
 
-  const handleClaimCheckboxChange = (label: string) => {
+  const handleClaimCheckboxChange = (value: string) => {
     setFormIndustDesign((prev) => {
-      const exists = prev.claim.includes(label);
+      const exists = prev.claim.includes(value);
       return {
         ...prev,
-        claim: exists ? prev.claim.filter((item) => item !== label) : [...prev.claim, label],
+        claim: exists ? prev.claim.filter((item) => item !== value) : [...prev.claim, value],
       };
     });
   };
 
-  const handleSubmitComplateIndusDesign = () => {
+  const handleSubmitComplateIndusDesign = async () => {
     const errors = validateIndustrialDesign(formIndustDesign);
     const hasErrors = Object.values(errors).some((error) => error !== null);
     if (hasErrors) {
       setFormIndustDesignError(errors);
       return;
     }
-    dispatch(complateSubmissionIndusDesign(designId, formIndustDesign));
+
+    if (types === "Lengkapi Berkas") {
+      setLoading(true);
+      try {
+        await dispatch(complateSubmissionIndusDesign(designId, formIndustDesign));
+        setFormIndustDesign({
+          titleDesign: "",
+          type: "",
+          typeDesignId: 0,
+          subtypeDesignId: 0,
+          claim: [],
+          looksPerspective: null as File | null,
+          frontView: null as File | null,
+          backView: null as File | null,
+          rightSideView: null as File | null,
+          lefttSideView: null as File | null,
+          topView: null as File | null,
+          downView: null as File | null,
+          moreImages: null as File | null,
+          letterTransferDesignRights: null as File | null,
+          designOwnershipLetter: null as File | null,
+        });
+        navigate("/histori-pengajuan/desain-industri");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (types === "Revisi") {
+      setLoading(true);
+      try {
+        await dispatch(revisionSubmissionIndustrialDesign(detailDesign?.id, formIndustDesign));
+        setFormIndustDesign({
+          titleDesign: "",
+          type: "",
+          typeDesignId: 0,
+          subtypeDesignId: 0,
+          claim: [] as string[],
+          looksPerspective: null as File | null,
+          frontView: null as File | null,
+          backView: null as File | null,
+          rightSideView: null as File | null,
+          lefttSideView: null as File | null,
+          topView: null as File | null,
+          downView: null as File | null,
+          moreImages: null as File | null,
+          letterTransferDesignRights: null as File | null,
+          designOwnershipLetter: null as File | null,
+        });
+        navigate("/histori-pengajuan/desain-industri");
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   useEffect(() => {
-    dispatch(getTypeIndusDesign());
-  }, [dispatch]);
+    const initForm = async () => {
+      if (!detailDesign || types !== "Revisi") return;
 
-  useEffect(() => {
-    if (formIndustDesign.typeDesignId) {
-      dispatch(getSubTypeIndusDesign(formIndustDesign.typeDesignId));
-    }
-  }, [dispatch, formIndustDesign.typeDesignId]);
+      const looksPerspective = await processFile(detailDesign.looksPerspective);
+      const frontView = await processFile(detailDesign.frontView);
+      const backView = await processFile(detailDesign.backView);
+      const rightSideView = await processFile(detailDesign.rightSideView);
+      const lefttSideView = await processFile(detailDesign.lefttSideView);
+      const topView = await processFile(detailDesign.topView);
+      const downView = await processFile(detailDesign.downView);
+      const moreImages = await processFile(detailDesign.moreImages);
+      const letterTransferDesignRights = await processFile(detailDesign.letterTransferDesignRights);
+      const designOwnershipLetter = await processFile(detailDesign.designOwnershipLetter);
+
+      setFormIndustDesign({
+        titleDesign: detailDesign.titleDesign || "",
+        type: detailDesign.type || "",
+        typeDesignId: detailDesign.typeDesignId || 0,
+        subtypeDesignId: detailDesign.subtypeDesignId || 0,
+        claim: typeof detailDesign.claim === "string" ? [detailDesign.claim] : Array.isArray(detailDesign.claim) ? detailDesign.claim : [],
+        looksPerspective,
+        frontView,
+        backView,
+        rightSideView,
+        lefttSideView,
+        topView,
+        downView,
+        moreImages,
+        letterTransferDesignRights,
+        designOwnershipLetter,
+      });
+    };
+
+    initForm();
+  }, [detailDesign, types]);
+
+  console.log(formIndustDesign);
 
   return {
     formIndustDesign,
@@ -137,8 +220,8 @@ const useComplateIndustrialDesain = () => {
     handleChangeComplateIndusDesign,
     handleSubmitComplateIndusDesign,
     handleClaimCheckboxChange,
-    typeDesign,
-    subtypeDesain,
+
+    loading,
   };
 };
 

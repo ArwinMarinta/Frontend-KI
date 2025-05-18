@@ -19,7 +19,7 @@ const usePersonalData = () => {
       ward: "",
       postalCode: "",
       phoneNumber: "",
-      ktp: null as File | null,
+      ktp: null,
       isLeader: false,
       facebook: null,
       whatsapp: null,

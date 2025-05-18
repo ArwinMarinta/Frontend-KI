@@ -10,7 +10,7 @@ interface StepperProps {
 
 const Stepper = ({ currentStep, steps }: StepperProps) => {
   return (
-    <ol className="flex items-center w-full ">
+    <ol className="flex items-center w-full  h-full">
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1;
         const isActive = currentStep === index;
@@ -19,7 +19,7 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
         return (
           <li
             key={index}
-            className={`flex flex-col items-center w-full h-full relative ${!isLast ? 'after:content-[""] after:w-full after:h-1 after:border-b after:border-4 after:inline-block after:absolute after:top-5 after:left-1/2 after:transform  after:z-[0]' : ""} ${
+            className={`flex flex-col items-center w-full h-32  relative ${!isLast ? 'after:content-[""] after:w-full after:h-1 after:border-b after:border-4 after:inline-block after:absolute after:top-5 after:left-1/2 after:transform  after:z-[0]' : ""} ${
               isCompleted ? "after:border-PRIMARY01" : "after:border-gray-300"
             }`}
           >

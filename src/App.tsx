@@ -61,6 +61,9 @@ import DashboardUser from "./applications/users/submission/page/dashboardUser";
 import SubmissionUserPaten from "./applications/users/submission/page/submissionUserPaten";
 import SubmissionUserBrand from "./applications/users/submission/page/submissionUserBrand";
 import SubmissionUserIndusDesign from "./applications/users/submission/page/submissionUserIndusDesign";
+import ProtectedToken from "./middleware/protecdToken";
+import NoAccessToken from "./middleware/noAccessToken";
+import ProtectedRouteRole from "./middleware/protecdRole";
 
 function App() {
   return (
@@ -73,75 +76,479 @@ function App() {
         <Route path="/unduhan" element={<Files />} />
         <Route path="/frequently-asked-question" element={<Faq />} />
         <Route path="/hubungi-kami" element={<Contact />} />
-        <Route path="/notifikasi" element={<Notification />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/lupa-kata-sandi" element={<ForgotPassword />} />
-        <Route path="/resset-password/:token" element={<RessetPassword />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/profile" element={<UserProfile />} />
+        {/* <Route path="/notifikasi" element={<Notification />} /> */}
+        <Route
+          path="/login"
+          element={
+            <ProtectedToken>
+              <Login />
+            </ProtectedToken>
+          }
+        />
 
-        <Route path="/penugasan" element={<Assignment />} />
-        <Route path="/penugasan/progress" element={<ReviewerProgress />} />
-        <Route path="/penugasan/progress/ubah" element={<ReviewerUpdateProgres />} />
-        <Route path="/ubah-password" element={<ChangePassword />} />
+        <Route
+          path="/register"
+          element={
+            <ProtectedToken>
+              <Register />
+            </ProtectedToken>
+          }
+        />
 
-        {/* dashboard pengajuan user */}
-        <Route path="/dashboard/pengajuan" element={<DashboardUser />} />
-        <Route path="/pengajuan/hak-cipta" element={<SubmissionUserCopytight />} />
-        <Route path="/pengajuan/paten" element={<SubmissionUserPaten />} />
-        <Route path="/pengajuan/merek" element={<SubmissionUserBrand />} />
-        <Route path="/pengajuan/desain-industri" element={<SubmissionUserIndusDesign />} />
+        <Route
+          path="/lupa-kata-sandi"
+          element={
+            <ProtectedToken>
+              <ForgotPassword />
+            </ProtectedToken>
+          }
+        />
 
-        {/* history */}
+        <Route
+          path="/resset-password/:token"
+          element={
+            <ProtectedToken>
+              <RessetPassword />
+            </ProtectedToken>
+          }
+        />
 
-        <Route path="/histori-pengajuan/progress" element={<SubmissionProgress />} />
-        <Route path="/histori-pengajuan/detail" element={<SubmissionDetail />} />
-        <Route path="/histori-pengajuan/ubah" element={<SubmissionUpdate />} />
-        <Route path="/lengkapi-berkas-pengajuan" element={<SubmissionComplete />} />
-        <Route path="/histori-pengajuan/:type" element={<SubmissionHistory />} />
-        {/* url admin */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        {/* permohonan */}
-        <Route path="/permohonan/hak-cipta" element={<SubmissionCopyright />} />
-        <Route path="/permohonan/paten" element={<SubmissionPatent />} />
-        <Route path="/permohonan/merek" element={<SubmissionBrand />} />
-        <Route path="/permohonan/desain-industri" element={<SubmissionIndustrialDesign />} />
-        <Route path="/permohonan/jenis/progres" element={<ProgresSubmission />} />
-        <Route path="/permohonan/:name/detail/:id" element={<DetailSubmission />} />
-        <Route path="/permohonan/:name/progres/:id" element={<ProgresSubmission />} />
-        {/* Kategori dan jenis kekayaan intelektual */}
-        <Route path="/kategori/kekayaan-intelektual" element={<IprCategory />} />
-        <Route path="/kategori/hak-cipta" element={<CopyrightCategory />} />
-        <Route path="/kategori/hak-cipta/:ids/sub-jenis" element={<SubCopyrightCategory />} />
-        <Route path="/kategori/paten" element={<PatentCategory />} />
-        <Route path="/kategori/merek" element={<BrandCategory />} />
-        <Route path="/kategori/desain-industri" element={<IndustrialDesignCategory />} />
-        <Route path="/kategori/desain-industri/:ids/sub-jenis" element={<SubIndustrialDesign />} />
-        {/* Pendanaan */}
-        <Route path="/manajemen/tahun/pendanaan" element={<ManageYearsFunding />} />
-        <Route path="/manajemen/tahun/pendanaan/:years" element={<ManageGroup />} />
-        <Route path="/manajemen/tahun/pendanaan/:years/quota/:group" element={<ManageQuota />} />
-        {/* FAQ */}
-        <Route path="/manajemen/kategori/faq" element={<ManageCategoryFaq />} />
-        <Route path="/manajemen/kategori/faq/:name" element={<ManageSubFaq />} />
-        {/* Unduhan */}
-        <Route path="/manajemen/kategori/unduhan/:name" element={<ManageDownload />} />
-        <Route path="/manajemen/kategori/unduhan" element={<ManageCategoryDownload />} />
-        {/* syarat dan ketentuan */}
-        <Route path="/manajemen/syarat-ketentuan-pendanaan" element={<ManageTermConditionalFunding />} />
-        {/* Pusat Bantuan */}
-        <Route path="/informasi/pusat-bantuan" element={<HelpCenter />} />
-        <Route path="/informasi/pusat-bantuan/balas/:ids" element={<ReplyHelpCenter />} />
-        <Route path="/informasi/laporan-analisis" element={<ReportsAnalitic />} />
-        <Route path="/informasi/log-aktivitas" element={<LogActivity />} />
-        {/* pengaturan akun */}
-        <Route path="/pengaturan/akun" element={<Account />} />
-        <Route path="/pengaturan/akun/detail/user" element={<DetailAccount />} />
-        <Route path="/pengaturan/akun/tambah/user" element={<CreateAccount />} />
-        <Route path="/pengaturan/akun/ubah/user" element={<UpdateAccount />} />
-        {/* Profile Admin */}
-        <Route path="/profile/admin" element={<ProfileAdmin />} />
+        <Route
+          path="/verify-email"
+          element={
+            <ProtectedToken>
+              <VerifyEmail />
+            </ProtectedToken>
+          }
+        />
+
+        <Route element={<ProtectedRouteRole allowedRoles={["user", "reviewer"]} />}>
+          <Route
+            path="/dashboard/pengajuan"
+            element={
+              <NoAccessToken>
+                <DashboardUser />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengajuan/hak-cipta"
+            element={
+              <NoAccessToken>
+                <SubmissionUserCopytight />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengajuan/paten"
+            element={
+              <NoAccessToken>
+                <SubmissionUserPaten />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengajuan/merek"
+            element={
+              <NoAccessToken>
+                <SubmissionUserBrand />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengajuan/desain-industri"
+            element={
+              <NoAccessToken>
+                <SubmissionUserIndusDesign />
+              </NoAccessToken>
+            }
+          />
+
+          {/* history */}
+
+          <Route
+            path="/histori-pengajuan/progress"
+            element={
+              <NoAccessToken>
+                <SubmissionProgress />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/histori-pengajuan/detail"
+            element={
+              <NoAccessToken>
+                <SubmissionDetail />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/histori-pengajuan/ubah"
+            element={
+              <NoAccessToken>
+                <SubmissionUpdate />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/lengkapi-berkas-pengajuan"
+            element={
+              <NoAccessToken>
+                <SubmissionComplete />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/histori-pengajuan/:type"
+            element={
+              <NoAccessToken>
+                <SubmissionHistory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/notifikasi"
+            element={
+              <NoAccessToken>
+                <Notification />
+              </NoAccessToken>
+            }
+          />
+        </Route>
+
+        <Route element={<ProtectedRouteRole allowedRoles={["reviewer"]} />}>
+          <Route
+            path="/penugasan"
+            element={
+              <NoAccessToken>
+                <Assignment />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/penugasan/progress"
+            element={
+              <NoAccessToken>
+                <ReviewerProgress />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/penugasan/progress/ubah"
+            element={
+              <NoAccessToken>
+                <ReviewerUpdateProgres />
+              </NoAccessToken>
+            }
+          />
+        </Route>
+
+        <Route element={<ProtectedRouteRole allowedRoles={["user", "reviewer", "admin", "superAdmin"]} />}>
+          <Route
+            path="/profile"
+            element={
+              <NoAccessToken>
+                <UserProfile />
+              </NoAccessToken>
+            }
+          />
+
+          <Route
+            path="/ubah-password"
+            element={
+              <NoAccessToken>
+                <ChangePassword />
+              </NoAccessToken>
+            }
+          />
+        </Route>
+
+        <Route element={<ProtectedRouteRole allowedRoles={["admin", "superAdmin"]} />}>
+          <Route
+            path="/ubah-password"
+            element={
+              <NoAccessToken>
+                <ChangePassword />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <NoAccessToken>
+                <Dashboard />
+              </NoAccessToken>
+            }
+          />
+
+          {/* permohonan */}
+          <Route
+            path="/permohonan/hak-cipta"
+            element={
+              <NoAccessToken>
+                <SubmissionCopyright />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/paten"
+            element={
+              <NoAccessToken>
+                <SubmissionPatent />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/merek"
+            element={
+              <NoAccessToken>
+                <SubmissionBrand />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/desain-industri"
+            element={
+              <NoAccessToken>
+                <SubmissionIndustrialDesign />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/jenis/progres"
+            element={
+              <NoAccessToken>
+                <ProgresSubmission />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/:name/detail/:id"
+            element={
+              <NoAccessToken>
+                <DetailSubmission />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/:name/progres/:id"
+            element={
+              <NoAccessToken>
+                <ProgresSubmission />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Kategori dan jenis kekayaan intelektual */}
+          <Route
+            path="/kategori/kekayaan-intelektual"
+            element={
+              <NoAccessToken>
+                <IprCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/hak-cipta"
+            element={
+              <NoAccessToken>
+                <CopyrightCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/hak-cipta/:ids/sub-jenis"
+            element={
+              <NoAccessToken>
+                <SubCopyrightCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/paten"
+            element={
+              <NoAccessToken>
+                <PatentCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/merek"
+            element={
+              <NoAccessToken>
+                <BrandCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/desain-industri"
+            element={
+              <NoAccessToken>
+                <IndustrialDesignCategory />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/kategori/desain-industri/:ids/sub-jenis"
+            element={
+              <NoAccessToken>
+                <SubIndustrialDesign />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Pendanaan */}
+          <Route
+            path="/manajemen/tahun/pendanaan"
+            element={
+              <NoAccessToken>
+                <ManageYearsFunding />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/manajemen/tahun/pendanaan/:years"
+            element={
+              <NoAccessToken>
+                <ManageGroup />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/manajemen/tahun/pendanaan/:years/quota/:group"
+            element={
+              <NoAccessToken>
+                <ManageQuota />
+              </NoAccessToken>
+            }
+          />
+
+          {/* FAQ */}
+          <Route
+            path="/manajemen/kategori/faq"
+            element={
+              <NoAccessToken>
+                <ManageCategoryFaq />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/manajemen/kategori/faq/:name"
+            element={
+              <NoAccessToken>
+                <ManageSubFaq />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Unduhan */}
+          <Route
+            path="/manajemen/kategori/unduhan"
+            element={
+              <NoAccessToken>
+                <ManageCategoryDownload />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/manajemen/kategori/unduhan/:name"
+            element={
+              <NoAccessToken>
+                <ManageDownload />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Syarat dan ketentuan */}
+          <Route
+            path="/manajemen/syarat-ketentuan-pendanaan"
+            element={
+              <NoAccessToken>
+                <ManageTermConditionalFunding />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Pusat Bantuan */}
+          <Route
+            path="/informasi/pusat-bantuan"
+            element={
+              <NoAccessToken>
+                <HelpCenter />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/informasi/pusat-bantuan/balas/:ids"
+            element={
+              <NoAccessToken>
+                <ReplyHelpCenter />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/informasi/laporan-analisis"
+            element={
+              <NoAccessToken>
+                <ReportsAnalitic />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/informasi/log-aktivitas"
+            element={
+              <NoAccessToken>
+                <LogActivity />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Profile Admin */}
+          <Route
+            path="/profile/admin"
+            element={
+              <NoAccessToken>
+                <ProfileAdmin />
+              </NoAccessToken>
+            }
+          />
+        </Route>
+
+        <Route element={<ProtectedRouteRole allowedRoles={["superAdmin"]} />}>
+          {/* Pengaturan akun */}
+          <Route
+            path="/pengaturan/akun"
+            element={
+              <NoAccessToken>
+                <Account />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengaturan/akun/detail/user"
+            element={
+              <NoAccessToken>
+                <DetailAccount />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengaturan/akun/tambah/user"
+            element={
+              <NoAccessToken>
+                <CreateAccount />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/pengaturan/akun/ubah/user"
+            element={
+              <NoAccessToken>
+                <UpdateAccount />
+              </NoAccessToken>
+            }
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -11,13 +11,16 @@ import Form_2 from "../components/form_2";
 import Form_4 from "../components/form_4";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../service/store";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../components/modal/modalLoading";
 
 const SubmissionUserIndusDesign = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { loading, setLoading } = useLoadingProses();
   // const { currentStep, submissionType, setCurrentStep, setSubmissionType } = useSubmission();
   const { error, currentStep, setCurrentStep } = useSubmissionType();
-  const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
-  const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent } = useDraftSubmission();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { setDraftPatent, draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent } = useDraftSubmission();
 
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
@@ -67,21 +70,56 @@ const SubmissionUserIndusDesign = () => {
       setCurrentStep(currentStep + 1);
     }
   };
-  const handleSubmit = () => {
-    dispatch(createSubmissionIndustrialDesign(4, personalData, draftPatent));
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      await dispatch(createSubmissionIndustrialDesign(4, personalData, draftPatent));
+      setCurrentStep(0);
+      setPersonalData([
+        {
+          id: 1,
+          isLeader: true,
+          name: "",
+          email: "",
+          faculty: "",
+          studyProgram: "",
+          institution: "",
+          work: "",
+          nationalState: "",
+          countryResidence: "",
+          province: "",
+          city: "",
+          subdistrict: "",
+          ward: "",
+          postalCode: "",
+          phoneNumber: "",
+          address: "",
+          ktp: null,
+          facebook: "",
+          whatsapp: "",
+          instagram: "",
+          twitter: "",
+        },
+      ]);
+
+      setDraftPatent(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-row w-full h-full bg-gray-100">
-      <div className="min-h-full w-[16%] bg-white">
+    <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+      <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
         <SideSubmisson />
       </div>
-      <div className="w-[84%]  border ">
+      <div className="lg:w-[84%] w-full border ">
         <HeaderNavigation />
-        <div className="container  mt-16 ">
-          <div className=" p-16 rounded-md bg-white">
+        <div className="px-4 lg:px-12  py-8">
+          <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex justify-center mb-10">
-              <h1 className="text-[48px] font-bold mb-20">Formulir Pengajuan Hak Cipta</h1>
+              <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Desain Industri</h1>
             </div>
             <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
             {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} />}
@@ -93,6 +131,7 @@ const SubmissionUserIndusDesign = () => {
           </div>
         </div>
       </div>
+      <ModalLoading show={loading} />
     </div>
   );
 };

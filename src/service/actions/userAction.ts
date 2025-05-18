@@ -6,11 +6,17 @@ import { setAccount, setUserDetails } from "../reducers/userReducer";
 import { User3, UserForm } from "../../types/userType";
 import { NavigateFunction } from "react-router-dom";
 import { API_URL } from "../../config/config";
+import { logout } from "./authAction";
 
 export const getMe = (): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
+
+      if (!token) {
+        dispatch(logout());
+        return Promise.reject();
+      }
 
       const response = await axios.get(`${API_URL}/auth/me`, {
         headers: {
@@ -19,10 +25,11 @@ export const getMe = (): AppThunk => {
       });
 
       dispatch(setUser(response.data.data));
+      return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          console.log(error.response.data.message);
+          dispatch(logout());
         } else {
           console.log("No response received:", error.message);
         }
@@ -176,6 +183,60 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
 
       dispatch(getAccount(currentPage, limit));
       navigate("/pengaturan/akun");
+      return Promise.resolve();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const updateReviewer = (id: number | string | null, reviewerId: number): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      await axios.patch(
+        `${API_URL}/user-submission/submission-reviewer/${id}`,
+        { reviewerId: reviewerId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return Promise.resolve();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const updateSubmissionStatus = (id: number | string | null, centralStatus: string): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      await axios.patch(
+        `${API_URL}/user-submission/submission-status/${id}`,
+        { centralStatus: centralStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {

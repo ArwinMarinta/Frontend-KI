@@ -11,14 +11,14 @@ const ReviewerAssignment = () => {
   const { reviewer, limit, currentPage, totalPages, dispatch } = useAssignment();
   return (
     <>
-      <div className="flex flex-row w-full h-full bg-gray-100">
-        <div className="min-h-full w-[16%] bg-white">
+      <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+        <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
           <SideSubmisson />
         </div>
-        <div className="w-[84%]  border  ">
+        <div className="lg:w-[84%] w-full border   ">
           <HeaderNavigation />
-          <div className="container  mt-16  ">
-            <div className="flex flex-col p-8 border rounded-md  bg-white">
+          <div className="px-4 lg:px-12  py-8">
+            <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <h1 className="text-3xl font-bold mb-14">Penugasan Reviewer</h1>
 
               <div className="mt-8">

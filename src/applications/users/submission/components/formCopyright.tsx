@@ -32,19 +32,22 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
 
   return (
     <>
-      <div className="flex flex-col items-center mt-20">
-        <h2 className="text-[32px] font-semibold">Dokumen Pengajuan</h2>
-        <p className="text-justify mt-3 flex flex-col w-full items-center">
-          <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
-          <span> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</span>
+      <div className="flex flex-col items-center lg:mt-20 mt-10">
+        <h2 className="lg:text-[32px] font-semibold text-2xl">Dokumen Pengajuan</h2>
+        <p className="text-justify mt-3 items-center">
+          Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.
+          {/* <br /> */}
+          Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.
+          {/* <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
+          <span> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</span> */}
         </p>
       </div>
 
-      <div className="flex flex-col gap-6 mt-24">
+      <div className="flex flex-col gap-6 lg:mt-24 mt-16">
         <Field label="Judul Ciptaan" value={formCopyright?.titleInvention || ""} name="titleInvention" type="text" placeholder="" need error={formCopyrightError?.titleInvention} onChange={handleChange} />
 
         <div>
-          <div className="flex flex-row w-full gap-6">
+          <div className="flex md:flex-row flex-col w-full gap-6">
             <FieldDropdown
               label="Jenis Hak Cipta"
               name="typeCreation"
@@ -78,7 +81,7 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
           </div>
         </div>
 
-        <div className="flex flex-row w-full gap-6">
+        <div className="flex md:flex-row flex-col w-full gap-6">
           <Field label="Negara Pertama Kali Diumumkan" value={formCopyright?.countryFirstAnnounced || ""} name="countryFirstAnnounced" type="text" placeholder="" need error={formCopyrightError?.countryFirstAnnounced} onChange={handleChange} />
           <Field label="Kota Pertama Kali Diumumkan" value={formCopyright?.cityFirstAnnounced || ""} name="cityFirstAnnounced" type="text" placeholder="" need error={formCopyrightError?.cityFirstAnnounced} onChange={handleChange} />
         </div>

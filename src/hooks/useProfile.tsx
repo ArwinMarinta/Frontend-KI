@@ -5,6 +5,7 @@ import { getMe } from "../service/actions/userAction";
 import { AppDispatch, RootState } from "../service/store";
 import { UpdateProfileErrors, User3 } from "../types/userType";
 import { updateProfile } from "../service/actions/userAction";
+import { logout } from "../service/actions/authAction";
 
 const useProfile = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -103,7 +104,12 @@ const useProfile = () => {
     }
   };
 
-  return { user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate };
+  const handleLogout = () => {
+    navigate("/");
+    dispatch(logout());
+  };
+
+  return { handleLogout, user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate };
 };
 
 export default useProfile;

@@ -32,14 +32,6 @@ const Contact = () => {
               </div>
             </form>
           </section>
-
-          <video autoPlay loop muted playsInline width="100%" style={{ maxWidth: "400px", borderRadius: "12px" }}>
-            <source src={LoadingAnimation} type="video/webm" />
-            Your browser does not support the video tag.
-          </video>
-          <img src={LoadingAnimation2} alt="Animasi lucu" style={{ width: "300px", height: "auto" }} />
-
-          {/* <DotLottieReact src="https://lottie.host/b6a33266-7aab-4279-9dfb-e70e56ca6cc3/m3gDtNNiI7.lottie" loop autoplay /> */}
         </div>
       </main>
     </>

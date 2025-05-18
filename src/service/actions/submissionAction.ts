@@ -7,6 +7,7 @@ import { FormSubmissionCopyright } from "../../types/copyright";
 import { FormAdditionalBrand, FormSubmissionBrand } from "../../types/brandType";
 import { getUserSubmission } from "./historyAction";
 import { FormSchema } from "../../types/schemaPayment";
+import { setReviewer } from "../reducers/userReducer";
 
 export const getSubmissionPatent = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -32,6 +33,29 @@ export const getSubmissionPatent = (currentPage: number, limit: number): AppThun
           limit: response.data?.limit ?? 2,
         })
       );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const getReviewer = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/user/reviewer`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(setReviewer(response.data.users ?? []));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -300,15 +324,16 @@ export const createSubmissionPaten = (submissionType: number, formPersonalData: 
         formData.append("draftPatentApplicationFile", drafDocument);
       }
 
-      const response = await axios.post(`${API_URL}/patent`, formData, {
+      await axios.post(`${API_URL}/patent`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
 
-      console.log(response.data.message);
-      alert(response.data.status);
+      // if (response.status === 201) {
+      //   navigate("/pengajuan/paten");
+      // }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -339,15 +364,12 @@ export const complateSubmissionPatent = (id: number, document: FormComplatePaten
       if (document.statementInventionOwnership) formData.append("statementInventionOwnership", document.statementInventionOwnership);
       if (document.letterTransferRightsInvention) formData.append("letterTransferRightsInvention", document.letterTransferRightsInvention);
 
-      const response = await axios.patch(`${API_URL}/patent/${id}`, formData, {
+      await axios.patch(`${API_URL}/patent/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log(response.data.message);
-      alert(response.data.status);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -384,15 +406,12 @@ export const complateSubmissionIndusDesign = (id: number, document: FormComplate
       if (document.designOwnershipLetter) formData.append("designOwnershipLetter", document.designOwnershipLetter);
       if (document.letterTransferDesignRights) formData.append("letterTransferDesignRights", document.letterTransferDesignRights);
 
-      const response = await axios.patch(`${API_URL}/design-industri/${id}`, formData, {
+      await axios.patch(`${API_URL}/design-industri/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log(response.data.message);
-      alert(response.data.status);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -499,15 +518,12 @@ export const createSubmissionIndustrialDesign = (submissionType: number, formPer
         formData.append("draftDesainIndustriApplicationFile", drafDocument);
       }
 
-      const response = await axios.post(`${API_URL}/design-industri`, formData, {
+      await axios.post(`${API_URL}/design-industri`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log(response.data.message);
-      alert(response.data.status);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -557,8 +573,8 @@ export const createSubmissionCopyright = (submissionType: number, formPersonalDa
       });
 
       formData.append("titleInvention", formCopyright.titleInvention);
-      formData.append("typeCreation", formCopyright.typeCreation !== null ? formCopyright.typeCreation.toString() : "");
-      formData.append("subTypeCreation", formCopyright.subTypeCreation !== null ? formCopyright.subTypeCreation.toString() : "");
+      formData.append("typeCreationId", formCopyright.typeCreation !== null ? formCopyright.typeCreation.toString() : "");
+      formData.append("subTypeCreationId", formCopyright.subTypeCreation !== null ? formCopyright.subTypeCreation.toString() : "");
       formData.append("countryFirstAnnounced", formCopyright.countryFirstAnnounced);
       formData.append("cityFirstAnnounced", formCopyright.cityFirstAnnounced);
       formData.append("timeFirstAnnounced", formCopyright.timeFirstAnnounced);
@@ -567,15 +583,12 @@ export const createSubmissionCopyright = (submissionType: number, formPersonalDa
       if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
       if (formCopyright.exampleCreation) formData.append("exampleCreation", formCopyright.exampleCreation);
 
-      const response = await axios.post(`${API_URL}/copyright`, formData, {
+      await axios.post(`${API_URL}/copyright`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log(response.data.message);
-      alert(response.data.status);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -657,17 +670,12 @@ export const createSubmissionBrand = (submissionType: number, formPersonalData: 
         }
       });
 
-      console.log("test");
-
-      const response = await axios.post(`${API_URL}/brand`, formData, {
+      await axios.post(`${API_URL}/brand`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Belum");
-      console.log(response.data.message);
-      alert(response.data.status);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -688,6 +696,7 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
       const formData = new FormData();
       formData.append("reviewStatus", form.reviewStatus);
       formData.append("comments", form.comments);
+      formData.append("billingCode", form.paymentCode);
 
       form.files.forEach((file) => {
         formData.append("files", file);
@@ -704,8 +713,6 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
       });
 
       dispatch(getDetailSubmission(id));
-
-      alert("success");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -724,7 +731,7 @@ export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk =
       const { token } = getState().auth;
       console.log(form);
 
-      const response = await axios.patch(
+      await axios.patch(
         `${API_URL}/user-submission/submission-schema/${id}`,
         {
           periodId: form.periodId,
@@ -738,8 +745,275 @@ export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk =
           },
         }
       );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
 
-      alert(response.data.message);
+export const revisionSubmissionPaten = (id: number | undefined, Form: FormComplatePatenSubmission): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+      if (Form.inventionTitle) {
+        formData.append("inventionTitle", Form?.inventionTitle);
+      }
+      if (Form.numberClaims) {
+        formData.append("numberClaims", String(Form.numberClaims));
+      }
+      if (Form.patentTypeId) {
+        formData.append("patentTypeId", Form?.patentTypeId?.toString());
+      }
+      if (Form.claim) {
+        formData.append("claim", Form?.claim);
+      }
+      if (Form.description) {
+        formData.append("description", Form?.description);
+      }
+      if (Form.abstract) {
+        formData.append("abstract", Form?.abstract);
+      }
+      if (Form.inventionImage) {
+        formData.append("inventionImage", Form?.inventionImage);
+      }
+      if (Form.statementInventionOwnership) {
+        formData.append("statementInventionOwnership", Form?.statementInventionOwnership);
+      }
+      if (Form.letterTransferRightsInvention) {
+        formData.append("letterTransferRightsInvention", Form?.letterTransferRightsInvention);
+      }
+
+      await axios.patch(`${API_URL}/patent/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const revisionSubmissionIndustrialDesign = (id: number | undefined, Form: FormComplateIndustDesign): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+      if (Form.titleDesign) formData.append("titleDesign", Form.titleDesign);
+      if (Form.type) formData.append("type", Form.type);
+      if (Form.typeDesignId) formData.append("typeDesignId", Form.typeDesignId.toString());
+      if (Form.claim) formData.append("claim", JSON.stringify(Form.claim));
+      if (Form.looksPerspective) formData.append("looksPerspective", Form.looksPerspective);
+      if (Form.frontView) formData.append("frontView", Form.frontView);
+      if (Form.backView) formData.append("backView", Form.backView);
+      if (Form.rightSideView) formData.append("rightSideView", Form.rightSideView);
+      if (Form.lefttSideView) formData.append("lefttSideView", Form.lefttSideView);
+      if (Form.topView) formData.append("topView", Form.topView);
+      if (Form.downView) formData.append("downView", Form.downView);
+      if (Form.moreImages) formData.append("moreImages", Form.moreImages);
+      if (Form.letterTransferDesignRights) formData.append("letterTransferDesignRights", Form.letterTransferDesignRights);
+      if (Form.designOwnershipLetter) formData.append("designOwnershipLetter", Form.designOwnershipLetter);
+
+      await axios.patch(`${API_URL}/design-industri/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const revisonSubmissionCopyright = (submissionType: number | undefined, formCopyright: FormSubmissionCopyright): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+      if (formCopyright.titleInvention) {
+        formData.append("titleInvention", formCopyright.titleInvention);
+      }
+
+      if (formCopyright.typeCreation !== null && formCopyright.typeCreation !== undefined) {
+        formData.append("typeCreation", formCopyright.typeCreation.toString());
+      }
+
+      if (formCopyright.subTypeCreation !== null && formCopyright.subTypeCreation !== undefined) {
+        formData.append("subTypeCreation", formCopyright.subTypeCreation.toString());
+      }
+
+      if (formCopyright.countryFirstAnnounced) {
+        formData.append("countryFirstAnnounced", formCopyright.countryFirstAnnounced);
+      }
+
+      if (formCopyright.cityFirstAnnounced) {
+        formData.append("cityFirstAnnounced", formCopyright.cityFirstAnnounced);
+      }
+
+      if (formCopyright.timeFirstAnnounced) {
+        formData.append("timeFirstAnnounced", formCopyright.timeFirstAnnounced);
+      }
+
+      if (formCopyright.briefDescriptionCreation) {
+        formData.append("briefDescriptionCreation", formCopyright.briefDescriptionCreation);
+      }
+
+      await axios.patch(`${API_URL}/copyright/${submissionType}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[]): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+
+      if (Form.applicationType) {
+        formData.append("applicationType", Form.applicationType);
+      }
+
+      if (Form.brandType) {
+        formData.append("brandType", Form.brandType.toString());
+      }
+
+      if (Form.referenceName) {
+        formData.append("referenceName", Form.referenceName);
+      }
+
+      if (Form.elementColor) {
+        formData.append("elementColor", Form.elementColor);
+      }
+
+      if (Form.translate) {
+        formData.append("translate", Form.translate);
+      }
+
+      if (Form.pronunciation) {
+        formData.append("pronunciation", Form.pronunciation);
+      }
+
+      if (Form.disclaimer) {
+        formData.append("disclaimer", Form.disclaimer);
+      }
+
+      if (Form.description) {
+        formData.append("description", Form.description);
+      }
+
+      if (Form.documentType) {
+        formData.append("documentType", Form.documentType);
+      }
+
+      if (Form.information) {
+        formData.append("information", Form.information);
+      }
+
+      if (Form.labelBrand) {
+        formData.append("labelBrand", Form.labelBrand);
+      }
+
+      if (Form.fileUploade) {
+        formData.append("fileUploade", Form.fileUploade);
+      }
+
+      if (Form.signature) {
+        formData.append("signature", Form.signature);
+      }
+
+      if (Form.InformationLetter) {
+        formData.append("InformationLetter", Form.InformationLetter);
+      }
+
+      if (Form.letterStatment) {
+        formData.append("letterStatment", Form.letterStatment);
+      }
+
+      // formAdditionalBrand.forEach((data, index) => {
+      //   if (data.additionalDescriptions) {
+      //     formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
+      //   }
+      // });
+
+      // formAdditionalBrand.forEach((data) => {
+      //   if (data.additionalFiles) {
+      //     formData.append("additionalFiles", data.additionalFiles);
+      //   }
+      // });
+
+      await axios.patch(`${API_URL}/brand/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const confirmPayment = (id: number | undefined, file: File | null): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+
+      if (file) {
+        formData.append("proofPayment", file);
+      }
+      formData.append("paymentStatus", "true");
+
+      await axios.patch(`${API_URL}/payment/payment-proof/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

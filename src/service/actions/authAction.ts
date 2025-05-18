@@ -1,7 +1,7 @@
 import { NavigateFunction } from "react-router-dom";
 import axios from "axios";
 import { AppThunk } from "../store";
-import { setToken } from "../reducers/authReducer";
+import { setToken, setUser } from "../reducers/authReducer";
 import { FormChangePassword } from "../../types/authType";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -41,7 +41,13 @@ export const login = (email: string, password: string, navigate: NavigateFunctio
 
       if (response.status === 200) {
         dispatch(setToken(response.data.token));
-        navigate("/");
+        if (response.data.role === "superAdmin" || response.data.role === "admin") {
+          navigate("/dashboard");
+        }
+
+        if (response.data.role === "user" || response.data.role === "reviewer") {
+          navigate("/dashboard/pengajuan");
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -106,5 +112,12 @@ export const changePassword = (form: FormChangePassword): AppThunk => {
         }
       }
     }
+  };
+};
+
+export const logout = (): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setToken(null));
+    dispatch(setUser(null));
   };
 };

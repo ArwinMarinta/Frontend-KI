@@ -5,6 +5,7 @@ import { PaginationType } from "../../types/paginationType";
 interface UserState {
   account: PaginationType & { users: User[] };
   userDetails: User | null;
+  reviewer: User[] | null;
 }
 
 const initialState: UserState = {
@@ -16,6 +17,7 @@ const initialState: UserState = {
     limit: 2,
   },
   userDetails: null,
+  reviewer: [],
 };
 
 const userSlice = createSlice({
@@ -35,9 +37,12 @@ const userSlice = createSlice({
     setCurrentPageUser: (state, action) => {
       state.account.currentPage = action.payload;
     },
+    setReviewer: (state, action) => {
+      state.reviewer = action.payload;
+    },
   },
 });
 
-export const { setAccount, setUserDetails, setCurrentPageUser, setLimitUser } = userSlice.actions;
+export const { setReviewer, setAccount, setUserDetails, setCurrentPageUser, setLimitUser } = userSlice.actions;
 
 export default userSlice.reducer;

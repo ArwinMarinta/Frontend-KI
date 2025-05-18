@@ -30,7 +30,7 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
 
   return (
     <>
-      <div className="flex flex-row justify-between mb-6">
+      <div className="flex lg:flex-row flex-col gap-6 lg:gap-2 lg justify-between mb-6">
         {searchable && <input type="text" placeholder="Cari..." className="p-2 border border-BORDER01 text-base rounded-md focus:outline-none" />}
         <div className="flex items-center gap-3">
           <DropdownLimit value={limit} onChange={onLimitChange} />
@@ -44,16 +44,16 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
             <tr>
               <th className="px-4 py-2 text-left border-b">No</th>
               {columns.map((col, i) => (
-                <th key={i} className="px-4 py-2 text-left border-b">
+                <th key={i} className="px-4 py-2 text-left border-b ">
                   {col.label}
                 </th>
               ))}
-              {actions?.length > 0 && <th className="px-4 py-2 text-left border-b ">Aksi</th>}
+              {actions?.length > 0 && <th className="px-4 py-2 text-left border-b whitespace-nowrap ">Aksi</th>}
             </tr>
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr key={item.id} className="bg-white hover:bg-gray-50">
+              <tr key={item.id} className="bg-white hover:bg-gray-50 ">
                 <td className="px-4 py-2 border-b">{index + 1 + (currentPage - 1) * limit}</td>
                 {columns.map((col, i) => (
                   <td key={i} className="px-4 py-2 border-b">
@@ -61,10 +61,10 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
                   </td>
                 ))}
                 {actions?.length > 0 && (
-                  <td className="px-4 py-2 border-b ">
-                    <div className="flex gap-2">
+                  <td className="px-4 py-2 border-b whitespace-nowrap">
+                    <div className="flex items-center  gap-2">
                       {actions.map((action, i) => (
-                        <span key={i} onClick={() => action.onClick(item)}>
+                        <span key={i} onClick={() => action.onClick(item)} className="inline-flex">
                           {action.component(item)}
                         </span>
                       ))}
@@ -77,7 +77,7 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
         </table>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-2 justify-between items-center mb-6">
         <span className="font-medium">{`Showing ${currentPage} to ${totalPages} of ${limit} entries`}</span>
         <Pagination previousLabel="Prev" nextLabel="Next" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons theme={customTheme} />
       </div>

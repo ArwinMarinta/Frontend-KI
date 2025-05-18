@@ -9,19 +9,19 @@ interface DocumentType {
 const DocumentSubmissionBrand = ({ data }: DocumentType) => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Tipe Permohonan" value={data?.applicationType ?? "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Tipe Merek" value={data?.brandTypeId?.toString() ?? "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Nama Refrensi Label Merek" value={data?.referenceName ?? "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Unsur Warna Dalam Label Merek" value={data?.elementColor?.toString() ?? "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Terjemahan Jika Menggunakan Bahasa Asing" value={data?.translate ?? "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Pengucapan Jika Menggunakan Huruf Non-Latin" value={data?.pronunciation?.toString() ?? "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
-      <div className="flex flex-col lg:flex-row lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Disclaimer" value={data?.disclaimer ?? "-"} name="fullname" type="text" placeholder="" readOnly />
         <Field label="Jenis Dokumen" value={data?.documentType ?? "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
@@ -71,21 +71,6 @@ const DocumentSubmissionBrand = ({ data }: DocumentType) => {
           </tbody>
         </table>
       </div>
-
-      {/* <div className="flex flex-col lg:flex-row lg:gap-6">
-        <Field label="Jenis Ciptaan" value={data?.typeCreation || "-"} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Sub-Jenis Ciptaan" value={String(data?.subTypeCreation || "-")} name="fullname" type="text" placeholder="" readOnly />
-      </div>
-      <div className="flex flex-col lg:flex-row lg:gap-6">
-        <Field label="Negara Pertama Kali Diumumkan" value={String(data?.countryFirstAnnounced || "-")} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Kota Pertama Kali Diumumkan" value={String(data?.cityFirstAnnounced || "-")} name="fullname" type="text" placeholder="" readOnly />
-      </div>
-
-      <Field label="Waktu Pertama Kali Diumumkan" value={String(data?.timeFirstAnnounced || "-")} name="fullname" type="text" placeholder="" readOnly />
-      <FieldTextarea label="Uraian Singkat" value={data?.briefDescriptionCreation || "-"} name="question" placeholder="" required row={4} readOnly />
-      <DetailDocument label="Surat Pernyataan" value={data?.statementLetter || ""} name="fullname" type="text" placeholder="" readOnly />
-      <DetailDocument label="Surat Pengalihan Hak Cipta" value={data?.letterTransferCopyright || ""} name="fullname" type="text" placeholder="" readOnly />
-      <DetailDocument label="Contoh Ciptaan" value={data?.exampleCreation || ""} name="fullname" type="text" placeholder="" readOnly /> */}
     </div>
   );
 };

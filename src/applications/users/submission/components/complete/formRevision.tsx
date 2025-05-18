@@ -28,24 +28,20 @@ const FormRevision = ({ progresSubmission }: FormRevisionProps) => {
         <div>
           <label className="block mb-2 text-base font-medium">File Revisi</label>
           <div className="flex flex-col gap-2">
-            {(progresSubmission?.[0].revisionFile ?? []).map((data) => (
-              <a key={data.id} href={`${API_FILE}/documents/${data.file}`} download={data.fileName} target="_blank" rel="noopener noreferrer" className="text-base font-semibold rounded-md w-full p-2 bg-gray-50 border flex flex-row gap-2 items-center hover:bg-gray-100 text-PRIMARY01 underline">
-                <BsFillFilePdfFill className="text-RED01" />
-                <div>{data.fileName}</div>
-              </a>
-            ))}
+            {(progresSubmission?.[0]?.revisionFile || []).length > 0 ? (
+              (progresSubmission?.[0]?.revisionFile || []).map((data) => (
+                <a key={data.id} href={`${API_FILE}/documents/${data.file}`} download={data.fileName} target="_blank" rel="noopener noreferrer" className="text-base font-semibold rounded-md w-full p-2 bg-gray-50 border flex flex-row gap-2 items-center hover:bg-gray-100 text-PRIMARY01 underline">
+                  <BsFillFilePdfFill className="text-RED01" />
+                  <div>{data.fileName}</div>
+                </a>
+              ))
+            ) : (
+              <div className="text-gray-400 italic text-sm py-2 px-4 border border-BORDER01 rounded-md">Tidak ada file revisi</div>
+            )}
           </div>
         </div>
         <FieldTextarea label="Komentar" value={progresSubmission?.[0]?.comment ?? ""} name="address" placeholder="" required row={4} readOnly />
-        <div>
-          <label className="block mb-2 text-base font-medium">Upload File</label>
-        </div>
       </div>
-      {/* <div className="flex justify-end mt-6">
-        <button onClick={handleSubmitSchema} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
-          Kirim
-        </button>
-      </div> */}
     </>
   );
 };

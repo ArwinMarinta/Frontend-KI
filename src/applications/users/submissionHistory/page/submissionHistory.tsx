@@ -22,18 +22,21 @@ const SubmissionHistory = () => {
       setMessage("Apakah Anda Yakin Ingin Menghapus Permohonan Hak Cipta Ini?");
     }
   };
+
+  console.log(user);
+
   return (
     <>
-      <div className="flex flex-row w-full h-full bg-gray-100">
-        <div className="min-h-full w-[16%] bg-white">
+      <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+        <div className="min-h-full  lg:w-[16%] hidden lg:block bg-white">
           <SideSubmisson />
         </div>
-        <div className="w-[84%]  border ">
+        <div className="lg:w-[84%] w-full border ">
           <HeaderNavigation />
-          <div className="container  mt-16 ">
-            <div className="flex flex-col p-8 border rounded-md bg-white">
+          <div className="px-4 lg:px-12  py-8 ">
+            <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <h1 className="text-3xl font-bold mb-14">Histori Pengajuan</h1>
-              <div className="flex flex-row w-full">
+              <div className="flex flex-row w-full h-full">
                 <Link to="/histori-pengajuan/hak-cipta">
                   <Button label={"Hak Cipta"} isActive={type === "hak-cipta"} onClick={() => {}} />
                 </Link>
@@ -103,12 +106,24 @@ const SubmissionHistory = () => {
                   actions={[
                     {
                       label: "Pembayaran",
+
                       onClick: () => {},
-                      component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Pembayaran") {
+                      component: (item: Review) => {
+                        if (item.progress.length > 0 && item.progress[0].status === "Pembayaran" && item.submission?.payment?.id) {
                           return (
-                            <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.submissionId}` }}>
-                              <button className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Pembayaran</button>
+                            <Link
+                              to="/lengkapi-berkas-pengajuan"
+                              state={{
+                                types: `${item.progress[0].status}`,
+                                submissionType: `${item.submission?.submissionType.title}`,
+                                submissionId: `${item.submissionId}`,
+                                paymentId: `${item.submission?.payment?.id}`,
+                                billingCode: `${item.submission?.payment?.billingCode}`,
+                                paymentSchema: `${item.submission?.submissionScheme}`,
+                              }}
+                              className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate   border-PRIMARY01 rounded-md text-PRIMARY01 font-medium"
+                            >
+                              Pembayaran
                             </Link>
                           );
                         }
@@ -119,10 +134,10 @@ const SubmissionHistory = () => {
                       label: "Skema Pendanaan",
                       onClick: () => {},
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Skema Pendanaan") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Skema Pendanaan" && item.submission?.submissionScheme === null) {
                           return (
                             <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
-                              <button className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
+                              <button className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
                             </Link>
                           );
                         }
@@ -135,8 +150,26 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Revisi") {
                           return (
-                            <Link to="/lengkapi-berkas-pengajuan" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
-                              <button className="py-1 px-2 border border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi</button>
+                            <Link
+                              to="/lengkapi-berkas-pengajuan"
+                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}
+                              className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium"
+                            >
+                              Revisi
+                            </Link>
+                          );
+                        }
+                        return null;
+                      },
+                    },
+                    {
+                      label: "Revisi Draft",
+                      onClick: () => {},
+                      component: (item) => {
+                        if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft") {
+                          return (
+                            <Link to="/histori-pengajuan/ubah" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                              <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
                             </Link>
                           );
                         }
@@ -147,11 +180,14 @@ const SubmissionHistory = () => {
                       label: "Lengkapi Berkas",
                       onClick: () => {},
                       component: (item) => {
-                        console.log(item.progress[0]);
                         if (item.progress.length > 0 && item.progress[0].status === "Lengkapi Berkas") {
                           return (
-                            <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, patenId: `${item.submission?.patentId}`, designId: `${item.submission?.industrialDesignId}` }}>
-                              <button className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Lengkapi Berkas</button>
+                            <Link
+                              to="/lengkapi-berkas-pengajuan"
+                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, patenId: `${item.submission?.patentId}`, designId: `${item.submission?.industrialDesignId}` }}
+                              className="py-1 px-2 whitespace-nowrap overflow-hidden truncate border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium"
+                            >
+                              Lengkapi Berkas
                             </Link>
                           );
                         }
@@ -159,13 +195,13 @@ const SubmissionHistory = () => {
                       },
                     },
                     {
-                      label: "Revisi",
+                      label: "Skema Pembayaran",
                       onClick: () => {},
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Skema Pembayaran") {
                           return (
                             <Link to="">
-                              <button className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
+                              <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
                             </Link>
                           );
                         }
@@ -180,7 +216,7 @@ const SubmissionHistory = () => {
                         if (item.progress.length > 0 && item.progress[0].status === "Pending") {
                           return (
                             <Link to="/histori-pengajuan/ubah" state={{ type: `${item.progress[0].status}`, submissionTypes: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
-                              <button className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Ubah</button>
+                              <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Ubah</button>
                             </Link>
                           );
                         }

@@ -1,39 +1,44 @@
-import Navbar from "../../../components/navigations/navbar";
+import { Link } from "react-router-dom";
+import HeaderNavigation from "../../../components/adminNavigation/headerNavigation";
+import SideSubmisson from "../../../components/adminNavigation/sideSubmisson";
 import useProfile from "../../../hooks/useProfile";
+import Profile from "../../../assets/images/profile.webp";
+import Button from "../submissionHistory/components/button";
 import FormDetailProfile from "../../admins/profile/components/formDetailProfile";
 import FormEditProfile from "../../admins/profile/components/formEditProfile";
-import SideProfile from "./components/sideProfile";
+import FormChagePassword from "../../admins/profile/components/formChangePassword";
 
 const UserProfile = () => {
   const { user, currentStatus, handleStatusChange, profileStatus, form, handleChange, handleSubmit, errors } = useProfile();
 
   return (
     <>
-      <Navbar />
-      <main className="flex w-full h-full justify-center">
-        <div className="container flex flex-row py-32 h-full gap-8">
-          <div className="min-h-full w-[20%]">
-            <SideProfile />
-          </div>
-          <div className="min-h-full w-[80%]">
-            <div className="flex flex-col p-8 border rounded-md shadow-md">
-              <h1 className="text-3xl font-bold mb-14">Profile</h1>
-              <form>
-                {/* <img src={ProfileImage} alt="image" className="h-20 rounded-full" />
-                <div className="mt-4">
-                  <input className="block w-full mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 max-w-xs focus:outline-none" id="file_input" type="file"></input>
-                  <span className="">Format file JPG, PNG, JPEG</span>
-                </div> */}
-                {currentStatus === "Profile" && profileStatus === "Detail" && <FormDetailProfile handleStatusChange={handleStatusChange} user={user} />}
-                {currentStatus === "Profile" && profileStatus === "Edit" && <FormEditProfile handleStatusChange={handleStatusChange} user={user} form={form} handleChange={handleChange} handleSubmit={handleSubmit} errors={errors} />}
-                {/* <div className="mt-8 flex justify-end">
-                  <button className="py-2 px-4 bg-PRIMARY01 font-medium text-white rounded-md">Ubah</button>
-                </div> */}
-              </form>
+      <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+        <div className="min-h-full lg:w-[16%] hidden lg:block bg-white ">
+          <SideSubmisson />
+        </div>
+        <div className="lg:w-[84%] w-full border ">
+          <HeaderNavigation />
+          <div className="px-4 lg:px-12   w-full flex lg:flex-row flex-col gap-10 py-8">
+            <div className="bg-white p-6 rounded-md lg:w-[40%] w-full self-start shadow-md border border-gray-50">
+              <Link to="/" className="flex w-full flex-col items-center p-4 gap-4 ">
+                <img src={Profile} alt="image" className="h-28 w-28 object-cover rounded-full" />
+                <div className="font-bold text-PRIMARY01 text-2xl block text-center w-full">{user?.fullname ?? "-"}</div>
+              </Link>
+            </div>
+            <div className="bg-white p-6 rounded-md w-full shadow-md border border-gray-50">
+              <div className="flex flex-row w-full mb-10">
+                <Button label="Profile" isActive={currentStatus === "Profile"} onClick={() => handleStatusChange("Profile")} />
+                <Button label="Ubah Password" isActive={currentStatus === "Ubah Password"} onClick={() => handleStatusChange("Ubah Password")} />
+              </div>
+
+              {currentStatus === "Profile" && profileStatus === "Detail" && <FormDetailProfile handleStatusChange={handleStatusChange} user={user} />}
+              {currentStatus === "Profile" && profileStatus === "Edit" && <FormEditProfile handleStatusChange={handleStatusChange} user={user} form={form} handleChange={handleChange} handleSubmit={handleSubmit} errors={errors} />}
+              {currentStatus === "Ubah Password" && <FormChagePassword />}
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 };

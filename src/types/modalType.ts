@@ -5,3 +5,5 @@ export interface ModalProps {
   id: number | string | null;
   message: string | null;
 }
+
+
