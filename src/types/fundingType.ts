@@ -1,5 +1,5 @@
-export interface PeriodType {
-  id: number | null;
+export interface PeriodTypes {
+  id: number;
   periodId: number | null;
   group: string;
   startDate: string;

@@ -55,7 +55,7 @@ import DetailSubmission from "./applications/admins/submission/page/detailSubmis
 import SubmissionProgress from "./applications/users/submissionHistory/page/submissionProgress";
 import ReviewerProgress from "./applications/users/assignment/page/reviewerProgress";
 import ReviewerUpdateProgres from "./applications/users/assignment/page/reviewerUpdateProgres";
-import SubmissionUpdate from "./applications/users/submissionHistory/page/submissionUpdate";
+// import SubmissionUpdate from "./applications/users/submissionHistory/page/submissionUpdate";
 import SubmissionUserCopytight from "./applications/users/submission/page/submissionUserCopytight";
 import DashboardUser from "./applications/users/submission/page/dashboardUser";
 import SubmissionUserPaten from "./applications/users/submission/page/submissionUserPaten";
@@ -183,14 +183,14 @@ function App() {
               </NoAccessToken>
             }
           />
-          <Route
+          {/* <Route
             path="/histori-pengajuan/ubah"
             element={
               <NoAccessToken>
                 <SubmissionUpdate />
               </NoAccessToken>
             }
-          />
+          /> */}
           <Route
             path="/lengkapi-berkas-pengajuan"
             element={

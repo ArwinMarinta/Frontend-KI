@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
 const useDraftSubmission = () => {
   const [draftPatent, setDraftPatent] = useState<File | null>(null);

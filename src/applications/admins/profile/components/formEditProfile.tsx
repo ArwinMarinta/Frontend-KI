@@ -8,7 +8,7 @@ interface FormDetailProfileProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   errors: UpdateProfileErrors;
-  isFormChanged: boolean;
+  isFormChanged?: boolean;
 }
 
 const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleSubmit, errors, isFormChanged }: FormDetailProfileProps) => {

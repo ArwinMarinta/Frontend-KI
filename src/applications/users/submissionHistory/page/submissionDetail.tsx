@@ -33,13 +33,13 @@ const SubmissionDetail = () => {
               </div>
               <div>
                 {current === "Informasi Umum" && <GeneralInformation terms={terms} data={detailSubmission} />}
-                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission.personalDatas} />}
+                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
                 {current === "Dokumen Pengajuan" && (
                   <>
-                    {detailSubmission?.submission.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
-                    {detailSubmission?.submission.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
-                    {detailSubmission?.submission.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
-                    {detailSubmission?.submission.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
+                    {detailSubmission?.submission?.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
+                    {detailSubmission?.submission?.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
+                    {detailSubmission?.submission?.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
+                    {detailSubmission?.submission?.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
                   </>
                 )}
               </div>

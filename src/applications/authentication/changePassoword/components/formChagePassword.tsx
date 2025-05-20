@@ -1,5 +1,3 @@
-import React from "react";
-
 const FormChagePassword = () => {
   return (
     <div className="flex flex-col p-8 border rounded-md shadow-md h-full">

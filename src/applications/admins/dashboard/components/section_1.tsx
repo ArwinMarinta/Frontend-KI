@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Section1Props {
   label: string;
   total: number;

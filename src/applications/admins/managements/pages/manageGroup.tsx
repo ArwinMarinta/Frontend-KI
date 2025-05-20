@@ -8,7 +8,7 @@ import ModalWarning from "../../../../components/modal/modalWarning";
 import TableWithPagination from "../../../../components/table/tableComponent";
 import { useModal } from "../../../../hooks/useModal";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/manageReducer";
-import { PeriodType } from "../../../../types/fundingType";
+import { PeriodTypes } from "../../../../types/fundingType";
 import { formatIndonesianDate } from "../../../../utils/formatDate";
 import ModalGroup from "../components/modal/modalGroup";
 import useGroup from "../hooks/useGroup";
@@ -47,7 +47,7 @@ const ManageGroup = () => {
               <AddButton onClick={() => handleModal(null, "Add")} />
             </div>
             <div className="  ">
-              <TableWithPagination<PeriodType>
+              <TableWithPagination<PeriodTypes>
                 columns={[
                   { label: "Gelombang Pendanaan", accessor: "group" },
                   { label: "Waktu Mulai", accessor: "startDate", render: (item) => formatIndonesianDate(item.startDate) },

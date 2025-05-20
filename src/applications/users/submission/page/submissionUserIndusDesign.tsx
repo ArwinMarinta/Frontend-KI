@@ -1,4 +1,3 @@
-import React from "react";
 import useSubmissionType from "../hooks/useSubmissionType";
 import useDraftSubmission from "../hooks/useDraftSubmission";
 import usePersonalData from "../hooks/usePersonalData";

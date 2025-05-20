@@ -1,10 +1,6 @@
 import { Dropdown, DropdownItem, Pagination } from "flowbite-react";
 import { useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
-import ManageButton from "../../../../components/button/manageButton";
-import UpdateButton from "../../../../components/button/updateButton";
-import DeleteButton from "../../../../components/button/deleteButton";
-import ProgressButton from "../../../../components/button/progressButton";
 
 const Tabel = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,9 +87,7 @@ const Tabel = () => {
               <td className="px-4 py-2 border-b">Mandiri</td>
               <td className="px-4 py-2 border-b">Muhammad Saman</td>
               <td className="px-4 py-2 border-b">Draft</td>
-              <td className="px-4 py-2 border-b">
-                <ProgressButton />
-              </td>
+              <td className="px-4 py-2 border-b"></td>
               <td className="px-4 py-2 border-b">12 January 2025</td>
               <td className="px-4 py-2 border-b ">
                 <div className="flex flex-row gap-2"></div>
@@ -106,16 +100,10 @@ const Tabel = () => {
               <td className="px-4 py-2 border-b">Pendanaan</td>
               <td className="px-4 py-2 border-b">Muhammad Saman</td>
               <td className="px-4 py-2 border-b">Draft</td>
-              <td className="px-4 py-2 border-b">
-                <ProgressButton />
-              </td>
+              <td className="px-4 py-2 border-b"></td>
               <td className="px-4 py-2 border-b">12 January 2025</td>
               <td className="px-4 py-2 border-b ">
-                <div className="flex flex-row gap-2">
-                  <ManageButton />
-                  <UpdateButton />
-                  <DeleteButton />
-                </div>
+                <div className="flex flex-row gap-2"></div>
               </td>
             </tr>
           </tbody>

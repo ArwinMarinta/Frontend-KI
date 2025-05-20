@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../../../components/navigations/navbar";
 import SideProfile from "../../users/profile/components/sideProfile";
 import FormChagePassword from "../../admins/profile/components/formChangePassword";
