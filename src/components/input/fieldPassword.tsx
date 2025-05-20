@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface FieldProps {
-  label: string;
+  label?: string;
   value: string;
   name?: string;
   type?: string;
@@ -23,10 +23,12 @@ const FieldPassword = ({ label, value, name, type = "text", placeholder, readOnl
 
   return (
     <div className="w-full">
-      <label htmlFor={name || label} className="block mb-2 text-base font-medium">
-        {label}
-        {need && <span className="text-RED01 ml-1">*</span>}
-      </label>
+      {label && (
+        <label htmlFor={name || label} className="block mb-2 text-base font-medium">
+          {label}
+          {need && <span className="text-RED01 ml-1">*</span>}
+        </label>
+      )}
       <div className="relative">
         <input
           type={type === "password" && !showPassword ? "password" : "text"}

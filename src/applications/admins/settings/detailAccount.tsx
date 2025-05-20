@@ -3,6 +3,7 @@ import HeaderNavigation from "../../../components/adminNavigation/headerNavigati
 
 import Field from "../../../components/input/fieldInput";
 import useUserDetail from "./hooks/useUserDetail";
+import { formatIndonesianDateTime } from "../../../utils/formatDate";
 
 const DetailAccount = () => {
   const { userDetails } = useUserDetail();
@@ -28,7 +29,7 @@ const DetailAccount = () => {
                 <Field label="Prodi" value={userDetails?.studyProgram || "-"} name="studyProgram" type="text" placeholder="" readOnly />
                 <Field label="Role" value={userDetails?.role || "-"} name="role" type="text" placeholder="" readOnly />
                 <Field label="Verifikasi" value={userDetails?.isVerified ? "Sudah" : "Belum"} name="isVerify" type="text" placeholder="" readOnly />
-                <Field label="Waktu Pendaftaran" value={userDetails?.createdAt || "-"} name="register" type="text" placeholder="" readOnly />
+                <Field label="Waktu Pendaftaran" value={formatIndonesianDateTime(userDetails?.createdAt ?? "")} name="register" type="text" placeholder="" readOnly />
               </div>
             </div>
           </div>

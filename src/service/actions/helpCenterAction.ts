@@ -66,10 +66,8 @@ export const getHelpCenterById = (id: number | string): AppThunk => {
 };
 
 export const createHelpCenter = (form: FormCreateHelpCenter): AppThunk => {
-  return async (dispatch, getState) => {
+  return async () => {
     try {
-      const { token } = getState().auth;
-
       const formData = new FormData();
       formData.append("email", form.email);
       formData.append("phoneNumber", form.phoneNumber);
@@ -81,7 +79,6 @@ export const createHelpCenter = (form: FormCreateHelpCenter): AppThunk => {
 
       await axios.post(`${API_URL}/help-center`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });

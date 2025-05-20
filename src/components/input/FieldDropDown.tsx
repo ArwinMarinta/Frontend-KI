@@ -38,7 +38,9 @@ const FieldDropdown = ({ label, value, name, type = "text", placeholder, readOnl
           required={required}
           className={`bg-gray-50 border ${error ? "border-RED01 ring-RED01 focus:ring-RED01 focus:border-RED01" : "border-BORDER01 focus:ring-PRIMARY01 focus:border-PRIMARY01"} text-base rounded-md block w-full p-2`}
         >
-          <option value="">Pilih {label}</option>
+          <option value="" hidden>
+            Pilih {label}
+          </option>
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

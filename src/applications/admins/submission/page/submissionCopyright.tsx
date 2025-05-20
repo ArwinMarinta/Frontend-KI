@@ -6,14 +6,14 @@ import { useModal } from "../../../../hooks/useModal";
 import TableWithPagination from "../../../../components/table/tableComponent";
 import { Review } from "../../../../types/submissionType";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/submissionReducer";
-import ManageButton from "../../../../components/button/manageButton";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ModalWarning from "../../../../components/modal/modalWarning";
-import ProgressButton from "../../../../components/button/progressButton";
 import ModalUpdateReviewer from "../components/modalUpdateReviewer";
 import ModalSubmissionStatus from "../components/modalSubmissionStatus";
 import useStatus from "../hooks/useStatus";
 import { truncateText } from "../../../../utils/caracterLength";
+import { Link } from "react-router-dom";
+import { toSlug } from "../../../../utils/toSlug";
 
 const SubmissionCopyright = () => {
   const { copyright, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useCopyright();
@@ -49,7 +49,7 @@ const SubmissionCopyright = () => {
             <div className="bg-white p-6 rounded-md">
               <div className="bg-white  ">
                 <div className="flex flex-row justify-between mb-20">
-                  <span className="text-3xl font-semibold">Paten</span>
+                  <span className="text-3xl font-semibold">Hak Cipta</span>
                   <AddButton />
                 </div>
                 <TableWithPagination<Review>
@@ -62,7 +62,7 @@ const SubmissionCopyright = () => {
                       accessor: "submission",
                       render: (item) => (
                         <button onClick={() => handleModal(item.id, "Reviewer")} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
-                          {item.reviewer?.fullname}
+                          {item.reviewer?.fullname ?? "-"}
                         </button>
                       ),
                     },
@@ -75,7 +75,17 @@ const SubmissionCopyright = () => {
                         </button>
                       ),
                     },
-                    { label: "Progres Pengajuan", accessor: "submission", render: (item) => <ProgressButton label={"Ubah Progres"} url={`/permohonan/${item.submission?.submissionType.title}/progres/${item.id}`} /> },
+                    {
+                      label: "Progres Pengajuan",
+                      accessor: "submission",
+                      render: (item) => (
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/progres`} state={{ submissionId: `${item.id}` }}>
+                          <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                            {truncateText(item.progress[0].status)}
+                          </button>
+                        </Link>
+                      ),
+                    },
                   ]}
                   data={copyright}
                   limit={limit}
@@ -88,7 +98,13 @@ const SubmissionCopyright = () => {
                     {
                       label: "Detail",
                       onClick: () => {},
-                      component: (item) => <ManageButton url={`/permohonan/${item.submission?.submissionType.title}/detail/${item.id}`} />,
+                      component: (item) => (
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}` }}>
+                          <button title="Klik untuk mengubah progres" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 ">
+                            Detail
+                          </button>
+                        </Link>
+                      ),
                     },
                     {
                       label: "Delete",

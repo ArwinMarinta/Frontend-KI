@@ -17,7 +17,6 @@ export const register = (fullname: string, email: string, password: string, navi
 
       if (response.status === 201) {
         navigate("/verify-email");
-        alert("register success");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -119,5 +118,35 @@ export const logout = (): AppThunk => {
   return async (dispatch) => {
     dispatch(setToken(null));
     dispatch(setUser(null));
+  };
+};
+
+export const resetPassword = (token: string | undefined, newPassword: string, confPassword: string, navigate: NavigateFunction): AppThunk => {
+  return async () => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/auth/reset-password/${token}`,
+
+        {
+          newPassword: newPassword,
+          confirmPassword: confPassword,
+        }
+      );
+
+      if (response.status === 200) {
+        navigate(`/resset-password/${token}`, { state: { message: response.data?.message } });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          const errorMessage = error.response.data?.message || "Terjadi kesalahan";
+          navigate(`/resset-password/${token}`, {
+            state: { message: errorMessage },
+          });
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
   };
 };

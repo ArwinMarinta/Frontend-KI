@@ -4,8 +4,7 @@ import useContactUs from "../hooks/useContactUs";
 import Field from "../../../../components/input/fieldInput";
 import FieldFile from "../../../../components/input/fieldFile";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
-import LoadingAnimation from "../../../../assets/send-animation.webm";
-import LoadingAnimation2 from "../../../../assets/send-animation2.gif";
+
 const Contact = () => {
   const { form, errors, handleOnChange, handleSubmit } = useContactUs();
   return (

@@ -6,6 +6,7 @@ import DetailButton from "../../../../components/button/detailButton";
 import DropdownLimit from "../../../../components/input/dropdownLimit";
 import { setCurrentPageUser, setLimitUser } from "../../../../service/reducers/userReducer";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 type TableAccountProps = {
   data: User[];
@@ -72,8 +73,10 @@ const TableAccount = ({ data, limit, totalPages, currentPage, handleModal }: Tab
                 <td className="px-4 py-2 border-b ">{item?.isVerified ? "Sudah" : "Belum"}</td>
                 <td className="px-4 py-2 border-b ">
                   <div className="flex flex-row gap-2">
-                    <DetailButton url="/pengaturan/akun/detail/user" state={{ id: item?.id }} />
-                    {/* <UpdateButton /> */}
+                    <DetailButton url="/pengaturan/akun/detail/user" state={{ id: item?.id, type: "create" }} />
+                    <Link to={"/pengaturan/akun/ubah/user"} state={{ userId: item.id, type: "update" }} className="py-1 px-2 border border-YELLOW03 rounded-md text-YELLOW03 font-medium">
+                      Ubah
+                    </Link>
                     <DeleteButton onClick={() => handleModal(item.id, "Delete")} />
                   </div>
                 </td>

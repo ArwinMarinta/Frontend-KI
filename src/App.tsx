@@ -19,7 +19,7 @@ import SubmissionDetail from "./applications/users/submissionHistory/page/submis
 import SubmissionComplete from "./applications/users/submission/page/submissionComplete";
 
 //url admin
-import Dashboard from "./applications/admins/dashboard/dashboard";
+import Dashboard from "./applications/admins/dashboard/page/dashboard";
 import SubmissionCopyright from "./applications/admins/submission/page/submissionCopyright";
 import SubmissionPatent from "./applications/admins/submission/page/submissionPatent";
 import SubmissionIndustrialDesign from "./applications/admins/submission/page/submissionIndustrialDesign";
@@ -64,6 +64,7 @@ import SubmissionUserIndusDesign from "./applications/users/submission/page/subm
 import ProtectedToken from "./middleware/protecdToken";
 import NoAccessToken from "./middleware/noAccessToken";
 import ProtectedRouteRole from "./middleware/protecdRole";
+import UpdateSubmissionProgress from "./applications/admins/submission/page/updateSubmissionProgress";
 
 function App() {
   return (
@@ -315,7 +316,7 @@ function App() {
             }
           />
           <Route
-            path="/permohonan/jenis/progres"
+            path="/permohonan/:name/progres"
             element={
               <NoAccessToken>
                 <ProgresSubmission />
@@ -323,7 +324,15 @@ function App() {
             }
           />
           <Route
-            path="/permohonan/:name/detail/:id"
+            path="/permohonan/:name/progres/ubah"
+            element={
+              <NoAccessToken>
+                <UpdateSubmissionProgress />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/:name/detail"
             element={
               <NoAccessToken>
                 <DetailSubmission />
@@ -331,7 +340,7 @@ function App() {
             }
           />
           <Route
-            path="/permohonan/:name/progres/:id"
+            path="/permohonan/:name/progres"
             element={
               <NoAccessToken>
                 <ProgresSubmission />

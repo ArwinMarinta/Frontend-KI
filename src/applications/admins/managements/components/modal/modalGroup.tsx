@@ -57,8 +57,8 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (groupDetail && type === "Edit" && id) {
       setForm({
         group: groupDetail.group,
-        startDate: toInputDateFormat(groupDetail.startDate),
-        endDate: toInputDateFormat(groupDetail.endDate),
+        startDate: groupDetail.startDate ? toInputDateFormat(groupDetail.startDate) : "",
+        endDate: groupDetail.endDate ? toInputDateFormat(groupDetail.endDate) : "",
       });
     } else {
       setForm({
@@ -78,7 +78,7 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
 
       // Periksa apakah tanggal valid
       if (!isNaN(dateValue.getTime())) {
-        newValue = dateValue.toISOString().split("T")[0]; // Konversi menjadi format YYYY-MM-DD
+        newValue = dateValue.toISOString().split("T")[0];
       } else {
         newValue = "";
       }

@@ -33,7 +33,7 @@ export function formatIndonesianDateTime(isoString: string): string {
   return `${tanggal}, ${""} ${waktu}`;
 }
 
-export const formatDateRange = (start: string | null, end: string | null) => {
+export const formatDateRange = (start: string | null | undefined, end: string | null | undefined) => {
   if (!start || !end) return "-";
 
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -63,4 +63,32 @@ export const formatDateRange = (start: string | null, end: string | null) => {
 export const toInputDateFormat = (iso: string): string => {
   const date = new Date(iso);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+};
+
+export const formatDateRangeWithYear = (start: string | null | undefined, end: string | null | undefined) => {
+  if (!start || !end) return "-";
+
+  const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return "-";
+  }
+
+  const startDay = startDate.getDate();
+  const startMonth = months[startDate.getMonth()];
+  const startYear = startDate.getFullYear();
+
+  const endDay = endDate.getDate();
+  const endMonth = months[endDate.getMonth()];
+  const endYear = endDate.getFullYear();
+
+  // Kalau tahun sama, tulis sekali saja
+  if (startYear === endYear) {
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${startYear}`;
+  }
+
+  return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
 };

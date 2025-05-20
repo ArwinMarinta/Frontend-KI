@@ -18,6 +18,7 @@ const useUpdateProgress = () => {
     reviewStatus: "",
     comments: "",
     paymentCode: "",
+    certificateFile: null,
     fileNames: [],
     files: [],
   });
@@ -29,25 +30,33 @@ const useUpdateProgress = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
 
-    setFormUpdateProgress((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (type === "file") {
+      const file = (e.target as HTMLInputElement).files?.[0] || null;
 
-    if (value.trim() === "") {
+      setFormUpdateProgress((prev) => ({
+        ...prev,
+        [name]: file,
+      }));
+
       setFormErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: `Field tidak boleh kosong`,
+        [name]: file ? null : "File tidak boleh kosong",
       }));
     } else {
+      setFormUpdateProgress((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+
       setFormErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: null,
+        [name]: value.trim() === "" ? "Field tidak boleh kosong" : null,
       }));
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target as HTMLInputElement;
     const files = e.target.files;
@@ -88,6 +97,7 @@ const useUpdateProgress = () => {
     const validationErrors = {
       reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
       paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
+      certificateFile: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
     };
     const hasErrors = Object.values(validationErrors).some((error) => error !== null);
     setFormErrors(validationErrors);
@@ -104,6 +114,7 @@ const useUpdateProgress = () => {
         paymentCode: "",
         fileNames: [],
         files: [],
+        certificateFile: null,
       });
 
       navigate("/penugasan/progress", { state: { submissionId: submissionId } });

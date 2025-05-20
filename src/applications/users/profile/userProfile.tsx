@@ -7,9 +7,10 @@ import Button from "../submissionHistory/components/button";
 import FormDetailProfile from "../../admins/profile/components/formDetailProfile";
 import FormEditProfile from "../../admins/profile/components/formEditProfile";
 import FormChagePassword from "../../admins/profile/components/formChangePassword";
+import ModalLoading from "../../../components/modal/modalLoading";
 
 const UserProfile = () => {
-  const { user, currentStatus, handleStatusChange, profileStatus, form, handleChange, handleSubmit, errors } = useProfile();
+  const { user, currentStatus, handleStatusChange, profileStatus, form, handleChange, handleSubmit, errors, isFormChanged, loading } = useProfile();
 
   return (
     <>
@@ -33,11 +34,12 @@ const UserProfile = () => {
               </div>
 
               {currentStatus === "Profile" && profileStatus === "Detail" && <FormDetailProfile handleStatusChange={handleStatusChange} user={user} />}
-              {currentStatus === "Profile" && profileStatus === "Edit" && <FormEditProfile handleStatusChange={handleStatusChange} user={user} form={form} handleChange={handleChange} handleSubmit={handleSubmit} errors={errors} />}
+              {currentStatus === "Profile" && profileStatus === "Edit" && <FormEditProfile handleStatusChange={handleStatusChange} user={user} form={form} handleChange={handleChange} handleSubmit={handleSubmit} errors={errors} isFormChanged={isFormChanged} />}
               {currentStatus === "Ubah Password" && <FormChagePassword />}
             </div>
           </div>
         </div>
+        <ModalLoading show={loading} />
       </div>
     </>
   );

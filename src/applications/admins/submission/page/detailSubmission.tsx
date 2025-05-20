@@ -10,7 +10,7 @@ import DocumentSubmissionIndutrialDesign from "../components/documentSubmissionI
 import DocumentSubmissionBrand from "../components/documentSubmissionBrand";
 
 const DetailSubmission = () => {
-  const { detailSubmission, current, handleChange } = useDetailSubmussion();
+  const { detailSubmission, current, handleChange, terms } = useDetailSubmussion();
   return (
     <main className="flex flex-row w-full h-full bg-GREY01">
       <div className="min-h-full w-[16%] bg-white">
@@ -30,14 +30,14 @@ const DetailSubmission = () => {
                 <Button label="Dokumen Pengajuan" isActive={current === "Dokumen Pengajuan"} onClick={() => handleChange("Dokumen Pengajuan")} />
               </div>
               <div>
-                {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} />}
-                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission.personalDatas} />}
+                {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} terms={terms} />}
+                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
                 {current === "Dokumen Pengajuan" && (
                   <>
-                    {detailSubmission?.submission.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
-                    {detailSubmission?.submission.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
-                    {detailSubmission?.submission.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
-                    {detailSubmission?.submission.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
+                    {detailSubmission?.submission?.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
+                    {detailSubmission?.submission?.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
+                    {detailSubmission?.submission?.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
+                    {detailSubmission?.submission?.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
                   </>
                 )}
               </div>

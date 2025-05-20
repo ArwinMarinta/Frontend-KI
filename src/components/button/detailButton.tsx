@@ -2,7 +2,10 @@ import { useNavigate } from "react-router-dom";
 
 interface DetailButtonProps {
   url: string;
-  state?: { id: string | number };
+  state?: {
+    id: string | number;
+    type?: string;
+  };
 }
 
 const DetailButton = ({ url, state }: DetailButtonProps) => {

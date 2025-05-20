@@ -2,9 +2,12 @@ import HeaderNavigation from "../../../../components/adminNavigation/headerNavig
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import TimelineHistory from "../../../users/submissionHistory/components/progress/timelineHistory";
 import useProgresSubmission from "../../../../hooks/useProgresSubmission";
+import { Link, useParams } from "react-router-dom";
 
 const ProgresSubmission = () => {
-  const { progresSubmission } = useProgresSubmission();
+  const { name } = useParams<{ name: string }>();
+
+  const { progresSubmission, submissionId } = useProgresSubmission();
   return (
     <main className="flex flex-row w-full h-full bg-GREY01">
       <div className="min-h-full w-[16%] bg-white">
@@ -20,6 +23,11 @@ const ProgresSubmission = () => {
               </div>
               <div>
                 <TimelineHistory data={progresSubmission} />
+              </div>
+              <div className="flex justify-end">
+                <Link to={`/permohonan/${name}/progres/ubah`} state={{ submissionId: submissionId }}>
+                  <button className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">Ubah Progress</button>
+                </Link>
               </div>
             </div>
           </div>

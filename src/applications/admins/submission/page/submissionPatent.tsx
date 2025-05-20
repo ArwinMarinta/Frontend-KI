@@ -7,16 +7,13 @@ import { setCurrentPage, setLimit } from "../../../../service/reducers/submissio
 import { useModal } from "../../../../hooks/useModal";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ModalWarning from "../../../../components/modal/modalWarning";
-import ManageButton from "../../../../components/button/manageButton";
 import { Review } from "../../../../types/submissionType";
-import ProgressButton from "../../../../components/button/progressButton";
 import ModalUpdateReviewer from "../components/modalUpdateReviewer";
 import useStatus from "../hooks/useStatus";
 import ModalSubmissionStatus from "../components/modalSubmissionStatus";
 import { truncateText } from "../../../../utils/caracterLength";
-// import ManageButton from "../../../../components/button/manageButton";
-// import UpdateButton from "../../../../components/button/updateButton";
-// import DeleteButton from "../../../../components/button/deleteButton";
+import { Link } from "react-router-dom";
+import { toSlug } from "../../../../utils/toSlug";
 
 const SubmissionPatent = () => {
   const { patent, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = usePatent();
@@ -78,7 +75,17 @@ const SubmissionPatent = () => {
                         </button>
                       ),
                     },
-                    { label: "Progres Pengajuan", accessor: "submission", render: (item) => <ProgressButton label={"Ubah Progres"} url={`/permohonan/${item.submission?.submissionType.title}/progres/${item.id}`} /> },
+                    {
+                      label: "Progres Pengajuan",
+                      accessor: "submission",
+                      render: (item) => (
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/progres`} state={{ submissionId: `${item.id}` }}>
+                          <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                            {truncateText(item.progress[0].status)}
+                          </button>
+                        </Link>
+                      ),
+                    },
                   ]}
                   data={patent}
                   limit={limit}
@@ -91,7 +98,13 @@ const SubmissionPatent = () => {
                     {
                       label: "Detail",
                       onClick: () => {},
-                      component: (item) => <ManageButton url={`/permohonan/${item?.submission?.submissionType.title}/detail/${item.id}`} />,
+                      component: (item) => (
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}` }}>
+                          <button title="Klik untuk mengubah progres" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 ">
+                            Detail
+                          </button>
+                        </Link>
+                      ),
                     },
                     {
                       label: "Delete",

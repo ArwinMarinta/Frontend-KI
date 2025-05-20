@@ -6,10 +6,12 @@ import { AppDispatch, RootState } from "../service/store";
 import { UpdateProfileErrors, User3 } from "../types/userType";
 import { updateProfile } from "../service/actions/userAction";
 import { logout } from "../service/actions/authAction";
+import useLoadingProses from "./useLoadingProses";
 
 const useProfile = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { loading, setLoading } = useLoadingProses();
   const { user, token } = useSelector((state: RootState) => state.auth);
   const [currentStatus, setCurrentStatus] = useState("Profile");
   const [profileStatus, setProfileStatus] = useState("Detail");
@@ -53,7 +55,7 @@ const useProfile = () => {
         studyProgram: user?.studyProgram || "",
       });
     }
-  }, [profileStatus]);
+  }, [profileStatus, profileStatus]);
 
   useEffect(() => {
     if (token) {
@@ -82,7 +84,9 @@ const useProfile = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const isFormChanged = form.fullname !== user?.fullname || form.faculty !== user?.faculty || form.phoneNumber !== form.phoneNumber || form?.studyProgram !== user?.studyProgram;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newErrors = {
       fullname: form.fullname.trim() === "",
@@ -95,12 +99,23 @@ const useProfile = () => {
 
     if (newErrors.fullname || newErrors.fullname || newErrors.faculty || newErrors.studyProgram) return;
 
-    if (profileStatus === "Edit") {
-      dispatch(
-        updateProfile(form, user?.id || "", () => {
-          setProfileStatus("Detail");
-        })
-      );
+    if (profileStatus === "Edit" && isFormChanged) {
+      setLoading(true);
+      try {
+        await dispatch(
+          updateProfile(form, user?.id || "", () => {
+            setProfileStatus("Detail");
+            setForm({
+              fullname: "",
+              phoneNumber: "",
+              faculty: "",
+              studyProgram: "",
+            });
+          })
+        );
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -109,7 +124,7 @@ const useProfile = () => {
     dispatch(logout());
   };
 
-  return { handleLogout, user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate };
+  return { loading, handleLogout, user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate, isFormChanged };
 };
 
 export default useProfile;

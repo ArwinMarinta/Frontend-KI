@@ -195,6 +195,7 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
     }
   };
 };
+
 export const updateReviewer = (id: number | string | null, reviewerId: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
@@ -237,6 +238,39 @@ export const updateSubmissionStatus = (id: number | string | null, centralStatus
         }
       );
 
+      return Promise.resolve();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateAccount = (id: number | undefined, formUser: UserForm, currentPage: number, limit: number, navigate: NavigateFunction): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const payload: Partial<UserForm> = {};
+      Object.entries(formUser).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          payload[key as keyof UserForm] = value;
+        }
+      });
+
+      await axios.patch(`${API_URL}/user/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(getAccount(currentPage, limit));
+      navigate("/pengaturan/akun");
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {

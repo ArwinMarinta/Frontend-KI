@@ -1,5 +1,5 @@
 interface FieldProps {
-  label: string;
+  label?: string;
   value: string;
   name?: string;
   type?: string;

@@ -11,7 +11,7 @@ import FieldDropdown from "../../../../components/input/FieldDropDown";
 
 const ModalSubmissionStatus = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { status, statusError, setStatusError, handleChange, resetStatus, dispatch, loading, setLoading } = useStatus();
-  console.log(status);
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!status || status.trim() === "") {

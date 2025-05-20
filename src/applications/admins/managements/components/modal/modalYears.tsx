@@ -3,11 +3,16 @@ import { ModalProps } from "../../../../../types/modalType";
 import useManageYear from "../../hooks/useManageYear";
 import { Button, Modal } from "flowbite-react";
 import { createPeriods, updatePeriods } from "../../../../../service/actions/periodeAction";
+import Field from "../../../../../components/input/fieldInput";
 
 const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
-  const { dispatch, title, setTitle, currentPage, limit, faqsDetail, setError } = useManageYear();
+  const { dispatch, title, setTitle, currentPage, limit, faqsDetail, setError, error } = useManageYear();
 
   const handleSubmit = async () => {
+    if (!title.trim()) {
+      setError(true);
+      return;
+    }
     if (type === "Edit" && id) {
       await dispatch(updatePeriods(id, title, currentPage, limit));
       setModal(false);
@@ -26,12 +31,6 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
     }
   }, [modal, setError]);
 
-  //   useEffect(() => {
-  //     if (type === "Edit" && id) {
-  //       dispatch(getById(id));
-  //     }
-  //   }, [type, id, dispatch]);
-
   useEffect(() => {
     if (faqsDetail && type === "Edit" && id) {
       setTitle(faqsDetail.question);
@@ -40,26 +39,29 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
     }
   }, [faqsDetail, type, id, setTitle]);
 
-  //   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //     const { name, value } = e.target;
-  //     setForm((prev) => ({
-  //       ...prev,
-  //       [name]: value,
-  //     }));
-  //     if (value.trim() !== "") {
-  //       setErrors((prev) => ({
-  //         ...prev,
-  //         [name]: false,
-  //       }));
-  //     }
-  //   };
-
   return (
     <Modal show={modal} onClose={() => setModal(false)}>
       <Modal.Header>{message}</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
-          <input type="number" id="year" name="year" min="1900" max="2099" step="1" placeholder="Masukkan tahun"></input>
+          <Field
+            label="Tahun Pendanaan"
+            value={title}
+            name="text"
+            type="number"
+            placeholder=""
+            onChange={(e) => {
+              const value = e.target.value;
+              setTitle(value);
+              if (value.trim() === "") {
+                setError(true);
+              } else {
+                setError(false);
+              }
+            }}
+            error={error}
+            need
+          />
         </div>
       </Modal.Body>
       <Modal.Footer>

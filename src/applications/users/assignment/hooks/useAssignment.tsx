@@ -20,7 +20,6 @@ const useAssignment = () => {
     currentPage,
     dispatch,
     totalPages,
-    // handleDeleteSubmission,
   };
 };
 

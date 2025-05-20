@@ -4,10 +4,11 @@ import CreateButton from "../../../components/button/createButton";
 import FieldDropdown from "../../../components/input/FieldDropDown";
 import Field from "../../../components/input/fieldInput";
 import FieldPassword from "../../../components/input/fieldPassword";
+import ModalLoading from "../../../components/modal/modalLoading";
 import useUserCreate from "./hooks/useUserCreate";
 
 const CreateAccount = () => {
-  const { formUser, handleChange, errors, handleSubmit } = useUserCreate();
+  const { formUser, handleChange, errors, handleSubmit, loading } = useUserCreate();
   return (
     <>
       <main className="flex flex-row w-full h-full bg-GREY01">
@@ -50,6 +51,7 @@ const CreateAccount = () => {
               </div>
             </form>
           </div>
+          <ModalLoading show={loading} />
         </div>
       </main>
     </>

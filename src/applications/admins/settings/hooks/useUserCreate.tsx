@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormUserErrors } from "../../../../types/userType";
-import { createAccount } from "../../../../service/actions/userAction";
+import { createAccount, updateAccount } from "../../../../service/actions/userAction";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
 
 interface FormUser {
   fullname: string;
@@ -20,8 +21,12 @@ interface FormUser {
 const useUserCreate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+  const { type } = location.state || {};
   const { token } = useSelector((state: RootState) => state.auth);
   const { currentPage, limit } = useSelector((state: RootState) => state.user.account);
+  const { userDetails } = useSelector((state: RootState) => state.user);
+  const { setLoading, loading } = useLoadingProses();
   const [formUser, setFormUser] = useState<FormUser>({
     fullname: "",
     email: "",
@@ -84,27 +89,81 @@ const useUserCreate = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = {
       fullname: formUser.fullname.trim() === "",
       email: formUser.email.trim() === "",
       role: formUser.role.trim() === "",
-      password: formUser.password.trim() === "" ? "Password tidak boleh kosong" : null,
-      confirmPassword: formUser.password !== formUser.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null,
-      // faculty: formUser.faculty.trim() === "",
-      // studyProgram: formUser.studyProgram.trim() === "",
-      // institution: formUser.institution.trim() === "",
-      // phoneNumber: formUser.phoneNumber.trim() === "",
+      password: type === "create" ? (formUser.password.trim() === "" ? "Password tidak boleh kosong" : null) : null, // untuk update, password tidak wajib
+      confirmPassword:
+        type === "create" ? (formUser.password !== formUser.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null) : formUser.password || formUser.confirmPassword ? (formUser.password !== formUser.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null) : null,
     };
 
-    setErrors(validationErrors);
+    const hasErrors = Object.values(validationErrors).some((error) => error !== null && error !== false);
 
-    if (!Object.values(validationErrors).includes(true)) {
-      dispatch(createAccount(formUser, currentPage, limit, navigate));
+    if (hasErrors) return;
+
+    if (type === "create") {
+      setLoading(true);
+      try {
+        await dispatch(createAccount(formUser, currentPage, limit, navigate));
+        setFormUser({
+          fullname: "",
+          email: "",
+          role: "",
+          password: "",
+          confirmPassword: "",
+          faculty: "",
+          studyProgram: "",
+          institution: "",
+          phoneNumber: "",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (type === "update") {
+      setLoading(true);
+      try {
+        await dispatch(updateAccount(userDetails?.id, formUser, currentPage, limit, navigate));
+        setFormUser({
+          fullname: "",
+          email: "",
+          role: "",
+          password: "",
+          confirmPassword: "",
+          faculty: "",
+          studyProgram: "",
+          institution: "",
+          phoneNumber: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
+
+  useEffect(() => {
+    if (type === "update") {
+      setFormUser({
+        fullname: userDetails?.fullname || "",
+        email: userDetails?.email || "",
+        role: userDetails?.role || "",
+        password: "",
+        confirmPassword: "",
+        faculty: userDetails?.faculty || "",
+        studyProgram: userDetails?.studyProgram || "",
+        institution: userDetails?.institution || "",
+        phoneNumber: userDetails?.phoneNumber || "",
+      });
+    }
+  }, [userDetails, type]);
+
+  console.log();
+
   return {
     formUser,
     setFormUser,
@@ -115,6 +174,7 @@ const useUserCreate = () => {
     errors,
     setErrors,
     handleSubmit,
+    loading,
   };
 };
 

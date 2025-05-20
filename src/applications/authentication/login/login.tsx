@@ -1,33 +1,13 @@
-import React from "react";
 import BackgroundITK from "../../../assets/background_itk.webp";
 import Logo from "../components/logo";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import FormLogin from "./components/formLogin";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../service/hooks";
 import { useLogin } from "../../../hooks/useLogin";
-import { login } from "../../../service/actions/authAction";
 
 const Login = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { formLogin, handleChange, handleLogin, loading, errors } = useLogin();
 
-  const { formLogin, setFormLogin } = useLogin();
-
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    dispatch(login(formLogin.email, formLogin.password, navigate));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormLogin((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
       <div className="absolute inset-0 w-full h-full z-0">
@@ -43,7 +23,7 @@ const Login = () => {
 
         <h1 className="text-[28px] font-bold mb-4">Masuk</h1>
 
-        <FormLogin formLogin={formLogin} handleChange={handleChange} handleLogin={handleLogin} />
+        <FormLogin formLogin={formLogin} handleChange={handleChange} handleLogin={handleLogin} loading={loading} errors={errors} />
 
         <div className="relative w-full my-8">
           <hr className="border-black" />

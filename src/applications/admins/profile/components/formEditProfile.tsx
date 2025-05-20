@@ -1,3 +1,4 @@
+import { FiArrowLeftCircle } from "react-icons/fi";
 import Field from "../../../../components/input/fieldInput";
 import { UpdateProfileErrors, User2, User3 } from "../../../../types/userType";
 interface FormDetailProfileProps {
@@ -7,9 +8,10 @@ interface FormDetailProfileProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   errors: UpdateProfileErrors;
+  isFormChanged: boolean;
 }
 
-const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleSubmit, errors }: FormDetailProfileProps) => {
+const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleSubmit, errors, isFormChanged }: FormDetailProfileProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col gap-4 mb-8">
@@ -20,11 +22,17 @@ const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleS
         <Field label="Prodi" value={form.studyProgram} name="studyProgram" type="text" placeholder="" onChange={handleChange} error={errors.studyProgram} />
       </div>
       <div className="flex flex-row gap-4 justify-end mt-10">
-        <button className="py-1 px-4 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium" onClick={() => handleStatusChange("Detail", "profile")}>
+        <button onClick={() => handleStatusChange("Detail", "profile")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+          <FiArrowLeftCircle className="text-xl" />
           Kembali
         </button>
-        <button type="submit" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">
-          Simpan Perubahan
+        <button
+          disabled={!isFormChanged}
+          type="submit"
+          className={`py-1 px-2 border bg-PRIMARY01 rounded-md text-white font-medium 
+    ${!isFormChanged ? " cursor-not-allowed" : ""}`}
+        >
+          Ubah Profile
         </button>
       </div>
     </form>

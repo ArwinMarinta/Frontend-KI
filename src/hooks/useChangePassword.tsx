@@ -4,10 +4,13 @@ import { AppDispatch } from "../service/store";
 import { useNavigate } from "react-router-dom";
 import { FormChangePassword, FormChangePasswordErros } from "../types/authType";
 import { changePassword } from "../service/actions/authAction";
+import useLoadingProses from "./useLoadingProses";
 
 const useChangePassword = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const { loading, setLoading } = useLoadingProses();
 
   const [form, setForm] = useState<FormChangePassword>({
     password: "",
@@ -57,7 +60,7 @@ const useChangePassword = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = {
@@ -68,8 +71,15 @@ const useChangePassword = () => {
 
     setErrors(validationErrors);
 
-    if (Object.values(validationErrors).every((error) => error === null)) {
-      dispatch(changePassword(form));
+    const isValid = Object.values(validationErrors).every((err) => err === null);
+
+    if (!isValid) return;
+
+    setLoading(true);
+    try {
+      await dispatch(changePassword(form));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,6 +90,7 @@ const useChangePassword = () => {
     errors,
     handleChange,
     handleSubmit,
+    loading,
   };
 };
 

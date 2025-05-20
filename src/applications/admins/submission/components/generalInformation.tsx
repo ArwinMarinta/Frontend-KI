@@ -1,29 +1,35 @@
-import { DetailSubmissionType } from "../../../../types/submissionType";
 import Field from "../../../../components/input/fieldInput";
-import { formatIndonesianDate } from "../../../../utils/formatDate";
+import { formatDateRangeWithYear, formatIndonesianDate } from "../../../../utils/formatDate";
 import { TermType } from "../../../../types/termsType";
+import { Review } from "../../../../types/submissionType";
+import DetailDocument from "../../../../components/input/detailDocument";
 
 interface GeneralType {
-  data: DetailSubmissionType | null;
+  data: Review | null;
   terms: TermType[] | null;
 }
 
 const GeneralInformation = ({ data, terms }: GeneralType) => {
-  const selectedIds = new Set(data?.submission.termsConditions?.map((term) => term.id));
+  const selectedIds = new Set(data?.submission?.termsConditions?.map((term) => term.id));
   return (
     <div className="flex flex-col gap-6">
-      <Field label="Jenis Pengajuan" value={data?.submission.submissionType?.title || "-"} name="fullname" type="text" placeholder="" readOnly />
+      <Field label="Jenis Pengajuan" value={data?.submission?.submissionType?.title || "-"} name="fullname" type="text" placeholder="" readOnly />
+      <Field label="Status Terakhir" value={data?.centralStatus || "-"} name="fullname" type="text" placeholder="" readOnly />
+      <Field label="Progres Terakhir" value={data?.progress[0].status || "-"} name="fullname" type="text" placeholder="" readOnly />
+
       <div className="flex lg:flex-row flex-col w-full gap-6">
         <Field label="Awal Pengajuan" value={formatIndonesianDate(data?.createdAt) || "-"} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Selesai Pengajuan" value={formatIndonesianDate(data?.updatedAt) || "-"} name="fullname" type="text" placeholder="" readOnly />
+        <Field label="Selesai Pengajuan" value={data?.centralStatus === "Sertifikat Terbit" ? formatIndonesianDate(data?.updatedAt) : "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
       <div className="flex lg:flex-row flex-col w-full gap-6">
-        <Field label="Skema Pendanaan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Periode Pengajuan" value={data?.submission.submissionScheme || "-"} name="fullname" type="text" placeholder="" readOnly />
+        <Field label="Skema Pendanaan" value={data?.submission?.submissionScheme || "Belum memilih skema pendanaan"} name="fullname" type="text" placeholder="" readOnly />
+        {data?.submission?.submissionScheme === "Pendanaan" && <Field label="Periode Pengajuan" value={`${data.submission.group?.group} (${formatDateRangeWithYear(data.submission.group?.startDate, data.submission.group?.endDate)})`} name="fullname" type="text" placeholder="" readOnly />}
       </div>
+      {data?.submission?.submissionScheme === "Mandiri" && <Field label="Kode Pembayaran" value={data?.submission?.payment?.billingCode || ""} name="fullname" type="text" placeholder="" readOnly />}
+      {data?.submission?.submissionScheme === "Mandiri" && <DetailDocument label="Bukti Pembayaran" value={data?.submission?.payment?.proofPayment || ""} name="fullname" type="text" placeholder="" readOnly />}
 
       <div className="flex flex-col gap-2">
-        {data?.submission.submissionScheme && data.submission.submissionScheme === "pendanaan" && (
+        {data?.submission?.submissionScheme && data.submission.submissionScheme === "Pendanaan" && (
           <>
             <label className="block text-base font-medium">Prasyarat Penerima Pendanaan</label>
             {terms?.map((term) => (

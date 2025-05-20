@@ -8,6 +8,7 @@ import { CategoryPatent } from "../../types/patentType";
 import { CategoryBrandType } from "../../types/brandType";
 import { TermType } from "../../types/termsType";
 import { IndustrialDesignType, PatentType, SubmissionBrand, SubmissionCopyrightType } from "../../types/submissionType";
+import { Notification } from "../../types/dashboard";
 
 interface LandingState {
   home: {
@@ -49,9 +50,13 @@ interface LandingState {
   terms: TermType[] | null;
   qouta: Group[] | null;
   detailPaten: PatentType | null;
-  detailCopyright:  SubmissionCopyrightType| null;
+  detailCopyright: SubmissionCopyrightType | null;
   detailBrand: SubmissionBrand | null;
   detailDesign: IndustrialDesignType | null;
+  notifications: {
+    notifications: Notification[] | null;
+    totalUnread: number;
+  };
 }
 
 const initialState: LandingState = {
@@ -97,6 +102,10 @@ const initialState: LandingState = {
   detailCopyright: null,
   detailBrand: null,
   detailDesign: null,
+  notifications: {
+    notifications: null,
+    totalUnread: 0,
+  },
 };
 
 const landingSlice = createSlice({
@@ -139,9 +148,12 @@ const landingSlice = createSlice({
     setDetailDesign: (state, action) => {
       state.detailDesign = action.payload;
     },
+    setNotifications: (state, action) => {
+      state.notifications = action.payload;
+    },
   },
 });
 
-export const { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setQuota, setHome, setFaq, setFaqCategory, setDoc, setDocCategory, setSubmissionType, setTermsLanding } = landingSlice.actions;
+export const { setNotifications, setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setQuota, setHome, setFaq, setFaqCategory, setDoc, setDocCategory, setSubmissionType, setTermsLanding } = landingSlice.actions;
 
 export default landingSlice.reducer;

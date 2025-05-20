@@ -1,13 +1,12 @@
 export const statusAdminList = [
   { key: "Menunggu", label: "Menunggu" },
-  { key: "Revisi_Draft", label: "Revisi Draft" },
   { key: "Direview", label: "Direview" },
   { key: "Ditolak", label: "Ditolak" },
   { key: "Diajukan", label: "Diajukan" },
   { key: "Skema Pendanaan", label: "Skema Pendanaan" },
   { key: "Pembayaran", label: "Pembayaran" },
   { key: "Lengkapi Berkas", label: "Lengkapi Berkas" },
-  { key: "Selesai", label: "Selesai" },
+  { key: "Sertifikat Terbit", label: "Sertifikat Terbit" },
 ];
 
 export const statusReviewerList = [

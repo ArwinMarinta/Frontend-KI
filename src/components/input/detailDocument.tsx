@@ -14,7 +14,7 @@ interface FieldProps {
   need?: boolean;
 }
 
-const DetailDocument = ({ label, value, name, need = false }: FieldProps) => {
+const DetailDocument = ({ label, value, name, need = false, type="documents" }: FieldProps) => {
   const isValid = value && value !== "null" && value !== "undefined" && value.trim() !== "";
   return (
     <div className="w-full">
@@ -23,7 +23,7 @@ const DetailDocument = ({ label, value, name, need = false }: FieldProps) => {
         {need && <span className="text-RED01 ml-1">*</span>}
       </label>
       {isValid ? (
-        <a href={`${API_FILE}/documents/${value}`} target="_blank" rel="noopener noreferrer" className="block w-full">
+        <a href={`${API_FILE}/${type}/${value}`} target="_blank" rel="noopener noreferrer" className="block w-full">
           <div className="bg-gray-50 border text-base rounded-md p-2">
             <div className="flex flex-row items-center gap-2">
               <BsFillFilePdfFill className="text-PRIMARY03" />

@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PaginationType } from "../../types/paginationType";
 import { Review, SubmissionProgress } from "../../types/submissionType";
-import { DetailSubmissionType } from "../../types/submissionType";
+import { DashboardData } from "../../types/dashboard";
 
 interface SubmissionState {
   patentData: PaginationType & { patent: Review[] };
   copyrightData: PaginationType & { copyright: Review[] };
   brandData: PaginationType & { brand: Review[] };
   industrialDesignData: PaginationType & { design: Review[] };
-  detailSubmission: DetailSubmissionType | null;
+  detailSubmission: Review | null;
   progresSubmission: SubmissionProgress[] | null;
+  dashboard: DashboardData | null;
 }
 
 const initialState: SubmissionState = {
@@ -43,6 +44,7 @@ const initialState: SubmissionState = {
   },
   progresSubmission: null,
   detailSubmission: null,
+  dashboard: null,
 };
 
 const submissionSlice = createSlice({
@@ -67,6 +69,9 @@ const submissionSlice = createSlice({
     setProgresSubmission: (state, action) => {
       state.progresSubmission = action.payload;
     },
+    setDashboard: (state, action) => {
+      state.dashboard = action.payload;
+    },
     setNullDetail: (state) => {
       state.detailSubmission = null;
     },
@@ -90,6 +95,6 @@ const submissionSlice = createSlice({
   },
 });
 
-export const { setPatentData, setNullDetail, setProgresSubmission, setLimit, setCurrentPage, setDetailSubmission, setCopyrightData, setBrandData, setIndustrialDesignData } = submissionSlice.actions;
+export const { setDashboard, setPatentData, setNullDetail, setProgresSubmission, setLimit, setCurrentPage, setDetailSubmission, setCopyrightData, setBrandData, setIndustrialDesignData } = submissionSlice.actions;
 
 export default submissionSlice.reducer;

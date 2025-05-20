@@ -1,3 +1,4 @@
+import { PeriodType, YearsType } from "./fundingType";
 import { User } from "./userType";
 
 export interface Review {
@@ -23,6 +24,8 @@ export interface Submission {
   industrialDesignId: number | null;
   brandId: number | null;
   periodId: number | null;
+  period: YearsType | null;
+  group: PeriodType | null;
   submissionScheme: string | null;
   createdAt: string;
   updatedAt: string;
@@ -110,8 +113,8 @@ export interface SubmissionCopyrightType {
   exampleCreation: string | null;
   createdAt: string;
   updatedAt: string;
-  typeCreation: null;
-  subTypeCreation: null;
+  typeCreation: TypeCreation | null;
+  subTypeCreation: SubTypeCreation | null;
 }
 
 export interface PatentType {
@@ -130,7 +133,7 @@ export interface PatentType {
   letterPassedReviewStage: string | null;
   createdAt: string;
   updatedAt: string;
-  patentType: string;
+  patentType: PatentsType | null;
 }
 
 export interface IndustrialDesignType {
@@ -153,8 +156,8 @@ export interface IndustrialDesignType {
   designOwnershipLetter: string | null;
   createdAt: string;
   updatedAt: string;
-  typeDesign: string | null;
-  subTypeDesign: string | null;
+  typeDesign: TypeDesign | null;
+  subTypeDesign: SubTypeDesign | null;
 }
 
 export interface PersonalData {
@@ -297,6 +300,7 @@ export interface FormUpdateProgress {
   paymentCode: string;
   fileNames: string[];
   files: File[];
+  certificateFile: File | null;
 }
 
 export interface FormUpdateProgressErrors {
@@ -321,10 +325,6 @@ export interface FormComplateIndustDesign {
   moreImages: File | null;
   letterTransferDesignRights: File | null;
   designOwnershipLetter: File | null;
-  // createdAt: string; // ISO date string
-  // updatedAt: string; // ISO date string
-  // typeDesign: Record<string, any> | null;
-  // subTypeDesign: Record<string, any> | null;
 }
 
 export interface FormDesignSubmissionErrors {
@@ -370,3 +370,45 @@ export interface FormComplatePatenSubmissionErrors {
   statementInventionOwnership?: string | null;
   letterTransferRightsInvention?: string | null;
 }
+
+export interface TypeCreation {
+  id: number;
+  title: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  deletedAt: string | null;
+}
+
+export interface SubTypeCreation {
+  id: number;
+  title: string;
+  typeCreationId: number;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  deletedAt: string | null;
+}
+
+export type PatentsType = {
+  id: number;
+  title: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  deletedAt: string | null;
+};
+
+export type TypeDesign = {
+  id: number;
+  title: string;
+  createdAt: string; // ISO date format
+  updatedAt: string; // ISO date format
+  deletedAt: string | null;
+};
+
+export type SubTypeDesign = {
+  id: number;
+  title: string;
+  typeDesignId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+};

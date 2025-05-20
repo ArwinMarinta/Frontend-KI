@@ -17,7 +17,8 @@ const useAccount = () => {
   }, [token, dispatch, limit, totalValue, currentPage]);
 
   const handleDeleteUser = (id: number | string | null) => {
-    dispatch(deleteUser(id, currentPage, limit));
+    const newPage = users.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
+    dispatch(deleteUser(id, newPage, limit));
   };
 
   return {

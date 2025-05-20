@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setBrandData, setCopyrightData, setDetailSubmission, setIndustrialDesignData, setPatentData, setProgresSubmission } from "../reducers/submissionReducer";
+import { setBrandData, setCopyrightData, setDashboard, setDetailSubmission, setIndustrialDesignData, setPatentData, setProgresSubmission } from "../reducers/submissionReducer";
 import { FormComplateIndustDesign, FormComplatePatenSubmission, FormPersonalData, FormUpdateProgress } from "../../types/submissionType";
 import { FormSubmissionCopyright } from "../../types/copyright";
 import { FormAdditionalBrand, FormSubmissionBrand } from "../../types/brandType";
@@ -1014,6 +1014,30 @@ export const confirmPayment = (id: number | undefined, file: File | null): AppTh
           "Content-Type": "multipart/form-data",
         },
       });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getDashboardAdmin = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/user-submission/admin-dashboard`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(setDashboard(response.data ?? null));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

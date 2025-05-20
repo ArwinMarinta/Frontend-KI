@@ -46,7 +46,7 @@ const PersonalDataSubmission = ({ data }: GeneralType) => {
           </div>
 
           <FieldTextarea label="Alamat" value={item.address || "-"} name="question" placeholder="" required row={4} readOnly />
-          <DetailDocument label="KTP" value={item.ktp || ""} name="fullname" type="text" placeholder="" readOnly />
+          <DetailDocument label="KTP" value={item.ktp || ""} name="fullname" type="image" placeholder="" readOnly />
         </div>
       ))}
     </div>

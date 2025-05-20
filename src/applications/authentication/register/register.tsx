@@ -2,33 +2,13 @@ import BackgroundITK from "../../../assets/background_itk.webp";
 import Logo from "../components/logo";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
+
 import { useRegister } from "../../../hooks/useRegister";
-import { register } from "../../../service/actions/authAction";
-import { useAppDispatch } from "../../../service/hooks";
+
 import FormRegister from "./components/formRegister";
 
 const Register = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const { formRegister, setFormRegister } = useRegister();
-
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (formRegister.password === formRegister.confPassword) {
-      dispatch(register(formRegister.fullname, formRegister.email, formRegister.password, navigate));
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormRegister((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const { formRegister, handleChange, handleRegister, loading, errors } = useRegister();
 
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
@@ -44,7 +24,7 @@ const Register = () => {
         </div>
 
         <h1 className="text-[28px] font-bold mb-4">Daftar</h1>
-        <FormRegister formRegister={formRegister} handleChange={handleChange} handleRegister={handleRegister} />
+        <FormRegister formRegister={formRegister} handleChange={handleChange} handleRegister={handleRegister} errors={errors} loading={loading} />
 
         <div className="relative w-full my-8">
           <hr className="border-black" />

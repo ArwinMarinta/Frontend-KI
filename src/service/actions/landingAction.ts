@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
+import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setNotifications, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
 
 export const getFaqLanding = (title: string | undefined, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -445,6 +445,59 @@ export const getDetailSubmissionLanding = (type: string, id: string | undefined)
       if (type === "Desain Industri") {
         dispatch(setDetailDesign(response.data.userSubmission.submission.industrialDesign ?? null));
       }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getNotification = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const responseType = await axios.get(`${API_URL}/notification/by-user-id`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(
+        setNotifications({
+          notifications: responseType?.data.notification ?? null,
+          totalUnread: responseType?.data.totalUnread ?? 0,
+        })
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateNotification = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      await axios.get(`${API_URL}/notification`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(getNotification());
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

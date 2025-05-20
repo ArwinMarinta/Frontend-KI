@@ -17,7 +17,7 @@ const FormDetailProfile = ({ user, handleStatusChange }: FormDetailProfileProps)
         <Field label="Prodi" value={user?.studyProgram || "-"} name="fullname" type="text" placeholder="" readOnly />
       </div>
       <div className="w-full flex  justify-end mt-10">
-        <button className="py-1 px-4 border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium" onClick={() => handleStatusChange("Edit", "profile")}>
+        <button className="py-1 px-4 border  rounded-md text-white bg-PRIMARY01 font-medium" onClick={() => handleStatusChange("Edit", "profile")}>
           Ubah
         </button>
       </div>
