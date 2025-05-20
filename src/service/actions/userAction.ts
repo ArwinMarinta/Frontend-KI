@@ -197,7 +197,7 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
 };
 
 export const updateReviewer = (id: number | string | null, reviewerId: number): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -224,7 +224,7 @@ export const updateReviewer = (id: number | string | null, reviewerId: number): 
   };
 };
 export const updateSubmissionStatus = (id: number | string | null, centralStatus: string): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 

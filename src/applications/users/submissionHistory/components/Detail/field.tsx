@@ -1,5 +1,3 @@
-import React from "react";
-
 interface FielProps {
   label: string;
   value: string;

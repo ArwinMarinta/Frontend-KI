@@ -1,4 +1,4 @@
-export interface PeriodTypes {
+export interface PeriodType {
   id: number;
   periodId: number | null;
   group: string;

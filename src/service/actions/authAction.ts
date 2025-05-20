@@ -84,7 +84,7 @@ export const forgotPassword = (email: string, navigate: NavigateFunction): AppTh
 };
 
 export const changePassword = (form: FormChangePassword): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 

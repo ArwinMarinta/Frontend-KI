@@ -286,7 +286,7 @@ export const deleteSubmissionUser = (id: number | string | null, type: string | 
 };
 
 export const createSubmissionPaten = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -347,7 +347,7 @@ export const createSubmissionPaten = (submissionType: number, formPersonalData: 
 };
 
 export const complateSubmissionPatent = (id: number, document: FormComplatePatenSubmission): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -382,7 +382,7 @@ export const complateSubmissionPatent = (id: number, document: FormComplatePaten
   };
 };
 export const complateSubmissionIndusDesign = (id: number, document: FormComplateIndustDesign): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -425,7 +425,7 @@ export const complateSubmissionIndusDesign = (id: number, document: FormComplate
 };
 
 export const updateSubmissionPaten = (id: number, submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -484,7 +484,7 @@ export const updateSubmissionPaten = (id: number, submissionType: number, formPe
   };
 };
 export const createSubmissionIndustrialDesign = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -537,7 +537,7 @@ export const createSubmissionIndustrialDesign = (submissionType: number, formPer
 };
 
 export const createSubmissionCopyright = (submissionType: number, formPersonalData: FormPersonalData[], formCopyright: FormSubmissionCopyright): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -602,7 +602,7 @@ export const createSubmissionCopyright = (submissionType: number, formPersonalDa
 };
 
 export const createSubmissionBrand = (submissionType: number, formPersonalData: FormPersonalData[], formBrand: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[]): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -726,7 +726,7 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
 };
 
 export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
       console.log(form);
@@ -758,7 +758,7 @@ export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk =
 };
 
 export const revisionSubmissionPaten = (id: number | undefined, Form: FormComplatePatenSubmission): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -809,7 +809,7 @@ export const revisionSubmissionPaten = (id: number | undefined, Form: FormCompla
   };
 };
 export const revisionSubmissionIndustrialDesign = (id: number | undefined, Form: FormComplateIndustDesign): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -848,7 +848,7 @@ export const revisionSubmissionIndustrialDesign = (id: number | undefined, Form:
 };
 
 export const revisonSubmissionCopyright = (submissionType: number | undefined, formCopyright: FormSubmissionCopyright): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -900,7 +900,7 @@ export const revisonSubmissionCopyright = (submissionType: number | undefined, f
 };
 
 export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[]): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -966,17 +966,17 @@ export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmiss
         formData.append("letterStatment", Form.letterStatment);
       }
 
-      // formAdditionalBrand.forEach((data, index) => {
-      //   if (data.additionalDescriptions) {
-      //     formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
-      //   }
-      // });
+      formAdditionalBrand.forEach((data, index) => {
+        if (data.additionalDescriptions) {
+          formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
+        }
+      });
 
-      // formAdditionalBrand.forEach((data) => {
-      //   if (data.additionalFiles) {
-      //     formData.append("additionalFiles", data.additionalFiles);
-      //   }
-      // });
+      formAdditionalBrand.forEach((data) => {
+        if (data.additionalFiles) {
+          formData.append("additionalFiles", data.additionalFiles);
+        }
+      });
 
       await axios.patch(`${API_URL}/brand/${id}`, formData, {
         headers: {
@@ -997,7 +997,7 @@ export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmiss
 };
 
 export const confirmPayment = (id: number | undefined, file: File | null): AppThunk => {
-  return async (dispatch, getState) => {
+  return async (_, getState) => {
     try {
       const { token } = getState().auth;
 

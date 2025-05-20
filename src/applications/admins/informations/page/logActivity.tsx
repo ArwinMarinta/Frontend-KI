@@ -1,4 +1,3 @@
-import React from "react";
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import TableWithPagination from "../../../../components/table/tableComponent";
