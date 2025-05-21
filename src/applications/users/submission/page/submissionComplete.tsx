@@ -23,6 +23,7 @@ import RevisionBrand from "../components/complete/revisionBrand";
 import useBrand from "../hooks/useBrand";
 import RevisionIndusDesign from "../components/complete/revisionIndusDesign";
 import useConfirmPayment from "../hooks/useConfirmPayment";
+import { getDetailSubmission } from "../../../../service/actions/submissionAction";
 
 const SubmissionComplete = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,8 +35,6 @@ const SubmissionComplete = () => {
   const { formCopyright, handleChangeCopyright, formCopyrightError, handleSubmitCopyright, loading: loadingCopyright } = useCopyright();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, handleSubmitRevision, loading: loadingBrand } = useBrand();
   const { formConfirmPayment, handleChange, formConfirmPaymentErrors, handleSubmitPayment, loading: loadingConfirmPayment } = useConfirmPayment();
-
-  console.log(formCopyright.typeCreation);
 
   useEffect(() => {
     if (submissionType === "Paten") {
@@ -65,11 +64,9 @@ const SubmissionComplete = () => {
 
   useEffect(() => {
     dispatch(getTermsLanding());
-  }, [dispatch]);
-
-  useEffect(() => {
+    dispatch(getDetailSubmission(submissionId));
     dispatch(getQuotaLanding());
-  }, [dispatch]);
+  }, [dispatch, submissionId]);
 
   return (
     <>

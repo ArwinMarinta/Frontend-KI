@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch } from "../service/store";
 import { login } from "../service/actions/authAction";
 import useLoadingProses from "./useLoadingProses";
@@ -18,6 +18,9 @@ export const useLogin = () => {
     email: "",
     password: "",
   });
+
+  const location = useLocation();
+  const message = location.state?.message ?? "";
 
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
@@ -66,5 +69,6 @@ export const useLogin = () => {
     handleLogin,
     errors,
     loading,
+    message,
   };
 };

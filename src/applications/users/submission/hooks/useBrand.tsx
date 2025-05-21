@@ -204,6 +204,7 @@ const useBrand = () => {
           InformationLetter: null as File | null,
           letterStatment: null as File | null,
         });
+        setFormAdditionalBrand([]);
         navigate("/histori-pengajuan/merek");
       } finally {
         setLoading(false);
@@ -277,6 +278,7 @@ const useBrand = () => {
     setFormBrand,
     handleSubmitRevision,
     loading,
+    setTempAdditionalBrand,
   };
 };
 

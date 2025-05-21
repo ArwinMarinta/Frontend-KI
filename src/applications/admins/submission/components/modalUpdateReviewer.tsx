@@ -5,11 +5,18 @@ import { useEffect } from "react";
 import { getReviewer } from "../../../../service/actions/submissionAction";
 import { updateReviewer } from "../../../../service/actions/userAction";
 import ModalLoading from "../../../../components/modal/modalLoading";
-import { ModalProps } from "../../../../types/modalType";
 
+export interface ModalProps {
+  modal: boolean;
+  setModal: (modal: boolean) => void;
+  type: string;
+  id: number | string | null;
+  message: string | null;
+  reviewer?: number;
+}
 
-const ModalUpdateReviewer = ({ modal, setModal, type, id, message }: ModalProps) => {
-  const { reviewer, handleChange, reviewerError, setReviewerError, dispatch, reviewerData, resetReviewer, loading, setLoading } = useReviewer();
+const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer }: ModalProps) => {
+  const { handleChange, reviewerError, setReviewerError, dispatch, reviewerData, resetReviewer, loading, setLoading } = useReviewer();
 
   useEffect(() => {
     dispatch(getReviewer());

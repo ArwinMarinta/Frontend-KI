@@ -191,10 +191,13 @@ export interface SubmissionProgress {
   id: number;
   userSubmissionId: number;
   status: string;
+  isStatus: boolean;
   comment: string;
+  certificateFile: File | null;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
   revisionFile: FileAttachment[] | null;
 }
 export interface FileAttachment {
@@ -269,7 +272,7 @@ export interface BrandFile {
 }
 
 export interface FormPersonalData {
-  id: number;
+  id: number | null;
   name: string;
   email: string;
   faculty: string | null;

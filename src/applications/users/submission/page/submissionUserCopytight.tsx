@@ -12,6 +12,9 @@ import { AppDispatch } from "../../../../service/store";
 import FormCopyright from "../components/formCopyright";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import { useModal } from "../../../../hooks/useModal";
+import ModalWarningContributor from "../../../../components/modal/modalWarningContributor";
+import { useEffect } from "react";
 
 const SubmissionUserCopytight = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +22,7 @@ const SubmissionUserCopytight = () => {
   const { error, currentStep, setCurrentStep } = useSubmissionType();
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData, setFormCopyright } = useCopyright();
+  const { activeModal, handleOpenModal, handleCloseModal, setMessage, message } = useModal();
 
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
@@ -53,9 +57,15 @@ const SubmissionUserCopytight = () => {
 
       return;
     }
+    if (personalData.length === 1) {
+      handleOpenModal(null, "warningContributorCopyright");
+      setMessage("Apakah Anda yakin ingin melanjutkan tanpa menambah kontributor lainnya?");
+    }
 
-    if (currentStep < 3 && !error) {
-      setCurrentStep(currentStep + 1);
+    if (personalData.length > 1) {
+      if (currentStep < 3 && !error) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
@@ -122,6 +132,18 @@ const SubmissionUserCopytight = () => {
     }
   };
 
+  const goToNextStep = () => {
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white ">
@@ -145,6 +167,7 @@ const SubmissionUserCopytight = () => {
         </div>
       </div>
       <ModalLoading show={loading} />
+      <ModalWarningContributor modal={activeModal === "warningContributorCopyright" || activeModal === "warningContributorCopyright"} setModal={handleCloseModal} message={message} handleAddContributor={addContributor} handleNext={goToNextStep} />
     </div>
   );
 };

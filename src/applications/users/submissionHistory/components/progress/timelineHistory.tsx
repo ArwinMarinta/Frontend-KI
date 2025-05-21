@@ -1,5 +1,7 @@
+import { statusDescriptions } from "../../../../../data/submissionStatus";
 import { SubmissionProgress } from "../../../../../types/submissionType";
 import { getStatusColor } from "../../../../../utils/colorsTimeline";
+import { getHrefByFileName } from "../../../../../utils/detecdtedFile";
 import { formatIndonesianDateTime } from "../../../../../utils/formatDate";
 import { FaCheck } from "react-icons/fa";
 
@@ -8,6 +10,7 @@ interface TimelineHistoryProps {
 }
 
 const TimelineHistory = ({ data }: TimelineHistoryProps) => {
+  const validStatuses = ["Revisi", "Skema Pendanaan", "Pembayaran", "Lengkapi Berkas"];
   return (
     <div>
       {data?.map((item, id) => (
@@ -30,8 +33,24 @@ const TimelineHistory = ({ data }: TimelineHistoryProps) => {
             </div>
             {/* Column 3: Content */}
             <div key={item.id} className="flex-1 py-3 px-3 hover:bg-gray-100 border-b border-BORDER01 last:border-b-0">
-              <h3 className="text-lg font-semibold text-gray-900">{formatIndonesianDateTime(item.createdAt)}</h3>
-              <h3 className="text-lg font-semibold mb-6 text-[#667085]">{item?.comment}</h3>
+              <div className="flex flex-row items-center gap-1 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900">{formatIndonesianDateTime(item.createdAt)}</h3>
+                {validStatuses.includes(item.status) && <div className={`border-l-4 pl-3 ml-2 font-medium ${item.isStatus ? "border-green-500 text-green-600" : "border-red-500 text-red-600"}`}>{item.isStatus ? `Sudah ${item.status}` : `Belum ${item.status.toLowerCase()}`}</div>}
+              </div>
+              {statusDescriptions[item.status] && <p className="text-base font-medium text-gray-600 mb-2">{statusDescriptions[item.status]}</p>}
+              {item?.comment && <h3 className="text-base font-bold mb-6 text-[#667085]">Keterangan: {item?.comment}</h3>}
+
+              {item.revisionFile && item.revisionFile.length > 0 && (
+                <div className="mb-4">
+                  {item.revisionFile.map((file, idx) => (
+                    <div key={idx} className="py-2 px-4  rounded-md  border border-GREY02 max-w-fit transition">
+                      <a href={getHrefByFileName(file.file)} target="_blank" rel="noopener noreferrer" className="text-PRIMARY01 underline font-bold hover:text-PRIMARY01">
+                        {file.fileName || `Berkas ${idx + 1}`}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
               <p className="text-[#667085]">
                 {item.status === "Pending" ? "Created by: " : "Updated by: "}
                 {item.createdBy ?? "-"}

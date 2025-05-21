@@ -35,47 +35,47 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
             <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                 <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChange(e, index, "name")} error={error[index]?.name} need />
-                <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChange(e, index, "email")} error={error[index].email} need />
+                <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChange(e, index, "email")} error={error[index]?.email} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Instansi" value={item.institution} name="institution" type="text" placeholder="" onChange={(e) => handleChange(e, index, "institution")} error={error[index].institution} need />
-                <Field label="Pekerjaan" value={item.work} name="work" type="text" placeholder="" onChange={(e) => handleChange(e, index, "work")} error={error[index].work} need />
+                <Field label="Instansi" value={item.institution} name="institution" type="text" placeholder="" onChange={(e) => handleChange(e, index, "institution")} error={error[index]?.institution} need />
+                <Field label="Pekerjaan" value={item.work} name="work" type="text" placeholder="" onChange={(e) => handleChange(e, index, "work")} error={error[index]?.work} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Fakultas" value={item.faculty || ""} name="faculty" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChange(e, index, "faculty")} error={error[index].faculty} need />
-                <Field label="Prodi" value={item.studyProgram || ""} name="studyProgram" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChange(e, index, "studyProgram")} error={error[index].studyProgram} need />
+                <Field label="Fakultas" value={item.faculty || ""} name="faculty" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChange(e, index, "faculty")} error={error[index]?.faculty} need />
+                <Field label="Prodi" value={item.studyProgram || ""} name="studyProgram" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChange(e, index, "studyProgram")} error={error[index]?.studyProgram} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Negara Kebangsaan" value={item.nationalState} name="nationalState" type="text" placeholder="" onChange={(e) => handleChange(e, index, "nationalState")} error={error[index].nationalState} need />
-                <Field label="Negara Tempat Tingggal" value={item.countryResidence} name="countryResidence" type="text" placeholder="" onChange={(e) => handleChange(e, index, "countryResidence")} error={error[index].countryResidence} need />
+                <Field label="Negara Kebangsaan" value={item.nationalState} name="nationalState" type="text" placeholder="" onChange={(e) => handleChange(e, index, "nationalState")} error={error[index]?.nationalState} need />
+                <Field label="Negara Tempat Tingggal" value={item.countryResidence} name="countryResidence" type="text" placeholder="" onChange={(e) => handleChange(e, index, "countryResidence")} error={error[index]?.countryResidence} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Provinsi" value={item.province} name="province" type="text" placeholder="" onChange={(e) => handleChange(e, index, "province")} error={error[index].province} need />
-                <Field label="Kota/Kabupaten" value={item.city} name="city" type="text" placeholder="" onChange={(e) => handleChange(e, index, "city")} error={error[index].city} need />
+                <Field label="Provinsi" value={item.province} name="province" type="text" placeholder="" onChange={(e) => handleChange(e, index, "province")} error={error[index]?.province} need />
+                <Field label="Kota/Kabupaten" value={item.city} name="city" type="text" placeholder="" onChange={(e) => handleChange(e, index, "city")} error={error[index]?.city} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Kecamatan" value={item.subdistrict} name="subdistrict" type="text" placeholder="" onChange={(e) => handleChange(e, index, "subdistrict")} error={error[index].subdistrict} need />
-                <Field label="Kelurahan" value={item.ward} name="ward" type="text" placeholder="" onChange={(e) => handleChange(e, index, "ward")} error={error[index].ward} need />
+                <Field label="Kecamatan" value={item.subdistrict} name="subdistrict" type="text" placeholder="" onChange={(e) => handleChange(e, index, "subdistrict")} error={error[index]?.subdistrict} need />
+                <Field label="Kelurahan" value={item.ward} name="ward" type="text" placeholder="" onChange={(e) => handleChange(e, index, "ward")} error={error[index]?.ward} need />
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChange(e, index, "postalCode")} error={error[index].postalCode} need />
-                <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChange(e, index, "phoneNumber")} error={error[index].phoneNumber} need />
+                <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChange(e, index, "postalCode")} error={error[index]?.postalCode} need />
+                <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChange(e, index, "phoneNumber")} error={error[index]?.phoneNumber} need />
               </div>
               {submissionType === "Merek" && (
                 <>
                   <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                    <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChange(e, index, "facebook")} error={error[index].facebook} />
-                    <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChange(e, index, "whatsapp")} error={error[index].whatsapp} />
+                    <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChange(e, index, "facebook")} error={error[index]?.facebook} />
+                    <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChange(e, index, "whatsapp")} error={error[index]?.whatsapp} />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
-                    <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "instagram")} error={error[index].instagram} />
-                    <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" onChange={(e) => handleChange(e, index, "twitter")} error={error[index].twitter} />
+                    <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "instagram")} error={error[index]?.instagram} />
+                    <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" onChange={(e) => handleChange(e, index, "twitter")} error={error[index]?.twitter} />
                   </div>
                 </>
               )}
 
-              <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index].address} need />
-              <InputFile label="KTP" value={item.ktp instanceof File ? item.ktp : undefined} name={`ktp_${index}`} required onChange={(e) => handleChange(e, index, "ktp")} accept=".jpg, .jpeg, .png, .webp" error={error[index].ktp} need placeholder={`${item.ktp ?? ""}`} />
+              <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index]?.address} need />
+              <InputFile label="KTP" value={item.ktp instanceof File ? item.ktp : undefined} name={`ktp_${index}`} required onChange={(e) => handleChange(e, index, "ktp")} accept=".jpg, .jpeg, .png, .webp" error={error[index]?.ktp} need placeholder={`${item.ktp ?? ""}`} />
 
               {personalData.length > 1 && index !== 0 ? (
                 <div className="flex justify-end mt-10">

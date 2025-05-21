@@ -14,7 +14,7 @@ const initialState: UserState = {
     currentPage: 1,
     totalPages: 1,
     totalValue: 0,
-    limit: 2,
+    limit: 10,
   },
   userDetails: null,
   reviewer: [],

@@ -12,6 +12,9 @@ import FormReview from "../components/formReview";
 import { createSubmissionPaten } from "../../../../service/actions/submissionAction";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import { useModal } from "../../../../hooks/useModal";
+import ModalWarningContributor from "../../../../components/modal/modalWarningContributor";
+import { useEffect } from "react";
 
 const SubmissionUserPaten = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +23,7 @@ const SubmissionUserPaten = () => {
   const { error, currentStep, setCurrentStep } = useSubmissionType();
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent, setDraftPatent } = useDraftSubmission();
-
+  const { activeModal, handleOpenModal, handleCloseModal, setMessage, message } = useModal();
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
 
@@ -54,9 +57,15 @@ const SubmissionUserPaten = () => {
 
       return;
     }
+    if (personalData.length === 1) {
+      handleOpenModal(null, "warningContributorPaten");
+      setMessage("Apakah Anda yakin ingin melanjutkan tanpa menambah kontributor lainnya?");
+    }
 
-    if (currentStep < 3 && !error) {
-      setCurrentStep(currentStep + 1);
+    if (personalData.length > 1) {
+      if (currentStep < 3 && !error) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
@@ -106,6 +115,20 @@ const SubmissionUserPaten = () => {
       setLoading(false);
     }
   };
+
+  const goToNextStep = () => {
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -129,6 +152,7 @@ const SubmissionUserPaten = () => {
         </div>
       </div>
       <ModalLoading show={loading} />
+      <ModalWarningContributor modal={activeModal === "warningContributorPaten" || activeModal === "warningContributorPaten"} setModal={handleCloseModal} message={message} handleAddContributor={addContributor} handleNext={goToNextStep} />
     </div>
   );
 };

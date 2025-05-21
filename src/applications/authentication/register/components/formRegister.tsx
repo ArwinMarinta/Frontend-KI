@@ -39,7 +39,7 @@ const FormRegister = ({ formRegister, handleChange, handleRegister, errors, load
         />
         {errors?.email && <p className="text-sm text-RED01 mt-1">{errors?.email}</p>}
       </div>
-      <FieldPassword value={formRegister.password} name="password" type="password" placeholder="password" onChange={handleChange} error={errors?.password} />
+      <FieldPassword value={formRegister.password} name="password" type="password" placeholder="Password" onChange={handleChange} error={errors?.password} />
       <FieldPassword value={formRegister.confPassword} name="confPassword" type="password" placeholder="Konfirmasi Password" onChange={handleChange} error={errors?.confPassword} />
 
       <button type="submit" disabled={loading} className={`bg-PRIMARY01 text-white p-2 font-semibold rounded-md transition ${loading ? " cursor-not-allowed" : "bg-PRIMARY01"}`}>

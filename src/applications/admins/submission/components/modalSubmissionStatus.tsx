@@ -1,6 +1,5 @@
 import React from "react";
 import useStatus from "../hooks/useStatus";
-import { ModalProps } from "../../../../types/modalType";
 import { Button, Modal } from "flowbite-react";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import { updateSubmissionStatus } from "../../../../service/actions/userAction";
@@ -9,9 +8,19 @@ import { statusOptions } from "../../../../data/statusSubmission";
 import FieldDropdown from "../../../../components/input/FieldDropDown";
 // Pastikan path ini sesuai
 
-const ModalSubmissionStatus = ({ modal, setModal, type, id, message }: ModalProps) => {
-  const { status, statusError, setStatusError, handleChange, resetStatus, dispatch, loading, setLoading } = useStatus();
+export interface ModalProps {
+  modal: boolean;
+  setModal: (modal: boolean) => void;
+  type: string;
+  id: number | string | null;
+  message: string | null;
+  status?: string;
+}
 
+const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status }: ModalProps) => {
+  const { statusError, setStatusError, handleChange, resetStatus, dispatch, loading, setLoading } = useStatus();
+
+  console.log(status);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!status || status.trim() === "") {
@@ -42,7 +51,7 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message }: ModalProp
         <div className="space-y-6">
           <FieldDropdown
             label="Status Pengajuan (DJKI)"
-            name="applicationType"
+            name="status"
             type="select"
             value={status ?? ""}
             onChange={handleChange}

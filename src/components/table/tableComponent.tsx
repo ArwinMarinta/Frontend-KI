@@ -7,7 +7,7 @@ type ActionType<T> = {
   component: (item: T) => React.ReactNode;
 };
 type TableProps<T extends { id: number | string }> = {
-  columns: { label: string; accessor: keyof T | string; render?: (item: T) => React.ReactNode }[];
+  columns: { label: string; accessor: keyof T | string; render?: (item: T) => React.ReactNode; width?: string }[];
   data: T[];
   limit: number;
   totalPages: number;
@@ -44,11 +44,11 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
             <tr>
               <th className="px-4 py-2 text-left border-b">No</th>
               {columns.map((col, i) => (
-                <th key={i} className="px-4 py-2 text-left border-b ">
+                <th key={i} className={`px-4 py-2 text-left border-b ${col.width ?? ""}`}>
                   {col.label}
                 </th>
               ))}
-              {actions?.length > 0 && <th className="px-4 py-2 text-left border-b whitespace-nowrap ">Aksi</th>}
+              {actions?.length > 0 && <th className="px-4 py-2 text-left w-max  border-b">Aksi</th>}
             </tr>
           </thead>
           <tbody>
@@ -56,17 +56,17 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
               <tr key={item.id} className="bg-white hover:bg-gray-50 ">
                 <td className="px-4 py-2 border-b">{index + 1 + (currentPage - 1) * limit}</td>
                 {columns.map((col, i) => (
-                  <td key={i} className="px-4 py-2 border-b">
+                  <td key={i} className="px-4 py-2 border-b break-words">
                     {col.render ? col.render(item) : ((item[col.accessor as keyof T] ?? "-") as React.ReactNode)}
                   </td>
                 ))}
                 {actions?.length > 0 && (
-                  <td className="px-4 py-2 border-b whitespace-nowrap">
-                    <div className="flex items-center  gap-2">
+                  <td className="border-b whitespace-nowrap w-max ">
+                    <div className="">
                       {actions.map((action, i) => (
-                        <span key={i} onClick={() => action.onClick(item)} className="inline-flex">
+                        <button key={i} onClick={() => action.onClick(item)} className={`inline-flex ${i !== actions.length - 1 ? "mr-2" : ""}`}>
                           {action.component(item)}
-                        </span>
+                        </button>
                       ))}
                     </div>
                   </td>

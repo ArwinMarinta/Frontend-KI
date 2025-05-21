@@ -33,6 +33,7 @@ const useReviewer = () => {
     resetReviewer,
     setLoading,
     loading,
+    setReviewer,
   };
 };
 

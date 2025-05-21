@@ -1049,3 +1049,368 @@ export const getDashboardAdmin = (): AppThunk => {
     }
   };
 };
+
+export const updateSubmissionCopyright = (id: number, formPersonalData: FormPersonalData[], formCopyright: FormSubmissionCopyright): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+      // const firstId = formPersonalData?.[0]?.id ?? null;
+
+      const formData = new FormData();
+
+      formPersonalData.forEach((data, index) => {
+        // if (data.id && index > 0 && firstId) {
+        //   const previousId = formPersonalData[index - 1]?.id;
+        //   if (previousId !== undefined && data.id >= firstId) {
+        //     formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        //   }
+        // } else if (data.id && index === 0) {
+        //   // index 0, kirim langsung
+        //   formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        // }
+        if (data.id) formData.append(`personalDatas[${index}][id]`, data?.id.toString());
+        if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
+        if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
+        if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
+        if (data.studyProgram) formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram);
+        if (data.institution) formData.append(`personalDatas[${index}][institution]`, data.institution);
+        if (data.work) formData.append(`personalDatas[${index}][work]`, data.work);
+        if (data.nationalState) formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        if (data.countryResidence) formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        if (data.province) formData.append(`personalDatas[${index}][province]`, data.province);
+        if (data.city) formData.append(`personalDatas[${index}][city]`, data.city);
+        if (data.subdistrict) formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        if (data.ward) formData.append(`personalDatas[${index}][ward]`, data.ward);
+        if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        // Lampirkan file KTP jika ada
+        // if (data.ktp) {
+        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
+        // }
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktpFiles", data.ktp);
+        }
+      });
+
+      if (formCopyright.titleInvention) {
+        formData.append("titleInvention", formCopyright.titleInvention);
+      }
+
+      if (formCopyright.typeCreation) {
+        formData.append("typeCreationId", formCopyright.typeCreation.toString());
+      }
+
+      if (formCopyright.subTypeCreation) {
+        formData.append("subTypeCreationId", formCopyright.subTypeCreation.toString());
+      }
+
+      if (formCopyright.countryFirstAnnounced) {
+        formData.append("countryFirstAnnounced", formCopyright.countryFirstAnnounced);
+      }
+
+      if (formCopyright.cityFirstAnnounced) {
+        formData.append("cityFirstAnnounced", formCopyright.cityFirstAnnounced);
+      }
+
+      if (formCopyright.timeFirstAnnounced) {
+        formData.append("timeFirstAnnounced", formCopyright.timeFirstAnnounced);
+      }
+
+      if (formCopyright.briefDescriptionCreation) {
+        formData.append("briefDescriptionCreation", formCopyright.briefDescriptionCreation);
+      }
+      if (formCopyright.statementLetter) formData.append("statementLetterFile", formCopyright.statementLetter);
+      if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyrightFile", formCopyright.letterTransferCopyright);
+      if (formCopyright.exampleCreation) formData.append("exampleCreationFile", formCopyright.exampleCreation);
+
+      await axios.patch(`${API_URL}/submission/personal-data-copyright/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateSubmissionPatenPending = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+      const firstId = formPersonalData?.[0]?.id ?? null;
+
+      const formData = new FormData();
+
+      formPersonalData.forEach((data, index) => {
+        if (data.id && index > 0 && firstId) {
+          const previousId = formPersonalData[index - 1]?.id;
+          if (previousId !== undefined && data.id >= firstId) {
+            formData.append(`personalDatas[${index}][id]`, data.id.toString());
+          }
+        } else if (data.id && index === 0) {
+          // index 0, kirim langsung
+          formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        }
+        if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
+        if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
+        if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
+        if (data.studyProgram) formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram);
+        if (data.institution) formData.append(`personalDatas[${index}][institution]`, data.institution);
+        if (data.work) formData.append(`personalDatas[${index}][work]`, data.work);
+        if (data.nationalState) formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        if (data.countryResidence) formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        if (data.province) formData.append(`personalDatas[${index}][province]`, data.province);
+        if (data.city) formData.append(`personalDatas[${index}][city]`, data.city);
+        if (data.subdistrict) formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        if (data.ward) formData.append(`personalDatas[${index}][ward]`, data.ward);
+        if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        // Lampirkan file KTP jika ada
+        // if (data.ktp) {
+        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
+        // }
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktpFiles", data.ktp);
+        }
+      });
+      if (drafDocument) {
+        formData.append("draftPatentApplicationFile", drafDocument);
+      }
+
+      await axios.patch(`${API_URL}/submission/personal-data-patent/${submissionType}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // if (response.status === 201) {
+      //   navigate("/pengajuan/paten");
+      // }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateSubmissionIndustrialDesign = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+      const firstId = formPersonalData?.[0]?.id ?? undefined;
+
+      const formData = new FormData();
+
+      formPersonalData.forEach((data, index) => {
+        if (data.id && index > 0 && firstId) {
+          const previousId = formPersonalData[index - 1]?.id;
+          if (previousId !== undefined && data.id >= firstId) {
+            formData.append(`personalDatas[${index}][id]`, data.id.toString());
+          }
+        } else if (data.id && index === 0) {
+          // index 0, kirim langsung
+          formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        }
+        if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
+        if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
+        if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
+        if (data.studyProgram) formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram);
+        if (data.institution) formData.append(`personalDatas[${index}][institution]`, data.institution);
+        if (data.work) formData.append(`personalDatas[${index}][work]`, data.work);
+        if (data.nationalState) formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        if (data.countryResidence) formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        if (data.province) formData.append(`personalDatas[${index}][province]`, data.province);
+        if (data.city) formData.append(`personalDatas[${index}][city]`, data.city);
+        if (data.subdistrict) formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        if (data.ward) formData.append(`personalDatas[${index}][ward]`, data.ward);
+        if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        // Lampirkan file KTP jika ada
+        // if (data.ktp) {
+        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
+        // }
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktpFiles", data.ktp);
+        }
+      });
+      if (drafDocument) {
+        formData.append("draftDesainIndustriApplicationFile", drafDocument);
+      }
+
+      await axios.patch(`${API_URL}/submission/personal-data-design-industri/${submissionType}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // if (response.status === 201) {
+      //   navigate("/pengajuan/paten");
+      // }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updateSubmissionBrand = (id: number | undefined, formPersonalData: FormPersonalData[], Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[]): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+      const firstId = formPersonalData?.[0]?.id ?? undefined;
+      const formData = new FormData();
+
+      formPersonalData.forEach((data, index) => {
+        if (data.id && index > 0 && firstId) {
+          const previousId = formPersonalData[index - 1]?.id;
+          if (previousId !== undefined && data.id >= firstId) {
+            formData.append(`personalDatas[${index}][id]`, data.id.toString());
+          }
+        } else if (data.id && index === 0) {
+          // index 0, kirim langsung
+          formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        }
+        if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
+        if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
+        if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
+        if (data.studyProgram) formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram);
+        if (data.institution) formData.append(`personalDatas[${index}][institution]`, data.institution);
+        if (data.work) formData.append(`personalDatas[${index}][work]`, data.work);
+        if (data.nationalState) formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        if (data.countryResidence) formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        if (data.province) formData.append(`personalDatas[${index}][province]`, data.province);
+        if (data.city) formData.append(`personalDatas[${index}][city]`, data.city);
+        if (data.subdistrict) formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        if (data.ward) formData.append(`personalDatas[${index}][ward]`, data.ward);
+        if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        // Lampirkan file KTP jika ada
+        // if (data.ktp) {
+        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
+        // }
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktpFiles", data.ktp);
+        }
+      });
+
+      if (Form.brandType) {
+        formData.append("brandType", Form.brandType.toString());
+      }
+
+      if (Form.referenceName) {
+        formData.append("referenceName", Form.referenceName);
+      }
+
+      if (Form.elementColor) {
+        formData.append("elementColor", Form.elementColor);
+      }
+
+      if (Form.translate) {
+        formData.append("translate", Form.translate);
+      }
+
+      if (Form.pronunciation) {
+        formData.append("pronunciation", Form.pronunciation);
+      }
+
+      if (Form.disclaimer) {
+        formData.append("disclaimer", Form.disclaimer);
+      }
+
+      if (Form.description) {
+        formData.append("description", Form.description);
+      }
+
+      if (Form.documentType) {
+        formData.append("documentType", Form.documentType);
+      }
+
+      if (Form.information) {
+        formData.append("information", Form.information);
+      }
+
+      if (Form.labelBrand) {
+        formData.append("labelBrand", Form.labelBrand);
+      }
+
+      if (Form.fileUploade) {
+        formData.append("fileUploade", Form.fileUploade);
+      }
+
+      if (Form.signature) {
+        formData.append("signature", Form.signature);
+      }
+
+      if (Form.InformationLetter) {
+        formData.append("InformationLetter", Form.InformationLetter);
+      }
+
+      if (Form.letterStatment) {
+        formData.append("letterStatment", Form.letterStatment);
+      }
+
+      formAdditionalBrand.forEach((data, index) => {
+        if (data.additionalDescriptions) {
+          formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
+        }
+      });
+
+      formAdditionalBrand.forEach((data) => {
+        if (data.additionalFiles) {
+          formData.append("additionalFiles", data.additionalFiles);
+        }
+      });
+
+      await axios.patch(`${API_URL}/submission/personal-data/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};

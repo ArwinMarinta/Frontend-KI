@@ -7,7 +7,7 @@ interface DropdownLimitProps {
 }
 
 const DropdownLimit = ({ value, onChange }: DropdownLimitProps) => {
-  const options = [2, 3, 5, 7];
+  const options = [10, 20, 50, 100];
 
   return (
     <Dropdown

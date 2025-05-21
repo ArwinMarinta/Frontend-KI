@@ -2,9 +2,31 @@ import Navbar from "../../../../components/navigations/navbar";
 import FileImage from "../../../../assets/images/files.webp";
 import useDocument from "../hooks/useDocument";
 import { API_FILE } from "../../../../config/config";
+import { AiOutlineDownload } from "react-icons/ai";
 
 const Files = () => {
   const { category, doc, handleCategoryChange } = useDocument();
+
+  const downloadFile = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const urlBlob = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.remove();
+      window.URL.revokeObjectURL(urlBlob);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -54,12 +76,13 @@ const Files = () => {
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
 
                       {/* Tombol Unduh */}
-                      <a href={`${API_FILE}/image/${item.cover}`} download className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button className="bg-white text-black px-3 py-1 rounded shadow font-medium text-sm">Unduh</button>
-                      </a>
+                      <button
+                        onClick={() => downloadFile(`${API_FILE}/documents/${item.document}`, item.document ?? "")}
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-black px-3 py-1 rounded shadow font-medium text-sm"
+                      >
+                        <AiOutlineDownload className="text-PRIMARY02 text-[80px]" />
+                      </button>
                     </div>
-
-                    <span className="mt-4">{item.title}</span>
                   </div>
                 ))}
               </div>

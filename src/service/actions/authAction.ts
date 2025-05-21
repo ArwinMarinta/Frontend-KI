@@ -21,7 +21,10 @@ export const register = (fullname: string, email: string, password: string, navi
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          console.log(error.response.data.message);
+          const errorMessage = error.response.data?.message || "Terjadi kesalahan";
+          navigate("/register", {
+            state: { message: errorMessage },
+          });
         } else {
           console.log("No response received:", error.message);
         }
@@ -51,7 +54,10 @@ export const login = (email: string, password: string, navigate: NavigateFunctio
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          console.log(error.response.data.message);
+          const errorMessage = error.response.data?.message || "Terjadi kesalahan";
+          navigate("/login", {
+            state: { message: errorMessage },
+          });
         } else {
           console.log("No response received:", error.message);
         }
@@ -143,6 +149,22 @@ export const resetPassword = (token: string | undefined, newPassword: string, co
           navigate(`/resset-password/${token}`, {
             state: { message: errorMessage },
           });
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const activationAccount = (token: string | undefined): AppThunk => {
+  return async () => {
+    try {
+      await axios.get(`${API_URL}/verify-email/${token}`);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.log(error.response.data.message);
         } else {
           console.log("No response received:", error.message);
         }

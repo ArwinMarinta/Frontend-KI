@@ -1,4 +1,5 @@
 export const statusOptions = [
+  { label: "Draft", value: "Draft" },
   { label: "Dianggap Ditarik Kembali (Formalitas)", value: "Dianggap Ditarik Kembali (Formalitas)" },
   { label: "Pemeriksa Substantif", value: "Pemeriksa Substantif" },
   { label: "Sudah Ditanggapi (Substantif)", value: "Sudah Ditanggapi (Substantif)" },

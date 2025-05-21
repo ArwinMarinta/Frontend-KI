@@ -1,5 +1,6 @@
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import Section_1 from "../components/section_1";
 import useDashboardAdmin from "../hooks/useDashboardAdmin";
 
@@ -7,14 +8,17 @@ const Dashboard = () => {
   const { dashboard } = useDashboardAdmin();
   return (
     <>
-      <main className="flex flex-row w-full h-full bg-GREY01">
+      <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
         <div className="min-h-full lg:w-[16%] hidden md:block bg-white  ">
           <SideNavigation />
         </div>
-        <div className="w-[84%]  border ">
+        <div className="lg:w-[84%] w-full  border  ">
           <HeaderNavigation />
-          <div className="px-4 lg:px-12   py-16">
-            <div className="grid grid-cols-4 gap-6">
+          <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb title="DASHBOARD" items={[{ label: "Dashboard", url: "/dashboard" }]} />
+            </div>
+            <div className="grid lg:grid-cols-4 grid-cols-2  gap-6">
               <Section_1 label={"Hak Cipta"} total={dashboard?.totalPengajuan.hakCipta ?? 0} description={"Total Pengajuan"} />
               <Section_1 label={"Paten"} total={dashboard?.totalPengajuan.paten ?? 0} description={"Total Pengajuan"} />
               <Section_1 label={"Merek"} total={dashboard?.totalPengajuan.merek ?? 0} description={"Total Pengajuan"} />
@@ -25,7 +29,7 @@ const Dashboard = () => {
               <Section_1 label={"Unduhan"} total={dashboard?.unduhan ?? 0} description={"Total Dokumen"} />
             </div>
             <div className="mt-10">
-              <div className="flex flex-col bg-whit p-6 bg-white rounded-md gap-6">
+              <div className="flex flex-col bg-whit lg:p-16 p-4 shadow-md bg-white rounded-md gap-6">
                 <div className=" border-PRIMARY01 border-l-[5px] text-lg font-medium pl-1">Pengajuan Terakhir</div>
                 <div className="overflow-x-auto w-full mb-6">
                   <table className="min-w-full">

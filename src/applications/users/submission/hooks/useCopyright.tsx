@@ -15,6 +15,8 @@ const useCopyright = () => {
   const { types } = location.state || {};
   const { detailCopyright } = useSelector((state: RootState) => state.landing);
 
+  // const {  } = useSelector((state: RootState) => state.landing);
+
   const [formCopyright, setFormCopyright] = useState<FormSubmissionCopyright>({
     titleInvention: "",
     typeCreation: null,
@@ -155,6 +157,7 @@ const useCopyright = () => {
     handleChangeCopyright,
     handleSubmitCopyright,
     loading,
+    detailCopyright,
   };
 };
 

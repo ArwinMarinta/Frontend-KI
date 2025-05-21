@@ -65,11 +65,22 @@ import ProtectedToken from "./middleware/protecdToken";
 import NoAccessToken from "./middleware/noAccessToken";
 import ProtectedRouteRole from "./middleware/protecdRole";
 import UpdateSubmissionProgress from "./applications/admins/submission/page/updateSubmissionProgress";
+import VerifySuccess from "./applications/authentication/register/verifySuccess";
+import ScrollBehavior from "./utils/scrollBehavior";
+import CreateSubmissionCopyrightAdmin from "./applications/admins/submission/page/createSubmissionCopyrightAdmin";
+import CreateSubmissionPaten from "./applications/admins/submission/page/createSubmissionPaten";
+import CreateSubmissionBrand from "./applications/admins/submission/page/createSubmissionBrand";
+import CreateSubmissionIndustrialDesign from "./applications/admins/submission/page/createSubmissionIndustrialDesign";
+import UpdateUserCopyright from "./applications/users/submission/components/complete/updateUserCopyright";
+import UpdateUserPaten from "./applications/users/submission/components/complete/updateUserPaten";
+import UpdateDesainIndustri from "./applications/users/submission/components/complete/updateDesainIndustri";
+import UpdateUserBrand from "./applications/users/submission/components/complete/updateUserBrand";
 
 function App() {
   return (
     <BrowserRouter>
       <PageTitle />
+      <ScrollBehavior />
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
@@ -83,6 +94,14 @@ function App() {
           element={
             <ProtectedToken>
               <Login />
+            </ProtectedToken>
+          }
+        />
+        <Route
+          path="/aktivasi-email/:token"
+          element={
+            <ProtectedToken>
+              <VerifySuccess />
             </ProtectedToken>
           }
         />
@@ -183,14 +202,38 @@ function App() {
               </NoAccessToken>
             }
           />
-          {/* <Route
-            path="/histori-pengajuan/ubah"
+          <Route
+            path="/histori-pengajuan/hak-cipta/ubah"
             element={
               <NoAccessToken>
-                <SubmissionUpdate />
+                <UpdateUserCopyright />
               </NoAccessToken>
             }
-          /> */}
+          />
+          <Route
+            path="/histori-pengajuan/paten/ubah"
+            element={
+              <NoAccessToken>
+                <UpdateUserPaten />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/histori-pengajuan/desain-industri/ubah"
+            element={
+              <NoAccessToken>
+                <UpdateDesainIndustri />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/histori-pengajuan/merek/ubah"
+            element={
+              <NoAccessToken>
+                <UpdateUserBrand />
+              </NoAccessToken>
+            }
+          />
           <Route
             path="/lengkapi-berkas-pengajuan"
             element={
@@ -292,10 +335,26 @@ function App() {
             }
           />
           <Route
+            path="/permohonan/hak-cipta/tambah"
+            element={
+              <NoAccessToken>
+                <CreateSubmissionCopyrightAdmin />
+              </NoAccessToken>
+            }
+          />
+          <Route
             path="/permohonan/paten"
             element={
               <NoAccessToken>
                 <SubmissionPatent />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/paten/tambah"
+            element={
+              <NoAccessToken>
+                <CreateSubmissionPaten />
               </NoAccessToken>
             }
           />
@@ -308,10 +367,26 @@ function App() {
             }
           />
           <Route
+            path="/permohonan/merek/tambah"
+            element={
+              <NoAccessToken>
+                <CreateSubmissionBrand />
+              </NoAccessToken>
+            }
+          />
+          <Route
             path="/permohonan/desain-industri"
             element={
               <NoAccessToken>
                 <SubmissionIndustrialDesign />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/permohonan/desain-industri/tambah"
+            element={
+              <NoAccessToken>
+                <CreateSubmissionIndustrialDesign />
               </NoAccessToken>
             }
           />

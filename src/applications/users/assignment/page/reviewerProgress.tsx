@@ -16,7 +16,7 @@ const ReviewerProgress = () => {
         </div>
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
-          <div className="px-4 lg:px-12  py-8  ">
+          <div className="px-4 lg:px-12  py-8 ">
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="grid grid-cols-3 items-center h-24 mb-16">
                 <div>

@@ -8,7 +8,7 @@ import { useRegister } from "../../../hooks/useRegister";
 import FormRegister from "./components/formRegister";
 
 const Register = () => {
-  const { formRegister, handleChange, handleRegister, loading, errors } = useRegister();
+  const { formRegister, handleChange, handleRegister, loading, errors, message } = useRegister();
 
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
@@ -24,6 +24,7 @@ const Register = () => {
         </div>
 
         <h1 className="text-[28px] font-bold mb-4">Daftar</h1>
+        <div className="mb-4">{message && message !== "Password berhasil diubah." && message !== "Email belum diverifikasi" && <div className="bg-red-300 py-3 px-4 font-medium rounded-md text-red-900">{message}</div>}</div>
         <FormRegister formRegister={formRegister} handleChange={handleChange} handleRegister={handleRegister} errors={errors} loading={loading} />
 
         <div className="relative w-full my-8">

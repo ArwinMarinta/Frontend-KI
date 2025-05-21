@@ -31,14 +31,14 @@ const HelpCenter = () => {
     }
   };
   return (
-    <main className="flex flex-row w-full h-full bg-GREY01">
-      <div className="min-h-full w-[16%] bg-white">
+    <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
+      <div className="min-h-full  lg:w-[16%] hidden lg:block bg-white">
         <SideNavigation />
       </div>
-      <div className="w-[84%]  border ">
+      <div className="lg:w-[84%] w-full  border">
         <HeaderNavigation />
-        <div className="container  mt-16">
-          <div className="bg-white p-6 rounded-md">
+        <div className="px-4 lg:px-12  py-8 ">
+          <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Pusat Bantuan</span>
               {/* <AddButton onClick={() => handleModal(null, "Add")} /> */}

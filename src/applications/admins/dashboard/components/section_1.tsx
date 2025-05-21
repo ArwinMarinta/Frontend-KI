@@ -6,7 +6,7 @@ interface Section1Props {
 
 const Section_1 = ({ label, total, description }: Section1Props) => {
   return (
-    <div className="bg-white rounded-md flex flex-col p-4 gap-2 shadow-sm">
+    <div className="bg-white rounded-md flex flex-col p-4 gap-2 shadow-md">
       <h3 className="text-lg font-medium">{label}</h3>
       <span className="text-3xl font-semibold text-PRIMARY01">{total}</span>
       <span className="text-base text-GREY04">{description}</span>

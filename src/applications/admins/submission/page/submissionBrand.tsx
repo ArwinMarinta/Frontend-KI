@@ -1,7 +1,6 @@
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
-import AddButton from "../../../../components/button/addButton";
-
+import ButtonAdd from "../../../../components/button/linkButton";
 import { useModal } from "../../../../hooks/useModal";
 import TableWithPagination from "../../../../components/table/tableComponent";
 import { Review } from "../../../../types/submissionType";
@@ -15,13 +14,15 @@ import ModalSubmissionStatus from "../components/modalSubmissionStatus";
 import { truncateText } from "../../../../utils/caracterLength";
 import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
+import useReviewer from "../hooks/useReviewer";
 
 const SubmissionBrand = () => {
   const { brand, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useBrand();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
-  const { setStatus } = useStatus();
+  const { setStatus, status } = useStatus();
+  const { reviewer, setReviewer } = useReviewer();
 
-  const handleModal = (id: number | null, types: string, status?: string) => {
+  const handleModal = (id: number | null, types: string, status?: string | null | undefined, reviewerId?: number) => {
     if (types === "Delete") {
       setId(id);
       handleOpenModal(id, "DeleteSubmissionBrand");
@@ -30,28 +31,31 @@ const SubmissionBrand = () => {
       setId(id);
       handleOpenModal(id, "updateReviewerBrand");
       setMessage("Ubah Reviewer");
+      setReviewer(reviewerId);
     } else if (types === "Status") {
       setId(id);
       handleOpenModal(id, "updateStatusBrand");
       setMessage("Ubah Status Pengajuan");
-      setStatus(status);
+      if (status) {
+        setStatus(status);
+      }
     }
   };
 
   return (
     <>
-      <main className="flex flex-row w-full h-full bg-GREY01">
-        <div className="min-h-full w-[16%] bg-white">
+      <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
+        <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
           <SideNavigation />
         </div>
-        <div className="w-[84%]  border ">
+        <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
-          <div className="container  mt-10 ">
-            <div className="bg-white p-6 rounded-md">
+          <div className="px-4 lg:px-12  py-8 ">
+            <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="bg-white  ">
                 <div className="flex flex-row justify-between mb-20">
                   <span className="text-3xl font-semibold">Merek</span>
-                  <AddButton />
+                  <ButtonAdd url={"/permohonan/merek/tambah"} />
                 </div>
                 <TableWithPagination<Review>
                   columns={[
@@ -62,8 +66,8 @@ const SubmissionBrand = () => {
                       label: "Reviewer",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Reviewer")} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
-                          {item.reviewer?.fullname}
+                        <button onClick={() => handleModal(item.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                          {item.reviewer?.fullname ?? "-"}
                         </button>
                       ),
                     },
@@ -100,7 +104,7 @@ const SubmissionBrand = () => {
                       label: "Detail",
                       onClick: () => {},
                       component: (item) => (
-                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}` }}>
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}`, types: "Ubah Merek" }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 ">
                             Detail
                           </button>
@@ -115,8 +119,8 @@ const SubmissionBrand = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} />
-              <ModalUpdateReviewer modal={activeModal === "updateReviewerBrand" || activeModal === "updateReviewerBrand"} setModal={handleCloseModal} type={type} id={id} message={message} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} />
+              <ModalUpdateReviewer modal={activeModal === "updateReviewerBrand" || activeModal === "updateReviewerBrand"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionBrand" || activeModal === "DeleteSubmissionBrand"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>
           </div>

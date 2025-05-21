@@ -4,7 +4,7 @@ import { FormPersonalData } from "../../../../types/submissionType";
 const usePersonalData = () => {
   const [personalData, setPersonalData] = useState<FormPersonalData[]>([
     {
-      id: 1,
+      id: null,
       name: "",
       email: "",
       faculty: null,

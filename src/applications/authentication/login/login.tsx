@@ -6,7 +6,7 @@ import FormLogin from "./components/formLogin";
 import { useLogin } from "../../../hooks/useLogin";
 
 const Login = () => {
-  const { formLogin, handleChange, handleLogin, loading, errors } = useLogin();
+  const { formLogin, handleChange, handleLogin, loading, errors, message } = useLogin();
 
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
@@ -22,7 +22,10 @@ const Login = () => {
         </div>
 
         <h1 className="text-[28px] font-bold mb-4">Masuk</h1>
-
+        <div className="mb-6">
+          {message && message !== "Password berhasil diubah." && message !== "Email belum diverifikasi" && <div className="bg-red-300 py-3 px-4 font-medium rounded-md text-red-900">{message}</div>}
+          {message && message === "Email belum diverifikasi" && <div className="bg-yellow-200 py-3 px-4 font-medium rounded-md text-yellow-800">{message}</div>}
+        </div>
         <FormLogin formLogin={formLogin} handleChange={handleChange} handleLogin={handleLogin} loading={loading} errors={errors} />
 
         <div className="relative w-full my-8">

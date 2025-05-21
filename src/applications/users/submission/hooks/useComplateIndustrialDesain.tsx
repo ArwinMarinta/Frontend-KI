@@ -212,16 +212,16 @@ const useComplateIndustrialDesain = () => {
     initForm();
   }, [detailDesign, types]);
 
-  console.log(formIndustDesign);
-
   return {
     formIndustDesign,
     formIndustDesignError,
     handleChangeComplateIndusDesign,
     handleSubmitComplateIndusDesign,
     handleClaimCheckboxChange,
-
+    setFormIndustDesign,
     loading,
+    setFormIndustDesignError,
+    validateIndustrialDesign,
   };
 };
 

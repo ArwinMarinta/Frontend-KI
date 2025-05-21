@@ -9,12 +9,12 @@ interface GeneralType {
 
 const PersonalDataSubmission = ({ data }: GeneralType) => {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col mt-10">
       {data?.map((item, index) => (
         <div key={item.id} className="border p-6 rounded-md flex flex-col gap-6 border-PRIMARY01">
           <div className="flex flex-col lg:flex-row gap-6">
             <Field label={`${item.isLeader ? "Ketua Pencipta" : `Kontributor ${index + 0}`}`} value={item.name || "-"} name="fullname" type="text" placeholder="" readOnly />
-            <Field label="Email" value={item.name || "-"} name="fullname" type="text" placeholder="" readOnly />
+            <Field label="Email" value={item.email || "-"} name="fullname" type="text" placeholder="" readOnly />
           </div>
           <div className="flex flex-col lg:flex-row gap-6">
             <Field label="Instansi" value={item.institution || "-"} name="fullname" type="text" placeholder="" readOnly />

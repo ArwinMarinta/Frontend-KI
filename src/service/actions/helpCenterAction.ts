@@ -1,9 +1,10 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setHelpCenter, setHelpCenterDetail } from "../reducers/informationReducer";
+import { setHelpCenter, setHelpCenterDetail, setReportAnalitic } from "../reducers/informationReducer";
 import { NavigateFunction } from "react-router-dom";
 import { FormCreateHelpCenter } from "../../types/helpCenter";
+import { FormReportAnalitic } from "../../types/document";
 
 export const getHelpCenter = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -144,6 +145,47 @@ export const deletesHelpCenter = (id: number | string | null, currentPage: numbe
 
       dispatch(getHelpCenter(currentPage, limit));
       return Promise.resolve();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getReportAndAnalitic = (form: FormReportAnalitic, currentPage: number, limit: number): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.get(`${API_URL}/submission/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          currentPage: currentPage,
+          limit: limit,
+          namaPengguna: form.namaPengguna,
+          jenisPengajuan: form.jenisPengajuan,
+          tanggalPengajuan: form.jenisPengajuan,
+          peran: form.peran,
+          instansi: form.instansi,
+        },
+      });
+
+      dispatch(
+        setReportAnalitic({
+          report: response.data.submissions,
+          currentPage: response.data.currentPage ?? 1,
+          totalPages: response.data.totalPages ?? 1,
+          totalValue: response.data.totalTerms,
+          limit: response.data.limit ?? 10,
+        })
+      );
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

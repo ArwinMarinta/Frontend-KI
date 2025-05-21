@@ -4,14 +4,14 @@ import Section_1 from "../../../admins/dashboard/components/section_1";
 
 const DashboardUser = () => {
   return (
-    <div className="flex flex-row w-full h-full bg-gray-100">
-      <div className="min-h-full w-[16%] bg-white">
+    <div className="flex flex-row w-full min-h-screen bg-[#F6F9FF]">
+      <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
         <SideSubmisson />
       </div>
-      <div className="w-[84%]  border ">
+      <div className="lg:w-[84%] w-full border ">
         <HeaderNavigation />
-        <div className="px-4 lg:px-12   py-16">
-          <div className="grid grid-cols-4 gap-6">
+        <div className="px-4 lg:px-12  py-8 ">
+          <div className="grid md:grid-cols-4 grid-cols-2 gap-6">
             <Section_1 label={"Hak Cipta"} total={24} description={"Total Pengajuan"} />
             <Section_1 label={"Hak Cipta"} total={24} description={"Total Pengajuan"} />
             <Section_1 label={"Hak Cipta"} total={24} description={"Total Pengajuan"} />

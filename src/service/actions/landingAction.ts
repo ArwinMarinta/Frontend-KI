@@ -457,7 +457,7 @@ export const getDetailSubmissionLanding = (type: string, id: string | undefined)
   };
 };
 
-export const getNotification = (): AppThunk => {
+export const getNotification = (limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -465,6 +465,9 @@ export const getNotification = (): AppThunk => {
       const responseType = await axios.get(`${API_URL}/notification/by-user-id`, {
         headers: {
           Authorization: `Bearer ${token}`,
+        },
+        params: {
+          limit: limit,
         },
       });
 
@@ -486,18 +489,22 @@ export const getNotification = (): AppThunk => {
   };
 };
 
-export const updateNotification = (): AppThunk => {
+export const updateNotification = (limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
 
-      await axios.get(`${API_URL}/notification`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.patch(
+        `${API_URL}/notification`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      dispatch(getNotification());
+      dispatch(getNotification(limit));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

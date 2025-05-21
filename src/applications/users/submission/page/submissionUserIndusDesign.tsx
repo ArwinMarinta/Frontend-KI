@@ -12,6 +12,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import { useModal } from "../../../../hooks/useModal";
+import ModalWarningContributor from "../../../../components/modal/modalWarningContributor";
+import { useEffect } from "react";
 
 const SubmissionUserIndusDesign = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +23,7 @@ const SubmissionUserIndusDesign = () => {
   const { error, currentStep, setCurrentStep } = useSubmissionType();
   const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
   const { setDraftPatent, draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent } = useDraftSubmission();
-
+  const { activeModal, handleOpenModal, handleCloseModal, setMessage, message } = useModal();
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
 
@@ -55,8 +58,15 @@ const SubmissionUserIndusDesign = () => {
       return;
     }
 
-    if (currentStep < 3 && !error) {
-      setCurrentStep(currentStep + 1);
+    if (personalData.length === 1) {
+      handleOpenModal(null, "warningContributorIndustrialDesign");
+      setMessage("Apakah Anda yakin ingin melanjutkan tanpa menambah kontributor lainnya?");
+    }
+
+    if (personalData.length > 1) {
+      if (currentStep < 3 && !error) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
@@ -108,8 +118,21 @@ const SubmissionUserIndusDesign = () => {
     }
   };
 
+  const goToNextStep = () => {
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
+
   return (
-    <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
+    <div className="flex flex-row w-full min-h-screen bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
         <SideSubmisson />
       </div>
@@ -131,6 +154,7 @@ const SubmissionUserIndusDesign = () => {
         </div>
       </div>
       <ModalLoading show={loading} />
+      <ModalWarningContributor modal={activeModal === "warningContributorIndustrialDesign" || activeModal === "warningContributorIndustrialDesign"} setModal={handleCloseModal} message={message} handleAddContributor={addContributor} handleNext={goToNextStep} />
     </div>
   );
 };

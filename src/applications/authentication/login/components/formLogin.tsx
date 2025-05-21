@@ -30,7 +30,7 @@ const FormLogin = ({ formLogin, handleChange, handleLogin, loading, errors }: Fo
         />
         {errors.email && <p className="text-sm text-RED01 mt-1">{errors.email}</p>}
       </div>
-      <FieldPassword value={formLogin.password} name="password" type="password" placeholder="password" onChange={handleChange} error={errors.password} />
+      <FieldPassword value={formLogin.password} name="password" type="password" placeholder="Password" onChange={handleChange} error={errors.password} />
 
       <div className="flex flex-row w-full justify-between">
         <div className="flex items-center mb-4">

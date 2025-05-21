@@ -13,14 +13,14 @@ const initialState: HistoryState = {
     currentPage: 1,
     totalPages: 1,
     totalValue: 0,
-    limit: 2,
+    limit: 10,
   },
   reviewerSubmission: {
     reviewer: [],
     currentPage: 1,
     totalPages: 1,
     totalValue: 0,
-    limit: 2,
+    limit: 10,
   },
 };
 

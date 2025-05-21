@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../service/store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { register } from "../service/actions/authAction";
 import useLoadingProses from "./useLoadingProses";
 
@@ -29,6 +29,9 @@ export const useRegister = () => {
     password: "",
     confPassword: "",
   });
+
+  const location = useLocation();
+  const message = location.state?.message ?? "";
 
   const [errors, setErrors] = useState<RegisterErrors>({});
 
@@ -78,5 +81,6 @@ export const useRegister = () => {
     handleChange,
     errors,
     loading,
+    message,
   };
 };

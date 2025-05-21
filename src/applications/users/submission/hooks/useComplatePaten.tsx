@@ -174,6 +174,7 @@ const useComplatePaten = () => {
     validateComplatePaten,
     setFormComplatePatenError,
     detailPaten,
+    setFormComplatePaten,
   };
 };
 

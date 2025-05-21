@@ -89,8 +89,8 @@ const RessetPassword = () => {
 
         <h1 className="text-[28px] font-bold mb-4">Ganti Kata Sandi</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-          {message && message !== "Password berhasil diubah." && <div className="bg-red-300 py-3 px-4 rounded-md text-red-900">{message}</div>}
-          {message && message === "Password berhasil diubah." && <div className="bg-green-300 py-3 px-4 rounded-md text-green-900">{message}</div>}
+          {message && message !== "Password berhasil diubah." && <div className="bg-red-300 font-medium py-3 px-4 rounded-md text-red-900">{message}</div>}
+          {message && message === "Password berhasil diubah." && <div className="bg-green-300 font-medium py-3 px-4 rounded-md text-green-900">{message}</div>}
           <p className="text-gray-600 mb-2">Kata sandi baru harus memiliki minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan simbol.</p>
 
           <FieldPassword value={formRegister.password} name="password" type="password" placeholder="password" onChange={handleChange} error={errors?.password} />

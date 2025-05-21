@@ -12,6 +12,9 @@ import FormBrand from "../components/formBrand";
 import useBrand from "../hooks/useBrand";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import { useModal } from "../../../../hooks/useModal";
+import ModalWarningContributor from "../../../../components/modal/modalWarningContributor";
+import { useEffect } from "react";
 
 const SubmissionUserBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +22,7 @@ const SubmissionUserBrand = () => {
   const { error, currentStep, setCurrentStep } = useSubmissionType();
   const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, validateBrandData, setFormBrandError, formBrandError, setFormBrand, setFormAdditionalBrand } = useBrand();
-
+  const { activeModal, handleOpenModal, handleCloseModal, setMessage, message } = useModal();
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
 
@@ -54,8 +57,15 @@ const SubmissionUserBrand = () => {
       return;
     }
 
-    if (currentStep < 3 && !error) {
-      setCurrentStep(currentStep + 1);
+    if (personalData.length === 1) {
+      handleOpenModal(null, "warningContributorBrand");
+      setMessage("Apakah Anda yakin ingin melanjutkan tanpa menambah kontributor lainnya?");
+    }
+
+    if (personalData.length > 1) {
+      if (currentStep < 3 && !error) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
@@ -129,6 +139,19 @@ const SubmissionUserBrand = () => {
     }
   };
 
+  const goToNextStep = () => {
+    if (currentStep < 3 && !error) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white ">
@@ -165,6 +188,7 @@ const SubmissionUserBrand = () => {
         </div>
       </div>
       <ModalLoading show={loading} />
+      <ModalWarningContributor modal={activeModal === "warningContributorBrand" || activeModal === "warningContributorBrand"} setModal={handleCloseModal} message={message} handleAddContributor={addContributor} handleNext={goToNextStep} />
     </div>
   );
 };

@@ -63,9 +63,9 @@ const ForgotPassword = () => {
         </div>
 
         <h1 className="text-[28px] font-bold mb-4">Lupa Sandi</h1>
-        {message === "Pengguna tidak ditemukan" && <div className="bg-red-300 py-3 px-4 rounded-md text-red-900">{message}</div>}
+        {message === "Pengguna tidak ditemukan" && <div className="bg-red-300 font-medium py-3 px-4 rounded-md text-red-900">{message}</div>}
 
-        {message === "Link reset password telah dikirim ke email kamu." && <div className="bg-green-300 py-3 px-4 rounded-md text-green-900">{message}</div>}
+        {message === "Link reset password telah dikirim ke email kamu." && <div className="bg-green-300 font-medium py-3 px-4 rounded-md text-green-900">{message}</div>}
 
         <form onSubmit={handleForgotPassword} className="flex flex-col gap-4 mt-2">
           <p className="text-gray-600 mb-2">Masukan email anda yang terhubung dengan akun Sentra KI ITK. Kami akan mengirimkan intruksi merubah kata sandi anda.</p>

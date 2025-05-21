@@ -1,8 +1,8 @@
 import DetailDocument from "../../../../components/input/detailDocument";
 import Field from "../../../../components/input/fieldInput";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
-import { API_FILE } from "../../../../config/config";
 import { SubmissionBrand } from "../../../../types/submissionType";
+import { getHrefByFileName } from "../../../../utils/detecdtedFile";
 interface DocumentType {
   data?: SubmissionBrand | null | undefined;
 }
@@ -51,7 +51,7 @@ const DocumentSubmissionBrand = ({ data }: DocumentType) => {
                   <td className="px-4 py-2 border-b">{index + 1}</td>
                   <td className="px-4 py-2 border-b">
                     {item.file ? (
-                      <a href={`${API_FILE}/documents/${item.file}`} target="_blank" rel="noopener noreferrer" className="text-PRIMARY01 underline">
+                      <a href={getHrefByFileName(item.file)} target="_blank" rel="noopener noreferrer" className="text-PRIMARY01 underline">
                         {item.fileName}
                       </a>
                     ) : (

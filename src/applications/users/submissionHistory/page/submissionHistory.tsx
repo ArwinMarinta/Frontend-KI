@@ -10,11 +10,12 @@ import Button from "../components/button";
 import { Link } from "react-router-dom";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
+import { toSlug } from "../../../../utils/toSlug";
 
 const SubmissionHistory = () => {
   const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission } = useHistorySubmission();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message } = useModal();
-  // const [currentStatus, setCurrentStatus] = useState("Hak Cipta");
+
   const handleModal = (id: number | null, types: string) => {
     if (types === "Delete") {
       setId(id);
@@ -22,8 +23,6 @@ const SubmissionHistory = () => {
       setMessage("Apakah Anda Yakin Ingin Menghapus Permohonan Hak Cipta Ini?");
     }
   };
-
-  console.log(user);
 
   return (
     <>
@@ -35,7 +34,7 @@ const SubmissionHistory = () => {
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
-              <h1 className="text-3xl font-bold mb-14">Histori Pengajuan</h1>
+              <h1 className="text-3xl font-bold mb-14">Progres Pengajuan</h1>
               <div className="flex flex-row w-full h-full">
                 <Link to="/histori-pengajuan/hak-cipta">
                   <Button label={"Hak Cipta"} isActive={type === "hak-cipta"} onClick={() => {}} />
@@ -59,6 +58,7 @@ const SubmissionHistory = () => {
                             label: "Judul Ciptaan",
                             accessor: "submission",
                             render: (item: Review) => item.submission?.copyright?.titleInvention ?? "-",
+                            width: "w-1/3",
                           },
                         ]
                       : [
@@ -68,7 +68,7 @@ const SubmissionHistory = () => {
                             render: (item: Review) => item.submission?.brand?.brandTypeId ?? "-",
                           },
                         ]),
-                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item.centralStatus },
+                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item.centralStatus, width: "w-1/3" },
                     {
                       label: "Progres Pengajuan",
                       accessor: "submission",
@@ -83,6 +83,7 @@ const SubmissionHistory = () => {
                           }}
                         />
                       ),
+                      width: "w-1/6",
                     },
                     {
                       label: "Informasi  Pengajuan",
@@ -94,6 +95,7 @@ const SubmissionHistory = () => {
                           </button>
                         </Link>
                       ),
+                      width: "w-1/6",
                     },
                   ]}
                   data={user}
@@ -134,7 +136,7 @@ const SubmissionHistory = () => {
                       label: "Skema Pendanaan",
                       onClick: () => {},
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Skema Pendanaan" && item.submission?.submissionScheme === null) {
+                        if (item.progress.length > 0 && item.progress[0].status === "Skema Pendanaan" && item.progress[0].isStatus === false) {
                           return (
                             <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
@@ -148,7 +150,7 @@ const SubmissionHistory = () => {
                       label: "Revisi",
                       onClick: () => {},
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Revisi") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Revisi" && item.progress[0].isStatus === false) {
                           return (
                             <Link
                               to="/lengkapi-berkas-pengajuan"
@@ -166,7 +168,7 @@ const SubmissionHistory = () => {
                       label: "Revisi Draft",
                       onClick: () => {},
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
                           return (
                             <Link to="/histori-pengajuan/ubah" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
@@ -180,7 +182,7 @@ const SubmissionHistory = () => {
                       label: "Lengkapi Berkas",
                       onClick: () => {},
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Lengkapi Berkas") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Lengkapi Berkas" && item.progress[0].isStatus === false) {
                           return (
                             <Link
                               to="/lengkapi-berkas-pengajuan"
@@ -194,28 +196,14 @@ const SubmissionHistory = () => {
                         return null;
                       },
                     },
-                    {
-                      label: "Skema Pembayaran",
-                      onClick: () => {},
-                      component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Skema Pembayaran") {
-                          return (
-                            <Link to="">
-                              <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
-                            </Link>
-                          );
-                        }
-                        return null;
-                      },
-                    },
+
                     {
                       label: "Ubah",
                       onClick: () => {},
                       component: (item) => {
-                        console.log(item.progress[0]);
-                        if (item.progress.length > 0 && item.progress[0].status === "Pending") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return (
-                            <Link to="/histori-pengajuan/ubah" state={{ type: `${item.progress[0].status}`, submissionTypes: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                            <Link to={`/histori-pengajuan/${toSlug(item.submission?.submissionType.title)}/ubah`} state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Ubah</button>
                             </Link>
                           );
@@ -228,7 +216,7 @@ const SubmissionHistory = () => {
                       label: "Delete",
                       onClick: (item) => handleModal(item.id, "Delete"),
                       component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Pending") {
+                        if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return <DeleteButton onClick={() => handleModal(item.id, "Delete")} />;
                         }
                         return null;

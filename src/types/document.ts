@@ -15,3 +15,22 @@ export interface DocumentType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ReportandAnalitic {
+  id: number;
+  submissionId: number;
+  namaPengguna: string;
+  jenisPengajuan: string;
+  skemaPengajuan: string;
+  progressPengajuan: string;
+  peran: string;
+  waktuPengajuan: string;
+}
+
+export type FormReportAnaliticType = {
+  namaPengguna: string;
+  jenisPengajuan: string;
+  tanggalPengajuan: string;
+  peran: string;
+  instansi: string;
+};
