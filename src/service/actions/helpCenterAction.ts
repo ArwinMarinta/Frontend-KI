@@ -4,7 +4,7 @@ import { API_URL } from "../../config/config";
 import { setHelpCenter, setHelpCenterDetail, setReportAnalitic } from "../reducers/informationReducer";
 import { NavigateFunction } from "react-router-dom";
 import { FormCreateHelpCenter } from "../../types/helpCenter";
-import { FormReportAnalitic } from "../../types/document";
+import { FormReportAnaliticType } from "../../types/document";
 
 export const getHelpCenter = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -157,7 +157,7 @@ export const deletesHelpCenter = (id: number | string | null, currentPage: numbe
   };
 };
 
-export const getReportAndAnalitic = (form: FormReportAnalitic, currentPage: number, limit: number): AppThunk => {
+export const getReportAndAnalitic = (form: FormReportAnaliticType, currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
