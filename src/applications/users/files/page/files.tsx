@@ -31,8 +31,8 @@ const Files = () => {
     <>
       <Navbar />
       <main className="w-full flex justify-center h-full">
-        <div className="container w-full h-full">
-          <section id="section-1" className="flex py-32 flex-row w-full h-full justify-center items-center">
+        <div className="container w-full h-full pt-32 pb-20">
+          <section id="section-1" className="flex   pb-10 lg:flex-row gap-2 lg:gap-0 flex-col-reverse w-full h-full justify-center items-center">
             <div className="flex justify-start w-full flex-col">
               <h1 className="font-bold text-[40px]">
                 Dapatkan Dokumen yang
@@ -44,15 +44,15 @@ const Files = () => {
               <img src={FileImage} alt="..." />
             </div>
           </section>
-          <section id="section-2" className="flex flex-row w-full justify-center h-full gap-10">
-            <div className="flex flex-col w-[25%] justify-start border p-4 rounded-md gap-2">
+          <section id="section-2" className="flex lg:flex-row flex-col w-full justify-center h-full gap-10">
+            <div className="flex shadow-md flex-col lg:w-[25%] w-full justify-start border drop-shadow-md p-4 rounded-md gap-2">
               {category?.map((item) => (
                 <button key={item.id} onClick={() => handleCategoryChange(item.type)} className={`text-start px-6 py-2 ${doc?.some((faqItem) => faqItem.type === item.type) ? "bg-PRIMARY01 text-white" : "bg-white border border-PRIMARY01 text-PRIMARY01"} rounded-md font-medium`}>
                   <span>{item.type}</span>
                 </button>
               ))}
             </div>
-            <div className="w-[70%] border p-4 rounded-md flex flex-col">
+            <div className="lg:w-[70%] shadow-md w-full border p-4 rounded-md flex flex-col">
               <form className="w-full mx-auto">
                 <div className="flex">
                   <div className="relative w-full">
@@ -66,7 +66,7 @@ const Files = () => {
                   </div>
                 </div>
               </form>
-              <div className="grid grid-cols-3 gap-16 mt-10">
+              <div className="grid lg:grid-cols-3 grid-rows-1 gap-16 mt-10">
                 {doc?.map((item) => (
                   <div key={item.id} className="flex flex-col">
                     <div className="relative group w-full">
@@ -83,6 +83,7 @@ const Files = () => {
                         <AiOutlineDownload className="text-PRIMARY02 text-[80px]" />
                       </button>
                     </div>
+                    <div className="mt-4">{item.title}</div>
                   </div>
                 ))}
               </div>

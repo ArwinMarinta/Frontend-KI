@@ -11,9 +11,7 @@ const useDocument = () => {
   const [selectedType, setSelectedType] = useState<string>("");
 
   useEffect(() => {
-    if (token) {
-      dispatch(getDocumentCateoryLanding());
-    }
+    dispatch(getDocumentCateoryLanding());
   }, [token, dispatch]);
 
   useEffect(() => {

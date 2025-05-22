@@ -11,13 +11,13 @@ const Contact = () => {
     <>
       <Navbar />
       <main className="flex justify-center w-full">
-        <div className="container flex flex-col">
-          <section id="section-1" className="flex py-32 flex-row w-full h-full justify-center items-center gap-6">
+        <div className="container flex flex-col pt-32 pb-20">
+          <section id="section-1" className="flex lg:flex-row flex-col w-full h-full justify-center items-center gap-6">
             <div className=" flex justify-end w-full">
               <img src={CsImage} alt="..." />
             </div>
-            <form onSubmit={handleSubmit} className="w-full flex flex-col items-center border h-full px-12 gap-4 py-10 rounded-md">
-              <h1 className="text-[40px] font-bold">Butuh Bantuan Kami?</h1>
+            <form onSubmit={handleSubmit} className="w-full shadow-md flex flex-col items-center border h-full lg:px-12 px-8 gap-4 py-10 rounded-md">
+              <h1 className="text-[40px] font-bold mb-5 lg:mb-0 ">Butuh Bantuan Kami?</h1>
               <Field label="Email" value={form.email} name="email" type="email" placeholder="" onChange={handleOnChange} error={errors.email} need />
               <Field label="Nomor Telphone" value={form.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={handleOnChange} error={errors.phoneNumber} need />
               <Field label="Masalah" value={form.problem} name="problem" type="text" placeholder="" onChange={handleOnChange} error={errors.problem} need />

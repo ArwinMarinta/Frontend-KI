@@ -11,9 +11,7 @@ const useFaq = () => {
   const [selectedType, setSelectedType] = useState<string>("");
 
   useEffect(() => {
-    if (token) {
-      dispatch(getFaqCateoryLanding());
-    }
+    dispatch(getFaqCateoryLanding());
   }, [token, dispatch]);
 
   useEffect(() => {

@@ -10,28 +10,28 @@ const Faq = () => {
     <>
       <Navbar />
       <main className="w-full flex justify-center">
-        <div className="container w-full h-full mb-20">
-          <section id="section-1" className="flex pt-20 flex-row w-full h-full justify-center items-center">
-            <div className="flex justify-start w-full flex-col">
+        <div className="container w-full h-full pt-32 pb-20 ">
+          <section id="section-1" className="flex flex-col-reverse pb-10 gap-2 lg:gap-0 lg:flex-row  w-full h-full justify-center items-center">
+            <div className="flex flex-col justify-start w-full lg:w-1/2">
               <h1 className="font-bold text-[40px]">
                 Dapatkan Dokumen yang
                 <br /> Anda Perlukan
               </h1>
               <p className="mt-8 text-lg">Kami menyediakan berbagai dokumen yang dapat Anda unduh dengan mudah. Baik itu laporan, panduan, atau dokumen lainnya, semuanya tersedia untuk membantu Anda mendapatkan informasi yang diperlukan.</p>
             </div>
-            <div className="w-full flex justify-end">
+            <div className="w-full lg:w-1/2 flex justify-end">
               <img src={FaqImage} alt="..." />
             </div>
           </section>
-          <section id="section-2" className="flex flex-row gap-10">
-            <div className="flex flex-col w-[25%] justify-start border p-4 rounded-md gap-2">
+          <section id="section-2" className="flex lg:flex-row flex-col gap-10">
+            <div className="flex flex-col  lg:w-[25%] w-full justify-start border p-4 shadow-md rounded-md gap-2">
               {category?.map((item) => (
                 <button key={item.id} onClick={() => handleCategoryChange(item.type)} className={`text-start px-6 py-2 ${faq?.some((faqItem) => faqItem.type === item.type) ? "bg-PRIMARY01 text-white" : "bg-white border border-PRIMARY01 text-PRIMARY01"} rounded-md font-medium`}>
                   <span>{item.type}</span>
                 </button>
               ))}
             </div>
-            <div className="w-[75%] border p-4 rounded-md flex flex-col">
+            <div className="lg:w-[75%] border p-4 rounded-md flex flex-col shadow-md mt-2 lg:mt-0">
               <form className="w-full mx-auto">
                 <div className="flex">
                   <div className="relative w-full">

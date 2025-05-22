@@ -28,7 +28,7 @@ const Home = () => {
 
           <div className="absolute inset-0 z-20 flex justify-center items-center h-screen pt-14 lg:px-20">
             <div className="container w-full h-full flex flex-row justify-between items-center">
-              <div className="flex flex-col items-start justify-center text-white w-[50%]">
+              <div className="flex flex-col items-start justify-center text-white lg:w-[50%]">
                 <h1 className="text-3xl xl:text-5xl font-bold text-start">
                   Selamat Datang di Sentra <br /> Kekayaan Intelektual ITK
                 </h1>
@@ -47,7 +47,7 @@ const Home = () => {
                     </Link>
                   )
                 ) : (
-                  <Link to="/login" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
+                  <Link to="/login" className="text-PRIMARY01 font-bold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
                     <span>Ajukan</span>
                     <FiArrowRightCircle />
                   </Link>
@@ -55,7 +55,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="absolute w-[40%] z-20 lg:-bottom-0 -mb-4 translate-x-[800px] xl:translate-x-0 xl:right-36 xl:bottom-0">
+          <div className="absolute w-[40%] hidden lg:block z-20 lg:-bottom-0 -mb-4 translate-x-[800px] xl:translate-x-0 xl:right-36 xl:bottom-0">
             <img src={PeopleIcon} alt="People" className="self-end h-[400px] xl:w-[700px] xl:h-[700px] object-contain  " />
           </div>
         </section>

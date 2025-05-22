@@ -13,7 +13,7 @@ interface BreadcrumbProps {
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, title }) => {
   return (
-    <nav className="text-sm text-GREY02 flex flex-col gap-2">
+    <nav className="text-sm text-PRIMARY01 flex flex-col gap-2">
       {title && (
         <>
           <span className="font-bold text-BLACK text-3xl">{title}</span>
