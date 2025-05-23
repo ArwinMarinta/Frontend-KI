@@ -15,11 +15,12 @@ import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
 import ButtonAdd from "../../../../components/button/linkButton";
 import useReviewer from "../hooks/useReviewer";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionCopyright = () => {
   const { copyright, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useCopyright();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
-  const { setStatus, status } = useStatus();
+  const { setStatus, status, handleChange } = useStatus();
   const { reviewer, setReviewer } = useReviewer();
 
   const handleModal = (id: number | null, types: string, status?: string | null | undefined, reviewerId?: number) => {
@@ -48,7 +49,11 @@ const SubmissionCopyright = () => {
         </div>
         <div className="lg:w-[84%] w-full  border">
           <HeaderNavigation />
+
           <div className="px-4 lg:px-12  py-8">
+            <div className="mb-8">
+              <Breadcrumb title="PERMOHONAN HAK CIPTA" items={[{ label: "Hak Cipta", url: "/permohonan/hak-cipta" }]} />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="bg-white  ">
                 <div className="flex flex-row justify-between mb-20">
@@ -117,7 +122,7 @@ const SubmissionCopyright = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusCopyright" || activeModal === "updateStatusCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusCopyright" || activeModal === "updateStatusCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
               <ModalUpdateReviewer modal={activeModal === "updateReviewerCopyright" || activeModal === "updateReviewerCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionCopyright" || activeModal === "DeleteSubmissionPatent"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
               {/* <ModalLoading show={loading} /> */}

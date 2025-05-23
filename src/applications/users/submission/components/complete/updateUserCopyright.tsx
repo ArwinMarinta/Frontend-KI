@@ -22,7 +22,7 @@ const UpdateUserCopyright = () => {
   const { loading, setLoading } = useLoadingProses();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { types, submissionId } = useComplate();
+  const { types, submissionId, actionTypes } = useComplate();
   const navigate = useNavigate();
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData, setFormCopyright } = useCopyright();
@@ -116,7 +116,11 @@ const UpdateUserCopyright = () => {
 
   const handleNextStep = () => {
     const error = validateCopyrightData(formCopyright);
-    const hasError = Object.values(error).includes(true);
+    const excludeFields = ["statementLetter", "letterTransferCopyright"];
+
+    const hasError = Object.entries(error)
+      .filter(([key]) => !excludeFields.includes(key))
+      .some(([, value]) => value === true);
 
     if (hasError) {
       setFormCopyrightError(error);
@@ -137,61 +141,64 @@ const UpdateUserCopyright = () => {
 
   useEffect(() => {
     const initForm = async () => {
-      if (!detailSubmission?.submission?.copyright || types !== "Menunggu") return;
+      if (detailSubmission?.submission?.copyright && types !== "Menunggu" && actionTypes !== "Mengubah Pengajuan") return;
 
-      const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
-      const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
-      const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
+      if (detailSubmission?.submission?.copyright) {
+        const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
+        const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
+        const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
 
-      // Set Form Hak Cipta
-      setFormCopyright({
-        titleInvention: detailSubmission?.submission?.copyright.titleInvention || "",
-        typeCreation: detailSubmission?.submission?.copyright.typeCreationId || null,
-        subTypeCreation: detailSubmission?.submission?.copyright.subTypeCreationId || null,
-        countryFirstAnnounced: detailSubmission?.submission?.copyright.countryFirstAnnounced || "",
-        cityFirstAnnounced: detailSubmission?.submission?.copyright.cityFirstAnnounced || "",
-        timeFirstAnnounced: detailSubmission?.submission?.copyright.timeFirstAnnounced || "",
-        briefDescriptionCreation: detailSubmission?.submission?.copyright.briefDescriptionCreation || "",
-        statementLetter,
-        letterTransferCopyright,
-        exampleCreation,
-      });
+        // Set Form Hak Cipta
+        setFormCopyright({
+          titleInvention: detailSubmission?.submission?.copyright.titleInvention || "",
+          typeCreation: detailSubmission?.submission?.copyright.typeCreationId || null,
+          subTypeCreation: detailSubmission?.submission?.copyright.subTypeCreationId || null,
+          countryFirstAnnounced: detailSubmission?.submission?.copyright.countryFirstAnnounced || "",
+          cityFirstAnnounced: detailSubmission?.submission?.copyright.cityFirstAnnounced || "",
+          timeFirstAnnounced: detailSubmission?.submission?.copyright.timeFirstAnnounced || "",
+          briefDescriptionCreation: detailSubmission?.submission?.copyright.briefDescriptionCreation || "",
+          statementLetter,
+          letterTransferCopyright,
+          exampleCreation,
+        });
 
-      // Set Personal Data jika tersedia
-      if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
-        const mappedContributors = await Promise.all(
-          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
-            id: item.id ?? null,
-            isLeader: item.isLeader || false,
-            name: item.name || "",
-            email: item.email || "",
-            faculty: item.faculty || "",
-            studyProgram: item.studyProgram || "",
-            institution: item.institution || "",
-            work: item.work || "",
-            nationalState: item.nationalState || "",
-            countryResidence: item.countryResidence || "",
-            province: item.province || "",
-            city: item.city || "",
-            subdistrict: item.subdistrict || "",
-            ward: item.ward || "",
-            postalCode: item.postalCode || "",
-            phoneNumber: item.phoneNumber || "",
-            address: item.address || "",
-            ktp: item.ktp ? await processFile(item.ktp) : null,
-            facebook: item.facebook || "",
-            whatsapp: item.whatsapp || "",
-            instagram: item.instagram || "",
-            twitter: item.twitter || "",
-          }))
-        );
+        if (types !== "Menunggu")
+          if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+            // Set Personal Data jika tersedia
+            const mappedContributors = await Promise.all(
+              detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+                id: item.id ?? null,
+                isLeader: item.isLeader || false,
+                name: item.name || "",
+                email: item.email || "",
+                faculty: item.faculty || "",
+                studyProgram: item.studyProgram || "",
+                institution: item.institution || "",
+                work: item.work || "",
+                nationalState: item.nationalState || "",
+                countryResidence: item.countryResidence || "",
+                province: item.province || "",
+                city: item.city || "",
+                subdistrict: item.subdistrict || "",
+                ward: item.ward || "",
+                postalCode: item.postalCode || "",
+                phoneNumber: item.phoneNumber || "",
+                address: item.address || "",
+                ktp: item.ktp ? await processFile(item.ktp) : null,
+                facebook: item.facebook || "",
+                whatsapp: item.whatsapp || "",
+                instagram: item.instagram || "",
+                twitter: item.twitter || "",
+              }))
+            );
 
-        setPersonalData(mappedContributors);
+            setPersonalData(mappedContributors);
+          }
       }
     };
 
     initForm();
-  }, [types, setFormCopyright, setPersonalData, detailSubmission]);
+  }, [types, setFormCopyright, setPersonalData, detailSubmission, actionTypes]);
 
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">

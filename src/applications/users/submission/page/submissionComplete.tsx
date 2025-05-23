@@ -24,6 +24,8 @@ import useBrand from "../hooks/useBrand";
 import RevisionIndusDesign from "../components/complete/revisionIndusDesign";
 import useConfirmPayment from "../hooks/useConfirmPayment";
 import { getDetailSubmission } from "../../../../service/actions/submissionAction";
+import FormComplateCopyright from "../components/complete/formComplateCopyright";
+import ComplateBrand from "../components/complete/complateBrand";
 
 const SubmissionComplete = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,8 +34,8 @@ const SubmissionComplete = () => {
   const { formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleSubmitComplateIndusDesign, handleClaimCheckboxChange, loading: loadingDesign } = useComplateIndustrialDesain();
   const { terms, formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, handleSubmitSchema, qouta, loading: loadingSchema } = useSchemaPayment();
   const { progresSubmission } = useRevision();
-  const { formCopyright, handleChangeCopyright, formCopyrightError, handleSubmitCopyright, loading: loadingCopyright } = useCopyright();
-  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, handleSubmitRevision, loading: loadingBrand } = useBrand();
+  const { formCopyright, handleChangeCopyright, formCopyrightError, handleSubmitCopyright, loading: loadingCopyright, handleSubmitComplateCopyright } = useCopyright();
+  const { handleComplateBrand, formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, handleSubmitRevision, loading: loadingBrand } = useBrand();
   const { formConfirmPayment, handleChange, formConfirmPaymentErrors, handleSubmitPayment, loading: loadingConfirmPayment } = useConfirmPayment();
 
   useEffect(() => {
@@ -90,6 +92,8 @@ const SubmissionComplete = () => {
                   handleSubmitComplateIndusDesign={handleSubmitComplateIndusDesign}
                 />
               )}
+              {types === "Lengkapi Berkas" && submissionType === "Hak Cipta" && <FormComplateCopyright formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitComplateCopyright} />}
+              {types === "Lengkapi Berkas" && submissionType === "Merek" && <ComplateBrand formBrand={formBrand} handleChange={handleChangeBrand} formBrandError={formBrandError} handleUpdate={handleComplateBrand} />}
               {types === "Skema Pendanaan" && (
                 <FormFunding qouta={qouta} terms={terms} formSchemaPayment={formSchemaPayment} formSchemaPaymentErrors={formSchemaPaymentErrors} handleChangeSchema={handleChangeSchema} handleCheckboxChange={handleCheckboxChange} handleSubmitSchema={handleSubmitSchema} />
               )}

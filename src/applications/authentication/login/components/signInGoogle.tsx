@@ -1,27 +1,26 @@
-import { auth, provider } from "../../../../firebase/apiKey";
-import { signInWithPopup } from "firebase/auth";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { loginWithGoogleAction } from "../../../../service/actions/authAction";
+import { AppDispatch } from "../../../../service/store";
 
-export default function LoginButton() {
-  const handleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      console.log("Login sukses:", user);
+const GoogleLogin = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-      // 👉 Optional: batasi email hanya itk.ac.id
-      const email = user.email || "";
-      if (!email.endsWith("@student.itk.ac.id") && !email.endsWith("@lecture.itk.ac.id")) {
-        alert("Hanya akun ITK yang diperbolehkan!");
-        // Logout langsung kalau bukan dari domain ITK
-        await auth.signOut();
-        return;
-      }
+  const loginGoogle = useGoogleLogin({
+    onSuccess: (responseGoogle) => dispatch(loginWithGoogleAction(responseGoogle.access_token, navigate)),
+    onError: (errorResponse) => {
+      alert(errorResponse.error_description);
+    },
+  });
+  return (
+    <button onClick={() => loginGoogle()} className="bg-white border flex justify-center items-center gap-2 border-PRIMARY01 w-full  p-2 rounded-md transition">
+      <FcGoogle className="text-2xl" />
+      <span>Masuk dengan Google</span>
+    </button>
+  );
+};
 
-      // Lanjutkan ke halaman dashboard, simpan user, dsb.
-    } catch (error) {
-      console.error("Login gagal:", error);
-    }
-  };
-
-  return <button onClick={handleLogin}>Login dengan Google</button>;
-}
+export default GoogleLogin;

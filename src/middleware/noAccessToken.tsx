@@ -49,7 +49,6 @@ const NoAccessToken = ({ children }: NoAccessTokenProps) => {
       </div>
     );
 
-  // Jika sudah valid, render anak-anaknya
   return <>{children}</>;
 };
 

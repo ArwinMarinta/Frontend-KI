@@ -170,7 +170,7 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
                           return (
-                            <Link to="/histori-pengajuan/ubah" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                            <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
                             </Link>
                           );
@@ -203,7 +203,7 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return (
-                            <Link to={`/histori-pengajuan/${toSlug(item.submission?.submissionType.title)}/ubah`} state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                            <Link to={`/histori-pengajuan/${toSlug(item.submission?.submissionType.title)}/ubah`} state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, actionTypes: "Mengubah Pengajuan" }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Ubah</button>
                             </Link>
                           );

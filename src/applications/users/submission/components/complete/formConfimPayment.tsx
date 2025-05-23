@@ -14,10 +14,9 @@ export interface ConfirmPaymentProps {
 
 const FormConfimPayment = ({ formConfirmPayment, handleChange, formConfirmPaymentErrors, handleSubmitPayment }: ConfirmPaymentProps) => {
   const location = useLocation();
-  const { billingCode, paymentSchema, paymentId } = location.state || {};
+  const { billingCode, paymentSchema } = location.state || {};
 
-  console.log(paymentSchema);
-  console.log(paymentId);
+
   return (
     <>
       <div className="grid grid-cols-[auto_1fr_auto] items-center h-24">

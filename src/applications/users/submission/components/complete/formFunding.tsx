@@ -1,6 +1,5 @@
 import BackButton from "../../../../../components/button/backButton";
 import FieldDropdown from "../../../../../components/input/FieldDropDown";
-
 import { SchemaPayment } from "../../../../../data/funding";
 import { Group } from "../../../../../types/fundingType";
 import { FormSchema, FormSchemaErrors } from "../../../../../types/schemaPayment";
@@ -13,13 +12,11 @@ interface FormComplateTermsProps {
   formSchemaPayment: FormSchema;
   formSchemaPaymentErrors: FormSchemaErrors;
   handleChangeSchema: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleCheckboxChange: (id: number) => void;
+  handleCheckboxChange: () => void;
   handleSubmitSchema: () => void;
 }
 
 const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, handleSubmitSchema }: FormComplateTermsProps) => {
-  console.log(formSchemaPayment);
-
   return (
     <>
       <div className="grid grid-cols-3 items-center h-24">
@@ -52,12 +49,12 @@ const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors,
               type="select"
               value={formSchemaPayment.groupId !== null && formSchemaPayment.periodId !== null ? `${formSchemaPayment.groupId}|${formSchemaPayment.periodId}` : ""}
               onChange={handleChangeSchema}
-              options={
-                qouta?.map((item) => ({
+              options={(qouta ?? [])
+                .filter((item: Group) => item.quota.some((q) => q.remainingQuota > 0))
+                .map((item: Group) => ({
                   label: `${item.group} (${formatIndonesianDate(item.startDate)} - ${formatIndonesianDate(item.endDate)})`,
                   value: `${item.id}|${item.periodId}`,
-                })) ?? []
-              }
+                }))}
               error={!!formSchemaPaymentErrors.groupId}
               need
             />
@@ -67,21 +64,18 @@ const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors,
                 <span className="text-RED01 ml-1">*</span>
               </label>
 
-              {(terms ?? []).map((term) => (
-                <label key={term.id} className="flex items-center space-x-2 mb-1">
-                  <input
-                    id="default-checkbox"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md  focus:ring-PRIMARY010 dark:focus:ring-PRIMARY01 dark:ring-offset-gray-800 focus:ring-1 "
-                    checked={formSchemaPayment.termsConditionId.includes(term.id)}
-                    onChange={() => handleCheckboxChange(term.id)}
-                  />
-
-                  <span>{term.terms}</span>
-                </label>
-              ))}
-
+              <ol className=" ">
+                {(terms ?? []).map((term, index) => (
+                  <li key={term.id} className="flex items-center space-x-2 mb-1">
+                    <span>{index + 1}.</span>
+                    <span>{term.terms}</span>
+                  </li>
+                ))}
+              </ol>
+              <label className="flex items-center space-x-2 mt-4">
+                <input type="checkbox" className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md focus:ring-PRIMARY01 focus:ring-1" checked={formSchemaPayment.termsConditionId.length === (terms?.length || 0)} onChange={handleCheckboxChange} />
+                <span className="text-black">Saya menyetujui semua syarat dan ketentuan</span>
+              </label>
               {formSchemaPaymentErrors.termsConditionId && <p className="text-sm text-RED01 mt-2">{formSchemaPaymentErrors.termsConditionId}</p>}
             </div>
           </>

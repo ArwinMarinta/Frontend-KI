@@ -3,6 +3,8 @@ import SideNavigation from "../../../../components/adminNavigation/sideNavigatio
 import TimelineHistory from "../../../users/submissionHistory/components/progress/timelineHistory";
 import useProgresSubmission from "../../../../hooks/useProgresSubmission";
 import { Link, useParams } from "react-router-dom";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { formatLabel } from "../../../../utils/toSlug";
 
 const ProgresSubmission = () => {
   const { name } = useParams<{ name: string }>();
@@ -16,6 +18,15 @@ const ProgresSubmission = () => {
       <div className="lg:w-[84%] w-full  border">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8  ">
+          <div className="mb-8">
+            <Breadcrumb
+              title="INFORMASI PENGAJUAN"
+              items={[
+                { label: `${formatLabel(name)}`, url: `/permohonan/${name}` },
+                { label: "Progress Pengajuan", url: "" },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="bg-white  ">
               <div className="mb-16">

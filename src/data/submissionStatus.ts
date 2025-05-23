@@ -2,6 +2,7 @@ export const statusAdminList = [
   { key: "Menunggu", label: "Menunggu" },
   { key: "Direview", label: "Direview" },
   { key: "Ditolak", label: "Ditolak" },
+  { key: "Revisi", label: "Revisi" },
   { key: "Diajukan", label: "Diajukan" },
   { key: "Skema Pendanaan", label: "Skema Pendanaan" },
   { key: "Pembayaran", label: "Pembayaran" },

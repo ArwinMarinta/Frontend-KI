@@ -13,6 +13,7 @@ import useProfile from "../../hooks/useProfile";
 const SideSubmisson = () => {
   const location = useLocation();
   const { user } = useProfile();
+  const type = "hak-cipta";
   return (
     <div className="overflow-y-scroll top-0 sticky left-0  ">
       <div className="flex flex-col px-8 pt-8  w-full h-screen  ">
@@ -43,7 +44,7 @@ const SideSubmisson = () => {
 
           <div className="mb-2 flex flex-col gap-1">
             <h1 className="font-bold text-GREY02 mb-2">PANGAJUAN SAYA</h1>
-            <Button text={"Progres Pengajuan"} icon={<RiHistoryLine className="text-lg" />} url={`/histori-pengajuan/${"hak-cipta"}`} location={location} />
+            <Button text={"Progres Pengajuan"} icon={<RiHistoryLine className="text-lg" />} url={`/histori-pengajuan/${type}`} location={location} />
             {/* <Button text={"Riwayat"} icon={<RiHistoryLine className="text-lg" />} url={"/histori-pengajuan/hak-cipta"} location={location} /> */}
           </div>
         </div>

@@ -19,7 +19,7 @@ import { AppDispatch, RootState } from "../../../../service/store";
 import useCopyright from "../../../users/submission/hooks/useCopyright";
 import { processFile } from "../../../../utils/formatFile";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { getDetailSubmission, revisionSubmissionIndustrialDesign, revisionSubmissionPaten, revisonSubmissionBrand, revisonSubmissionCopyright } from "../../../../service/actions/submissionAction";
+import { getDetailSubmission, revisionSubmissionIndustrialDesign, revisionSubmissionPaten, revisonSubmissionBrand, revisonSubmissionCopyright, updatePersonalData } from "../../../../service/actions/submissionAction";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import useComplatePaten from "../../../users/submission/hooks/useComplatePaten";
 import useComplateIndustrialDesain from "../../../users/submission/hooks/useComplateIndustrialDesain";
@@ -27,6 +27,11 @@ import { claimOptions, designTypes } from "../../../../data/indusDesign";
 import useBrand from "../../../users/submission/hooks/useBrand";
 import { brandClassOptions, brandTypeOptions } from "../../../../data/brand";
 import { FormAdditionalBrand } from "../../../../types/brandType";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { formatLabel } from "../../../../utils/toSlug";
+import usePersonalData from "../../../users/submission/hooks/usePersonalData";
+import { IoAddCircleSharp } from "react-icons/io5";
+import { PersonalData } from "../../../../types/submissionType";
 
 const DetailSubmission = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +45,7 @@ const DetailSubmission = () => {
   const { formComplatePaten, formComplatePatenError, handleChangeComplatePaten, setFormComplatePaten } = useComplatePaten();
   const { formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleClaimCheckboxChange, setFormIndustDesign } = useComplateIndustrialDesain();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormAdditionalBrand, setFormBrand } = useBrand();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
 
   useEffect(() => {
     if (name === "paten") {
@@ -317,6 +323,116 @@ const DetailSubmission = () => {
     initFormBrand();
   }, [detailSubmission?.submission?.brand, types, setFormAdditionalBrand, setFormBrand]);
 
+  const handleUpdatePersonalData = async () => {
+    const updatedErrors = personalData.map(validatePersonalData);
+
+    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+
+    if (hasError) {
+      const newErrors = updatedErrors.map((error) => ({
+        name: error.name === true,
+        email: error.email === true,
+        faculty: error.faculty === true,
+        studyProgram: error.studyProgram === true,
+        institution: error.institution === true,
+        work: error.work === true,
+        nationalState: error.nationalState === true,
+        countryResidence: error.countryResidence === true,
+        province: error.province === true,
+        city: error.city === true,
+        subdistrict: error.subdistrict === true,
+        ward: error.ward === true,
+        postalCode: error.postalCode === true,
+        phoneNumber: error.phoneNumber === true,
+        ktp: error.ktp === true,
+        facebook: error.facebook === true,
+        whatsapp: error.whatsapp === true,
+        instagram: error.instagram === true,
+        twitter: error.twitter === true,
+        address: error.address === true,
+      }));
+
+      setPersonalDataError(newErrors);
+
+      return;
+    }
+    setLoading(true);
+    try {
+      await dispatch(updatePersonalData(detailSubmission?.submission?.id, personalData));
+      setPersonalData([
+        {
+          id: 1,
+          isLeader: true,
+          name: "",
+          email: "",
+          faculty: "",
+          studyProgram: "",
+          institution: "",
+          work: "",
+          nationalState: "",
+          countryResidence: "",
+          province: "",
+          city: "",
+          subdistrict: "",
+          ward: "",
+          postalCode: "",
+          phoneNumber: "",
+          address: "",
+          ktp: null,
+          facebook: "",
+          whatsapp: "",
+          instagram: "",
+          twitter: "",
+        },
+      ]);
+      handleChange("Data Diri", "Detail");
+      dispatch(getDetailSubmission(submissionId));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initPersonalData = async () => {
+      if (!detailSubmission?.submission?.personalDatas || statusDetail !== "Ubah") return;
+
+      if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+        const mappedContributors = await Promise.all(
+          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+            id: item.id ?? null,
+            isLeader: item.isLeader || false,
+            name: item.name || "",
+            email: item.email || "",
+            faculty: item.faculty || "",
+            studyProgram: item.studyProgram || "",
+            institution: item.institution || "",
+            work: item.work || "",
+            nationalState: item.nationalState || "",
+            countryResidence: item.countryResidence || "",
+            province: item.province || "",
+            city: item.city || "",
+            subdistrict: item.subdistrict || "",
+            ward: item.ward || "",
+            postalCode: item.postalCode || "",
+            phoneNumber: item.phoneNumber || "",
+            address: item.address || "",
+            ktp: item.ktp ? await processFile(item.ktp) : null,
+            facebook: item.facebook || "",
+            whatsapp: item.whatsapp || "",
+            instagram: item.instagram || "",
+            twitter: item.twitter || "",
+          }))
+        );
+
+        setPersonalData(mappedContributors);
+      }
+    };
+
+    initPersonalData();
+  }, [detailSubmission?.submission?.personalDatas, setPersonalData, types, current, statusDetail]);
+
+  const uniquePersonalData = Array.from(new Map(personalData.map((item) => [item.id, item])).values());
+
   return (
     <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -325,6 +441,15 @@ const DetailSubmission = () => {
       <div className="lg:w-[84%] w-full  border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb
+              title="INFORMASI PENGAJUAN"
+              items={[
+                { label: `${formatLabel(name)}`, url: `/permohonan/${name}` },
+                { label: "Informasi Pengajuan", url: "" },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="bg-white  ">
               <div className="mb-16">
@@ -345,6 +470,92 @@ const DetailSubmission = () => {
                     {detailSubmission?.submission?.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
                     {detailSubmission?.submission?.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
                     {detailSubmission?.submission?.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
+                  </>
+                )}
+
+                {current === "Data Diri" && statusDetail === "Ubah" && (
+                  <>
+                    <div className="flex flex-col gap-6  mt-10">
+                      {uniquePersonalData.map((item, index) => (
+                        <>
+                          <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "name")} error={personalDataError[index]?.name} need />
+                              <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChangePerson(e, index, "email")} error={personalDataError[index]?.email} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Instansi" value={item.institution} name="institution" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "institution")} error={personalDataError[index]?.institution} need />
+                              <Field label="Pekerjaan" value={item.work} name="work" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "work")} error={personalDataError[index]?.work} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Fakultas" value={item.faculty || ""} name="faculty" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChangePerson(e, index, "faculty")} error={personalDataError[index]?.faculty} need />
+                              <Field label="Prodi" value={item.studyProgram || ""} name="studyProgram" type="text" placeholder="strip '-' jika bukan berasal dari ITK" onChange={(e) => handleChangePerson(e, index, "studyProgram")} error={personalDataError[index]?.studyProgram} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Negara Kebangsaan" value={item.nationalState} name="nationalState" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "nationalState")} error={personalDataError[index]?.nationalState} need />
+                              <Field label="Negara Tempat Tingggal" value={item.countryResidence} name="countryResidence" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "countryResidence")} error={personalDataError[index]?.countryResidence} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Provinsi" value={item.province} name="province" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "province")} error={personalDataError[index]?.province} need />
+                              <Field label="Kota/Kabupaten" value={item.city} name="city" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "city")} error={personalDataError[index]?.city} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Kecamatan" value={item.subdistrict} name="subdistrict" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "subdistrict")} error={personalDataError[index]?.subdistrict} need />
+                              <Field label="Kelurahan" value={item.ward} name="ward" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "ward")} error={personalDataError[index]?.ward} need />
+                            </div>
+                            <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                              <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "postalCode")} error={personalDataError[index]?.postalCode} need />
+                              <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "phoneNumber")} error={personalDataError[index]?.phoneNumber} need />
+                            </div>
+                            {detailSubmission?.submission?.submissionType?.title === "Merek" && (
+                              <>
+                                <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                                  <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "facebook")} error={personalDataError[index]?.facebook} />
+                                  <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "whatsapp")} error={personalDataError[index]?.whatsapp} />
+                                </div>
+                                <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
+                                  <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "instagram")} error={personalDataError[index]?.instagram} />
+                                  <Field label="Twitter" value={item.twitter || ""} name="twitter" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "twitter")} error={personalDataError[index]?.twitter} />
+                                </div>
+                              </>
+                            )}
+
+                            <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChangePerson(e, index, "address")} error={personalDataError[index]?.address} need />
+                            <InputFile
+                              label="KTP"
+                              value={item.ktp instanceof File ? item.ktp : undefined}
+                              name={`ktp_${index}`}
+                              required
+                              onChange={(e) => handleChangePerson(e, index, "ktp")}
+                              accept=".jpg, .jpeg, .png, .webp"
+                              error={personalDataError[index]?.ktp}
+                              need
+                              placeholder={`${item.ktp ?? ""}`}
+                            />
+
+                            {personalData.length > 1 && index !== 0 ? (
+                              <div className="flex justify-end mt-10">
+                                <button onClick={() => removeContributor(index)} className="bg-RED01 py-1 px-4 text-white rounded-md">
+                                  Hapus
+                                </button>
+                              </div>
+                            ) : null}
+                          </div>
+                        </>
+                      ))}
+                    </div>
+
+                    <div className="mt-4 flex justify-start">
+                      <button type="button" onClick={addContributor} className="flex flex-row items-center gap-2 px-2 py-2 active:bg-gray-100 rounded-md">
+                        <IoAddCircleSharp className="md:text-3xl text-xl text-PRIMARY01" />
+                        <span className="text-PRIMARY01 font-bold md:text-xl text-lg">Tambah Pencipta</span>
+                      </button>
+                    </div>
+                    <div className="flex justify-end mt-6">
+                      <button onClick={handleUpdatePersonalData} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+                        Simpan Perubahan
+                      </button>
+                    </div>
                   </>
                 )}
                 {current === "Dokumen Pengajuan" && statusDetail === "Ubah" && name === "hak-cipta" && (
@@ -707,6 +918,13 @@ const DetailSubmission = () => {
             <div className="mt-12 flex justify-end">
               {current === "Dokumen Pengajuan" && statusDetail === "Detail" && (
                 <button onClick={() => handleChange("Dokumen Pengajuan", "Ubah")} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+                  Ubah
+                </button>
+              )}
+            </div>
+            <div className="mt-12 flex justify-end">
+              {current === "Data Diri" && statusDetail === "Detail" && (
+                <button onClick={() => handleChange("Data Diri", "Ubah")} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
                   Ubah
                 </button>
               )}

@@ -15,6 +15,7 @@ import { truncateText } from "../../../../utils/caracterLength";
 import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
 import useReviewer from "../hooks/useReviewer";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionBrand = () => {
   const { brand, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useBrand();
@@ -51,6 +52,9 @@ const SubmissionBrand = () => {
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb title="PERMOHONAN MEREK" items={[{ label: "Merek", url: "/permohonan/merek" }]} />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="bg-white  ">
                 <div className="flex flex-row justify-between mb-20">

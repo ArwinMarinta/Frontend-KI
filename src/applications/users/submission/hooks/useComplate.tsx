@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const useComplate = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { types, submissionId, submissionType } = location.state || {};
+  const { types, submissionId, submissionType, actionTypes } = location.state || {};
 
   useEffect(() => {
     // const invalidTypes = ["Merek", "Hak Cipta"];
@@ -20,6 +20,7 @@ const useComplate = () => {
     types,
     submissionId,
     submissionType,
+    actionTypes,
   };
 };
 

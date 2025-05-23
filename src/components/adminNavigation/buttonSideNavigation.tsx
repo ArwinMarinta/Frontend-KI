@@ -11,6 +11,7 @@ interface ButtonProps {
 
 const ButtonSideNavigation = ({ text, icon, url, location }: ButtonProps) => {
   const active = location.pathname.startsWith(url);
+
   return (
     <Link to={url} className="w-full">
       <button

@@ -15,6 +15,7 @@ import { truncateText } from "../../../../utils/caracterLength";
 import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
 import useReviewer from "../hooks/useReviewer";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionIndustrialDesign = () => {
   const { design, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useIndustrialDesign();
@@ -51,6 +52,9 @@ const SubmissionIndustrialDesign = () => {
         <div className="lg:w-[84%] w-full  border  ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb title="PERMOHONAN DESAIN INDUSTRI" items={[{ label: "Desain Industri", url: "/permohonan/desain-industri" }]} />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="bg-white  ">
                 <div className="flex flex-row justify-between mb-20">

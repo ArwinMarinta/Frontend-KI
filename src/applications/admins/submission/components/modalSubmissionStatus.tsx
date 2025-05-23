@@ -15,12 +15,12 @@ export interface ModalProps {
   id: number | string | null;
   message: string | null;
   status?: string;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status }: ModalProps) => {
-  const { statusError, setStatusError, handleChange, resetStatus, dispatch, loading, setLoading } = useStatus();
+const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, handleChange }: ModalProps) => {
+  const { statusError, setStatusError, resetStatus, dispatch, loading, setLoading } = useStatus();
 
-  console.log(status);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!status || status.trim() === "") {

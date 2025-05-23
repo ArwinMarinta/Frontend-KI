@@ -71,7 +71,7 @@ const RevisionBrand = ({ progresSubmission, formBrand, formBrandError, handleCha
             <Field label="Unsur Warna Dalam Label Merek" value={formBrand?.elementColor || ""} name="elementColor" type="text" placeholder="Contoh: Hitam, Putih dan Biru, Kuning, Merah" need error={formBrandError?.elementColor} onChange={handleChange} />
           </div>
           <div className="flex lg:flex-row flex-col w-full gap-6">
-            <Field label="Disclaimer (Tidak dilindungin)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
+            <Field label="Disclaimer (Tidak dilindungi)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
             <FieldDropdown
               label="Jenis Dokumen"
               name="documentType"

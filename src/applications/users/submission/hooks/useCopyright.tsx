@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { revisonSubmissionCopyright } from "../../../../service/actions/submissionAction";
+import { complateSubmissionCopyright, revisonSubmissionCopyright } from "../../../../service/actions/submissionAction";
 import { processFile } from "../../../../utils/formatFile";
 
 const useCopyright = () => {
@@ -29,6 +29,7 @@ const useCopyright = () => {
     letterTransferCopyright: null as File | null,
     exampleCreation: null as File | null,
   });
+
   const [formCopyrightError, setFormCopyrightError] = useState({
     titleInvention: false,
     typeCreation: false,
@@ -123,6 +124,49 @@ const useCopyright = () => {
     }
   };
 
+  const handleSubmitComplateCopyright = async () => {
+    const error = {
+      titleInvention: false,
+      typeCreation: false,
+      subTypeCreation: false,
+      countryFirstAnnounced: false,
+      cityFirstAnnounced: false,
+      timeFirstAnnounced: false,
+      briefDescriptionCreation: false,
+      statementLetter: !formCopyright?.statementLetter,
+      letterTransferCopyright: !formCopyright?.letterTransferCopyright,
+      exampleCreation: false,
+    };
+
+    const hasError = Object.values(error).includes(true);
+
+    if (hasError) {
+      setFormCopyrightError(error);
+      return;
+    }
+    if (types === "Lengkapi Berkas") {
+      setLoading(true);
+      try {
+        await dispatch(complateSubmissionCopyright(detailCopyright?.id, formCopyright));
+        setFormCopyright({
+          titleInvention: "",
+          typeCreation: null,
+          subTypeCreation: null,
+          countryFirstAnnounced: "",
+          cityFirstAnnounced: "",
+          timeFirstAnnounced: "",
+          briefDescriptionCreation: "",
+          statementLetter: null,
+          letterTransferCopyright: null,
+          exampleCreation: null,
+        });
+        navigate("/histori-pengajuan/hak-cipta");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const initForm = async () => {
       if (!detailCopyright || types !== "Revisi") return;
@@ -158,6 +202,7 @@ const useCopyright = () => {
     handleSubmitCopyright,
     loading,
     detailCopyright,
+    handleSubmitComplateCopyright,
   };
 };
 

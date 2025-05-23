@@ -130,6 +130,8 @@ const UpdateUserPaten = () => {
       // Set Form Hak Cipta
       setDraftPatent(draftPatentApplicationFile);
 
+      console.log("ini kag");
+
       // Set Personal Data jika tersedia
       if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
         const mappedContributors = await Promise.all(
@@ -165,7 +167,7 @@ const UpdateUserPaten = () => {
 
     initForm();
   }, [detailSubmission?.submission?.patent, types, setPersonalData, detailSubmission, setDraftPatent]);
-  console.log(personalData);
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -178,7 +180,7 @@ const UpdateUserPaten = () => {
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Paten</h1>
             </div>
-            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
+            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
             {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} />}
             {currentStep === 1 && (
               <Form_2 submissionType="Paten" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />

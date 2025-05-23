@@ -1,12 +1,12 @@
 import BackgroundITK from "../../../assets/background_itk.webp";
 import Logo from "../components/logo";
 import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import FormLogin from "./components/formLogin";
 import { useLogin } from "../../../hooks/useLogin";
-import { auth, provider } from "../../../firebase/apiKey"; // sesuaikan path
-import { getRedirectResult, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
-import { useEffect, useState } from "react";
+import GoogleLogin from "./components/signInGoogle";
+// import { auth, provider } from "../../../firebase/apiKey"; // sesuaikan path
+// import { getRedirectResult, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+// import { useEffect, useState } from "react";
 
 // function getCookie(name: string) {
 //   const cookieArr = document.cookie.split(";");
@@ -21,36 +21,36 @@ import { useEffect, useState } from "react";
 
 const Login = () => {
   const { formLogin, handleChange, handleLogin, loading, errors, message } = useLogin();
-  const [redirectLoading, setRedirectLoading] = useState(false);
-  const handleGoogleLogin = () => {
-    setRedirectLoading(true);
-    signInWithRedirect(auth, provider);
-  };
+  // const [redirectLoading, setRedirectLoading] = useState(false);
+  // const handleGoogleLogin = () => {
+  //   setRedirectLoading(true);
+  //   signInWithRedirect(auth, provider);
+  // };
 
-  useEffect(() => {
-    console.log("Running getRedirectResult...");
-    const unsub = onAuthStateChanged(auth, (user) => {
-      console.log("onAuthStateChanged user:", user);
-    });
+  // useEffect(() => {
+  //   console.log("Running getRedirectResult...");
+  //   const unsub = onAuthStateChanged(auth, (user) => {
+  //     console.log("onAuthStateChanged user:", user);
+  //   });
 
-    console.log(unsub);
-    getRedirectResult(auth)
-      .then(async (result) => {
-        console.log("getRedirectResult result:", result);
-        if (result) {
-          const user = result.user;
-          console.log("User email:", user.email);
-        } else {
-          console.log("No redirect result");
-          setRedirectLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Login Google gagal:", error);
-        alert("Login dengan Google gagal, coba lagi.");
-        setRedirectLoading(false);
-      });
-  }, []);
+  //   console.log(unsub);
+  //   getRedirectResult(auth)
+  //     .then(async (result) => {
+  //       console.log("getRedirectResult result:", result);
+  //       if (result) {
+  //         const user = result.user;
+  //         console.log("User email:", user.email);
+  //       } else {
+  //         console.log("No redirect result");
+  //         setRedirectLoading(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Login Google gagal:", error);
+  //       alert("Login dengan Google gagal, coba lagi.");
+  //       setRedirectLoading(false);
+  //     });
+  // }, []);
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
       <div className="absolute inset-0 w-full h-full z-0">
@@ -77,10 +77,7 @@ const Login = () => {
         </div>
 
         <div className="w-full mb-6">
-          <button onClick={handleGoogleLogin} className="bg-white border flex justify-center items-center gap-2 border-PRIMARY01 w-full  p-2 rounded-md transition">
-            <FcGoogle className="text-2xl" />
-            <span>{redirectLoading ? "Loading.." : "Masuk dengan Google"}</span>
-          </button>
+          <GoogleLogin />
         </div>
 
         <div className="text-center font-medium">

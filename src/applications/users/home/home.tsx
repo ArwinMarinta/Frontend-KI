@@ -29,9 +29,10 @@ const Home = () => {
           <div className="absolute inset-0 z-20 flex justify-center items-center h-screen pt-14 lg:px-20">
             <div className="container w-full h-full flex flex-row justify-between items-center">
               <div className="flex flex-col items-start justify-center text-white lg:w-[50%]">
-                <h1 className="text-3xl xl:text-5xl font-bold text-start">
+                <h1 className="text-3xl xl:text-5xl font-bold text-start hidden lg:block">
                   Selamat Datang di Sentra <br /> Kekayaan Intelektual ITK
                 </h1>
+                <h1 className="text-3xl xl:text-5xl font-bold text-start  lg:hidden">Selamat Datang di Sentra Kekayaan Intelektual ITK</h1>
                 <p className="text-lg xl:text-xl mt-8 text-justify w-[80%] mb-10 ">Sentra Kekayaan Intelektual (KI) ITK hadir untuk melindungi ide dan inovasi Anda. Kami memberikan layanan pengelolaan KI yang mencakup Hak Cipta, Paten, Merek, dan Desain Industri.</p>
 
                 {token ? (

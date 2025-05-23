@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { revisonSubmissionBrand } from "../../../../service/actions/submissionAction";
+import { complateSubmissionBrand, revisonSubmissionBrand } from "../../../../service/actions/submissionAction";
 import { processFile } from "../../../../utils/formatFile";
 
 const useBrand = () => {
@@ -212,6 +212,60 @@ const useBrand = () => {
     }
   };
 
+  const handleComplateBrand = async () => {
+    const error = {
+      applicationType: false,
+      brandType: false,
+      referenceName: false,
+      elementColor: false,
+      translate: false,
+      pronunciation: false,
+      disclaimer: false,
+      description: false,
+      documentType: false,
+      information: false,
+      labelBrand: false,
+      fileUploade: !formBrand?.fileUploade,
+      signature: false,
+      InformationLetter: false,
+      letterStatment: false,
+    };
+    const hasError = Object.values(error).includes(true);
+
+    if (hasError) {
+      setFormBrandError(error);
+      return;
+    }
+
+    if (types === "Lengkapi Berkas") {
+      setLoading(true);
+      try {
+        await dispatch(complateSubmissionBrand(detailBrand?.id, formBrand));
+        setFormBrand({
+          applicationType: "",
+          brandType: null,
+          referenceName: "",
+          elementColor: "",
+          translate: "",
+          pronunciation: "",
+          disclaimer: "",
+          description: "",
+          documentType: "",
+          information: "",
+          labelBrand: null as File | null,
+          fileUploade: null as File | null,
+          signature: null as File | null,
+          InformationLetter: null as File | null,
+          letterStatment: null as File | null,
+        });
+        setFormAdditionalBrand([]);
+        navigate("/histori-pengajuan/merek");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const initFormBrand = async () => {
       if (!detailBrand || types !== "Revisi") return;
@@ -279,6 +333,7 @@ const useBrand = () => {
     handleSubmitRevision,
     loading,
     setTempAdditionalBrand,
+    handleComplateBrand,
   };
 };
 

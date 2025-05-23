@@ -880,6 +880,46 @@ export const revisonSubmissionCopyright = (submissionType: number | undefined, f
       if (formCopyright.briefDescriptionCreation) {
         formData.append("briefDescriptionCreation", formCopyright.briefDescriptionCreation);
       }
+      if (formCopyright.letterTransferCopyright) {
+        formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
+      }
+      if (formCopyright.statementLetter) {
+        formData.append("statementLetter", formCopyright.statementLetter);
+      }
+      if (formCopyright.exampleCreation) {
+        formData.append("exampleCreation", formCopyright.exampleCreation);
+      }
+
+      await axios.patch(`${API_URL}/copyright/${submissionType}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+export const complateSubmissionCopyright = (submissionType: number | undefined, formCopyright: FormSubmissionCopyright): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+
+      if (formCopyright.letterTransferCopyright) {
+        formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
+      }
+      if (formCopyright.statementLetter) {
+        formData.append("statementLetter", formCopyright.statementLetter);
+      }
 
       await axios.patch(`${API_URL}/copyright/${submissionType}`, formData, {
         headers: {
@@ -968,13 +1008,13 @@ export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmiss
 
       formAdditionalBrand.forEach((data, index) => {
         if (data.additionalDescriptions) {
-          formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
+          formData.append(`additionalDatas[${index}][description]`, data.additionalDescriptions);
         }
       });
 
       formAdditionalBrand.forEach((data) => {
         if (data.additionalFiles) {
-          formData.append("additionalFiles", data.additionalFiles);
+          formData.append("additionalDataFiles", data.additionalFiles);
         }
       });
 
@@ -1123,9 +1163,9 @@ export const updateSubmissionCopyright = (id: number, formPersonalData: FormPers
       if (formCopyright.briefDescriptionCreation) {
         formData.append("briefDescriptionCreation", formCopyright.briefDescriptionCreation);
       }
-      if (formCopyright.statementLetter) formData.append("statementLetterFile", formCopyright.statementLetter);
-      if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyrightFile", formCopyright.letterTransferCopyright);
-      if (formCopyright.exampleCreation) formData.append("exampleCreationFile", formCopyright.exampleCreation);
+      if (formCopyright.statementLetter) formData.append("statementLetter", formCopyright.statementLetter);
+      if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
+      if (formCopyright.exampleCreation) formData.append("exampleCreation", formCopyright.exampleCreation);
 
       await axios.patch(`${API_URL}/submission/personal-data-copyright/${id}`, formData, {
         headers: {
@@ -1394,6 +1434,84 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
       formAdditionalBrand.forEach((data) => {
         if (data.additionalFiles) {
           formData.append("additionalFiles", data.additionalFiles);
+        }
+      });
+
+      await axios.patch(`${API_URL}/submission/personal-data/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const complateSubmissionBrand = (id: number | undefined, Form: FormSubmissionBrand): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+
+      if (Form.fileUploade) {
+        formData.append("fileUploade", Form.fileUploade);
+      }
+
+      await axios.patch(`${API_URL}/brand/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const updatePersonalData = (id: number | undefined, formPersonalData: FormPersonalData[]): AppThunk => {
+  return async (_, getState) => {
+    try {
+      const { token } = getState().auth;
+      const formData = new FormData();
+
+      formPersonalData.forEach((data, index) => {
+        if (data.id) formData.append(`personalDatas[${index}][id]`, data.id.toString());
+        if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
+        if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
+        if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
+        if (data.studyProgram) formData.append(`personalDatas[${index}][studyProgram]`, data.studyProgram);
+        if (data.institution) formData.append(`personalDatas[${index}][institution]`, data.institution);
+        if (data.work) formData.append(`personalDatas[${index}][work]`, data.work);
+        if (data.nationalState) formData.append(`personalDatas[${index}][nationalState]`, data.nationalState);
+        if (data.countryResidence) formData.append(`personalDatas[${index}][countryResidence]`, data.countryResidence);
+        if (data.province) formData.append(`personalDatas[${index}][province]`, data.province);
+        if (data.city) formData.append(`personalDatas[${index}][city]`, data.city);
+        if (data.subdistrict) formData.append(`personalDatas[${index}][subdistrict]`, data.subdistrict);
+        if (data.ward) formData.append(`personalDatas[${index}][ward]`, data.ward);
+        if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
+        if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
+        if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+      });
+
+      formPersonalData.forEach((data) => {
+        if (data.ktp) {
+          formData.append("ktpFiles", data.ktp);
         }
       });
 

@@ -9,7 +9,7 @@ interface GeneralType {
 
 const PersonalDataSubmission = ({ data }: GeneralType) => {
   return (
-    <div className="flex flex-col mt-10">
+    <div className="flex flex-col mt-10 gap-10">
       {data?.map((item, index) => (
         <div key={item.id} className="border p-6 rounded-md flex flex-col gap-6 border-PRIMARY01">
           <div className="flex flex-col lg:flex-row gap-6">

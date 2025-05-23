@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 
@@ -38,7 +38,7 @@ const useSchemaPayment = () => {
         errors.groupId = "Group ID wajib diisi untuk pendanaan.";
       }
       if (formSchemaPayment.termsConditionId.length === 0) {
-        errors.termsConditionId = "Pilih minimal 1 prasyarat pendanaan";
+        errors.termsConditionId = "Prasyarat pendanaan wajib di centang";
       }
     }
 
@@ -80,16 +80,17 @@ const useSchemaPayment = () => {
     });
   };
 
-  const handleCheckboxChange = (id: number) => {
+  const handleCheckboxChange = () => {
     setFormSchemaPayment((prev) => {
-      const exists = prev.termsConditionId.includes(id);
-
+      const allSelected = prev.termsConditionId.length === (terms?.length || 0);
       return {
         ...prev,
-        termsConditionId: exists ? prev.termsConditionId.filter((item) => item !== id) : [...prev.termsConditionId, id],
+        termsConditionId: allSelected ? [] : terms?.map((term) => term.id) ?? [],
       };
     });
   };
+
+  console.log(formSchemaPayment.termsConditionId);
 
   const handleSubmitSchema = async () => {
     const errors = validate();

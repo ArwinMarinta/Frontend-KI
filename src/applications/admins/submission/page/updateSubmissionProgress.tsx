@@ -14,6 +14,8 @@ import { AiFillFileWord } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import FieldFile from "../../../../components/input/fieldFile";
+import { formatLabel } from "../../../../utils/toSlug";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const UpdateSubmissionProgress = () => {
   const { name } = useParams<{ name: string }>();
@@ -28,6 +30,16 @@ const UpdateSubmissionProgress = () => {
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="INFORMASI PENGAJUAN"
+                items={[
+                  { label: `${formatLabel(name)}`, url: `/permohonan/${name}` },
+                  { label: "Progres Pengajuan", url: "/permohonan/hak-cipta/progres" },
+                  { label: "Ubah Progres", url: "" },
+                ]}
+              />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="grid grid-cols-3 items-center h-24 mb-10">
                 <div>

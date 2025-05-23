@@ -71,7 +71,12 @@ const SubmissionUserBrand = () => {
 
   const handleNextStep = () => {
     const error = validateBrandData(formBrand);
-    const hasError = Object.values(error).includes(true);
+
+    const excludeFields = ["fileUploade", "InformationLetter", "letterStatment"];
+
+    const hasError = Object.entries(error)
+      .filter(([key]) => !excludeFields.includes(key))
+      .some(([, value]) => value === true);
 
     if (hasError) {
       setFormBrandError(error);

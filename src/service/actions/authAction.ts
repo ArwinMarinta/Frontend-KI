@@ -172,3 +172,32 @@ export const activationAccount = (token: string | undefined): AppThunk => {
     }
   };
 };
+export const loginWithGoogleAction = (accessToken: string, navigate: NavigateFunction): AppThunk => {
+  return async (dispatch) => {
+    try {
+      console.log(accessToken);
+      const response = await axios.post(
+        `${API_URL}/auth/login-google`,
+        { idToken: accessToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(response);
+
+      dispatch(setToken(response.data.token));
+      navigate("/");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
