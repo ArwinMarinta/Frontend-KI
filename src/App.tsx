@@ -61,9 +61,7 @@ import DashboardUser from "./applications/users/submission/page/dashboardUser";
 import SubmissionUserPaten from "./applications/users/submission/page/submissionUserPaten";
 import SubmissionUserBrand from "./applications/users/submission/page/submissionUserBrand";
 import SubmissionUserIndusDesign from "./applications/users/submission/page/submissionUserIndusDesign";
-import ProtectedToken from "./middleware/protecdToken";
 import NoAccessToken from "./middleware/noAccessToken";
-import ProtectedRouteRole from "./middleware/protecdRole";
 import UpdateSubmissionProgress from "./applications/admins/submission/page/updateSubmissionProgress";
 import VerifySuccess from "./applications/authentication/register/verifySuccess";
 import ScrollBehavior from "./utils/scrollBehavior";
@@ -75,6 +73,11 @@ import UpdateUserCopyright from "./applications/users/submission/components/comp
 import UpdateUserPaten from "./applications/users/submission/components/complete/updateUserPaten";
 import UpdateDesainIndustri from "./applications/users/submission/components/complete/updateDesainIndustri";
 import UpdateUserBrand from "./applications/users/submission/components/complete/updateUserBrand";
+import { ProtectedRouteUser } from "./middleware/protectRouteUser";
+import { ProtectedRouteReviewer } from "./middleware/protecdRouteReviewer";
+import { ProtectedRouteAdmin } from "./middleware/protecdRouteAdmin";
+import { ProtectedRouteSuperAdmin } from "./middleware/protecdRouteSuperAdmin";
+import ProtectedToken from "./middleware/protecdToken";
 
 function App() {
   return (
@@ -142,7 +145,7 @@ function App() {
           }
         />
 
-        <Route element={<ProtectedRouteRole allowedRoles={["user", "reviewer"]} />}>
+        <Route element={<ProtectedRouteUser />}>
           <Route
             path="/dashboard/pengajuan"
             element={
@@ -258,9 +261,27 @@ function App() {
               </NoAccessToken>
             }
           />
+
+          <Route
+            path="/profile"
+            element={
+              <NoAccessToken>
+                <UserProfile />
+              </NoAccessToken>
+            }
+          />
+
+          <Route
+            path="/ubah-password"
+            element={
+              <NoAccessToken>
+                <ChangePassword />
+              </NoAccessToken>
+            }
+          />
         </Route>
 
-        <Route element={<ProtectedRouteRole allowedRoles={["reviewer"]} />}>
+        <Route element={<ProtectedRouteReviewer />}>
           <Route
             path="/penugasan"
             element={
@@ -287,27 +308,7 @@ function App() {
           />
         </Route>
 
-        <Route element={<ProtectedRouteRole allowedRoles={["user", "reviewer", "admin", "superAdmin"]} />}>
-          <Route
-            path="/profile"
-            element={
-              <NoAccessToken>
-                <UserProfile />
-              </NoAccessToken>
-            }
-          />
-
-          <Route
-            path="/ubah-password"
-            element={
-              <NoAccessToken>
-                <ChangePassword />
-              </NoAccessToken>
-            }
-          />
-        </Route>
-
-        <Route element={<ProtectedRouteRole allowedRoles={["admin", "superAdmin"]} />}>
+        <Route element={<ProtectedRouteAdmin />}>
           <Route
             path="/ubah-password"
             element={
@@ -578,14 +579,6 @@ function App() {
               </NoAccessToken>
             }
           />
-          <Route
-            path="/informasi/log-aktivitas"
-            element={
-              <NoAccessToken>
-                <LogActivity />
-              </NoAccessToken>
-            }
-          />
 
           {/* Profile Admin */}
           <Route
@@ -598,8 +591,7 @@ function App() {
           />
         </Route>
 
-        <Route element={<ProtectedRouteRole allowedRoles={["superAdmin"]} />}>
-          {/* Pengaturan akun */}
+        <Route element={<ProtectedRouteSuperAdmin />}>
           <Route
             path="/pengaturan/akun"
             element={
@@ -629,6 +621,14 @@ function App() {
             element={
               <NoAccessToken>
                 <UpdateAccount />
+              </NoAccessToken>
+            }
+          />
+          <Route
+            path="/informasi/log-aktivitas"
+            element={
+              <NoAccessToken>
+                <LogActivity />
               </NoAccessToken>
             }
           />
