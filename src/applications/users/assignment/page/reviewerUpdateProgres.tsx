@@ -8,14 +8,13 @@ import { AiFillFileWord } from "react-icons/ai";
 import { HiOutlineDocument } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import Field from "../../../../components/input/fieldInput";
-import { Link } from "react-router-dom";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ReviewerUpdateProgres = () => {
-  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, handleUpdateProgress, submissionId, loading } = useUpdateProgress();
+  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, handleUpdateProgress, loading } = useUpdateProgress();
 
   return (
     <>
@@ -26,17 +25,21 @@ const ReviewerUpdateProgres = () => {
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="PENUGASAN"
+                items={[
+                  { label: "Penugasan", url: "/penugasan" },
+                  {
+                    label: "Progres",
+                    url: "/penugasan/progress",
+                  },
+                  { label: "Ubah", url: "" },
+                ]}
+              />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
-              <div className="grid grid-cols-3 items-center h-24 mb-10">
-                <div>
-                  {/* <BackButton url={`/penugasan/progress`} /> */}
-                  <Link to="/penugasan/progress" state={{ submissionId: submissionId }}>
-                    <button className="flex flex-row items-center gap-2 bg-GREY01 py-2 px-3 rounded-md">
-                      <IoArrowBackCircleOutline className="text-2xl" />
-                      <span className="text-base font-medium">Kembali</span>
-                    </button>
-                  </Link>
-                </div>
+              <div className="flex items-center h-24 mb-10">
                 <h1 className="text-center text-3xl w-full font-bold">Ubah Progress Pengajuan</h1>
               </div>
               <div className="flex flex-col gap-6">

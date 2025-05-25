@@ -6,6 +6,7 @@ import useAssignment from "../hooks/useAssignment";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/historyReducer";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ReviewerAssignment = () => {
   const { reviewer, limit, currentPage, totalPages, dispatch } = useAssignment();
@@ -18,6 +19,9 @@ const ReviewerAssignment = () => {
         <div className="lg:w-[84%] w-full border   ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8">
+            <div className="mb-8">
+              <Breadcrumb title="PENUGASAN" items={[{ label: "Penugasan", url: "" }]} />
+            </div>
             <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <h1 className="text-3xl font-bold mb-14">Penugasan Reviewer</h1>
 

@@ -10,7 +10,6 @@ const useQuota = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { quota, currentPage, totalPages, totalValue, limit } = useSelector((state: RootState) => state.manage.quotasData);
 
-  console.log(group);
   useEffect(() => {
     if (token) {
       dispatch(getQuota(group, currentPage, limit));

@@ -32,15 +32,17 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
 
   return (
     <>
-      <div className="flex flex-col items-center lg:mt-20 mt-10">
+      <div className="flex flex-col items-center lg:mt-20 mt-10 gap-6">
         <h2 className="lg:text-[32px] font-semibold text-2xl">Dokumen Pengajuan</h2>
-        <p className="text-justify mt-3 items-center">
-          Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.
-          {/* <br /> */}
-          Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.
-          {/* <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
+        <div className="md:w-[60%] w-full">
+          <p className=" mt-3 items-center text-center">
+            Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.
+            {/* <br /> */}
+            Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.
+            {/* <span className="text-justify"> Lengkapi semua data pengajuan Anda agar dapat diproses dengan lancar.</span>
           <span> Pastikan semua dokumen yang diperlukan telah diisi dengan benar dan lengkap.</span> */}
-        </p>
+          </p>
+        </div>
       </div>
 
       <div className="flex flex-col gap-6 lg:mt-24 mt-16">

@@ -67,9 +67,7 @@ const HeaderNavigation = () => {
             <GiHamburgerMenu className="text-3xl" />
           </button>
         </div>
-        <div className="lg:block hidden">
-          <h1 className="font-semibold text-PRIMARY01 text-2xl">Hi, Admin</h1>
-        </div>
+        <div className="lg:block hidden">{/* <h1 className="font-semibold text-PRIMARY01 text-2xl">Hi, Admin</h1> */}</div>
         <div className="flex flex-row gap-8">
           {token && user?.role !== "superAdmin" && user?.role !== "admin" && (
             <Dropdown

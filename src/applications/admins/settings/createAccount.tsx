@@ -1,5 +1,6 @@
 import HeaderNavigation from "../../../components/adminNavigation/headerNavigation";
 import SideNavigation from "../../../components/adminNavigation/sideNavigation";
+import Breadcrumb from "../../../components/breadcrumb.tsx/breadcrumb";
 import CreateButton from "../../../components/button/createButton";
 import FieldDropdown from "../../../components/input/FieldDropDown";
 import Field from "../../../components/input/fieldInput";
@@ -18,6 +19,15 @@ const CreateAccount = () => {
         <div className="lg:w-[84%] w-full  border">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="PENGATURAN AKUN"
+                items={[
+                  { label: "Pengaturan Akun", url: "/pengaturan/akun" },
+                  { label: "Tambah Pengguna", url: "" },
+                ]}
+              />
+            </div>
             <form onSubmit={handleSubmit} className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="flex flex-row justify-between mb-20">
                 <span className="text-3xl font-semibold">Tambah Pengguna</span>

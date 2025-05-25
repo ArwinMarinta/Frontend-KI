@@ -9,6 +9,7 @@ import DeleteButton from "../../../../components/button/deleteButton";
 import ModalWarning from "../../../../components/modal/modalWarning";
 import { formatIndonesianDateTime } from "../../../../utils/formatDate";
 import ReplyButton from "../../../../components/button/replyButton";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const HelpCenter = () => {
   const { center, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useHelpCenter();
@@ -38,6 +39,9 @@ const HelpCenter = () => {
       <div className="lg:w-[84%] w-full  border">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb title="PUSAT BANTUAN" items={[{ label: "Pusat Bantuan", url: "" }]} />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Pusat Bantuan</span>

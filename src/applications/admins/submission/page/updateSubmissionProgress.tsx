@@ -1,8 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
 import useUpdateProgress from "../../../../hooks/useUpdateProgress";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
 import FieldDropdown from "../../../../components/input/FieldDropDown";
 import { statusAdminList } from "../../../../data/submissionStatus";
 import Field from "../../../../components/input/fieldInput";
@@ -19,7 +18,7 @@ import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const UpdateSubmissionProgress = () => {
   const { name } = useParams<{ name: string }>();
-  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, handleUpdateProgress, submissionId, loading } = useUpdateProgress();
+  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, loading, handleUpdateProgressAdmin } = useUpdateProgress();
 
   return (
     <>
@@ -41,16 +40,7 @@ const UpdateSubmissionProgress = () => {
               />
             </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
-              <div className="grid grid-cols-3 items-center h-24 mb-10">
-                <div>
-                  {/* <BackButton url={`/penugasan/progress`} /> */}
-                  <Link to={`/permohonan/${name}/progres`} state={{ submissionId: submissionId }}>
-                    <button className="flex flex-row items-center gap-2 bg-GREY01 py-2 px-3 rounded-md">
-                      <IoArrowBackCircleOutline className="text-2xl" />
-                      <span className="text-base font-medium">Kembali</span>
-                    </button>
-                  </Link>
-                </div>
+              <div className="flex  items-center h-24 mb-10">
                 <h1 className="text-center text-3xl w-full font-bold">Ubah Progress Pengajuan</h1>
               </div>
               <div className="flex flex-col gap-6">
@@ -111,7 +101,7 @@ const UpdateSubmissionProgress = () => {
                   </div>
                 </div>
                 <div className="flex justify-end mt-10">
-                  <button onClick={handleUpdateProgress} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
+                  <button onClick={() => handleUpdateProgressAdmin(name)} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
                     Simpan Perubahan
                   </button>
                 </div>

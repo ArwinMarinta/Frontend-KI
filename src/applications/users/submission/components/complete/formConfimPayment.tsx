@@ -1,5 +1,4 @@
 import { useLocation } from "react-router-dom";
-import BackButton from "../../../../../components/button/backButton";
 
 import Field from "../../../../../components/input/fieldInput";
 import { ConfirmPaymentError, ConfirmPaymentForm } from "../../hooks/useConfirmPayment";
@@ -16,15 +15,10 @@ const FormConfimPayment = ({ formConfirmPayment, handleChange, formConfirmPaymen
   const location = useLocation();
   const { billingCode, paymentSchema } = location.state || {};
 
-
   return (
     <>
-      <div className="grid grid-cols-[auto_1fr_auto] items-center h-24">
-        <div className="max-h-fit">
-          <BackButton url={"/histori-pengajuan"} />
-        </div>
+      <div className="flex items-center h-24">
         <h1 className="text-center text-3xl w-full font-bold">Konfirmasi Pembayaran Mandiri</h1>
-        <div></div>
       </div>
       <div className="flex flex-col gap-6">
         <Field label="Skema Pendanaan" value={paymentSchema ?? "-"} name="titleInvention" type="text" placeholder="" readOnly />

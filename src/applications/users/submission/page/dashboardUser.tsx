@@ -1,5 +1,6 @@
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import Section_1 from "../../../admins/dashboard/components/section_1";
 
 const DashboardUser = () => {
@@ -11,6 +12,9 @@ const DashboardUser = () => {
       <div className="lg:w-[84%] w-full border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb title="DASHBOARD" items={[{ label: "Dashboard", url: `` }]} />
+          </div>
           <div className="grid md:grid-cols-4 grid-cols-2 gap-6">
             <Section_1 label={"Hak Cipta"} total={24} description={"Total Pengajuan"} />
             <Section_1 label={"Hak Cipta"} total={24} description={"Total Pengajuan"} />

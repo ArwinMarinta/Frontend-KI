@@ -30,7 +30,7 @@ const ProgresSubmission = () => {
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="bg-white  ">
               <div className="mb-16">
-                <h1 className="text-center text-3xl w-full font-bold">Progress Pengajuan Hak Paten</h1>
+                <h1 className="text-center text-3xl w-full font-bold">Progress Pengajuan {formatLabel(name)}</h1>
               </div>
               <div>
                 <TimelineHistory data={progresSubmission} />

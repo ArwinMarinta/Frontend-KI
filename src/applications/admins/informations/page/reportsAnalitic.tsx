@@ -6,6 +6,7 @@ import TableWithPagination from "../../../../components/table/tableComponent";
 import { ReportandAnalitic } from "../../../../types/document";
 import { formatIndonesianDateTime } from "../../../../utils/formatDate";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/informationReducer";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ReportsAnalitic = () => {
   const { report, limit, totalPages, currentPage, handleChangeReportAnalitic, formReportAnalitic, handleSearchReport, dispatch } = useReportAnalitic();
@@ -17,7 +18,11 @@ const ReportsAnalitic = () => {
         </div>
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
+
           <div className="px-4 lg:px-12  py-8">
+            <div className="mb-8">
+              <Breadcrumb title="LAPORAN & ANALISIS" items={[{ label: "Laporan & Analisis", url: "" }]} />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="flex flex-row justify-between mb-12">
                 <span className="text-3xl font-semibold">Laporan dan Analisis</span>

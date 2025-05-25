@@ -9,6 +9,7 @@ import ModalWarning from "../../../../components/modal/modalWarning";
 import useIpr from "../hooks/useIpr";
 import { useModal } from "../../../../hooks/useModal";
 import ModalIpr from "../components/modalIpr";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const IprCategory = () => {
   const { iprs, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useIpr();
@@ -38,6 +39,9 @@ const IprCategory = () => {
       <div className="lg:w-[84%] w-full  border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb title="JENIS KEKAYAAN INTELEKTUAL" items={[{ label: "Jenis Kekayaan Intelektual", url: "" }]} />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Kategori Kekayaan Intelektual</span>

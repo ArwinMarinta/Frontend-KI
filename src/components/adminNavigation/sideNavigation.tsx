@@ -9,9 +9,13 @@ import { RxCube, RxActivityLog } from "react-icons/rx";
 // import { TbCategory2 } from "react-icons/tb";
 import { MdOutlineMarkChatUnread, MdOutlineQuestionAnswer, MdOutlineCategory, MdOutlineDashboard } from "react-icons/md";
 import { TbFileDownload, TbBrandGoogleAnalytics, TbContract } from "react-icons/tb";
+import { useSelector } from "react-redux";
+import { RootState } from "../../service/store";
 
 const SideNavigation = () => {
   const location = useLocation();
+
+  const { user, token } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="overflow-y-scroll top-0 sticky left-0  ">
@@ -53,12 +57,15 @@ const SideNavigation = () => {
             <h1 className="font-bold text-GREY02 mb-2">INFORMASI</h1>
             <Button text={"Laporan & Analisis"} icon={<TbBrandGoogleAnalytics className="text-lg" />} url={"/informasi/laporan-analisis"} location={location} />
             <Button text={"Pusat Bantuan"} icon={<MdOutlineMarkChatUnread className="text-lg" />} url={"/informasi/pusat-bantuan"} location={location} />
-            <Button text={"Log Aktivitas"} icon={<RxActivityLog className="text-lg" />} url={"/informasi/log-aktivitas"} location={location} />
+            {token && user?.role === "superAdmin" && <Button text={"Log Aktivitas"} icon={<RxActivityLog className="text-lg" />} url={"/informasi/log-aktivitas"} location={location} />}
           </div>
-          <div className="mb-2 flex flex-col gap-1">
-            <h1 className="font-bold text-GREY02 mb-2">PENGATURAN</h1>
-            <Button text={"Akun"} icon={<LuSettings className="text-lg" />} url={"/pengaturan/akun"} location={location} />
-          </div>
+
+          {token && user?.role === "superAdmin" && (
+            <div className="mb-2 flex flex-col gap-1">
+              <h1 className="font-bold text-GREY02 mb-2">PENGATURAN</h1>
+              <Button text={"Akun"} icon={<LuSettings className="text-lg" />} url={"/pengaturan/akun"} location={location} />
+            </div>
+          )}
         </div>
       </div>
     </div>

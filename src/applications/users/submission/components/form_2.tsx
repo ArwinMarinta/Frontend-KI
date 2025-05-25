@@ -22,10 +22,10 @@ export type FormStepProps = {
 const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error }: FormStepProps) => {
   return (
     <div className="flex flex-col">
-      <div>
-        <div className="flex flex-col items-center md:mt-20 mt-10">
-          <h2 className="text-[32px] font-semibold">Data Diri</h2>
-          <p className="text-justify mt-3 flex flex-col items-center w-full">Silakan mengisi data diri Anda untuk proses pengajuan Kekayaan Intelektual. Pastikan informasi yang diberikan akurat dan lengkap. Anda juga dapat menambahkan pencipta lainnya jika pengajuan dilakukan secara kolaboratif.</p>
+      <div className="flex flex-col items-center md:mt-20 mt-10 gap-6">
+        <h2 className="text-[32px] font-semibold">Data Diri</h2>
+        <div className="md:w-[60%] w-full">
+          <p className="text-center mt-3 flex flex-col items-center w-full">Silakan mengisi data diri Anda untuk proses pengajuan Kekayaan Intelektual. Pastikan informasi yang diberikan akurat dan lengkap. Anda juga dapat menambahkan pencipta lainnya jika pengajuan dilakukan secara kolaboratif.</p>
         </div>
       </div>
 

@@ -15,6 +15,7 @@ import ModalLoading from "../../../../components/modal/modalLoading";
 import { useModal } from "../../../../hooks/useModal";
 import ModalWarningContributor from "../../../../components/modal/modalWarningContributor";
 import { useEffect } from "react";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionUserBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -165,6 +166,9 @@ const SubmissionUserBrand = () => {
       <div className="lg:w-[84%] w-full border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb title="PENGAJUAN MEREK" items={[{ label: "Pengajuan Merek", url: "" }]} />
+          </div>
           <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Merek</h1>

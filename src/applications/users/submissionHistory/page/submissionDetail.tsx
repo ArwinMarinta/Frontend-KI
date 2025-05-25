@@ -1,4 +1,3 @@
-import BackButton from "../../../../components/button/backButton";
 import useDetailSubmussion from "../../../../hooks/useDetailSubmussion";
 import Button from "../components/button";
 import GeneralInformation from "../../../admins/submission/components/generalInformation";
@@ -9,9 +8,10 @@ import DocumentSubmissionIndutrialDesign from "../../../admins/submission/compon
 import DocumentSubmissionBrand from "../../../admins/submission/components/documentSubmissionBrand";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionDetail = () => {
-  const { detailSubmission, current, handleChange, submissionType, toSlug, status, terms } = useDetailSubmussion();
+  const { detailSubmission, current, handleChange, submissionType, toSlug, terms } = useDetailSubmussion();
   return (
     <>
       <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -21,9 +21,17 @@ const SubmissionDetail = () => {
         <div className="lg:w-[84%] w-full border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="PROGRES PENGAJUAN"
+                items={[
+                  { label: "Progres Pengajuan", url: `/histori-pengajuan/${toSlug(submissionType)}` },
+                  { label: "Detail Pengajuan", url: "" },
+                ]}
+              />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
-              <div className="grid grid-cols-3 items-center h-24 ">
-                <div>{status === "Riwayat" ? <BackButton url={`/histori-pengajuan/${toSlug(submissionType)}`} /> : <BackButton url={`/penugasan`} />}</div>
+              <div className="flex  items-center h-24 mb-10">
                 <h1 className="text-center text-3xl w-full font-bold">Riwayat Pengajuan</h1>
               </div>
               <div className="flex flex-row w-full justify-center mb-10">

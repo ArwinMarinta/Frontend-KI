@@ -16,6 +16,8 @@ import Stepper from "../stepper";
 import FormReview from "../formReview";
 import Form_2 from "../form_2";
 import ModalLoading from "../../../../../components/modal/modalLoading";
+import { toSlug } from "../../../../../utils/toSlug";
+import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
 
 const UpdateDesainIndustri = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,7 +27,7 @@ const UpdateDesainIndustri = () => {
   const { error, currentStep, setCurrentStep } = useSubmissionType();
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent, setDraftPatent } = useDraftSubmission();
-  const { types, submissionId } = useComplate();
+  const { types, submissionId, submissionType } = useComplate();
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
@@ -173,6 +175,16 @@ const UpdateDesainIndustri = () => {
       <div className="lg:w-[84%] w-full  border ">
         <HeaderNavigation />
         <div className=" px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb
+              title="PROGRES PENGAJUAN"
+              items={[
+                { label: "Progres Pengajuan", url: `/histori-pengajuan/${toSlug(submissionType)}` },
+                { label: submissionType, url: "" },
+                { label: "Ubah Pengajuan", url: "" },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50 ">
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Paten</h1>

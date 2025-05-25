@@ -11,6 +11,7 @@ import UpdateButton from "../../../../components/button/updateButton";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ModalWarning from "../../../../components/modal/modalWarning";
 import ModalIndusDesign from "../components/modalIndusDesign";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const IndustrialDesignCategory = () => {
   const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useIndusDesign();
@@ -40,6 +41,15 @@ const IndustrialDesignCategory = () => {
       <div className="lg:w-[84%] w-full  border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb
+              title="JENIS DESAIN INDUSTRI"
+              items={[
+                { label: "Jenis Desain Industri", url: "" },
+                // { label: "FAQ", url: "" },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Jenis Desain Industri</span>

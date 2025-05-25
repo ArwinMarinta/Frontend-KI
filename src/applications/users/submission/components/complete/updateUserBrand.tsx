@@ -16,11 +16,13 @@ import FormBrand from "../formBrand";
 import Form_2 from "../form_2";
 import { FormAdditionalBrand } from "../../../../../types/brandType";
 import { processFile } from "../../../../../utils/formatFile";
+import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
+import { toSlug } from "../../../../../utils/toSlug";
 
 const UpdateUserBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, setLoading } = useLoadingProses();
-  const { types, submissionId } = useComplate();
+  const { types, submissionId, submissionType } = useComplate();
   const { currentStep, setCurrentStep } = useSubmissionType();
   const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, validateBrandData, setFormBrandError, formBrandError, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand } =
@@ -201,9 +203,19 @@ const UpdateUserBrand = () => {
       <div className="lg:w-[84%] w-full border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb
+              title="PROGRES PENGAJUAN"
+              items={[
+                { label: "Progres Pengajuan", url: `/histori-pengajuan/${toSlug(submissionType)}` },
+                { label: submissionType, url: "" },
+                { label: "Ubah Pengajuan", url: "" },
+              ]}
+            />
+          </div>
           <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex justify-center mb-10">
-              <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Merek</h1>
+              <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Ubah Pengajuan Merek</h1>
             </div>
             <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
 

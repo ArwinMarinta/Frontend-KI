@@ -123,6 +123,36 @@ const useUpdateProgress = () => {
     }
   };
 
+  const handleUpdateProgressAdmin = async (type: string | undefined) => {
+    const validationErrors = {
+      reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
+      paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
+      certificateFile: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
+    };
+    const hasErrors = Object.values(validationErrors).some((error) => error !== null);
+    setFormErrors(validationErrors);
+
+    if (hasErrors) return;
+
+    setLoading(true);
+    try {
+      await dispatch(updateReviewerSubmissionProgress(submissionId, formUpdateProgress));
+
+      setFormUpdateProgress({
+        reviewStatus: "",
+        comments: "",
+        paymentCode: "",
+        fileNames: [],
+        files: [],
+        certificateFile: null,
+      });
+
+      navigate(`/permohonan/${type}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     submissionId,
     dispatch,
@@ -134,6 +164,7 @@ const useUpdateProgress = () => {
     handleRemoveFile,
     handleUpdateProgress,
     loading,
+    handleUpdateProgressAdmin,
   };
 };
 

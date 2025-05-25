@@ -4,9 +4,6 @@ import { FormComplateIndustDesign, FormDesignSubmissionErrors } from "../../../.
 import InputFile from "../field/InputFile";
 import { claimOptions, designTypes } from "../../../../../data/indusDesign";
 import useComplate from "../../hooks/useComplate";
-import { toSlug } from "../../../../../utils/toSlug";
-import { Link } from "react-router-dom";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../service/store";
 
@@ -23,13 +20,7 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
   const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing.submissionType.indusDesign);
   return (
     <>
-      <div className="grid grid-cols-3 items-center h-24">
-        <Link to={`/histori-pengajuan/${toSlug(submissionType)}`}>
-          <button className="flex flex-row items-center gap-2 bg-GREY01 py-2 px-3 rounded-md">
-            <IoArrowBackCircleOutline className="text-2xl" />
-            <span className="text-base font-medium">Kembali</span>
-          </button>
-        </Link>
+      <div className="flex items-center h-24">
         <h1 className="text-center text-3xl w-full font-bold">Formulir Pendaftaran {submissionType}</h1>
       </div>
       <div className="flex flex-col gap-6">

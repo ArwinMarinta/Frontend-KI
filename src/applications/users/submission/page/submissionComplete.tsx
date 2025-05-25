@@ -26,6 +26,8 @@ import useConfirmPayment from "../hooks/useConfirmPayment";
 import { getDetailSubmission } from "../../../../service/actions/submissionAction";
 import FormComplateCopyright from "../components/complete/formComplateCopyright";
 import ComplateBrand from "../components/complete/complateBrand";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { toSlug } from "../../../../utils/toSlug";
 
 const SubmissionComplete = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -79,10 +81,18 @@ const SubmissionComplete = () => {
         <div className="lg:w-[84%] w-full  border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="PROGRES PENGAJUAN"
+                items={[
+                  { label: "Progres Pengajuan", url: `/histori-pengajuan/${toSlug(submissionType)}` },
+                  { label: submissionType, url: "" },
+                  { label: types, url: "" },
+                ]}
+              />
+            </div>
             <div className=" lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50 ">
-              {types === "Lengkapi Berkas" && submissionType === "Paten" && (
-                <FormComplatePatent submissionType={submissionType} formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} />
-              )}
+              {types === "Lengkapi Berkas" && submissionType === "Paten" && <FormComplatePatent formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} />}
               {types === "Lengkapi Berkas" && submissionType === "Desain Industri" && (
                 <FormComplateIndustrialDesign
                   handleClaimCheckboxChange={handleClaimCheckboxChange}

@@ -1,5 +1,6 @@
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideNavigation from "../../../../components/adminNavigation/sideNavigation";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import AddButton from "../../../../components/button/addButton";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ManageButton from "../../../../components/button/manageButton";
@@ -16,6 +17,8 @@ import useGroup from "../hooks/useGroup";
 const ManageGroup = () => {
   const { group, limit, totalPages, currentPage, dispatch, handleDeleteFaq, years } = useGroup();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
+
+  console.log(id);
 
   const handleModal = (id: number | null, types: string) => {
     if (types === "Add") {
@@ -41,9 +44,18 @@ const ManageGroup = () => {
       <div className="lg:w-[84%] w-full  border">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb
+              title="PENDANAAN"
+              items={[
+                { label: "Tahun Pendanaan", url: "/manajemen/tahun/pendanaan" },
+                { label: "Tahun Pendanaan", url: `/manajemen/tahun/pendanaan/${years}` },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
-              <span className="text-3xl font-semibold">Tahun Pendanaan</span>
+              <span className="text-3xl font-semibold">Gelombang Pendanaan</span>
               <AddButton onClick={() => handleModal(null, "Add")} />
             </div>
             <div className="  ">

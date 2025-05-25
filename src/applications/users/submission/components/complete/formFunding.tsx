@@ -1,4 +1,3 @@
-import BackButton from "../../../../../components/button/backButton";
 import FieldDropdown from "../../../../../components/input/FieldDropDown";
 import { SchemaPayment } from "../../../../../data/funding";
 import { Group } from "../../../../../types/fundingType";
@@ -19,10 +18,7 @@ interface FormComplateTermsProps {
 const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, handleSubmitSchema }: FormComplateTermsProps) => {
   return (
     <>
-      <div className="grid grid-cols-3 items-center h-24">
-        <div>
-          <BackButton url={"/histori-pengajuan"} />
-        </div>
+      <div className="flex items-center h-24">
         <h1 className="text-center text-3xl w-full font-bold">Skema Pendanaan</h1>
       </div>
       <div className="flex flex-col gap-6">

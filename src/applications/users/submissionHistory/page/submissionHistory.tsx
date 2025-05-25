@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import { toSlug } from "../../../../utils/toSlug";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionHistory = () => {
   const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission } = useHistorySubmission();
@@ -33,6 +34,9 @@ const SubmissionHistory = () => {
         <div className="lg:w-[84%] w-full border ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb title="PROGRES PENGAJUAN" items={[{ label: "Progres Pengajuan", url: "" }]} />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <h1 className="text-3xl font-bold mb-14">Progres Pengajuan</h1>
               <div className="flex flex-row w-full h-full">
@@ -111,7 +115,7 @@ const SubmissionHistory = () => {
 
                       onClick: () => {},
                       component: (item: Review) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Pembayaran" && item.submission?.payment?.id) {
+                        if (item.progress.length > 0 && item.progress[0].status === "Pembayaran" && item.progress[0].isStatus === false) {
                           return (
                             <Link
                               to="/lengkapi-berkas-pengajuan"

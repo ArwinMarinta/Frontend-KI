@@ -10,6 +10,7 @@ import UpdateButton from "../../../../components/button/updateButton";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ModalBrand from "../components/modalBrand";
 import ModalWarning from "../../../../components/modal/modalWarning";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const BrandCategory = () => {
   const { brands, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useBrand();
@@ -39,6 +40,9 @@ const BrandCategory = () => {
       <div className="lg:w-[84%] w-full  border ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb title="JENIS MEREK" items={[{ label: "Jenis Merek", url: "" }]} />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Jenis Merek</span>

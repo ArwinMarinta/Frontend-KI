@@ -11,6 +11,7 @@ import DeleteButton from "../../../../components/button/deleteButton";
 import { DocumentType } from "../../../../types/document";
 import ModalDocument from "../components/modal/modalDocument";
 import { API_FILE } from "../../../../config/config";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ManageDownload = () => {
   const { docs, limit, totalPages, currentPage, dispatch, handleDelete } = useDocument();
@@ -41,6 +42,15 @@ const ManageDownload = () => {
         <div className="lg:w-[84%] w-full  border  ">
           <HeaderNavigation />
           <div className="px-4 lg:px-12  py-8 ">
+            <div className="mb-8">
+              <Breadcrumb
+                title="UNDUHAN"
+                items={[
+                  { label: "Kategori Unduhan", url: "/manajemen/kategori/unduhan" },
+                  { label: "Dokumen Unduhan", url: "" },
+                ]}
+              />
+            </div>
             <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
               <div className="flex flex-row justify-between mb-20">
                 <span className="text-3xl font-semibold">Dokumen Unduhan</span>

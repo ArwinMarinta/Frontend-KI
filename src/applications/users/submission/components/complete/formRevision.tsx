@@ -1,4 +1,3 @@
-import BackButton from "../../../../../components/button/backButton";
 import Field from "../../../../../components/input/fieldInput";
 import FieldTextarea from "../../../../../components/input/fieldTextArea";
 import { API_FILE } from "../../../../../config/config";
@@ -12,10 +11,7 @@ interface FormRevisionProps {
 const FormRevision = ({ progresSubmission }: FormRevisionProps) => {
   return (
     <>
-      <div className="grid grid-cols-3 items-center h-24">
-        <div>
-          <BackButton url={"/histori-pengajuan"} />
-        </div>
+      <div className="flex items-center h-24">
         <h1 className="text-center text-3xl w-full font-bold">Revisi Berkas Pengajuan</h1>
       </div>
       <div className="flex flex-col gap-6">

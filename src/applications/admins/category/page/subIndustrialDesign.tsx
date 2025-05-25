@@ -10,6 +10,7 @@ import UpdateButton from "../../../../components/button/updateButton";
 import DeleteButton from "../../../../components/button/deleteButton";
 import ModalSubIndusDesign from "../components/modalSubIndusDesign";
 import ModalWarning from "../../../../components/modal/modalWarning";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubIndustrialDesign = () => {
   const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useSubIndusDesign();
@@ -39,6 +40,15 @@ const SubIndustrialDesign = () => {
       <div className="lg:w-[84%] w-full  border  ">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8">
+          <div className="mb-8">
+            <Breadcrumb
+              title="SUB JENIS DESAIN INDUSTRI"
+              items={[
+                { label: "Jenis Desain Industri", url: "/kategori/desain-industri" },
+                { label: "Sub-Jenis Desain Industri", url: "" },
+              ]}
+            />
+          </div>
           <div className="lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
             <div className="flex flex-row justify-between mb-20">
               <span className="text-3xl font-semibold">Sub-Jenis Desain Industri</span>

@@ -28,10 +28,10 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
 
   return (
     <div className="flex flex-col">
-      <div>
-        <div className="flex flex-col items-center md:mt-20 mt-10">
-          <h2 className="text-2xl md:text-[32px] font-semibold">Review Pengajuan</h2>
-          <p className="text-justify mt-3">Silakan tinjau kembali detail pengajuan Anda sebelum mengirim. Pastikan semua informasi yang Anda isi sudah benar dan sesuai untuk meminimalisir kesalahan input yang dapat menghambat proses verifikasi atau persetujuan.</p>
+      <div className="flex flex-col items-center md:mt-20 mt-10 gap-6">
+        <h2 className="text-2xl md:text-[32px] font-semibold">Review Pengajuan</h2>
+        <div className="md:w-[60%] w-full">
+          <p className="text-center mt-3">Silakan tinjau kembali detail pengajuan Anda sebelum mengirim. Pastikan semua informasi yang Anda isi sudah benar dan sesuai untuk meminimalisir kesalahan input yang dapat menghambat proses verifikasi atau persetujuan.</p>
         </div>
       </div>
 

@@ -16,13 +16,15 @@ import useComplate from "../../hooks/useComplate";
 import { processFile } from "../../../../../utils/formatFile";
 import { PersonalData } from "../../../../../types/submissionType";
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
+import { toSlug } from "../../../../../utils/toSlug";
 
 const UpdateUserCopyright = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, setLoading } = useLoadingProses();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { types, submissionId, actionTypes } = useComplate();
+  const { types, submissionId, actionTypes, submissionType } = useComplate();
   const navigate = useNavigate();
   const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData, setFormCopyright } = useCopyright();
@@ -208,9 +210,19 @@ const UpdateUserCopyright = () => {
       <div className="lg:w-[84%] w-full">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb
+              title="PROGRES PENGAJUAN"
+              items={[
+                { label: "Progres Pengajuan", url: `/histori-pengajuan/${toSlug(submissionType)}` },
+                { label: submissionType, url: "" },
+                { label: "Ubah Pengajuan", url: "" },
+              ]}
+            />
+          </div>
           <div className="md:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50 ">
             <div className="flex justify-center mb-10">
-              <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Hak Cipta</h1>
+              <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Ubah Pengajuan Hak Cipta</h1>
             </div>
             <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
 

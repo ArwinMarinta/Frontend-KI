@@ -45,6 +45,7 @@ const SideSubmisson = () => {
           <div className="mb-2 flex flex-col gap-1">
             <h1 className="font-bold text-GREY02 mb-2">PANGAJUAN SAYA</h1>
             <Button text={"Progres Pengajuan"} icon={<RiHistoryLine className="text-lg" />} url={`/histori-pengajuan/${type}`} location={location} />
+
             {/* <Button text={"Riwayat"} icon={<RiHistoryLine className="text-lg" />} url={"/histori-pengajuan/hak-cipta"} location={location} /> */}
           </div>
         </div>

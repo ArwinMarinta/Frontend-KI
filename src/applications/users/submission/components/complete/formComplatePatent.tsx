@@ -2,33 +2,23 @@ import Field from "../../../../../components/input/fieldInput";
 import { FormComplatePatenSubmission, FormComplatePatenSubmissionErrors } from "../../../../../types/submissionType";
 import FieldDropdown from "../../../../../components/input/FieldDropDown";
 import InputFile from "../field/InputFile";
-import { Link } from "react-router-dom";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { toSlug } from "../../../../../utils/toSlug";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../service/store";
 
 interface FormComplatePatentProps {
-  submissionType: string;
   formComplatePaten: FormComplatePatenSubmission;
   formComplatePatenError: FormComplatePatenSubmissionErrors;
   handleChangeComplatePaten: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSubmitComplatePatent: () => void;
 }
 
-const FormComplatePatent = ({ submissionType, formComplatePaten, formComplatePatenError, handleChangeComplatePaten, handleSubmitComplatePatent }: FormComplatePatentProps) => {
+const FormComplatePatent = ({ formComplatePaten, formComplatePatenError, handleChangeComplatePaten, handleSubmitComplatePatent }: FormComplatePatentProps) => {
   const { typePaten } = useSelector((state: RootState) => state.landing.submissionType.paten);
 
   return (
     <>
-      <div className="grid grid-cols-3 items-center h-24">
-        <Link to={`/histori-pengajuan/${toSlug(submissionType)}`}>
-          <button className="flex flex-row items-center gap-2 bg-GREY01 py-2 px-3 rounded-md">
-            <IoArrowBackCircleOutline className="text-2xl" />
-            <span className="text-base font-medium">Kembali</span>
-          </button>
-        </Link>
-
+      <div className="flex  items-center h-24">
         <h1 className="text-center text-3xl w-full font-bold">Formulir Lengkapi Berkas Paten</h1>
       </div>
       <div className="flex flex-col gap-6">
