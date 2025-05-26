@@ -18,7 +18,7 @@ import useReviewer from "../hooks/useReviewer";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubmissionPatent = () => {
-  const { patent, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = usePatent();
+  const { patent, currentPage, limit, totalPages, dispatch, handleDeleteSubmission, search, setSearch } = usePatent();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
   const { setStatus, status } = useStatus();
   const { reviewer, setReviewer } = useReviewer();
@@ -62,6 +62,9 @@ const SubmissionPatent = () => {
                   <ButtonAdd url={"/permohonan/paten/tambah"} />
                 </div>
                 <TableWithPagination<Review>
+                  search={search}
+                  onSearchChange={setSearch}
+                  excel={true}
                   columns={[
                     { label: "Nama Pemohon", accessor: "user", render: (item) => item.user?.fullname },
                     { label: "Judul Invensi", accessor: "submission", render: (item) => item.submission?.patent?.inventionTitle ?? "-" },

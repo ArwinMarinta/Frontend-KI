@@ -66,7 +66,7 @@ const useChangePassword = () => {
     const validationErrors = {
       password: form.password.trim() === "" ? "Password tidak boleh kosong" : null,
       newPassword: form.newPassword.trim() === "" ? "Password tidak boleh kosong" : null,
-      confirmPassword: form.password !== form.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null,
+      confirmPassword: form.newPassword !== form.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null,
     };
 
     setErrors(validationErrors);
@@ -78,6 +78,11 @@ const useChangePassword = () => {
     setLoading(true);
     try {
       await dispatch(changePassword(form));
+      setForm({
+        password: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
     } finally {
       setLoading(false);
     }

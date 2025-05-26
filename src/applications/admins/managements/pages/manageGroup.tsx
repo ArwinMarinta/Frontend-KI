@@ -18,8 +18,6 @@ const ManageGroup = () => {
   const { group, limit, totalPages, currentPage, dispatch, handleDeleteFaq, years } = useGroup();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
-  console.log(id);
-
   const handleModal = (id: number | null, types: string) => {
     if (types === "Add") {
       handleOpenModal(null, "AddGroups");
@@ -66,6 +64,7 @@ const ManageGroup = () => {
                   { label: "Waktu Selesai", accessor: "endDate", render: (item) => formatIndonesianDate(item.endDate) },
                 ]}
                 data={group}
+                searchable={false}
                 limit={limit}
                 totalPages={totalPages}
                 currentPage={currentPage}

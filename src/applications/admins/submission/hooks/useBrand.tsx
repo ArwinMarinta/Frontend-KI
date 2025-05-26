@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import { deleteSubmission, getSubmissionBrand } from "../../../../service/actions/submissionAction";
@@ -7,12 +7,12 @@ const useBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { brand, currentPage, limit, totalPages } = useSelector((state: RootState) => state.submission.brandData);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    if (token) {
-      dispatch(getSubmissionBrand(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getSubmissionBrand(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit]);
+  }, [token, dispatch, currentPage, limit, search]);
 
   const handleDeleteSubmission = (id: number | string | null) => {
     const newPage = brand.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
@@ -26,6 +26,8 @@ const useBrand = () => {
     dispatch,
     totalPages,
     handleDeleteSubmission,
+    search,
+    setSearch,
   };
 };
 

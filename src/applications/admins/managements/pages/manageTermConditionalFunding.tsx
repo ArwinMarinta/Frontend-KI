@@ -55,6 +55,7 @@ const ManageTermConditionalFunding = () => {
                   columns={[{ label: "Syarat dan Ketentuan", accessor: "terms" }]}
                   data={terms}
                   limit={limit}
+                  searchable={false}
                   totalPages={totalPages}
                   currentPage={currentPage}
                   // totalData={totalValue}

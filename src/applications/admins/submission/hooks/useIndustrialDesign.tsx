@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import { deleteSubmission, getSubmissionIndustrialDesign } from "../../../../service/actions/submissionAction";
@@ -7,12 +7,12 @@ const useIndustrialDesign = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { design, currentPage, limit, totalPages } = useSelector((state: RootState) => state.submission.industrialDesignData);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    if (token) {
-      dispatch(getSubmissionIndustrialDesign(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getSubmissionIndustrialDesign(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit]);
+  }, [token, dispatch, currentPage, limit, search]);
 
   const handleDeleteSubmission = (id: number | string | null) => {
     const newPage = design.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
@@ -26,6 +26,8 @@ const useIndustrialDesign = () => {
     dispatch,
     totalPages,
     handleDeleteSubmission,
+    search,
+    setSearch,
   };
 };
 

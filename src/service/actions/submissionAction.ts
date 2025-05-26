@@ -9,7 +9,7 @@ import { getUserSubmission } from "./historyAction";
 import { FormSchema } from "../../types/schemaPayment";
 import { setReviewer } from "../reducers/userReducer";
 
-export const getSubmissionPatent = (currentPage: number, limit: number): AppThunk => {
+export const getSubmissionPatent = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -21,6 +21,7 @@ export const getSubmissionPatent = (currentPage: number, limit: number): AppThun
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -68,7 +69,7 @@ export const getReviewer = (): AppThunk => {
   };
 };
 
-export const getSubmissionCopyRight = (currentPage: number, limit: number): AppThunk => {
+export const getSubmissionCopyRight = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -80,6 +81,7 @@ export const getSubmissionCopyRight = (currentPage: number, limit: number): AppT
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -103,7 +105,7 @@ export const getSubmissionCopyRight = (currentPage: number, limit: number): AppT
     }
   };
 };
-export const getSubmissionBrand = (currentPage: number, limit: number): AppThunk => {
+export const getSubmissionBrand = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -115,6 +117,7 @@ export const getSubmissionBrand = (currentPage: number, limit: number): AppThunk
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -138,7 +141,7 @@ export const getSubmissionBrand = (currentPage: number, limit: number): AppThunk
     }
   };
 };
-export const getSubmissionIndustrialDesign = (currentPage: number, limit: number): AppThunk => {
+export const getSubmissionIndustrialDesign = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -150,6 +153,7 @@ export const getSubmissionIndustrialDesign = (currentPage: number, limit: number
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

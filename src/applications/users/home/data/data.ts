@@ -45,25 +45,25 @@ export const Section3: Section3Type[] = [
   {
     id: 1,
     title: "Hak Cipta",
-    description: "Hak Cipta merupakan salah satu bagian dari kekayaan intelektual yang memiliki ruang lingkup objek dilindungi paling luas, karena mencakup ilmu pengetahuan, seni dan sastra (art and literary) yang di dalamnya mencakup pula program komputer.",
+    description: "Hak Cipta adalah hak eksklusif pencipta yang timbul secara otomatis berdasarkan prinsip deklaratif setelah suatu ciptaan diwujudkan dalam bentuk nyata tanpa mengurangi pembatasan sesuai dengan ketentuan peraturan perundang-undangan.",
     url: "https://www.dgip.go.id/menu-utama/hak-cipta/pengenalan",
   },
   {
     id: 1,
     title: "Paten",
-    description: "Hak Cipta merupakan salah satu bagian dari kekayaan intelektual yang memiliki ruang lingkup objek dilindungi paling luas, karena mencakup ilmu pengetahuan, seni dan sastra (art and literary) yang di dalamnya mencakup pula program komputer.",
+    description: "Paten adalah hak eksklusif yang diberikan oleh negara kepada inventor atas hasil invensinya di bidang teknologi untuk jangka waktu tertentu melaksanakan sendiri invensi tersebut atau memberikan persetujuan kepada pihak lain untuk melaksanakannya",
     url: "https://www.dgip.go.id/menu-utama/paten/pengenalan",
   },
   {
     id: 1,
     title: "Merek",
-    description: "Hak Cipta merupakan salah satu bagian dari kekayaan intelektual yang memiliki ruang lingkup objek dilindungi paling luas, karena mencakup ilmu pengetahuan, seni dan sastra (art and literary) yang di dalamnya mencakup pula program komputer.",
+    description: "Merek adalah elemen penting dalam bisnis yang membedakan produk atau jasa. Merek bisa berupa kata, logo, suara, bentuk tiga dimensi, atau hologram dan memberikan identitas unik bagi produk.",
     url: "https://www.dgip.go.id/menu-utama/merek/pengenalan",
   },
   {
     id: 1,
     title: "Desain Industri",
-    description: "Hak Cipta merupakan salah satu bagian dari kekayaan intelektual yang memiliki ruang lingkup objek dilindungi paling luas, karena mencakup ilmu pengetahuan, seni dan sastra (art and literary) yang di dalamnya mencakup pula program komputer.",
+    description: "Desain Industri adalah suatu kreasi bentuk, konfigurasi, atau komposisi garis dan warna yang memberikan kesan estetis pada suatu produk, komoditas industri, maupun kerajinan tangan. Desain industri bisa berbentuk 3 dimensi atau 2 dimensi. ",
     url: "https://www.dgip.go.id/menu-utama/desain-industri/pengenalan",
   },
 ];

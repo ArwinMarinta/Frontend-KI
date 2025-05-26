@@ -131,16 +131,11 @@ const Home = () => {
             <p className="text-start text-lg font-normal">
               kekayaan intelektual (KI) apa yang Anda butuhkan? <br /> Pelajari berbagai jenis KI yang dapat Anda lindungi bersama kami.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full h-full">
               {Section3.map((data) => (
-                <div key={data.id} className="flex flex-col rounded-md border w-full px-4 py-4  justify-center items-start ">
-                  <h1
-                    className=" max-w-fit text-[20px] text-PRIMARY01 font-semibold
-                "
-                  >
-                    {data.title}
-                  </h1>
-                  <p className="text-justify mt-4">{data.description}</p>
+                <div key={data.id} className="flex flex-col h-full rounded-md border w-full px-4 py-4 justify-start items-start">
+                  <h1 className="max-w-fit text-[20px] text-PRIMARY01 font-semibold">{data.title}</h1>
+                  <p className="text-justify mt-4 flex-grow">{data.description}</p>
                   <Button url={data.url} />
                 </div>
               ))}

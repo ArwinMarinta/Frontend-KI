@@ -95,10 +95,10 @@ export const changePassword = (form: FormChangePassword): AppThunk => {
       const { token } = getState().auth;
 
       await axios.post(
-        `${API_URL}/auth/send-email-reset-password`,
+        `${API_URL}/user/password`,
 
         {
-          password: form.password,
+          oldPassword: form.password,
           newPassword: form.newPassword,
           confirmPassword: form.confirmPassword,
         },
@@ -175,10 +175,9 @@ export const activationAccount = (token: string | undefined): AppThunk => {
 export const loginWithGoogleAction = (accessToken: string, navigate: NavigateFunction): AppThunk => {
   return async (dispatch) => {
     try {
-      console.log(accessToken);
       const response = await axios.post(
         `${API_URL}/auth/login-google`,
-        { idToken: accessToken },
+        { accessToken: accessToken },
         {
           headers: {
             "Content-Type": "application/json",

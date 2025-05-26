@@ -52,6 +52,7 @@ const PatentCategory = () => {
               <TableWithPagination<CategoryPatent>
                 columns={[{ label: "Jenis Paten", accessor: "title" }]}
                 data={patents}
+                searchable={false}
                 limit={limit}
                 totalPages={Number.isFinite(totalPages) && totalPages > 0 ? totalPages : 1}
                 currentPage={Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1}

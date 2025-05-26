@@ -16,9 +16,11 @@ import { toSlug } from "../../../../utils/toSlug";
 import ButtonAdd from "../../../../components/button/linkButton";
 import useReviewer from "../hooks/useReviewer";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const SubmissionCopyright = () => {
-  const { copyright, currentPage, limit, totalPages, dispatch, handleDeleteSubmission } = useCopyright();
+  const { copyright, currentPage, limit, totalPages, dispatch, handleDeleteSubmission, setSearch, search } = useCopyright();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
   const { setStatus, status, handleChange } = useStatus();
   const { reviewer, setReviewer } = useReviewer();
@@ -41,6 +43,28 @@ const SubmissionCopyright = () => {
     }
   };
 
+  const exportToExcel = () => {
+    const dataToExport = copyright.map((item) => ({
+      "Nama Pemohon": item?.user?.fullname ?? "-",
+      Pembayaran: item?.submission?.submissionScheme ?? "-",
+      Reviewer: item?.reviewer?.fullname ?? "-",
+      "Status Pengajuan": item?.centralStatus ?? "-",
+      "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Permohonan Hak Cipta");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const dataBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(dataBlob, "Permohonan_Merek.xlsx");
+  };
+
   return (
     <>
       <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -60,7 +84,12 @@ const SubmissionCopyright = () => {
                   <span className="text-3xl font-semibold">Hak Cipta</span>
                   <ButtonAdd url={"/permohonan/hak-cipta/tambah"} />
                 </div>
+
                 <TableWithPagination<Review>
+                  exportButton={exportToExcel}
+                  search={search}
+                  excel={true}
+                  onSearchChange={setSearch}
                   columns={[
                     { label: "Nama Pemohon", accessor: "user", render: (item) => item.user?.fullname },
                     { label: "Judul Ciptaan", accessor: "submission", render: (item) => item.submission?.copyright?.titleInvention ?? "-" },

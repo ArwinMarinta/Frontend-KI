@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { deleteSubmission, getSubmissionPatent } from "../../../../service/actions/submissionAction";
 
 const usePatent = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { patent, currentPage, limit, totalPages } = useSelector((state: RootState) => state.submission.patentData);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (token) {
-      dispatch(getSubmissionPatent(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getSubmissionPatent(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit]);
+  }, [token, dispatch, currentPage, limit, search]);
 
   const handleDeleteSubmission = (id: number | string | null) => {
     const newPage = patent.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
@@ -26,6 +27,8 @@ const usePatent = () => {
     dispatch,
     totalPages,
     handleDeleteSubmission,
+    search,
+    setSearch,
   };
 };
 

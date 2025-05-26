@@ -51,6 +51,7 @@ const ManageQuota = () => {
                   { label: "Sisa Kouta", accessor: "remainingQuota" },
                 ]}
                 data={quota}
+                searchable={false}
                 limit={limit}
                 totalPages={totalPages}
                 currentPage={currentPage}

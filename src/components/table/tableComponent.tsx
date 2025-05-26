@@ -1,5 +1,6 @@
 import { Pagination } from "flowbite-react";
 import DropdownLimit from "../input/dropdownLimit";
+import { useState } from "react";
 
 type ActionType<T> = {
   label: string;
@@ -17,9 +18,13 @@ type TableProps<T extends { id: number | string }> = {
   onPageChange: (page: number) => void;
   actions?: ActionType<T>[];
   searchable?: boolean;
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  exportButton?: () => void;
+  excel?: boolean;
 };
 
-function TableWithPagination<T extends { id: number | string }>({ columns, data, limit, totalPages, currentPage, onLimitChange, onPageChange, actions = [], searchable = true }: TableProps<T>) {
+function TableWithPagination<T extends { id: number | string }>({ columns, data, limit, totalPages, currentPage, onLimitChange, onPageChange, actions = [], searchable = true, onSearchChange, exportButton, excel = false }: TableProps<T>) {
   const customTheme = {
     pages: {
       selector: {
@@ -28,13 +33,49 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
     },
   };
 
+  const [localSearch, setLocalSearch] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearchChange?.(localSearch);
+  };
+
   return (
     <>
-      <div className="flex lg:flex-row flex-col gap-6 lg:gap-2 lg justify-between mb-6">
-        {searchable && <input type="text" placeholder="Cari..." className="p-2 border border-BORDER01 text-base rounded-md focus:outline-none" />}
-        <div className="flex items-center gap-3">
-          <DropdownLimit value={limit} onChange={onLimitChange} />
-          <span className="font-medium">entries per page</span>
+      <div className={`flex lg:flex-row flex-col items-center gap-6 lg:gap-2 lg mb-6 ${searchable ? "justify-between" : "justify-end"}`}>
+        {searchable && (
+          <form onSubmit={handleSubmit} className="flex xl:w-[500px]">
+            <div className="relative w-full">
+              <input
+                type="search"
+                id="search-dropdown"
+                className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-md border border-gray-300 focus:ring-PRIMARY01 focus:border-PRIMARY01"
+                placeholder="Pembayaran, progres, status"
+                required
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+              />
+              <button type="submit" className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-PRIMARY01 rounded-e-lg border border-PRIMARY01 hover:bg-PRIMARY01 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+                <span className="sr-only">Search</span>
+              </button>
+            </div>
+          </form>
+        )}
+        <div className="flex items-center h-full gap-6">
+          <div className="flex items-center gap-3">
+            <DropdownLimit value={limit} onChange={onLimitChange} />
+            <span className="font-medium">entries per page</span>
+          </div>
+          {excel && (
+            <div>
+              <button onClick={exportButton} className=" bg-green-600 text-white p-2.5 rounded-md">
+                Unduh Excel
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

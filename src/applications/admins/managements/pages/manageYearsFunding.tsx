@@ -54,6 +54,7 @@ const ManageYearsFunding = () => {
                 columns={[{ label: "Tahun Pendanaan", accessor: "year" }]}
                 data={years}
                 limit={limit}
+                searchable={false}
                 totalPages={totalPages}
                 currentPage={currentPage}
                 // totalData={totalValue}
