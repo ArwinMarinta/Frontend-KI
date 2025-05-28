@@ -1,17 +1,9 @@
-# Gunakan node image yang ringan
-FROM node:18-alpine
-
-# Tentukan working directory di container
+# frontend/Dockerfile
+FROM node:18 AS builder
 WORKDIR /app
-
-# Salin file package.json dan package-lock.json (jika ada)
-COPY package.json package-lock.json* ./
-
-# Install dependencies
-RUN npm install
-
-# Salin semua source code
 COPY . .
+RUN npm install && npm run build
 
-# Build aplikasi Vite React
-RUN npm run build
+FROM nginx:stable-alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY ./nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
