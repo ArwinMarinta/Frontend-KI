@@ -44,6 +44,7 @@ const CreateAccount = () => {
                   options={[
                     { label: "Super Admin", value: "superAdmin" },
                     { label: "Admin", value: "admin" },
+                    { label: "Reviewer", value: "reviewer" },
                     { label: "User", value: "user" },
                   ]}
                   error={errors.role}
