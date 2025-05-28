@@ -19,7 +19,7 @@ const useHistorySubmission = () => {
       .join(" ");
   };
 
-  const isDifferentType = user.some((data) => data.submission?.submissionType.title !== formatType(type)) ? 1 : currentPage;
+  const isDifferentType = user.some((data) => data.submission?.submissionType?.title !== formatType(type)) ? 1 : currentPage;
 
   useEffect(() => {
     const submissionTypeId = type === "hak-cipta" ? 1 : type === "paten" ? 2 : type === "merek" ? 3 : type === "desain-industri" ? 4 : undefined;
