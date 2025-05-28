@@ -15,16 +15,6 @@ export default {
           "2xl": "6rem",
         },
       },
-      containeradmin: {
-        padding: {
-          DEFAULT: "1rem",
-          sm: "2rem",
-          md: "2rem",
-          lg: "4rem",
-          xl: "5rem",
-          "2xl": "6rem",
-        },
-      },
       colors: {
         PRIMARY01: "#0A61AA",
         PRIMARY02: "#FBD159",

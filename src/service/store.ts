@@ -1,5 +1,5 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import rootReducer from "./reducers"; // Ini adalah kombinasi semua slice reducer
+import rootReducer from "./reducers"; 
 
 const store = configureStore({
   reducer: rootReducer,

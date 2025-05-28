@@ -61,7 +61,7 @@ const SubmissionHistory = () => {
                           {
                             label: "Judul Ciptaan",
                             accessor: "submission",
-                            render: (item: Review) => item.submission?.copyright?.titleInvention ?? "-",
+                            render: (item: Review) => item?.submission?.copyright?.titleInvention ?? "-",
                             width: "w-1/3",
                           },
                         ]
@@ -69,10 +69,10 @@ const SubmissionHistory = () => {
                           {
                             label: "Tipe Merek",
                             accessor: "submission",
-                            render: (item: Review) => item.submission?.brand?.brandTypeId ?? "-",
+                            render: (item: Review) => item?.submission?.brand?.brandTypeId ?? "-",
                           },
                         ]),
-                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item.centralStatus, width: "w-1/3" },
+                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item?.centralStatus, width: "w-1/3" },
                     {
                       label: "Progres Pengajuan",
                       accessor: "submission",
@@ -81,8 +81,8 @@ const SubmissionHistory = () => {
                           label={"Lihat Progres"}
                           url={`/histori-pengajuan/progress`}
                           state={{
-                            type: item.progress[0].status,
-                            submissionType: item.submission?.submissionType.title,
+                            type: item.progress[0]?.status,
+                            submissionType: item?.submission?.submissionType?.title,
                             submissionId: item.id,
                           }}
                         />
@@ -93,7 +93,7 @@ const SubmissionHistory = () => {
                       label: "Informasi  Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <Link to="/histori-pengajuan/detail" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, status: "Riwayat" }}>
+                        <Link to="/histori-pengajuan/detail" state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}`, status: "Riwayat" }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-[#D1E7DD] border text-[#055160] font-medium rounded-md flex items-center justify-center whitespace-nowrap">
                             Detail Pengajuan
                           </button>
@@ -120,8 +120,8 @@ const SubmissionHistory = () => {
                             <Link
                               to="/lengkapi-berkas-pengajuan"
                               state={{
-                                types: `${item.progress[0].status}`,
-                                submissionType: `${item.submission?.submissionType.title}`,
+                                types: `${item.progress[0]?.status}`,
+                                submissionType: `${item.submission?.submissionType?.title}`,
                                 submissionId: `${item.submissionId}`,
                                 paymentId: `${item.submission?.payment?.id}`,
                                 billingCode: `${item.submission?.payment?.billingCode}`,
@@ -142,7 +142,7 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Skema Pendanaan" && item.progress[0].isStatus === false) {
                           return (
-                            <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                            <Link to="/lengkapi-berkas-pengajuan" state={{ types: `${item.progress[0]?.status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
                             </Link>
                           );
@@ -158,7 +158,7 @@ const SubmissionHistory = () => {
                           return (
                             <Link
                               to="/lengkapi-berkas-pengajuan"
-                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}
+                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}
                               className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium"
                             >
                               Revisi
@@ -174,7 +174,7 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
                           return (
-                            <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                            <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
                             </Link>
                           );
@@ -190,7 +190,7 @@ const SubmissionHistory = () => {
                           return (
                             <Link
                               to="/lengkapi-berkas-pengajuan"
-                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, patenId: `${item.submission?.patentId}`, designId: `${item.submission?.industrialDesignId}` }}
+                              state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}`, patenId: `${item.submission?.patentId}`, designId: `${item.submission?.industrialDesignId}` }}
                               className="py-1 px-2 whitespace-nowrap overflow-hidden truncate border border-PRIMARY01 rounded-md text-PRIMARY01 font-medium"
                             >
                               Lengkapi Berkas
@@ -207,7 +207,7 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return (
-                            <Link to={`/histori-pengajuan/${toSlug(item.submission?.submissionType.title)}/ubah`} state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}`, actionTypes: "Mengubah Pengajuan" }}>
+                            <Link to={`/histori-pengajuan/${toSlug(item.submission?.submissionType?.title)}/ubah`} state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}`, actionTypes: "Mengubah Pengajuan" }}>
                               <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Ubah</button>
                             </Link>
                           );

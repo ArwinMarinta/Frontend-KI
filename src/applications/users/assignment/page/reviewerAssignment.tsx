@@ -35,11 +35,11 @@ const ReviewerAssignment = () => {
                       render: (item) => {
                         if (item.submission?.brand !== null) {
                           return "Merek";
-                        } else if (item.submission.copyright !== null) {
+                        } else if (item.submission?.copyright !== null) {
                           return "Hak Cipta";
-                        } else if (item.submission.patent !== null) {
+                        } else if (item.submission?.patent !== null) {
                           return "Paten";
-                        } else if (item.submission.industrialDesign !== null) {
+                        } else if (item.submission?.industrialDesign !== null) {
                           return "Desain Industri";
                         }
                       },
@@ -54,7 +54,7 @@ const ReviewerAssignment = () => {
                           url={`/penugasan/progress`}
                           state={{
                             type: item.progress[0].status,
-                            submissionType: item.submission?.submissionType.title,
+                            submissionType: item.submission?.submissionType?.title,
                             submissionId: item.id,
                           }}
                         />
@@ -64,7 +64,7 @@ const ReviewerAssignment = () => {
                       label: "Informasi  Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <Link to={`/histori-pengajuan/detail`} state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType.title}`, submissionId: `${item.id}` }}>
+                        <Link to={`/histori-pengajuan/detail`} state={{ type: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-[#D1E7DD] border text-[#055160] font-medium rounded-md flex items-center justify-center whitespace-nowrap">
                             Detail Pengajuan
                           </button>

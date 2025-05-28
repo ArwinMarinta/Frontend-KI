@@ -73,8 +73,8 @@ const SubmissionPatent = () => {
                       label: "Reviewer",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
-                          {item.reviewer?.fullname ?? "-"}
+                        <button onClick={() => handleModal(item?.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                          {item?.reviewer?.fullname ?? "-"}
                         </button>
                       ),
                     },
@@ -82,8 +82,8 @@ const SubmissionPatent = () => {
                       label: "Status Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Status", item.centralStatus)} title={item.centralStatus} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
-                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item.centralStatus)}</span>
+                        <button onClick={() => handleModal(item.id, "Status", item?.centralStatus)} title={item.centralStatus} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
+                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item?.centralStatus)}</span>
                         </button>
                       ),
                     },
@@ -91,7 +91,7 @@ const SubmissionPatent = () => {
                       label: "Progres Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/progres`} state={{ submissionId: `${item.id}` }}>
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType?.title)}/progres`} state={{ submissionId: `${item?.id}` }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
                             {truncateText(item.progress[0].status)}
                           </button>
@@ -111,7 +111,7 @@ const SubmissionPatent = () => {
                       label: "Detail",
                       onClick: () => {},
                       component: (item) => (
-                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}`, types: "Ubah Paten" }}>
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType?.title)}/detail`} state={{ submissionId: `${item?.id}`, types: "Ubah Paten" }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 ">
                             Detail
                           </button>
@@ -121,7 +121,7 @@ const SubmissionPatent = () => {
                     {
                       label: "Delete",
                       onClick: (item) => handleModal(item.id, "Delete"),
-                      component: (item) => <DeleteButton onClick={() => handleModal(item.id, "Delete")} />,
+                      component: (item) => <DeleteButton onClick={() => handleModal(item?.id, "Delete")} />,
                     },
                   ]}
                 />

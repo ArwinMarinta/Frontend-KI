@@ -116,7 +116,7 @@ const SubmissionCopyright = () => {
                       label: "Progres Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/progres`} state={{ submissionId: `${item.id}` }}>
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType?.title)}/progres`} state={{ submissionId: `${item?.id}` }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
                             {truncateText(item.progress[0].status)}
                           </button>
@@ -136,7 +136,7 @@ const SubmissionCopyright = () => {
                       label: "Detail",
                       onClick: () => {},
                       component: (item) => (
-                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType.title)}/detail`} state={{ submissionId: `${item.id}`, types: "Ubah Hak Cipta" }}>
+                        <Link to={`/permohonan/${toSlug(item.submission?.submissionType?.title)}/detail`} state={{ submissionId: `${item?.id}`, types: "Ubah Hak Cipta" }}>
                           <button title="Klik untuk mengubah progres" className="py-1 px-2 border border-PRIMARY01 rounded-md text-PRIMARY01 ">
                             Detail
                           </button>
