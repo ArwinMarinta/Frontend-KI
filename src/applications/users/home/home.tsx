@@ -3,7 +3,7 @@ import Footer from "../../../components/navigations/footer";
 // import BackgroundImage from "../../../assets/images/image 3.svg";
 import BackgroundImage2 from "../../../assets/images/Background2.webp";
 import PeopleIcon from "../../../assets/images/people_image.svg";
-import { Section2, Section3 } from "./data/data";
+import { Section2, Section3, staticSection4 } from "./data/data";
 import Button from "./components/button";
 import { IoIosWarning } from "react-icons/io";
 import useHome from "./hooks/useHome";
@@ -38,7 +38,7 @@ const Home = () => {
                 {token ? (
                   user?.role === "superAdmin" || user?.role === "admin" ? (
                     <Link to="/dashboard" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
-                      <span>Ajukan</span>
+                      <span>Dashboard</span>
                       <FiArrowRightCircle />
                     </Link>
                   ) : (
@@ -85,38 +85,59 @@ const Home = () => {
               Pengajuan HKI pada tahun 2025 akan dilakukan dengan sistem gelombang (batch), di mana akan dilakukan 3 (tiga) batch dan 1 (satu) batch tambahan dengan status opsional (yang merujuk pada pendanaan yang tersedia), jadwal pendanaan akan diatur sebagai berikut
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full">
-              {period.map((data) => (
-                <div key={data.id} className="flex flex-col rounded-md border w-full  justify-center items-start ">
-                  <h1
-                    className="text-[20px] text-PRIMARY01 font-semibold border-b w-full px-4 py-2 bg-gray-50 rounded-t-md
+            {period && period.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full">
+                {period.map((data) => (
+                  <div key={data.id} className="flex flex-col rounded-md border w-full  justify-center items-start ">
+                    <h1
+                      className="text-[20px] text-PRIMARY01 font-semibold border-b w-full px-4 py-2 bg-gray-50 rounded-t-md
                 "
-                  >
-                    {data.group}
-                  </h1>
-                  <div className="flex flex-col w-full  mt-2">
-                    <div className="px-4 py-2 text-justify">
-                      Total Kouta Pengajuan{" "}
-                      {data.quota
-                        .filter((item) => item.title === "Hak Cipta" || item.title === "Patent" || item.title === "Merek" || item.title === "Desain Industri")
-                        .map((item, index, arr) => (
-                          <span key={item.id}>
-                            <strong>{item.title}</strong> sebanyak {item.quota}
-                            {index === arr.length - 2 ? " dan " : ""}
-                            {index < arr.length - 2 ? ", " : ""}
-                          </span>
-                        ))}
-                    </div>
-                    <h3 className="mt-8 px-4 mb-5 text-PRIMARY01 font-bold">{formatDateRange(data.startDate, data.endDate)}</h3>
-                    {data.quota.map((item) => (
-                      <div key={item.id} className="border-t px-4 py-2">
-                        Kouta {item.title} : {item.remainingQuota}
+                    >
+                      {data.group}
+                    </h1>
+                    <div className="flex flex-col w-full  mt-2">
+                      <div className="px-4 py-2 text-justify">
+                        Total Kouta Pengajuan{" "}
+                        {data.quota
+                          .filter((item) => item.title === "Hak Cipta" || item.title === "Patent" || item.title === "Merek" || item.title === "Desain Industri")
+                          .map((item, index, arr) => (
+                            <span key={item.id}>
+                              <strong>{item.title}</strong> sebanyak {item.quota}
+                              {index === arr.length - 2 ? " dan " : ""}
+                              {index < arr.length - 2 ? ", " : ""}
+                            </span>
+                          ))}
                       </div>
-                    ))}
+                      <h3 className="mt-8 px-4 mb-5 text-PRIMARY01 font-bold">{formatDateRange(data.startDate, data.endDate)}</h3>
+                      {data.quota.map((item) => (
+                        <div key={item.id} className="border-t px-4 py-2">
+                          Kouta {item.title} : {item.remainingQuota}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+
+            {period.length === 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full">
+                {staticSection4.map((data) => (
+                  <div key={data.id} className="flex flex-col rounded-md border w-full justify-center items-start">
+                    <h1 className="text-[20px] text-PRIMARY01 font-semibold border-b w-full px-4 py-2 bg-gray-50 rounded-t-md">{data.batch}</h1>
+                    <div className="flex flex-col w-full mt-2">
+                      <div className="px-4 py-2 text-justify">{data.title}</div>
+                      <h3 className="mt-2 px-4 mb-5 text-PRIMARY01 font-bold">{data.range_submissions}</h3>
+                      {data.kouta.map((item) => (
+                        <div key={item.id} className="border-t px-4 py-2 w-full">
+                          Kouta {item.title} : {item.amount}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="py-4 px-4 bg-YELLOW01 rounded-md text-YELLOW02 font-semibold flex flex-row gap-2 items-center">
               <IoIosWarning />

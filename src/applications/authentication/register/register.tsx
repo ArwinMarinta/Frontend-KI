@@ -1,11 +1,11 @@
 import BackgroundITK from "../../../assets/background_itk.webp";
 import Logo from "../components/logo";
 import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 
 import { useRegister } from "../../../hooks/useRegister";
 
 import FormRegister from "./components/formRegister";
+import GoogleLogin from "../login/components/signInGoogle";
 
 const Register = () => {
   const { formRegister, handleChange, handleRegister, loading, errors, message } = useRegister();
@@ -33,10 +33,7 @@ const Register = () => {
         </div>
 
         <div className="w-full mb-6">
-          <button type="submit" className="bg-white border flex justify-center items-center gap-2 border-PRIMARY01 w-full  p-2 rounded-md transition">
-            <FcGoogle className="text-2xl" />
-            <span>Masuk dengan akun Google</span>
-          </button>
+          <GoogleLogin />
         </div>
 
         <div className="text-center font-medium">

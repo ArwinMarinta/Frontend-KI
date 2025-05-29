@@ -4,9 +4,10 @@ import useContactUs from "../hooks/useContactUs";
 import Field from "../../../../components/input/fieldInput";
 import FieldFile from "../../../../components/input/fieldFile";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
+import ModalLoading from "../../../../components/modal/modalLoading";
 
 const Contact = () => {
-  const { form, errors, handleOnChange, handleSubmit } = useContactUs();
+  const { form, errors, handleOnChange, handleSubmit, loading, message } = useContactUs();
   return (
     <>
       <Navbar />
@@ -16,8 +17,10 @@ const Contact = () => {
             <div className=" flex justify-end w-full">
               <img src={CsImage} alt="..." />
             </div>
-            <form onSubmit={handleSubmit} className="w-full shadow-md flex flex-col items-center border h-full lg:px-12 px-8 gap-4 py-10 rounded-md">
+            <form onSubmit={handleSubmit} className="w-full shadow-md flex flex-col  border h-full lg:px-12 px-8 gap-4 py-10 rounded-md">
               <h1 className="text-[40px] font-bold mb-5 lg:mb-0 ">Butuh Bantuan Kami?</h1>
+              <p className="mb-4">Jika kamu mengalami kesulitan atau ada pertanyaan jangan ragu untuk menghubungi admin kami. </p>
+              {message === "Help Center berhasil ditambahkan" && <div className="bg-green-300 font-medium py-3 px-4 rounded-md text-green-900">Pesan berhasil dikirim ke admin</div>}
               <Field label="Email" value={form.email} name="email" type="email" placeholder="" onChange={handleOnChange} error={errors.email} need />
               <Field label="Nomor Telphone" value={form.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={handleOnChange} error={errors.phoneNumber} need />
               <Field label="Masalah" value={form.problem} name="problem" type="text" placeholder="" onChange={handleOnChange} error={errors.problem} need />
@@ -25,13 +28,14 @@ const Contact = () => {
               <FieldFile label="Dokumen" value={form.document} name="document" onChange={handleOnChange} />
 
               <div className="w-full flex justify-end mt-10">
-                <button type="submit" className="px-6 py-2 bg-PRIMARY01 rounded-md text-white font-semibold">
+                <button disabled={loading} type="submit" className="px-6 py-2 bg-PRIMARY01 rounded-md text-white font-semibold">
                   Kirim
                 </button>
               </div>
             </form>
           </section>
         </div>
+        <ModalLoading show={loading} />
       </main>
     </>
   );

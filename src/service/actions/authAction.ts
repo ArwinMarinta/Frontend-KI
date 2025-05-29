@@ -43,6 +43,7 @@ export const login = (email: string, password: string, navigate: NavigateFunctio
 
       if (response.status === 200) {
         dispatch(setToken(response.data.token));
+
         if (response.data.role === "superAdmin" || response.data.role === "admin") {
           navigate("/dashboard");
         }
@@ -54,12 +55,15 @@ export const login = (email: string, password: string, navigate: NavigateFunctio
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          const errorMessage = error.response.data?.message || "Terjadi kesalahan";
-          navigate("/login", {
-            state: { message: errorMessage },
-          });
-        } else {
-          console.log("No response received:", error.message);
+          console.log(error.response.data.message);
+          if (error.response.data.message === "Email belum diverifikasi. Link verifikasi telah dikirim ulang ke email Anda.") {
+            navigate("/verify-email");
+          } else {
+            const errorMessage = error.response.data?.message || "Terjadi kesalahan";
+            navigate("/login", {
+              state: { message: errorMessage },
+            });
+          }
         }
       }
     }
@@ -157,21 +161,29 @@ export const resetPassword = (token: string | undefined, newPassword: string, co
   };
 };
 
-export const activationAccount = (token: string | undefined): AppThunk => {
+export const activationAccount = (token: string | undefined, navigate: NavigateFunction): AppThunk => {
   return async () => {
     try {
-      await axios.get(`${API_URL}/verify-email/${token}`);
+      const response = await axios.get(`${API_URL}/auth/verify-email/${token}`);
+
+      if (response.data.message === "Email berhasil diverifikasi. Akun Anda kini aktif.") {
+        navigate(`/aktivasi-email/${token}`, { state: { message: "berhasil" } });
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           console.log(error.response.data.message);
+          if (error.response.data.message === "Email sudah diverifikasi sebelumnya.") {
+            navigate(`/login`);
+          }
         } else {
-          console.log("No response received:", error.message);
+          navigate(`/aktivasi-email/${token}`, { state: { message: "berhasil" } });
         }
       }
     }
   };
 };
+
 export const loginWithGoogleAction = (accessToken: string, navigate: NavigateFunction): AppThunk => {
   return async (dispatch) => {
     try {
@@ -185,10 +197,16 @@ export const loginWithGoogleAction = (accessToken: string, navigate: NavigateFun
         }
       );
 
-      console.log(response);
+      if (response.status === 200) {
+        dispatch(setToken(response.data.token));
+        if (response.data.role === "superAdmin" || response.data.role === "admin") {
+          navigate("/dashboard");
+        }
 
-      dispatch(setToken(response.data.token));
-      navigate("/");
+        if (response.data.role === "user" || response.data.role === "reviewer") {
+          navigate("/dashboard/pengajuan");
+        }
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {

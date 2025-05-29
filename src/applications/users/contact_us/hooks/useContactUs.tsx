@@ -3,9 +3,17 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../service/store";
 import { FormCreateHelpCenter } from "../../../../types/helpCenter";
 import { createHelpCenter } from "../../../../service/actions/helpCenterAction";
+import { useLocation, useNavigate } from "react-router-dom";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
 
 const useContactUs = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const message = location.state?.message ?? "";
+
+  const { loading, setLoading } = useLoadingProses();
 
   const [form, setForm] = useState<FormCreateHelpCenter>({
     email: "",
@@ -23,9 +31,16 @@ const useContactUs = () => {
   });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: !value }));
+    const target = e.target;
+
+    if (target instanceof HTMLInputElement && target.type === "file") {
+      const files = target.files;
+      setForm((prev) => ({ ...prev, [target.name]: files?.[0] || null }));
+      setErrors((prev) => ({ ...prev, [target.name]: !files?.length }));
+    } else {
+      setForm((prev) => ({ ...prev, [target.name]: target.value }));
+      setErrors((prev) => ({ ...prev, [target.name]: !target.value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,15 +58,20 @@ const useContactUs = () => {
     const hasError = Object.values(newErrors).some((error) => error);
     if (hasError) return;
 
-    dispatch(createHelpCenter(form));
+    setLoading(true);
+    try {
+      await dispatch(createHelpCenter(form, navigate));
 
-    setForm({
-      email: "",
-      phoneNumber: "",
-      problem: "",
-      message: "",
-      document: null,
-    });
+      setForm({
+        email: "",
+        phoneNumber: "",
+        problem: "",
+        message: "",
+        document: null,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
@@ -60,6 +80,8 @@ const useContactUs = () => {
     errors,
     handleOnChange,
     handleSubmit,
+    loading,
+    message,
   };
 };
 

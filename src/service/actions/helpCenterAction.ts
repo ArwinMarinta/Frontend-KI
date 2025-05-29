@@ -66,7 +66,7 @@ export const getHelpCenterById = (id: number | string): AppThunk => {
   };
 };
 
-export const createHelpCenter = (form: FormCreateHelpCenter): AppThunk => {
+export const createHelpCenter = (form: FormCreateHelpCenter, navigate: NavigateFunction): AppThunk => {
   return async () => {
     try {
       const formData = new FormData();
@@ -75,17 +75,21 @@ export const createHelpCenter = (form: FormCreateHelpCenter): AppThunk => {
       formData.append("problem", form.problem);
       formData.append("message", form.message);
       if (form.document) {
-        formData.append("message", form.document);
+        formData.append("document", form.document);
       }
 
-      await axios.post(`${API_URL}/help-center`, formData, {
+      const response = await axios.post(`${API_URL}/help-center`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      navigate("/hubungi-kami", {
+        state: { message: response.data.message },
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
+        if (error.response) {
           console.log(error.response.data.message);
         } else {
           console.log("No response received:", error.message);
