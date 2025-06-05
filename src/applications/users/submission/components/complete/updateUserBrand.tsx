@@ -18,6 +18,7 @@ import { FormAdditionalBrand } from "../../../../../types/brandType";
 import { processFile } from "../../../../../utils/formatFile";
 import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
 import { toSlug } from "../../../../../utils/toSlug";
+import { PersonalData } from "../../../../../types/submissionType";
 
 const UpdateUserBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -117,7 +118,7 @@ const UpdateUserBrand = () => {
       });
 
       setFormAdditionalBrand([]);
-      navigate("/histori-pengajuan/desain-industri");
+      navigate("/histori-pengajuan/merek");
     } finally {
       setLoading(false);
     }
@@ -183,15 +184,46 @@ const UpdateUserBrand = () => {
       } else {
         setFormAdditionalBrand([]);
       }
+      if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+        // Set Personal Data jika tersedia
+        const mappedContributors = await Promise.all(
+          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+            id: item.id ?? null,
+            isLeader: item.isLeader || false,
+            name: item.name || "",
+            email: item.email || "",
+            faculty: item.faculty || "",
+            studyProgram: item.studyProgram || "",
+            institution: item.institution || "",
+            work: item.work || "",
+            nationalState: item.nationalState || "",
+            countryResidence: item.countryResidence || "",
+            province: item.province || "",
+            city: item.city || "",
+            subdistrict: item.subdistrict || "",
+            ward: item.ward || "",
+            postalCode: item.postalCode || "",
+            phoneNumber: item.phoneNumber || "",
+            address: item.address || "",
+            ktp: item.ktp ? await processFile(item.ktp) : null,
+            facebook: item.facebook || "",
+            whatsapp: item.whatsapp || "",
+            instagram: item.instagram || "",
+            twitter: item.twitter || "",
+          }))
+        );
+
+        setPersonalData(mappedContributors);
+      }
     };
 
     initForm();
-  }, [types, detailSubmission, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand]);
+  }, [types, detailSubmission, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand, setPersonalData]);
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "auto",
     });
   }, [currentStep]);
 
@@ -217,7 +249,7 @@ const UpdateUserBrand = () => {
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Ubah Pengajuan Merek</h1>
             </div>
-            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
+            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
 
             {currentStep === 0 && (
               <FormBrand

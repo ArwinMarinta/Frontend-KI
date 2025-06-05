@@ -124,7 +124,7 @@ const useProfile = () => {
     dispatch(logout());
   };
 
-  return { loading, handleLogout, user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate, isFormChanged };
+  return { loading, handleLogout, user, token, currentStatus, profileStatus, handleStatusChange, form, handleChange, handleSubmit, errors, navigate, isFormChanged, dispatch };
 };
 
 export default useProfile;

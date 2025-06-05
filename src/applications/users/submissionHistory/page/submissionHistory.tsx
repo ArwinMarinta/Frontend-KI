@@ -12,6 +12,7 @@ import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson"
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import { toSlug } from "../../../../utils/toSlug";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { API_FILE } from "../../../../config/config";
 
 const SubmissionHistory = () => {
   const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission } = useHistorySubmission();
@@ -22,6 +23,27 @@ const SubmissionHistory = () => {
       setId(id);
       handleOpenModal(id, "DeleteSubmissionUser");
       setMessage("Apakah Anda Yakin Ingin Menghapus Permohonan Hak Cipta Ini?");
+    }
+  };
+
+  const downloadFile = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const urlBlob = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.remove();
+      window.URL.revokeObjectURL(urlBlob);
+    } catch (error) {
+      console.error("Download failed:", error);
     }
   };
 
@@ -132,10 +154,13 @@ const SubmissionHistory = () => {
                               Pembayaran
                             </Link>
                           );
+                        } else if (item.progress[0].status === "Pembayaran" && item.progress[0].isStatus === true) {
+                          return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
                         }
                         return null;
                       },
                     },
+
                     {
                       label: "Skema Pendanaan",
                       onClick: () => {},
@@ -146,6 +171,8 @@ const SubmissionHistory = () => {
                               <button className="py-1 px-2 border  whitespace-nowrap overflow-hidden truncate border-PRIMARY01 rounded-md text-PRIMARY01 font-medium">Skema Pembayaran</button>
                             </Link>
                           );
+                        } else if (item.progress[0].status === "Skema Pendanaan" && item.progress[0].isStatus === true) {
+                          return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
                         }
                         return null;
                       },
@@ -164,24 +191,28 @@ const SubmissionHistory = () => {
                               Revisi
                             </Link>
                           );
+                        } else if (item.progress[0].status === "Revisi" && item.progress[0].isStatus === true) {
+                          return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
                         }
                         return null;
                       },
                     },
-                    {
-                      label: "Revisi Draft",
-                      onClick: () => {},
-                      component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
-                          return (
-                            <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
-                              <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
-                            </Link>
-                          );
-                        }
-                        return null;
-                      },
-                    },
+                    // {
+                    //   label: "Revisi Draft",
+                    //   onClick: () => {},
+                    //   component: (item) => {
+                    //     if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
+                    //       return (
+                    //         <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
+                    //           <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
+                    //         </Link>
+                    //       );
+                    //     } else if (item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === true) {
+                    //       return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
+                    //     }
+                    //     return null;
+                    //   },
+                    // },
                     {
                       label: "Lengkapi Berkas",
                       onClick: () => {},
@@ -196,6 +227,8 @@ const SubmissionHistory = () => {
                               Lengkapi Berkas
                             </Link>
                           );
+                        } else if (item.progress[0].status === "Lengkapi Berkas" && item.progress[0].isStatus === true) {
+                          return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
                         }
                         return null;
                       },
@@ -222,6 +255,31 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return <DeleteButton onClick={() => handleModal(item.id, "Delete")} />;
+                        }
+                        return null;
+                      },
+                    },
+                    {
+                      label: "Unduh Sertifikat",
+                      onClick: () => {},
+                      component: (item) => {
+                        if (item.progress.length > 0 && item.progress[0].status === "Sertifikat Terbit") {
+                          const certFile = item.progress[0].certificateFile;
+                          let filename = "";
+
+                          if (typeof certFile === "string") {
+                            filename = certFile;
+                          } else if (certFile instanceof File) {
+                            filename = certFile.name;
+                          }
+
+                          if (!filename) return null;
+
+                          return (
+                            <button onClick={() => downloadFile(`${API_FILE}/documents/${filename}`, filename)} className="py-1 px-2 border whitespace-nowrap underline overflow-hidden truncate border-green-500 rounded-md text-green-600 font-medium">
+                              Sertifikat
+                            </button>
+                          );
                         }
                         return null;
                       },

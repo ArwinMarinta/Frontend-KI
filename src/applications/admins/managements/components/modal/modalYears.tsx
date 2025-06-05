@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import { ModalProps } from "../../../../../types/modalType";
 import useManageYear from "../../hooks/useManageYear";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { createPeriods, updatePeriods } from "../../../../../service/actions/periodeAction";
 import Field from "../../../../../components/input/fieldInput";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 
 const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, title, setTitle, currentPage, limit, faqsDetail, setError, error } = useManageYear();
+  const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -14,12 +18,22 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
       return;
     }
     if (type === "Edit" && id) {
-      await dispatch(updatePeriods(id, title, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updatePeriods(id, title, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createPeriods(title, currentPage, limit));
-      setModal(false);
-      setTitle("");
+      setLoading(true);
+      try {
+        await dispatch(createPeriods(title, currentPage, limit));
+        setModal(false);
+        setTitle("");
+      } finally {
+        setLoading(false);
+      }
     } else {
       setTitle("");
     }
@@ -65,10 +79,9 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

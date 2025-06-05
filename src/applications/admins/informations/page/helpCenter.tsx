@@ -12,7 +12,7 @@ import ReplyButton from "../../../../components/button/replyButton";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const HelpCenter = () => {
-  const { center, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useHelpCenter();
+  const { center, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useHelpCenter();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -49,6 +49,8 @@ const HelpCenter = () => {
             </div>
             <div className="  ">
               <TableWithPagination<HelpCenterType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[
                   { label: "Email", accessor: "email" },
                   { label: "No Telphone", accessor: "phoneNumber" },
@@ -56,9 +58,9 @@ const HelpCenter = () => {
                   {
                     label: "Status",
                     accessor: "status",
-                    render: (row) => (row.status ? "Terkirim" : "Menunggu"),
+                    render: (row) => (row?.status ? "Terkirim" : "Menunggu"),
                   },
-                  { label: "Update", accessor: "updatedAt", render: (row) => formatIndonesianDateTime(row.updatedAt) },
+                  { label: "Update", accessor: "updatedAt", render: (row) => formatIndonesianDateTime(row?.updatedAt) },
                 ]}
                 data={center}
                 limit={limit}

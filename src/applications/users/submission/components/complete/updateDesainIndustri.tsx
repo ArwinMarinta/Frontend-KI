@@ -124,9 +124,9 @@ const UpdateDesainIndustri = () => {
 
   useEffect(() => {
     const initForm = async () => {
-      if (!detailSubmission?.submission?.industrialDesign || types !== "Menunggu") return;
+      if (!detailSubmission?.submission?.industrialDesign && types !== "Menunggu") return;
 
-      const draftDesainIndustriApplicationFile = await processFile(detailSubmission?.submission?.industrialDesign.draftDesainIndustriApplicationFile !== undefined ? detailSubmission.submission.industrialDesign.draftDesainIndustriApplicationFile : null);
+      const draftDesainIndustriApplicationFile = await processFile(detailSubmission?.submission?.industrialDesign?.draftDesainIndustriApplicationFile !== undefined ? detailSubmission.submission.industrialDesign.draftDesainIndustriApplicationFile : null);
 
       // Set Form Hak Cipta
       setDraftPatent(draftDesainIndustriApplicationFile);
@@ -189,7 +189,7 @@ const UpdateDesainIndustri = () => {
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Paten</h1>
             </div>
-            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }, { label: "Review" }]} />
+            <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
             {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} />}
             {currentStep === 1 && (
               <Form_2 submissionType="Paten" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />

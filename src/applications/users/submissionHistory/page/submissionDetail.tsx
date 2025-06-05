@@ -55,32 +55,6 @@ const SubmissionDetail = () => {
           </div>
         </div>
       </div>
-      {/* <Navbar /> */}
-      {/* <main className="flex w-full h-full justify-center">
-        <div className="container flex flex-col py-32 h-full gap-8 ">
-          <div className="grid grid-cols-3 items-center h-24">
-            <div>{status === "Riwayat" ? <BackButton url={`/histori-pengajuan/${toSlug(submissionType)}`} /> : <BackButton url={`/penugasan`} />}</div>
-            <h1 className="text-center text-3xl w-full font-bold">Riwayat Pengajuan</h1>
-          </div>
-          <div className="flex flex-row w-full justify-center mb-10">
-            <Button label="Informasi Umum" isActive={current === "Informasi Umum"} onClick={() => handleChange("Informasi Umum")} />
-            <Button label="Data Diri" isActive={current === "Data Diri"} onClick={() => handleChange("Data Diri")} />
-            <Button label="Dokumen Pengajuan" isActive={current === "Dokumen Pengajuan"} onClick={() => handleChange("Dokumen Pengajuan")} />
-          </div>
-          <div>
-            {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} />}
-            {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission.personalDatas} />}
-            {current === "Dokumen Pengajuan" && (
-              <>
-                {detailSubmission?.submission.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
-                {detailSubmission?.submission.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
-                {detailSubmission?.submission.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
-                {detailSubmission?.submission.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
-              </>
-            )}
-          </div>
-        </div>
-      </main> */}
     </>
   );
 };

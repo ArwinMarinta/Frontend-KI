@@ -16,7 +16,7 @@ const FieldFile = ({ label, value, name, required = false, onChange, error = fal
 
       <div className="flex items-center gap-2">
         {/* Tombol Pilih File menggunakan absolute positioning */}
-        <label htmlFor={name} className="cursor-pointer bg-PRIMARY01 hover:bg-PRIMARY01 text-white text-sm px-4 py-2 rounded-md absolute left-0">
+        <label htmlFor={name} className="cursor-pointer bg-[#1F2A37]  text-white text-sm px-4 py-2 rounded-md absolute left-0">
           Pilih File
         </label>
 

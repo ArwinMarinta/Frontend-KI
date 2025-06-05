@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import useCopyright from "../hooks/useCopyright";
 import { ModalProps } from "../../../../types/modalType";
 import { createCategoryCopyright, getCategoryCopyrightById, updateCategoryCopyright } from "../../../../service/actions/categoryCopyrightAction";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Field from "../../../../components/input/fieldInput";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import AddButtonModal from "../../../../components/button/addButtonModal";
+import ModalLoading from "../../../../components/modal/modalLoading";
 
 const ModalCopyright = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { form, setForm, errors, setErrors, dispatch, currentPage, limit, categoryCopyrightDetail } = useCopyright();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       title: form.title.trim() === "",
@@ -18,14 +21,24 @@ const ModalCopyright = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.title) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateCategoryCopyright(id, form.title, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateCategoryCopyright(id, form.title, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createCategoryCopyright(form.title, currentPage, limit));
-      setModal(false);
-      setForm({
-        title: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createCategoryCopyright(form.title, currentPage, limit));
+        setModal(false);
+        setForm({
+          title: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         title: "",
@@ -84,10 +97,9 @@ const ModalCopyright = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

@@ -76,7 +76,7 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
         </div>
 
         <div className="flex lg:flex-row flex-col w-full gap-6">
-          <Field label="Nama Refrensi Label Merek" value={formBrand?.referenceName || ""} name="referenceName" type="text" placeholder="" need error={formBrandError?.elementColor} onChange={handleChange} />
+          <Field label="Nama Refrensi Label Merek" value={formBrand?.referenceName || ""} name="referenceName" type="text" placeholder="" need error={formBrandError?.referenceName} onChange={handleChange} />
           <Field label="Unsur Warna Dalam Label Merek" value={formBrand?.elementColor || ""} name="elementColor" type="text" placeholder="Contoh: Hitam, Putih dan Biru, Kuning, Merah" need error={formBrandError?.elementColor} onChange={handleChange} />
         </div>
         <div className="flex lg:flex-row flex-col w-full gap-6">
@@ -99,8 +99,8 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
         </div>
 
         <div className="flex lg:flex-row flex-col w-full gap-6">
-          <Field label="Terjemahan Jika Menggunakan Bahasa Asing" value={formBrand?.translate || ""} name="translate" type="text" placeholder="" need error={formBrandError?.translate} onChange={handleChange} />
-          <Field label="Pengucapan Jika Menggunakan Huruf Non-Latin" value={formBrand?.pronunciation || ""} name="pronunciation" type="text" placeholder="" need error={formBrandError?.pronunciation} onChange={handleChange} />
+          <Field label="Terjemahan Jika Menggunakan Bahasa Asing" value={formBrand?.translate || ""} name="translate" type="text" placeholder="" error={formBrandError?.translate} onChange={handleChange} />
+          <Field label="Pengucapan Jika Menggunakan Huruf Non-Latin" value={formBrand?.pronunciation || ""} name="pronunciation" type="text" placeholder="" error={formBrandError?.pronunciation} onChange={handleChange} />
         </div>
 
         <FieldTextarea
@@ -114,19 +114,18 @@ Jika bukan, isi dengan tanda strip -."
           row={4}
           onChange={handleChange}
           error={formBrandError?.description}
-          need
         />
-        <FieldTextarea label="Keterangan" value={formBrand?.information ?? ""} name="information" placeholder="" required row={4} onChange={handleChange} error={formBrandError?.information} need />
+        <FieldTextarea label="Keterangan" value={formBrand?.information ?? ""} name="information" placeholder="" required row={4} onChange={handleChange} error={formBrandError?.information} />
 
-        <InputFile label="Label Merek" value={formBrand?.labelBrand ?? null} name="labelBrand" required onChange={handleChange} accept=".jpg" error={formBrandError?.labelBrand} need />
+        <InputFile label="Label Merek" value={formBrand?.labelBrand ?? null} name="labelBrand" required onChange={handleChange} accept=".jpg" error={formBrandError?.labelBrand} need message="Format file harus berupa jpg. Max 5 MB. 1024 x 1024 pixel" />
         {/* <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChange} accept=".jpg, .jpeg" error={formBrandError?.fileUploade} need /> */}
-        <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChange} error={formBrandError?.signature} need />
+        <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChange} error={formBrandError?.signature} need message="Format file harus berupa pdf. Max 20 MB." />
         {/* <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChange} error={formBrandError?.InformationLetter} need />
         <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChange} error={formBrandError?.letterStatment} need /> */}
 
         <div className="flex flex-col mt-10 gap-6">
           <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>
-          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} />
+          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} message="Format file harus berupa pdf. Max 20 MB" />
           <FieldTextarea label="Keterangan" value={tempAdditionalBrand?.additionalDescriptions ?? ""} name="additionalDescriptions" placeholder="" required row={4} onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalDescriptions} />
 
           <button onClick={addAdditionalBrand} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">

@@ -1,12 +1,16 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import React, { useEffect } from "react";
 import { getQuotaById, updateQuota } from "../../../../../service/actions/periodeAction";
 import useManageQuota from "../../hooks/useManageQuota";
 import FieldNumber from "../../../../../components/input/fieldNumber";
 import { ModalProps } from "../../../../../types/modalType";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 
 const ModalQuota = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, form, setForm, group, currentPage, limit, quotaDetail, errors, setErrors } = useManageQuota();
+  const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
     const newErrors = {
@@ -19,8 +23,13 @@ const ModalQuota = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.quota || newErrors.remainingQuota) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateQuota(id, form.quota, form.remainingQuota, group, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateQuota(id, form.quota, form.remainingQuota, group, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         quota: 0,
@@ -79,10 +88,9 @@ const ModalQuota = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

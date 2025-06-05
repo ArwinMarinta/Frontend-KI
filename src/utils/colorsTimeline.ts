@@ -1,25 +1,28 @@
 export const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
-    case "draft":
-      return "bg-gray-300 text-gray-700"; // Warna untuk Draft
+    // Abu-abu: status awal / belum diproses
+    case "Menunggu":
     case "direview":
-      return "bg-blue-100 text-blue-700"; // Warna untuk Direview
-    case "revisi":
-    case "revisi draft":
-      return "bg-red-100 text-red-700"; // Warna untuk Revisi dan Revisi Draft
     case "diajukan":
-      return "bg-yellow-100 text-yellow-700"; // Warna untuk Diajukan
-    case "ditolak":
-      return "bg-red-500 text-red-800"; // Warna untuk Ditolak
     case "skema pengajuan":
-      return "bg-green-100 text-green-700"; // Warna untuk Skema Pengajuan
-    case "pembayaran":
-      return "bg-green-200 text-green-800"; // Warna untuk Pembayaran
+      return "bg-gray-300 text-gray-700";
+
+    // Merah: status yang menunjukkan masalah
+    case "revisi":
+    case "ditolak":
+      return "bg-red-300 text-red-800";
+
+    // Kuning: status sedang diproses / dalam antrean
+
     case "lengkapi berkas":
-      return "bg-orange-200 text-orange-800"; // Warna untuk Lengkapi Berkas
+      return "bg-yellow-200 text-yellow-800";
+
+    case "pembayaran":
     case "selesai":
-      return "bg-green-300 text-green-900"; // Warna untuk Selesai
+      return "bg-green-300 text-green-800";
+
+    // Default: abu-abu untuk status tidak dikenal
     default:
-      return "bg-gray-100 text-gray-700"; // Default untuk status lainnya
+      return "bg-gray-300 text-gray-700";
   }
 };

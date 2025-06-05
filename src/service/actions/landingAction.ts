@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
-import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setNotifications, setQuota, setSubmissionType, setTermsLanding } from "../reducers/landingReducer";
+import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setIprCount, setNotifications, setQuota, setSubmissionType, setTermsLanding, setUserDashboard } from "../reducers/landingReducer";
 
 export const getFaqLanding = (title: string | undefined, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -505,6 +505,54 @@ export const updateNotification = (limit: number): AppThunk => {
       );
 
       dispatch(getNotification(limit));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getIprCount = (): AppThunk => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${API_URL}/user-submission/count`);
+
+      dispatch(
+        setIprCount({
+          hakCipta: response.data.data.hakCipta ?? 0,
+          paten: response.data.data.paten ?? 0,
+          merek: response.data.data.merek ?? 0,
+          desainIndustri: response.data.data.desainIndustri ?? 0,
+        })
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.log(error.response.data.message);
+        } else {
+          console.log("No response received:", error.message);
+        }
+      }
+    }
+  };
+};
+
+export const getUserDashboard = (): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.get(`${API_URL}/user-submission/user-dashboard`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(setUserDashboard(response.data ?? null));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {

@@ -55,8 +55,8 @@ const Navbar = () => {
             <div className="">
               <ul className="flex flex-row gap-6">
                 {NavbarData.map((data) => (
-                  <li key={data.id} className={`${location.pathname === data.url ? "underline underline-offset-8 decoration-[3px] decoration-PRIMARY01" : ""}`}>
-                    <Link to={data.url} className="text-base font-medium">
+                  <li key={data.id} className={`${location.pathname === data.url ? "underline underline-offset-8 decoration-[3px] decoration-PRIMARY02" : ""}`}>
+                    <Link to={data.url} className={`text-lg ${location.pathname === data.url ? "text-PRIMARY01  font-bold" : "text-black font-medium"}`}>
                       {data.name}
                     </Link>
                   </li>
@@ -74,7 +74,7 @@ const Navbar = () => {
         {token === null && (
           <div className="flex flex-row">
             <Link to="/login">
-              <button className="bg-PRIMARY01 py-2 px-4 rounded-md text-white ">Masuk</button>
+              <button className="bg-PRIMARY01 py-2 px-4 rounded-md font-semibold text-white ">Masuk</button>
             </Link>
           </div>
         )}
@@ -83,12 +83,12 @@ const Navbar = () => {
           <>
             {(user.role === "superAdmin" || user.role === "admin") && (
               <Link to="/dashboard">
-                <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-medium">Dashboard</button>
+                <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-semibold">Dashboard</button>
               </Link>
             )}
             {user.role !== "superAdmin" && user.role !== "admin" && (
               <Link to="/dashboard/pengajuan">
-                <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-medium">Dashboard</button>
+                <button className="py-2 px-4 bg-PRIMARY01 rounded-md text-white font-semibold">Dashboard</button>
               </Link>
             )}
           </>

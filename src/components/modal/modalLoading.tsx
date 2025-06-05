@@ -11,11 +11,18 @@ const ModalLoading = ({ show }: ModalLoadingProps) => {
       {/* Container modal */}
       <div className="bg-transparent p-6 rounded-md flex flex-col items-center gap-6">
         {/* Spinner sederhana */}
-        <svg className="animate-spin h-16 w-16 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="white">
+          <circle cx="15" cy="15" r="15">
+            <animate attributeName="opacity" begin="0s" dur="1.4s" values="1;0.3;1" repeatCount="indefinite" />
+          </circle>
+          <circle cx="60" cy="15" r="15">
+            <animate attributeName="opacity" begin="0.2s" dur="1.4s" values="1;0.3;1" repeatCount="indefinite" />
+          </circle>
+          <circle cx="105" cy="15" r="15">
+            <animate attributeName="opacity" begin="0.4s" dur="1.4s" values="1;0.3;1" repeatCount="indefinite" />
+          </circle>
         </svg>
-        <p className="text-white text-lg font-medium">Mengirim Data...</p>
+        <p className="text-white text-lg font-medium">Menunggu</p>
       </div>
     </div>
   );

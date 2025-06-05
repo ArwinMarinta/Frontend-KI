@@ -5,8 +5,9 @@ import useReportAnalitic from "../hooks/useReportAnalitic";
 import TableWithPagination from "../../../../components/table/tableComponent";
 import { ReportandAnalitic } from "../../../../types/document";
 import { formatIndonesianDateTime } from "../../../../utils/formatDate";
-import { setCurrentPage, setLimit } from "../../../../service/reducers/informationReducer";
+
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { setCurrentPage, setLimit } from "../../../../service/reducers/informationReducer";
 
 const ReportsAnalitic = () => {
   const { report, limit, totalPages, currentPage, handleChangeReportAnalitic, formReportAnalitic, handleSearchReport, dispatch } = useReportAnalitic();
@@ -32,13 +33,14 @@ const ReportsAnalitic = () => {
             {report.length > 0 && (
               <div className="mt-10 lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">
                 <TableWithPagination<ReportandAnalitic>
+                  searchable={false}
                   columns={[
-                    { label: "Nama Pengguna", accessor: "user", render: (item) => item.namaPengguna },
-                    { label: "Jenis Pengajuan", accessor: "user", render: (item) => item.jenisPengajuan },
-                    { label: "Pendanaan", accessor: "action", render: (item) => item.skemaPengajuan },
-                    { label: "Progress", accessor: "user", render: (item) => item.progressPengajuan },
-                    { label: "Peran", accessor: "user", render: (item) => item.peran },
-                    { label: "Waktu", accessor: "updatedAt", render: (item) => formatIndonesianDateTime(item.waktuPengajuan) },
+                    { label: "Nama Pengguna", accessor: "user", render: (item) => item?.namaPengguna ?? "" },
+                    { label: "Jenis Pengajuan", accessor: "user", render: (item) => item?.jenisPengajuan ?? "" },
+                    { label: "Pendanaan", accessor: "action", render: (item) => item?.skemaPengajuan ?? "" },
+                    { label: "Progress", accessor: "user", render: (item) => item?.progressPengajuan ?? "" },
+                    { label: "Peran", accessor: "user", render: (item) => item?.peran ?? "" },
+                    { label: "Waktu", accessor: "updatedAt", render: (item) => formatIndonesianDateTime(item?.waktuPengajuan ?? "") },
                   ]}
                   data={report}
                   limit={limit}
@@ -46,7 +48,7 @@ const ReportsAnalitic = () => {
                   currentPage={Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1}
                   // totalData={totalValue}
                   onLimitChange={(val) => dispatch(setLimit({ key: "reportAndAnalitic", limit: val }))}
-                  onPageChange={(page) => dispatch(setCurrentPage({ key: "logActivity", currentPage: page }))}
+                  onPageChange={(page) => dispatch(setCurrentPage({ key: "reportAndAnalitic", currentPage: page }))}
                   actions={[]}
                 />
               </div>

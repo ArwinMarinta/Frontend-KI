@@ -119,20 +119,18 @@ const UpdateUserPaten = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "auto",
     });
   }, [currentStep]);
 
   useEffect(() => {
     const initForm = async () => {
-      if (!detailSubmission?.submission?.patent || types !== "Menunggu") return;
+      if (!detailSubmission?.submission?.patent && types !== "Menunggu") return;
 
       const draftPatentApplicationFile = await processFile(detailSubmission?.submission?.patent?.draftPatentApplicationFile !== undefined ? detailSubmission.submission.patent.draftPatentApplicationFile : null);
 
       // Set Form Hak Cipta
       setDraftPatent(draftPatentApplicationFile);
-
-      console.log("ini kag");
 
       // Set Personal Data jika tersedia
       if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {

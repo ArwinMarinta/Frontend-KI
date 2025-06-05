@@ -52,6 +52,15 @@ const informationSlice = createSlice({
     setReportAnalitic: (state, action) => {
       state.reportAndAnalitic = action.payload;
     },
+    setNullReportAnalitic: (state) => {
+      state.reportAndAnalitic = state.reportAndAnalitic = {
+        report: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalValue: 0,
+        limit: 10,
+      };
+    },
     setLimit: (state, action: PayloadAction<{ key: "helpCenter" | "logActivity" | "reportAndAnalitic"; limit: number }>) => {
       const { key, limit } = action.payload;
       const target = state[key];
@@ -72,6 +81,6 @@ const informationSlice = createSlice({
   },
 });
 
-export const { setReportAnalitic, setHelpCenter, setCurrentPage, setLogActivity, setLimit, setHelpCenterDetail } = informationSlice.actions;
+export const { setNullReportAnalitic, setReportAnalitic, setHelpCenter, setCurrentPage, setLogActivity, setLimit, setHelpCenterDetail } = informationSlice.actions;
 
 export default informationSlice.reducer;

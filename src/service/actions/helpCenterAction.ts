@@ -6,7 +6,7 @@ import { NavigateFunction } from "react-router-dom";
 import { FormCreateHelpCenter } from "../../types/helpCenter";
 import { FormReportAnaliticType } from "../../types/document";
 
-export const getHelpCenter = (currentPage: number, limit: number): AppThunk => {
+export const getHelpCenter = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -18,6 +18,7 @@ export const getHelpCenter = (currentPage: number, limit: number): AppThunk => {
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -161,7 +162,7 @@ export const deletesHelpCenter = (id: number | string | null, currentPage: numbe
   };
 };
 
-export const getReportAndAnalitic = (form: FormReportAnaliticType, currentPage: number, limit: number): AppThunk => {
+export const getReportAndAnalitic = (currentPage?: number, limit?: number, form?: FormReportAnaliticType): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -173,11 +174,11 @@ export const getReportAndAnalitic = (form: FormReportAnaliticType, currentPage: 
         params: {
           currentPage: currentPage,
           limit: limit,
-          namaPengguna: form.namaPengguna,
-          jenisPengajuan: form.jenisPengajuan,
-          tanggalPengajuan: form.jenisPengajuan,
-          peran: form.peran,
-          instansi: form.instansi,
+          namaPengguna: form?.namaPengguna,
+          jenisPengajuan: form?.jenisPengajuan,
+          tanggalPengajuan: form?.jenisPengajuan,
+          peran: form?.peran,
+          instansi: form?.instansi,
         },
       });
 

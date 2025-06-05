@@ -1,13 +1,16 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import React, { useEffect } from "react";
 import useManageCategoryFaq from "../../hooks/useManageCategoryFaq";
 import { createCategoryFaq, getCategoryFaqById, updateCategoryFaq } from "../../../../../service/actions/faqAction";
 import Field from "../../../../../components/input/fieldInput";
 import { ModalProps } from "../../../../../types/modalType";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
 
 const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, faqs, setFaqs, faqCategoryDetail, currentPage, limit, error, setError } = useManageCategoryFaq();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     if (!faqs.trim()) {
       setError(true);
@@ -15,12 +18,22 @@ const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) =>
     }
 
     if (type === "Edit" && id) {
-      await dispatch(updateCategoryFaq(faqCategoryDetail?.type, faqs, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateCategoryFaq(faqCategoryDetail?.type, faqs, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createCategoryFaq(faqs, currentPage, limit));
-      setModal(false);
-      setFaqs("");
+      setLoading(true);
+      try {
+        await dispatch(createCategoryFaq(faqs, currentPage, limit));
+        setModal(false);
+        setFaqs("");
+      } finally {
+        setLoading(false);
+      }
     } else {
       setFaqs("");
     }
@@ -58,10 +71,9 @@ const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) =>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

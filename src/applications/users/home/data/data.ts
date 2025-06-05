@@ -3,6 +3,13 @@ export type Section2Type = {
   title: string;
   amount: number;
 };
+
+export type SectionType = {
+  id: number;
+  title: string;
+  amount: number;
+  key: string;
+};
 export type Section3Type = {
   id: number;
   title: string;
@@ -18,26 +25,30 @@ export type Section4Type = {
   kouta: Section2Type[];
 };
 
-export const Section2: Section2Type[] = [
+export const Section2: SectionType[] = [
   {
     id: 1,
     title: "Hak Cipta",
-    amount: 600,
+    key: "hakCipta",
+    amount: 0,
   },
   {
     id: 2,
     title: "Paten",
-    amount: 300,
+    key: "paten",
+    amount: 0,
   },
   {
     id: 3,
     title: "Merek",
-    amount: 100,
+    key: "merek",
+    amount: 0,
   },
   {
     id: 4,
     title: "Desain Industri",
-    amount: 400,
+    key: "desainIndustri",
+    amount: 0,
   },
 ];
 

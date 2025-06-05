@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import useManageGroup from "../../hooks/useManageGroup";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { createGroup, getGroupById, updateGroup } from "../../../../../service/actions/periodeAction";
 import { ModalProps } from "../../../../../types/modalType";
 import Field from "../../../../../components/input/fieldInput";
 import { toInputDateFormat } from "../../../../../utils/formatDate";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 
 const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, form, setForm, years, currentPage, limit, groupDetail, errors, setErrors } = useManageGroup();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       group: form.group.trim() === "",
@@ -21,17 +24,26 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.group || newErrors.startDate || newErrors.endDate) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateGroup(id, form.group, form.startDate, form.endDate, years, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateGroup(id, form.group, form.startDate, form.endDate, years, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      console.log(years);
-      await dispatch(createGroup(form.group, form.startDate, form.endDate, years, currentPage, limit));
-      setModal(false);
-      setForm({
-        group: "",
-        startDate: "",
-        endDate: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createGroup(form.group, form.startDate, form.endDate, years, currentPage, limit));
+        setModal(false);
+        setForm({
+          group: "",
+          startDate: "",
+          endDate: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         group: "",
@@ -140,10 +152,9 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

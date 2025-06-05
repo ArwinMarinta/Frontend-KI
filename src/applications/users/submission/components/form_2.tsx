@@ -59,7 +59,22 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
               </div>
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                 <Field label="Kode Pos" value={item.postalCode} name="postalCode" type="text" placeholder="" onChange={(e) => handleChange(e, index, "postalCode")} error={error[index]?.postalCode} need />
-                <Field label="Nomor Handphone" value={item.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={(e) => handleChange(e, index, "phoneNumber")} error={error[index]?.phoneNumber} need />
+                <Field
+                  label="Nomor Handphone"
+                  value={item.phoneNumber}
+                  name="phoneNumber"
+                  type="tel"
+                  placeholder=""
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    // Hanya izinkan angka dan panjang 10-15
+                    if (/^\d{0,15}$/.test(val)) {
+                      handleChange(e, index, "phoneNumber");
+                    }
+                  }}
+                  error={error[index]?.phoneNumber}
+                  need
+                />
               </div>
               {submissionType === "Merek" && (
                 <>
@@ -75,7 +90,18 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
               )}
 
               <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index]?.address} need />
-              <InputFile label="KTP" value={item.ktp instanceof File ? item.ktp : undefined} name={`ktp_${index}`} required onChange={(e) => handleChange(e, index, "ktp")} accept=".jpg, .jpeg, .png, .webp" error={error[index]?.ktp} need placeholder={`${item.ktp ?? ""}`} />
+              <InputFile
+                label="KTP"
+                value={item.ktp instanceof File ? item.ktp : undefined}
+                name={`ktp_${index}`}
+                required
+                onChange={(e) => handleChange(e, index, "ktp")}
+                error={error[index]?.ktp}
+                need
+                placeholder={`${item.ktp ?? ""}`}
+                message="Format file harus berupa pdf. Max 20 MB"
+                accept=".pdf"
+              />
 
               {personalData.length > 1 && index !== 0 ? (
                 <div className="flex justify-end mt-10">

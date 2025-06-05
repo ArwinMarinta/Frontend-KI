@@ -19,7 +19,7 @@ const FormReview = ({ draftPatent, handleChange, errorDraftPatent, handleNextSte
       </div>
       <div className=" lg:mt-24 mt-16">
         <InputFile label="Draft Review Pengajuan" value={draftPatent} name="draftPatentApplicationFile" required onChange={handleChange} error={errorDraftPatent} need placeholder="" />
-        <span className="block pt-2">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
+        <span className="mt-1 text-GREY04 text-sm font-medium">Gabungkan berkas Deskripsi, Abstrak, Klaim, Gambar menjadi dalam satu file dengan format doc/docx/pdf</span>
       </div>
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">
         <NextButton onClick={handleNextStep1} />

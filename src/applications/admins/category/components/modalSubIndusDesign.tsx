@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import { ModalProps } from "../../../../types/modalType";
 import { createCategorySubIndusDesign, getCategorySubIndusDesigntById, updateCategorySubIndusDesign } from "../../../../service/actions/categoryIndusDesignAction";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Field from "../../../../components/input/fieldInput";
 import useSubIndusDesign from "../hooks/useSubIndusDesign";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import AddButtonModal from "../../../../components/button/addButtonModal";
+import ModalLoading from "../../../../components/modal/modalLoading";
 
 const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { form, setForm, errors, setErrors, dispatch, currentPage, limit, categorySubIndustrialDesignDetail, ids } = useSubIndusDesign();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       title: form.title.trim() === "",
@@ -18,14 +21,24 @@ const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps)
     if (newErrors.title) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateCategorySubIndusDesign(id, ids, form.title, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateCategorySubIndusDesign(id, ids, form.title, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createCategorySubIndusDesign(ids, form.title, currentPage, limit));
-      setModal(false);
-      setForm({
-        title: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createCategorySubIndusDesign(ids, form.title, currentPage, limit));
+        setModal(false);
+        setForm({
+          title: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         title: "",
@@ -84,10 +97,9 @@ const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps)
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

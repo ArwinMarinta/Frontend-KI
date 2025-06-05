@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { ModalProps } from "../../../../../types/modalType";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { createDocument, getDocumentById, updateDocument } from "../../../../../service/actions/documentAction";
 import Field from "../../../../../components/input/fieldInput";
 import useManageDocument from "../../hooks/useManageDocument";
 import FieldFile from "../../../../../components/input/fieldFile";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, form, setForm, name, currentPage, limit, documentDetail, errors, setErrors } = useManageDocument();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       title: form.title.trim() === "",
@@ -20,18 +23,28 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.title || newErrors.document || newErrors.cover) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateDocument(id, form.title, form.document, form.cover, name, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateDocument(id, form.title, form.document, form.cover, name, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createDocument(form.title, form.document, form.cover, name, currentPage, limit));
-      setModal(false);
-      setForm({
-        title: "",
-        document: null,
-        documentName: "",
-        cover: null,
-        coverName: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createDocument(form.title, form.document, form.cover, name, currentPage, limit));
+        setModal(false);
+        setForm({
+          title: "",
+          document: null,
+          documentName: "",
+          cover: null,
+          coverName: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         title: "",
@@ -146,10 +159,9 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

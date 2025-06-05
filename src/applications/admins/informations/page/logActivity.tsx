@@ -28,11 +28,11 @@ const LogActivity = () => {
             <div className="  ">
               <TableWithPagination<ActivityLog>
                 columns={[
-                  { label: "Nama Pengguna", accessor: "user", render: (item) => item.user.fullname },
-                  { label: "Email", accessor: "user", render: (item) => item.user.email },
+                  { label: "Nama Pengguna", accessor: "user", render: (item) => item.user?.fullname ?? "" },
+                  { label: "Email", accessor: "user", render: (item) => item.user?.email ?? "" },
                   { label: "Aktivitas", accessor: "action" },
-                  { label: "Role", accessor: "user", render: (item) => item.user.role },
-                  { label: "Waktu", accessor: "updatedAt", render: (item) => formatIndonesianDateTime(item.user.updatedAt) },
+                  { label: "Role", accessor: "user", render: (item) => item.user?.role ?? "" },
+                  { label: "Waktu", accessor: "updatedAt", render: (item) => formatIndonesianDateTime(item.user?.updatedAt) ?? "" },
                 ]}
                 data={activity}
                 limit={limit}

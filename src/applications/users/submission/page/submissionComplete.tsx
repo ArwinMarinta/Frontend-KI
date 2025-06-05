@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import ModalLoading from "../../../../components/modal/modalLoading";
-
 import FormComplateIndustrialDesign from "../components/complete/formComplateIndustrialDesign";
 import FormComplatePatent from "../components/complete/formComplatePatent";
 import FormConfimPayment from "../components/complete/formConfimPayment";
 import FormFunding from "../components/complete/formFunding";
-
 import useComplate from "../hooks/useComplate";
 import useComplateIndustrialDesain from "../hooks/useComplateIndustrialDesain";
 import useComplatePaten from "../hooks/useComplatePaten";
@@ -59,7 +57,6 @@ const SubmissionComplete = () => {
         dispatch(getSubTypeCopyright(formCopyright.typeCreation));
       }
     }
-
     if (submissionType === "Merek") {
       dispatch(getDetailSubmissionLanding("Merek", submissionId));
       dispatch(getTypeBrand());

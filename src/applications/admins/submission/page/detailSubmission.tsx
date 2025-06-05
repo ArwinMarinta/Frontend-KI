@@ -394,9 +394,9 @@ const DetailSubmission = () => {
 
   useEffect(() => {
     const initPersonalData = async () => {
-      if (!detailSubmission?.submission?.personalDatas || statusDetail !== "Ubah") return;
-
-      if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+      if (!detailSubmission?.submission?.personalDatas && statusDetail !== "Ubah") {
+        return;
+      } else if (statusDetail == "Ubah" && detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
         const mappedContributors = await Promise.all(
           detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
             id: item.id ?? null,
@@ -463,7 +463,7 @@ const DetailSubmission = () => {
               <div>
                 {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} terms={terms} />}
                 {current === "Data Diri" && statusDetail === "Detail" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
-                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
+
                 {current === "Dokumen Pengajuan" && statusDetail === "Detail" && (
                   <>
                     {detailSubmission?.submission?.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}

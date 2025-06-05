@@ -54,7 +54,7 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
               label="Jenis Hak Cipta"
               name="typeCreation"
               type="select"
-              value={String(formCopyright?.typeCreation ?? null)}
+              value={String(formCopyright?.typeCreation)}
               onChange={handleChange}
               options={
                 typeCopy?.map((item) => ({
@@ -69,7 +69,7 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
               label="Sub-Jenis Hak Cipta"
               name="subTypeCreation"
               type="select"
-              value={String(formCopyright?.subTypeCreation ?? null)}
+              value={String(formCopyright?.subTypeCreation)}
               onChange={handleChange}
               options={
                 subTypeCopy?.map((item) => ({
@@ -106,7 +106,7 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
         <FieldTextarea label="Uraian Singkat Ciptaan" value={formCopyright?.briefDescriptionCreation || ""} name="briefDescriptionCreation" placeholder="" required row={4} onChange={handleChange} error={formCopyrightError?.briefDescriptionCreation} need />
         {/* <InputFile label="Surat Pernyataan" value={formCopyright?.statementLetter ?? null} name="statementLetter" required onChange={handleChange} error={formCopyrightError?.statementLetter} need />
         <InputFile label="Surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ?? null} name="letterTransferCopyright" required onChange={handleChange} error={formCopyrightError?.letterTransferCopyright} need /> */}
-        <InputFile label="Contoh Ciptaan" value={formCopyright?.exampleCreation ?? null} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} need />
+        <InputFile label="Contoh Ciptaan" value={formCopyright?.exampleCreation} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} accept="video/mp4, application/pdf, image/jpeg" message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB" />
       </div>
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">
         <NextButton onClick={handleNextStep} />

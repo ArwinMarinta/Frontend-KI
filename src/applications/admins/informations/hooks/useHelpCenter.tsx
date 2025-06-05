@@ -12,7 +12,7 @@ const useHelpCenter = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { center, limit, currentPage, totalPages } = useSelector((state: RootState) => state.information.helpCenter);
   const { helpCenterDetail } = useSelector((state: RootState) => state.information);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState<FormReplyHelpCenter>({
     answer: "",
   });
@@ -22,10 +22,10 @@ const useHelpCenter = () => {
   });
 
   useEffect(() => {
-    if (token) {
-      dispatch(getHelpCenter(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getHelpCenter(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit]);
+  }, [token, dispatch, currentPage, limit, search]);
 
   const handleDeleteFaq = async (id: number | string | null) => {
     if (token) {
@@ -84,6 +84,8 @@ const useHelpCenter = () => {
     setErrors,
     handleChange,
     handleSubmit,
+    search,
+    setSearch,
   };
 };
 

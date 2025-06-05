@@ -1,8 +1,8 @@
 import Navbar from "../../../components/navigations/navbar";
 import Footer from "../../../components/navigations/footer";
 // import BackgroundImage from "../../../assets/images/image 3.svg";
-import BackgroundImage2 from "../../../assets/images/Background2.webp";
-import PeopleIcon from "../../../assets/images/people_image.svg";
+import BackgroundImage2 from "../../../assets/Tentang_ITK.webp";
+// import PeopleIcon from "../../../assets/images/people_image.svg";
 import { Section2, Section3, staticSection4 } from "./data/data";
 import Button from "./components/button";
 import { IoIosWarning } from "react-icons/io";
@@ -11,29 +11,41 @@ import { formatDateRange } from "../../../utils/formatDate";
 import { Link } from "react-router-dom";
 import useProfile from "../../../hooks/useProfile";
 import { FiArrowRightCircle } from "react-icons/fi";
+import { RootState } from "../../../service/store";
+import { useSelector } from "react-redux";
+import { getIprCount } from "../../../service/actions/landingAction";
+import { useEffect } from "react";
 
 const Home = () => {
   const { period } = useHome();
-  const { token, user } = useProfile();
+  const { token, user, dispatch } = useProfile();
+  const { iprCount } = useSelector((state: RootState) => state.landing);
+
+  useEffect(() => {
+    dispatch(getIprCount());
+  }, [dispatch]);
+
   return (
     <>
       <Navbar />
       <main>
         <section id="section-1" className="relative w-full h-screen overflow-hidden">
-          <div className="absolute inset-0 w-full h-full z-0">
-            <img src={BackgroundImage2} alt="Background" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 w-full h-full z-0 lg:mt-[86px] mt-[43px]">
+            <img src={BackgroundImage2} alt="Background" className="w-full h-full object-cover" loading="lazy" />
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0067B3] opacity-85 z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0067B3] opacity-100 z-10"></div>
 
           <div className="absolute inset-0 z-20 flex justify-center items-center h-screen pt-14 lg:px-20">
             <div className="container w-full h-full flex flex-row justify-between items-center">
-              <div className="flex flex-col items-start justify-center text-white lg:w-[50%]">
+              <div className="flex flex-col items-start justify-center text-white lg:w-[70%]">
                 <h1 className="text-3xl xl:text-5xl font-bold text-start hidden lg:block">
                   Selamat Datang di Sentra <br /> Kekayaan Intelektual ITK
                 </h1>
                 <h1 className="text-3xl xl:text-5xl font-bold text-start  lg:hidden">Selamat Datang di Sentra Kekayaan Intelektual ITK</h1>
-                <p className="text-lg xl:text-xl mt-8 text-justify w-[80%] mb-10 ">Sentra Kekayaan Intelektual (KI) ITK hadir untuk melindungi ide dan inovasi Anda. Kami memberikan layanan pengelolaan KI yang mencakup Hak Cipta, Paten, Merek, dan Desain Industri.</p>
+                <p className="text-lg xl:text-xl mt-8 text-justify w-[90%] mb-10 ">
+                  Sentra Kekayaan Intelektual (KI) ITK hadir untuk melindungi ide dan inovasi Anda. Kami memberikan layanan pengelolaan KI yang mencakup Hak Cipta, Paten, Merek, dan Desain Industri. Pengajuan layanan dapat dilakukan dengan opsi pendanaan maupun mandiri sesuai kebutuhan Anda.
+                </p>
 
                 {token ? (
                   user?.role === "superAdmin" || user?.role === "admin" ? (
@@ -56,9 +68,9 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="absolute w-[40%] hidden lg:block z-20 lg:-bottom-0 -mb-4 translate-x-[800px] xl:translate-x-0 xl:right-36 xl:bottom-0">
+          {/* <div className="absolute w-[40%] hidden lg:block z-20 lg:-bottom-0 -mb-4 translate-x-[800px] xl:translate-x-0 xl:right-36 xl:bottom-0">
             <img src={PeopleIcon} alt="People" className="self-end h-[400px] xl:w-[700px] xl:h-[700px] object-contain  " />
-          </div>
+          </div> */}
         </section>
         <section id="section-2" className="w-full flex justify-center">
           <div className="w-full items-center container flex justify-center py-16">
@@ -71,7 +83,7 @@ const Home = () => {
                   >
                     {data.title}
                   </h1>
-                  <h1 className="text-[80px] font-bold text-PRIMARY01">{data.amount}</h1>
+                  <h1 className="text-[80px] font-bold text-PRIMARY01"> {iprCount[data.key as keyof typeof iprCount]}</h1>
                   <span className="text-[20px] font-semibold">Terdaftar</span>
                 </div>
               ))}

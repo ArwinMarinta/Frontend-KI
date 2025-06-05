@@ -118,7 +118,7 @@ const UpdateUserCopyright = () => {
 
   const handleNextStep = () => {
     const error = validateCopyrightData(formCopyright);
-    const excludeFields = ["statementLetter", "letterTransferCopyright"];
+    const excludeFields = ["statementLetter", "letterTransferCopyright", "exampleCreation"];
 
     const hasError = Object.entries(error)
       .filter(([key]) => !excludeFields.includes(key))
@@ -143,7 +143,7 @@ const UpdateUserCopyright = () => {
 
   useEffect(() => {
     const initForm = async () => {
-      if (detailSubmission?.submission?.copyright && types !== "Menunggu" && actionTypes !== "Mengubah Pengajuan") return;
+      if (!detailSubmission?.submission?.copyright && types !== "Menunggu") return;
 
       if (detailSubmission?.submission?.copyright) {
         const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
@@ -164,38 +164,37 @@ const UpdateUserCopyright = () => {
           exampleCreation,
         });
 
-        if (types !== "Menunggu")
-          if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
-            // Set Personal Data jika tersedia
-            const mappedContributors = await Promise.all(
-              detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
-                id: item.id ?? null,
-                isLeader: item.isLeader || false,
-                name: item.name || "",
-                email: item.email || "",
-                faculty: item.faculty || "",
-                studyProgram: item.studyProgram || "",
-                institution: item.institution || "",
-                work: item.work || "",
-                nationalState: item.nationalState || "",
-                countryResidence: item.countryResidence || "",
-                province: item.province || "",
-                city: item.city || "",
-                subdistrict: item.subdistrict || "",
-                ward: item.ward || "",
-                postalCode: item.postalCode || "",
-                phoneNumber: item.phoneNumber || "",
-                address: item.address || "",
-                ktp: item.ktp ? await processFile(item.ktp) : null,
-                facebook: item.facebook || "",
-                whatsapp: item.whatsapp || "",
-                instagram: item.instagram || "",
-                twitter: item.twitter || "",
-              }))
-            );
+        if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+          // Set Personal Data jika tersedia
+          const mappedContributors = await Promise.all(
+            detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+              id: item.id ?? null,
+              isLeader: item.isLeader || false,
+              name: item.name || "",
+              email: item.email || "",
+              faculty: item.faculty || "",
+              studyProgram: item.studyProgram || "",
+              institution: item.institution || "",
+              work: item.work || "",
+              nationalState: item.nationalState || "",
+              countryResidence: item.countryResidence || "",
+              province: item.province || "",
+              city: item.city || "",
+              subdistrict: item.subdistrict || "",
+              ward: item.ward || "",
+              postalCode: item.postalCode || "",
+              phoneNumber: item.phoneNumber || "",
+              address: item.address || "",
+              ktp: item.ktp ? await processFile(item.ktp) : null,
+              facebook: item.facebook || "",
+              whatsapp: item.whatsapp || "",
+              instagram: item.instagram || "",
+              twitter: item.twitter || "",
+            }))
+          );
 
-            setPersonalData(mappedContributors);
-          }
+          setPersonalData(mappedContributors);
+        }
       }
     };
 

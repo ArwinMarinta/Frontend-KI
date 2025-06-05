@@ -45,3 +45,19 @@ export interface Notification {
   updatedAt: string;
   deletedAt: string | null;
 }
+
+export type UserDashboardData = {
+  totalPengajuan: {
+    hakCipta: number;
+    paten: number;
+    merek: number;
+    desainIndustri: number;
+  };
+  totalPendanaan: {
+    pendanaan: number;
+    mandiri: number;
+  };
+  faq: number;
+  unduhan: number;
+  pengajuanTerakhir: PengajuanItem[];
+};

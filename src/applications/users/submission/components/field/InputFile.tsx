@@ -10,8 +10,9 @@ interface FileProps {
   placeholder?: string;
   accept?: string;
   need?: boolean;
+  message?: string;
 }
-const InputFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", need = false }: FileProps) => {
+const InputFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", need = false, message }: FileProps) => {
   return (
     <div className="w-full relative">
       <label className="block mb-2 text-base font-medium">
@@ -21,7 +22,7 @@ const InputFile = ({ label, value, name, required = false, onChange, error = fal
 
       <div className="flex items-center gap-2">
         {/* Tombol Pilih File menggunakan absolute positioning */}
-        <label htmlFor={name} className="cursor-pointer bg-PRIMARY01 hover:bg-PRIMARY01 text-white text-sm px-4 py-2 rounded-md absolute left-0">
+        <label htmlFor={name} className="cursor-pointer bg-[#1F2A37] hover:bg-[#1F2A37] text-white text-sm px-4 py-2 rounded-md absolute left-0">
           Pilih File
         </label>
 
@@ -31,8 +32,9 @@ const InputFile = ({ label, value, name, required = false, onChange, error = fal
         {/* Input file tersembunyi */}
         <input id={name} name={name} type="file" className="hidden" required={required} onChange={onChange} accept={accept} />
       </div>
-
       {error && <p className="text-sm text-RED01 mt-1">File Tidak Boleh Kosong!</p>}
+
+      <div className="mt-1 text-GREY04 text-sm font-medium">{message}</div>
     </div>
   );
 };

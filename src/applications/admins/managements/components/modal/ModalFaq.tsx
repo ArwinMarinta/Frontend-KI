@@ -1,13 +1,16 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import useManageFaq from "../../hooks/useManageFaq";
 import FieldTextarea from "../../../../../components/input/fieldTextArea";
 import { createFaq, getFaqById, updateFaq } from "../../../../../service/actions/faqAction";
 import { useEffect } from "react";
 import { ModalProps } from "../../../../../types/modalType";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 
 const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { dispatch, form, setForm, name, currentPage, limit, faqsDetail, errors, setErrors } = useManageFaq();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       question: form.question.trim() === "",
@@ -19,15 +22,25 @@ const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.question || newErrors.answer) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateFaq(id, form.question, form.answer, name, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateFaq(id, form.question, form.answer, name, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createFaq(form.question, form.answer, name, currentPage, limit));
-      setModal(false);
-      setForm({
-        question: "",
-        answer: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createFaq(form.question, form.answer, name, currentPage, limit));
+        setModal(false);
+        setForm({
+          question: "",
+          answer: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         question: "",
@@ -86,10 +99,9 @@ const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

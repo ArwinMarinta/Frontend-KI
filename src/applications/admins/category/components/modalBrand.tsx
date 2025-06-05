@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import { ModalProps } from "../../../../types/modalType";
 import { createCategoryBrand, getCategoryBrandById, updateCategoryBrand } from "../../../../service/actions/categoryBrandAction";
 import useBrand from "../hooks/useBrand";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Field from "../../../../components/input/fieldInput";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../components/button/addButtonModal";
 
 const ModalBrand = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { form, setForm, errors, setErrors, dispatch, currentPage, limit, categoryBrandDetail } = useBrand();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       title: form.title.trim() === "",
@@ -18,14 +21,24 @@ const ModalBrand = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.title) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateCategoryBrand(id, form.title, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateCategoryBrand(id, form.title, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createCategoryBrand(form.title, currentPage, limit));
-      setModal(false);
-      setForm({
-        title: "",
-      });
+      setLoading(true);
+      try {
+        await dispatch(createCategoryBrand(form.title, currentPage, limit));
+        setModal(false);
+        setForm({
+          title: "",
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setForm({
         title: "",
@@ -84,10 +97,9 @@ const ModalBrand = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

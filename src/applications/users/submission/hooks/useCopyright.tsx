@@ -93,7 +93,11 @@ const useCopyright = () => {
 
   const handleSubmitCopyright = async () => {
     const error = validateCopyrightData(formCopyright);
-    const hasError = Object.values(error).includes(true);
+    const excludeFields = ["exampleCreation"];
+
+    const hasError = Object.entries(error)
+      .filter(([key]) => !excludeFields.includes(key))
+      .some(([, value]) => value === true);
 
     if (hasError) {
       setFormCopyrightError(error);

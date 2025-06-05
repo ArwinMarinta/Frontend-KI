@@ -22,13 +22,14 @@ const DocumentSubmissionIndutrialDesign = ({ data }: DocumentType) => {
         <div className="flex flex-wrap gap-8">
           {claimOptions.map((option) => (
             <div key={option.id} className="flex items-center gap-2">
-              <input type="checkbox" checked={data?.claim?.includes(option.value)} className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md focus:ring-PRIMARY01 dark:focus:ring-PRIMARY01 dark:ring-offset-gray-800 focus:ring-1" readOnly />
+              <input disabled type="checkbox" checked={data?.claim?.includes(option.value)} className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md focus:ring-PRIMARY01 dark:focus:ring-PRIMARY01 dark:ring-offset-gray-800 focus:ring-1" readOnly />
               <label>{option.label}</label>
             </div>
           ))}
         </div>
       </div>
 
+      <DetailDocument label="Draft Pengajuan" value={data?.draftDesainIndustriApplicationFile || ""} name="fullname" placeholder="" readOnly />
       <DetailDocument label="Tampak Perspektik" value={data?.looksPerspective || ""} name="fullname" placeholder="" readOnly />
       <DetailDocument label="Tampak Depan" value={data?.frontView || ""} name="fullname" placeholder="" readOnly />
       <DetailDocument label="Tampak Belakang" value={data?.backView || ""} name="fullname" placeholder="" readOnly />

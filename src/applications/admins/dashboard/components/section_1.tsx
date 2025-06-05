@@ -1,6 +1,6 @@
 interface Section1Props {
   label: string;
-  total: number;
+  total: number | undefined;
   description: string;
 }
 

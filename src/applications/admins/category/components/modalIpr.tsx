@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { ModalProps } from "../../../../types/modalType";
 import { getIprById, updateIpr } from "../../../../service/actions/categoryIprAction";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Field from "../../../../components/input/fieldInput";
 import useIpr from "../hooks/useIpr";
+import ModalLoading from "../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../components/button/addButtonModal";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
 
 const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { form, setForm, errors, setErrors, dispatch, currentPage, limit, categoryIprDetail } = useIpr();
-
+  const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
       title: form.title.trim() === "",
@@ -18,8 +21,13 @@ const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (newErrors.title) return;
 
     if (type === "Edit" && id) {
-      await dispatch(updateIpr(id, form.title, form.isPublish, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateIpr(id, form.title, form.isPublish, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     }
     // else if (type === "Add") {
     //   await dispatch(createFaq(form.question, form.answer, name, currentPage, limit));
@@ -94,10 +102,9 @@ const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };

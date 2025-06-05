@@ -9,7 +9,7 @@ const UpdateButton = ({ onClick }: UpdateButtonProps) => {
         e.preventDefault();
         onClick(null, "Edit");
       }}
-      className="py-1 px-2 border border-YELLOW03 rounded-md text-YELLOW03 "
+      className="py-1 px-2 border border-PRIMARY02 rounded-md text-PRIMARY02 "
     >
       Ubah
     </button>

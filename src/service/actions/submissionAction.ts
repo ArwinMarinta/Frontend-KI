@@ -701,6 +701,7 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
       formData.append("reviewStatus", form.reviewStatus);
       formData.append("comments", form.comments);
       formData.append("billingCode", form.paymentCode);
+      if (form.certificateFile) formData.append("certificateFile", form.certificateFile);
 
       form.files.forEach((file) => {
         formData.append("files", file);
@@ -1429,19 +1430,19 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
         formData.append("letterStatment", Form.letterStatment);
       }
 
-      formAdditionalBrand.forEach((data, index) => {
-        if (data.additionalDescriptions) {
-          formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
-        }
-      });
+      // formAdditionalBrand.forEach((data, index) => {
+      //   if (data.additionalDescriptions) {
+      //     formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
+      //   }
+      // });
 
-      formAdditionalBrand.forEach((data) => {
-        if (data.additionalFiles) {
-          formData.append("additionalFiles", data.additionalFiles);
-        }
-      });
+      // formAdditionalBrand.forEach((data) => {
+      //   if (data.additionalFiles) {
+      //     formData.append("additionalFiles", data.additionalFiles);
+      //   }
+      // });
 
-      await axios.patch(`${API_URL}/submission/personal-data/${id}`, formData, {
+      await axios.patch(`${API_URL}/submission/personal-data-brand/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

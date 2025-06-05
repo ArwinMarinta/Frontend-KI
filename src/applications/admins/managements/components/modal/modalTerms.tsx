@@ -1,8 +1,11 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import FieldTextarea from "../../../../../components/input/fieldTextArea";
 import useManageTerms from "../../hooks/useManageTerms";
 import { createTerms, getById, updateTerms } from "../../../../../service/actions/termsActions";
 import { useEffect } from "react";
+import useLoadingProses from "../../../../../hooks/useLoadingProses";
+import ModalLoading from "../../../../../components/modal/modalLoading";
+import AddButtonModal from "../../../../../components/button/addButtonModal";
 
 interface ModalTermProps {
   modal: boolean;
@@ -14,6 +17,7 @@ interface ModalTermProps {
 
 const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
   const { dispatch, terms, setTerms, termsDetail, currentPage, limit, errors, setErrors } = useManageTerms();
+  const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
     if (!terms.trim()) {
@@ -22,12 +26,22 @@ const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
     }
 
     if (type === "Edit" && id) {
-      await dispatch(updateTerms(id, terms, currentPage, limit));
-      setModal(false);
+      setLoading(true);
+      try {
+        await dispatch(updateTerms(id, terms, currentPage, limit));
+        setModal(false);
+      } finally {
+        setLoading(false);
+      }
     } else if (type === "Add") {
-      await dispatch(createTerms(terms, currentPage, limit));
-      setModal(false);
-      setTerms("");
+      setLoading(true);
+      try {
+        await dispatch(createTerms(terms, currentPage, limit));
+        setModal(false);
+        setTerms("");
+      } finally {
+        setLoading(false);
+      }
     } else {
       setTerms("");
       setModal(false);
@@ -71,10 +85,9 @@ const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
+      <ModalLoading show={loading} />
     </Modal>
   );
 };
