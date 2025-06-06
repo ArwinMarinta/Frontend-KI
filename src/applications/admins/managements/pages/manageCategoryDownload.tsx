@@ -14,7 +14,7 @@ import ModalCategoryDocument from "../components/modal/modalCategoryDocument";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ManageCategoryDownload = () => {
-  const { docs, limit, totalPages, currentPage, handleDelete, dispatch } = useCategoryDocument();
+  const { docs, limit, totalPages, currentPage, handleDelete, dispatch, search, setSearch } = useCategoryDocument();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | string | null, types: string) => {
@@ -52,6 +52,8 @@ const ManageCategoryDownload = () => {
               </div>
               <div className="">
                 <TableWithPagination<DocumentCategoryType>
+                  search={search}
+                  onSearchChange={setSearch}
                   columns={[
                     { label: "Kategori Unduhan", accessor: "type" },
                     { label: "Total Dokumen", accessor: "totalTypeDigunakan" },

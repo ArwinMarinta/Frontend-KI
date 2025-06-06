@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryIndustrialDesign, setCategoryIndustrialDesignDetail, setCategorySubIndustrialDesign, setCategorySubIndustrialDesignDetail } from "../reducers/categoryReducer";
 
-export const getCategoryIndusDesign = (currentPage: number, limit: number): AppThunk => {
+export const getCategoryIndusDesign = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -15,6 +15,7 @@ export const getCategoryIndusDesign = (currentPage: number, limit: number): AppT
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -158,7 +159,7 @@ export const deleteCategoryIndusDesign = (id: number | string | null, currentPag
   };
 };
 
-export const getCategorySubIndusDesign = (id: string | undefined, currentPage: number, limit: number): AppThunk => {
+export const getCategorySubIndusDesign = (id: string | undefined, currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -170,6 +171,7 @@ export const getCategorySubIndusDesign = (id: string | undefined, currentPage: n
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

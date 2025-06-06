@@ -11,7 +11,7 @@ const useSubIndusDesign = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { design, limit, currentPage, totalPages } = useSelector((state: RootState) => state.category.categorySubIndustrialDesign);
   const { categorySubIndustrialDesignDetail } = useSelector((state: RootState) => state.category);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState<FormIndustialDesign>({
     title: "",
   });
@@ -21,10 +21,10 @@ const useSubIndusDesign = () => {
   });
 
   useEffect(() => {
-    if (token) {
-      dispatch(getCategorySubIndusDesign(ids, currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getCategorySubIndusDesign(ids, currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit, ids]);
+  }, [token, dispatch, currentPage, limit, ids, search]);
 
   const handleDeleteFaq = async (id: number | string | null) => {
     if (token) {
@@ -48,6 +48,8 @@ const useSubIndusDesign = () => {
     errors,
     setErrors,
     ids,
+    search,
+    setSearch,
   };
 };
 

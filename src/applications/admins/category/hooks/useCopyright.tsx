@@ -9,7 +9,7 @@ const useCopyright = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { copyright, limit, currentPage, totalPages } = useSelector((state: RootState) => state.category.categoryCopyright);
   const { categoryCopyrightDetail } = useSelector((state: RootState) => state.category);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState<FormBrand>({
     title: "",
   });
@@ -18,10 +18,10 @@ const useCopyright = () => {
     title: false,
   });
   useEffect(() => {
-    if (token) {
-      dispatch(getCategoryCopyright(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getCategoryCopyright(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit]);
+  }, [token, dispatch, currentPage, limit, search]);
 
   const handleDeleteFaq = async (id: number | string | null) => {
     if (token) {
@@ -44,6 +44,8 @@ const useCopyright = () => {
     form,
     errors,
     setErrors,
+    search,
+    setSearch,
   };
 };
 

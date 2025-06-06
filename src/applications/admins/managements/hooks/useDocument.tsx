@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../../service/store";
@@ -10,12 +10,12 @@ const useDocument = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { docs, currentPage, totalPages, totalValue, limit } = useSelector((state: RootState) => state.manage.documentsData);
   const { faqsDetail } = useSelector((state: RootState) => state.manage);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    if (token) {
-      dispatch(getDocuments(name, currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getDocuments(name, currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit, name]);
+  }, [token, dispatch, currentPage, limit, name, search]);
 
   const handleDelete = async (id: number | string | null) => {
     if (token) {
@@ -34,8 +34,9 @@ const useDocument = () => {
     limit,
     handleDelete,
     dispatch,
-
     faqsDetail,
+    search,
+    setSearch,
   };
 };
 

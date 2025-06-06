@@ -16,12 +16,13 @@ import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
 import useReviewer from "../hooks/useReviewer";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { exportBrandToExcel } from "../../../../components/export/submissionData";
 
 const SubmissionBrand = () => {
   const { brand, currentPage, limit, totalPages, dispatch, handleDeleteSubmission, search, setSearch } = useBrand();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
-  const { setStatus, status } = useStatus();
-  const { reviewer, setReviewer } = useReviewer();
+  const { setStatus, status, handleChange } = useStatus();
+  const { reviewer, setReviewer, handleChange: handleChangeReviewer } = useReviewer();
 
   const handleModal = (id: number | null, types: string, status?: string | null | undefined, reviewerId?: number) => {
     if (types === "Delete") {
@@ -43,6 +44,10 @@ const SubmissionBrand = () => {
     }
   };
 
+  const exportToExcel = () => {
+    exportBrandToExcel(brand);
+  };
+
   return (
     <>
       <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -62,6 +67,7 @@ const SubmissionBrand = () => {
                   <ButtonAdd url={"/permohonan/merek/tambah"} />
                 </div>
                 <TableWithPagination<Review>
+                  exportButton={exportToExcel}
                   search={search}
                   onSearchChange={setSearch}
                   excel={true}
@@ -126,8 +132,8 @@ const SubmissionBrand = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} />
-              <ModalUpdateReviewer modal={activeModal === "updateReviewerBrand" || activeModal === "updateReviewerBrand"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalUpdateReviewer modal={activeModal === "updateReviewerBrand" || activeModal === "updateReviewerBrand"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionBrand" || activeModal === "DeleteSubmissionBrand"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>
           </div>

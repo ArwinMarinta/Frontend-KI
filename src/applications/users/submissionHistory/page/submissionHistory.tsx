@@ -15,7 +15,7 @@ import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import { API_FILE } from "../../../../config/config";
 
 const SubmissionHistory = () => {
-  const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission } = useHistorySubmission();
+  const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission, search, setSearch } = useHistorySubmission();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -77,6 +77,8 @@ const SubmissionHistory = () => {
               </div>
               <div className="mt-8">
                 <TableWithPagination<Review>
+                  search={search}
+                  onSearchChange={setSearch}
                   columns={[
                     ...(type !== "Merek"
                       ? [

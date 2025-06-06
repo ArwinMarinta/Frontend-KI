@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/userType";
 import { PaginationType } from "../../types/paginationType";
 
@@ -40,9 +40,26 @@ const userSlice = createSlice({
     setReviewer: (state, action) => {
       state.reviewer = action.payload;
     },
+    setLimit: (state, action: PayloadAction<{ key: "account"; limit: number }>) => {
+      const { key, limit } = action.payload;
+      const target = state[key];
+
+      if (target) {
+        target.limit = limit;
+        target.currentPage = 1;
+      }
+    },
+    setCurrentPage: (state, action: PayloadAction<{ key: "account"; currentPage: number }>) => {
+      const { key, currentPage } = action.payload;
+      const target = state[key];
+
+      if (target) {
+        target.currentPage = currentPage;
+      }
+    },
   },
 });
 
-export const { setReviewer, setAccount, setUserDetails, setCurrentPageUser, setLimitUser } = userSlice.actions;
+export const { setReviewer, setAccount, setUserDetails, setCurrentPageUser, setLimitUser, setLimit, setCurrentPage } = userSlice.actions;
 
 export default userSlice.reducer;

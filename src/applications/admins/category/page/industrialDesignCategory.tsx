@@ -14,7 +14,7 @@ import ModalIndusDesign from "../components/modalIndusDesign";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const IndustrialDesignCategory = () => {
-  const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useIndusDesign();
+  const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useIndusDesign();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -57,6 +57,8 @@ const IndustrialDesignCategory = () => {
             </div>
             <div className="  ">
               <TableWithPagination<IndustialDesignType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[{ label: "Jenis Hak Cipta", accessor: "title" }]}
                 data={design}
                 limit={limit}

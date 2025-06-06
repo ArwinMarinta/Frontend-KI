@@ -16,14 +16,13 @@ import { toSlug } from "../../../../utils/toSlug";
 import ButtonAdd from "../../../../components/button/linkButton";
 import useReviewer from "../hooks/useReviewer";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import { exportCopyrightToExcel } from "../../../../components/export/submissionData";
 
 const SubmissionCopyright = () => {
   const { copyright, currentPage, limit, totalPages, dispatch, handleDeleteSubmission, setSearch, search } = useCopyright();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
   const { setStatus, status, handleChange } = useStatus();
-  const { reviewer, setReviewer } = useReviewer();
+  const { reviewer, setReviewer, handleChange: handleChangeReviewer } = useReviewer();
 
   const handleModal = (id: number | null, types: string, status?: string | null | undefined, reviewerId?: number) => {
     if (types === "Delete") {
@@ -44,25 +43,7 @@ const SubmissionCopyright = () => {
   };
 
   const exportToExcel = () => {
-    const dataToExport = copyright.map((item) => ({
-      "Nama Pemohon": item?.user?.fullname ?? "-",
-      Pembayaran: item?.submission?.submissionScheme ?? "-",
-      Reviewer: item?.reviewer?.fullname ?? "-",
-      "Status Pengajuan": item?.centralStatus ?? "-",
-      "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Permohonan Hak Cipta");
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const dataBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(dataBlob, "Permohonan_Merek.xlsx");
+    exportCopyrightToExcel(copyright);
   };
 
   return (
@@ -98,7 +79,7 @@ const SubmissionCopyright = () => {
                       label: "Reviewer",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah progres" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                        <button onClick={() => handleModal(item.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah Reviewer" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
                           {item.reviewer?.fullname ?? "-"}
                         </button>
                       ),
@@ -152,7 +133,7 @@ const SubmissionCopyright = () => {
                 />
               </div>
               <ModalSubmissionStatus modal={activeModal === "updateStatusCopyright" || activeModal === "updateStatusCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
-              <ModalUpdateReviewer modal={activeModal === "updateReviewerCopyright" || activeModal === "updateReviewerCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} />
+              <ModalUpdateReviewer modal={activeModal === "updateReviewerCopyright" || activeModal === "updateReviewerCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionCopyright" || activeModal === "DeleteSubmissionPatent"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
               {/* <ModalLoading show={loading} /> */}
             </div>

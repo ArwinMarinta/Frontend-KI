@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { setCategoryFaqDetail, setCategoryFaqs, setFaqDetail, setFaqs } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
 
-export const getCategoryFaq = (currentPage: number, limit: number): AppThunk => {
+export const getCategoryFaq = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -15,6 +15,7 @@ export const getCategoryFaq = (currentPage: number, limit: number): AppThunk => 
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -128,7 +129,7 @@ export const deleteCategoryFaq = (id: number | string | null, currentPage: numbe
   };
 };
 
-export const getFaq = (title: string | undefined, currentPage: number, limit: number): AppThunk => {
+export const getFaq = (title: string | undefined, currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -140,6 +141,7 @@ export const getFaq = (title: string | undefined, currentPage: number, limit: nu
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

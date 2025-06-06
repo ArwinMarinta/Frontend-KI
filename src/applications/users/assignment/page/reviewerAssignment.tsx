@@ -9,7 +9,7 @@ import HeaderNavigation from "../../../../components/adminNavigation/headerNavig
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ReviewerAssignment = () => {
-  const { reviewer, limit, currentPage, totalPages, dispatch } = useAssignment();
+  const { reviewer, limit, currentPage, totalPages, dispatch, search, setSearch } = useAssignment();
   return (
     <>
       <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -27,6 +27,8 @@ const ReviewerAssignment = () => {
 
               <div className="mt-8">
                 <TableWithPagination<Review>
+                  search={search}
+                  onSearchChange={setSearch}
                   columns={[
                     { label: "Judul Ciptaan", accessor: "submission", render: (item) => item.submission?.copyright?.titleInvention ?? "-" },
                     {

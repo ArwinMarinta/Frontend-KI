@@ -16,12 +16,13 @@ import { Link } from "react-router-dom";
 import { toSlug } from "../../../../utils/toSlug";
 import useReviewer from "../hooks/useReviewer";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { exportPatentToExcel } from "../../../../components/export/submissionData";
 
 const SubmissionPatent = () => {
   const { patent, currentPage, limit, totalPages, dispatch, handleDeleteSubmission, search, setSearch } = usePatent();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message, type } = useModal();
-  const { setStatus, status } = useStatus();
-  const { reviewer, setReviewer } = useReviewer();
+  const { setStatus, status, handleChange } = useStatus();
+  const { reviewer, setReviewer, handleChange: handleChangeReviewer } = useReviewer();
 
   const handleModal = (id: number | null, types: string, status?: string | null, reviewerId?: number) => {
     if (types === "Delete") {
@@ -43,6 +44,10 @@ const SubmissionPatent = () => {
     }
   };
 
+  const exportToExcel = () => {
+    exportPatentToExcel(patent);
+  };
+
   return (
     <>
       <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -62,6 +67,7 @@ const SubmissionPatent = () => {
                   <ButtonAdd url={"/permohonan/paten/tambah"} />
                 </div>
                 <TableWithPagination<Review>
+                  exportButton={exportToExcel}
                   search={search}
                   onSearchChange={setSearch}
                   excel={true}
@@ -126,8 +132,8 @@ const SubmissionPatent = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusPaten" || activeModal === "updateStatusPaten"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} />
-              <ModalUpdateReviewer modal={activeModal === "updateReviewerPaten" || activeModal === "updateReviewerPaten"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusPaten" || activeModal === "updateStatusPaten"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalUpdateReviewer modal={activeModal === "updateReviewerPaten" || activeModal === "updateReviewerPaten"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionPatent" || activeModal === "DeleteSubmissionPatent"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>
           </div>

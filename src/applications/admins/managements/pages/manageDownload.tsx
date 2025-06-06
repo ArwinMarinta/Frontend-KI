@@ -14,7 +14,7 @@ import { API_FILE } from "../../../../config/config";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ManageDownload = () => {
-  const { docs, limit, totalPages, currentPage, dispatch, handleDelete } = useDocument();
+  const { docs, limit, totalPages, currentPage, dispatch, handleDelete, search, setSearch } = useDocument();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | string | null, types: string) => {
@@ -58,6 +58,8 @@ const ManageDownload = () => {
               </div>
               <div className="  ">
                 <TableWithPagination<DocumentType>
+                  search={search}
+                  onSearchChange={setSearch}
                   columns={[
                     { label: "Nama File", accessor: "title" },
                     {

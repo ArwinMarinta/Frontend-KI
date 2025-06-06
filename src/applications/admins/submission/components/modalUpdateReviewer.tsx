@@ -13,10 +13,11 @@ export interface ModalProps {
   id: number | string | null;
   message: string | null;
   reviewer?: number;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer }: ModalProps) => {
-  const { handleChange, reviewerError, setReviewerError, dispatch, reviewerData, resetReviewer, loading, setLoading } = useReviewer();
+const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer, handleChange }: ModalProps) => {
+  const { reviewerError, setReviewerError, dispatch, reviewerData, resetReviewer, loading, setLoading } = useReviewer();
 
   useEffect(() => {
     dispatch(getReviewer());
@@ -54,7 +55,7 @@ const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer }: M
             label="Reviewer"
             name="applicationType"
             type="select"
-            value={reviewer !== undefined ? reviewer.toString() : ""}
+            value={reviewer?.toString() ?? ""}
             onChange={handleChange}
             options={
               reviewerData?.map((item) => ({

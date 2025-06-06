@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { setCategoryDocumentDetail, setDocumentDetail, setDocumentsCategoryData, setDocumentsData } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
 
-export const getCategoryDocument = (currentPage: number, limit: number): AppThunk => {
+export const getCategoryDocument = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -15,6 +15,7 @@ export const getCategoryDocument = (currentPage: number, limit: number): AppThun
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -154,12 +155,10 @@ export const deleteCategoryDocument = (title: number | string | null, currentPag
   };
 };
 
-export const getDocuments = (title: string | undefined, currentPage: number, limit: number): AppThunk => {
+export const getDocuments = (title: string | undefined, currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
-
-      console.log(title);
 
       const response = await axios.get(`${API_URL}/document/by-type/${title}`, {
         headers: {
@@ -168,6 +167,7 @@ export const getDocuments = (title: string | undefined, currentPage: number, lim
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

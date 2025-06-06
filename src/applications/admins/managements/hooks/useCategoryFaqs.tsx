@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import { deleteCategoryFaq, getCategoryFaq } from "../../../../service/actions/faqAction";
@@ -8,12 +8,12 @@ const useCategoryFaqs = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqs, currentPage, totalPages, totalValue, limit } = useSelector((state: RootState) => state.manage.faqsCategoryData);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    if (token) {
-      dispatch(getCategoryFaq(currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getCategoryFaq(currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit, totalValue]);
+  }, [token, dispatch, currentPage, limit, totalValue, search]);
 
   const handleDeleteCategoryFaq = async (id: number | string | null) => {
     if (token) {
@@ -33,6 +33,8 @@ const useCategoryFaqs = () => {
     limit,
     handleDeleteCategoryFaq,
     dispatch,
+    search,
+    setSearch,
   };
 };
 

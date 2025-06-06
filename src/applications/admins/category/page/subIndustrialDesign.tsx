@@ -13,7 +13,7 @@ import ModalWarning from "../../../../components/modal/modalWarning";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubIndustrialDesign = () => {
-  const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useSubIndusDesign();
+  const { design, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useSubIndusDesign();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -56,6 +56,8 @@ const SubIndustrialDesign = () => {
             </div>
             <div className="  ">
               <TableWithPagination<IndustialDesignType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[{ label: "Jenis Hak Cipta", accessor: "title" }]}
                 data={design}
                 limit={limit}

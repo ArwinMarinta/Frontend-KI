@@ -13,7 +13,7 @@ import ModalFaq from "../components/modal/ModalFaq";
 import useFaq from "../hooks/useFaq";
 
 const ManageFaq = () => {
-  const { faqs, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useFaq();
+  const { faqs, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useFaq();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -56,6 +56,8 @@ const ManageFaq = () => {
             </div>
             <div className="  ">
               <TableWithPagination<FaqType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[
                   { label: "Pertanyaan", accessor: "question" },
                   { label: "Jawaban", accessor: "answer" },

@@ -14,7 +14,7 @@ import ModalCopyright from "../components/modalCopyright";
 import useCopyright from "../hooks/useCopyright";
 
 const CopyrightCategory = () => {
-  const { copyright, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useCopyright();
+  const { copyright, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useCopyright();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -51,6 +51,8 @@ const CopyrightCategory = () => {
             </div>
             <div className="  ">
               <TableWithPagination<CopyrightType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[{ label: "Jenis Hak Cipta", accessor: "title" }]}
                 data={copyright}
                 limit={limit}

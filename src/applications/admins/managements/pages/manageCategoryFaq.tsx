@@ -14,7 +14,7 @@ import useCategoryFaqs from "../hooks/useCategoryFaqs";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const ManageCategoryFaq = () => {
-  const { faqs, limit, totalPages, currentPage, handleDeleteCategoryFaq, dispatch } = useCategoryFaqs();
+  const { faqs, limit, totalPages, currentPage, handleDeleteCategoryFaq, dispatch, search, setSearch } = useCategoryFaqs();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | string | null, types: string) => {
@@ -52,6 +52,8 @@ const ManageCategoryFaq = () => {
               </div>
               <div className="  ">
                 <TableWithPagination<FaqCategoryType>
+                  search={search}
+                  onSearchChange={setSearch}
                   columns={[
                     { label: "Kategori FAQ", accessor: "type" },
                     { label: "Total FAQ", accessor: "totalTypeDigunakan" },

@@ -11,7 +11,7 @@ const useSubCopyright = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { copyright, limit, currentPage, totalPages } = useSelector((state: RootState) => state.category.categorySubCopyright);
   const { categorySubCopyrightDetail } = useSelector((state: RootState) => state.category);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState<FormCopyright>({
     title: "",
   });
@@ -20,10 +20,10 @@ const useSubCopyright = () => {
     title: false,
   });
   useEffect(() => {
-    if (token) {
-      dispatch(getCategorySubCopyright(ids, currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getCategorySubCopyright(ids, currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit, ids]);
+  }, [token, dispatch, currentPage, limit, ids, search]);
 
   const handleDeleteFaq = async (id: number | string | null) => {
     if (token) {
@@ -47,6 +47,8 @@ const useSubCopyright = () => {
     errors,
     setErrors,
     ids,
+    search,
+    setSearch,
   };
 };
 

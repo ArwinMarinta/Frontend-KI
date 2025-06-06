@@ -103,6 +103,8 @@ const useUserCreate = () => {
 
     const hasErrors = Object.values(validationErrors).some((error) => error !== null && error !== false);
 
+    setErrors(validationErrors);
+
     if (hasErrors) return;
 
     if (type === "create") {
@@ -161,8 +163,6 @@ const useUserCreate = () => {
       });
     }
   }, [userDetails, type]);
-
-  console.log();
 
   return {
     formUser,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import { getFaq, deleteFaq } from "../../../../service/actions/faqAction";
@@ -10,12 +10,12 @@ const useFaq = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqs, currentPage, totalPages, totalValue, limit } = useSelector((state: RootState) => state.manage.faqsData);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    if (token) {
-      dispatch(getFaq(name, currentPage, limit));
+    if (token || search !== "") {
+      dispatch(getFaq(name, currentPage, limit, search));
     }
-  }, [token, dispatch, currentPage, limit, name]);
+  }, [token, dispatch, currentPage, limit, name, search]);
 
   const handleDeleteFaq = async (id: number | string | null) => {
     if (token) {
@@ -34,6 +34,8 @@ const useFaq = () => {
     limit,
     handleDeleteFaq,
     dispatch,
+    search,
+    setSearch,
   };
 };
 

@@ -72,7 +72,7 @@ export const updateProfile = (form: User3, id: string | number, onSuccess?: () =
   };
 };
 
-export const getAccount = (currentPage: number, limit: number): AppThunk => {
+export const getAccount = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -84,6 +84,7 @@ export const getAccount = (currentPage: number, limit: number): AppThunk => {
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

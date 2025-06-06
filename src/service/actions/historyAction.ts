@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setHistorySubmission, setReviewerSubmission } from "../reducers/historyReducer";
 
-export const getUserSubmission = (currentPage: number, limit: number, id: number | undefined): AppThunk => {
+export const getUserSubmission = (currentPage: number, limit: number, id: number | undefined, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -16,6 +16,7 @@ export const getUserSubmission = (currentPage: number, limit: number, id: number
           page: currentPage,
           limit: limit,
           submissionTypeId: id,
+          search: search,
         },
       });
 
@@ -39,7 +40,7 @@ export const getUserSubmission = (currentPage: number, limit: number, id: number
     }
   };
 };
-export const getReviewerSubmission = (currentPage: number, limit: number): AppThunk => {
+export const getReviewerSubmission = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -51,6 +52,7 @@ export const getReviewerSubmission = (currentPage: number, limit: number): AppTh
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

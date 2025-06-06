@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryCopyright, setCategoryCopyrightDetail, setCategorySubCopyright, setCategorySubCopyrightDetail } from "../reducers/categoryReducer";
 
-export const getCategoryCopyright = (currentPage: number, limit: number): AppThunk => {
+export const getCategoryCopyright = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -15,6 +15,7 @@ export const getCategoryCopyright = (currentPage: number, limit: number): AppThu
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 
@@ -158,7 +159,7 @@ export const deleteCategoryCopyright = (id: number | string | null, currentPage:
   };
 };
 
-export const getCategorySubCopyright = (id: string | undefined, currentPage: number, limit: number): AppThunk => {
+export const getCategorySubCopyright = (id: string | undefined, currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -170,6 +171,7 @@ export const getCategorySubCopyright = (id: string | undefined, currentPage: num
         params: {
           page: currentPage,
           limit: limit,
+          search: search,
         },
       });
 

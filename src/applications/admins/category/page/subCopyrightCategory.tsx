@@ -13,7 +13,7 @@ import ModalSubCopyright from "../components/modalSubCopyright";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const SubCopyrightCategory = () => {
-  const { copyright, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useSubCopyright();
+  const { copyright, limit, totalPages, currentPage, dispatch, handleDeleteFaq, search, setSearch } = useSubCopyright();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
 
   const handleModal = (id: number | null, types: string) => {
@@ -56,6 +56,8 @@ const SubCopyrightCategory = () => {
             </div>
             <div className="  ">
               <TableWithPagination<CopyrightType>
+                search={search}
+                onSearchChange={setSearch}
                 columns={[{ label: "Jenis Hak Cipta", accessor: "title" }]}
                 data={copyright}
                 limit={limit}

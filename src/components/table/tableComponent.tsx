@@ -51,7 +51,6 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
                 id="search-dropdown"
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-md border border-gray-300 focus:ring-PRIMARY01 focus:border-PRIMARY01"
                 placeholder="Pembayaran, progres, status"
-                required
                 value={localSearch}
                 onChange={(e) => setLocalSearch(e.target.value)}
               />

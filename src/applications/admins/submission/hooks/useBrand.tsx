@@ -8,6 +8,7 @@ const useBrand = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const { brand, currentPage, limit, totalPages } = useSelector((state: RootState) => state.submission.brandData);
   const [search, setSearch] = useState("");
+
   useEffect(() => {
     if (token || search !== "") {
       dispatch(getSubmissionBrand(currentPage, limit, search));

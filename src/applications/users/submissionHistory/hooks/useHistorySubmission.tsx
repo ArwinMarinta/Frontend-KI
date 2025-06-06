@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUserSubmission } from "../../../../service/actions/historyAction";
 import { deleteSubmissionUser } from "../../../../service/actions/submissionAction";
 import { useParams } from "react-router-dom";
@@ -19,15 +19,17 @@ const useHistorySubmission = () => {
       .join(" ");
   };
 
+  const [search, setSearch] = useState("");
+
   const isDifferentType = user.some((data) => data.submission?.submissionType?.title !== formatType(type)) ? 1 : currentPage;
 
   useEffect(() => {
     const submissionTypeId = type === "hak-cipta" ? 1 : type === "paten" ? 2 : type === "merek" ? 3 : type === "desain-industri" ? 4 : undefined;
 
-    if (token) {
-      dispatch(getUserSubmission(isDifferentType, limit, submissionTypeId));
+    if (token || search !== "") {
+      dispatch(getUserSubmission(isDifferentType, limit, submissionTypeId, search));
     }
-  }, [token, dispatch, currentPage, limit, type, isDifferentType]);
+  }, [token, dispatch, currentPage, limit, type, isDifferentType, search]);
 
   const handleDeleteSubmission = (id: number | string | null) => {
     const newPage = user.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
@@ -42,6 +44,8 @@ const useHistorySubmission = () => {
     totalPages,
     type,
     handleDeleteSubmission,
+    setSearch,
+    search,
   };
 };
 
