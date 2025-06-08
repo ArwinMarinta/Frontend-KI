@@ -10,7 +10,7 @@ import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/informationReducer";
 
 const ReportsAnalitic = () => {
-  const { report, limit, totalPages, currentPage, handleChangeReportAnalitic, formReportAnalitic, handleSearchReport, dispatch } = useReportAnalitic();
+  const { report, limit, totalPages, currentPage, handleSearchReport, dispatch } = useReportAnalitic();
   return (
     <>
       <main className="flex flex-row w-full min-h-full bg-[#F6F9FF]">
@@ -28,7 +28,7 @@ const ReportsAnalitic = () => {
               <div className="flex flex-row justify-between mb-12">
                 <span className="text-3xl font-semibold">Laporan dan Analisis</span>
               </div>
-              <FormReportAnalitic form={formReportAnalitic} onChange={handleChangeReportAnalitic} handleSearch={handleSearchReport} />
+              <FormReportAnalitic handleSearch={handleSearchReport} />
             </div>
             {report.length > 0 && (
               <div className="mt-10 lg:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50">

@@ -18,7 +18,7 @@ export const getStatusColor = (status: string) => {
       return "bg-yellow-200 text-yellow-800";
 
     case "pembayaran":
-    case "selesai":
+    case "sertifikat terbit":
       return "bg-green-300 text-green-800";
 
     // Default: abu-abu untuk status tidak dikenal

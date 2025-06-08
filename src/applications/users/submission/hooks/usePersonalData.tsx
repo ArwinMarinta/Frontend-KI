@@ -26,6 +26,7 @@ const usePersonalData = () => {
       instagram: null,
       twitter: null,
       address: "",
+      ktpName: "",
     },
   ]);
 

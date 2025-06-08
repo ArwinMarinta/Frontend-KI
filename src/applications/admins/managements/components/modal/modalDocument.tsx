@@ -148,8 +148,8 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
       <Modal.Body>
         <div className="space-y-6">
           <Field label="Judul Dokumen" value={form.title} name="title" type="text" placeholder="" onChange={handleOnChange} required error={errors.title} />
-          <FieldFile label="Cover Dokumen" value={form.cover} name="cover" required onChange={handleOnChange} error={errors.document} placeholder={form.documentName} accept=".jpg, .jpeg, .png, .webp" />
-          <FieldFile label="Dokumen" value={form.document} name="document" required onChange={handleOnChange} error={errors.document} placeholder={form.documentName} />
+          <FieldFile label="Cover Dokumen" value={form.cover} name="cover" required onChange={handleOnChange} error={errors.cover} placeholder={form.coverName} accept=".jpg, .jpeg, .png, .webp" message="Format file harus berupa jpg, jpeg, png, webp" edite={type} url={form.documentName} />
+          <FieldFile label="Dokumen" value={form.document} name="document" required onChange={handleOnChange} error={errors.document} placeholder={form.documentName} message="Format file harus berupa pdf, doc, atau docx" edite={type} url={form.documentName} />
 
           {/* {form.documentName && (
             <p className="text-sm text-gray-500 mt-1">

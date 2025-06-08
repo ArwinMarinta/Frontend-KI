@@ -16,6 +16,7 @@ import ModalWarningContributor from "../../../../components/modal/modalWarningCo
 import Form_4 from "../../../users/submission/components/form_4";
 import useCopyright from "../../../users/submission/hooks/useCopyright";
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 
 const CreateSubmissionCopyrightAdmin = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -155,6 +156,15 @@ const CreateSubmissionCopyrightAdmin = () => {
       <div className="lg:w-[84%] w-full">
         <HeaderNavigation />
         <div className="px-4 lg:px-12  py-8 ">
+          <div className="mb-8">
+            <Breadcrumb
+              title="PERMOHONAN HAK CIPTA"
+              items={[
+                { label: "Hak Cipta", url: "/permohonan/hak-cipta" },
+                { label: "Tambah", url: "" },
+              ]}
+            />
+          </div>
           <div className="md:p-16 p-4 rounded-md bg-white shadow-md border border-gray-50 ">
             <div className="flex justify-center mb-10">
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Formulir Pengajuan Hak Cipta</h1>

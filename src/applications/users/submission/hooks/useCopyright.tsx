@@ -28,6 +28,9 @@ const useCopyright = () => {
     statementLetter: null as File | null,
     letterTransferCopyright: null as File | null,
     exampleCreation: null as File | null,
+    statementName: "",
+    letterName: "",
+    exampleName: "",
   });
 
   const [formCopyrightError, setFormCopyrightError] = useState({

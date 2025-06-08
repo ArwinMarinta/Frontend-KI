@@ -31,6 +31,7 @@ const useComplateIndustrialDesain = () => {
     moreImages: null as File | null,
     letterTransferDesignRights: null as File | null,
     designOwnershipLetter: null as File | null,
+    draftDesainIndustriApplicationFile: null as File | null,
   });
   const [formIndustDesignError, setFormIndustDesignError] = useState<FormDesignSubmissionErrors>({
     titleDesign: null,

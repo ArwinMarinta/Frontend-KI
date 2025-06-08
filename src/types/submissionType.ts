@@ -95,6 +95,7 @@ export interface PersonalData {
   instagram: string | null;
   twitter: string | null;
   address: string;
+  ktpName?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -294,7 +295,7 @@ export interface FormPersonalData {
   instagram: string | null;
   twitter: string | null;
   address: string;
-  // ktpName: string;
+  ktpName?: string;
 }
 
 export interface FormUpdateProgress {
@@ -328,6 +329,7 @@ export interface FormComplateIndustDesign {
   moreImages: File | null;
   letterTransferDesignRights: File | null;
   designOwnershipLetter: File | null;
+  draftDesainIndustriApplicationFile?: File | null;
 }
 
 export interface FormDesignSubmissionErrors {
@@ -359,6 +361,10 @@ export interface FormComplatePatenSubmission {
   inventionImage: File | null;
   statementInventionOwnership: File | null;
   letterTransferRightsInvention: File | null;
+  draftPatentApplicationFile?: File | null;
+  inventionName?: string | null;
+  statementName?: string | null;
+  letterName?: string | null;
 }
 
 export interface FormComplatePatenSubmissionErrors {

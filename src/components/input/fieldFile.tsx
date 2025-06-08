@@ -1,4 +1,5 @@
 import React from "react";
+import { getHrefByFileName } from "../../utils/detecdtedFile";
 interface FileProps {
   label: string;
   value: File | null;
@@ -8,8 +9,11 @@ interface FileProps {
   error?: boolean;
   placeholder?: string;
   accept?: string;
+  message?: string;
+  url?: string;
+  edite?: string;
 }
-const FieldFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx" }: FileProps) => {
+const FieldFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", message, url, edite }: FileProps) => {
   return (
     <div className="w-full relative">
       <label className="block mb-2 text-base font-medium">{label}</label>
@@ -28,6 +32,15 @@ const FieldFile = ({ label, value, name, required = false, onChange, error = fal
       </div>
 
       {error && <p className="text-sm text-RED01 mt-1">File Tidak Boleh Kosong!</p>}
+      {edite === "Edit" && (
+        <div className="mt-1 ">
+          File lama :
+          <a href={getHrefByFileName(url)} className="underline text-PRIMARY01" target="_blank">
+            {url}
+          </a>{" "}
+        </div>
+      )}
+      <div className="mt-1 text-GREY04 text-sm font-medium">{message}</div>
     </div>
   );
 };

@@ -238,7 +238,7 @@ export const updateDocument = (id: string | number, name: string, file: File | n
         formData.append("document", file);
       }
       if (cover) {
-        formData.append("document", cover);
+        formData.append("cover", cover);
       }
 
       await axios.patch(`${API_URL}/document/${id}`, formData, {

@@ -795,6 +795,9 @@ export const revisionSubmissionPaten = (id: number | undefined, Form: FormCompla
       if (Form.letterTransferRightsInvention) {
         formData.append("letterTransferRightsInvention", Form?.letterTransferRightsInvention);
       }
+      if (Form.draftPatentApplicationFile) {
+        formData.append("draftPatentApplicationFile", Form?.draftPatentApplicationFile);
+      }
 
       await axios.patch(`${API_URL}/patent/${id}`, formData, {
         headers: {
@@ -833,6 +836,7 @@ export const revisionSubmissionIndustrialDesign = (id: number | undefined, Form:
       if (Form.moreImages) formData.append("moreImages", Form.moreImages);
       if (Form.letterTransferDesignRights) formData.append("letterTransferDesignRights", Form.letterTransferDesignRights);
       if (Form.designOwnershipLetter) formData.append("designOwnershipLetter", Form.designOwnershipLetter);
+      if (Form.draftDesainIndustriApplicationFile) formData.append("draftDesainIndustriApplicationFile", Form.draftDesainIndustriApplicationFile);
 
       await axios.patch(`${API_URL}/design-industri/${id}`, formData, {
         headers: {

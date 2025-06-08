@@ -28,6 +28,9 @@ export interface FormSubmissionCopyright {
   statementLetter: File | null;
   letterTransferCopyright: File | null;
   exampleCreation: File | null;
+  statementName?: string;
+  letterName?: string;
+  exampleName?: string;
 }
 
 export interface FormSubmissionCopyrightError {

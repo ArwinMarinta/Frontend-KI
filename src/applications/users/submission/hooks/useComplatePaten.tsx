@@ -26,6 +26,10 @@ const useComplatePaten = () => {
     inventionImage: null,
     statementInventionOwnership: null,
     letterTransferRightsInvention: null,
+    draftPatentApplicationFile: null,
+    inventionName: "",
+    statementName: "",
+    letterName: "",
   });
 
   const [formComplatePatenError, setFormComplatePatenError] = useState<FormComplatePatenSubmissionErrors>({

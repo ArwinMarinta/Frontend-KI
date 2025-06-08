@@ -1,4 +1,5 @@
 import React from "react";
+import { getHrefByFileName } from "../../../../../utils/detecdtedFile";
 
 interface FileProps {
   label: string;
@@ -11,8 +12,10 @@ interface FileProps {
   accept?: string;
   need?: boolean;
   message?: string;
+  url?: string | undefined | null;
+  edite?: string;
 }
-const InputFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", need = false, message }: FileProps) => {
+const InputFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", need = false, message, url, edite }: FileProps) => {
   return (
     <div className="w-full relative">
       <label className="block mb-2 text-base font-medium">
@@ -33,7 +36,14 @@ const InputFile = ({ label, value, name, required = false, onChange, error = fal
         <input id={name} name={name} type="file" className="hidden" required={required} onChange={onChange} accept={accept} />
       </div>
       {error && <p className="text-sm text-RED01 mt-1">File Tidak Boleh Kosong!</p>}
-
+      {edite === "Ubah" && url && (
+        <div className="mt-1 ">
+          File lama :
+          <a href={getHrefByFileName(url)} className="underline text-PRIMARY01" target="_blank">
+            {url}
+          </a>{" "}
+        </div>
+      )}
       <div className="mt-1 text-GREY04 text-sm font-medium">{message}</div>
     </div>
   );

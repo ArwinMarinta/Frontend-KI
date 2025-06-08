@@ -5,23 +5,38 @@ import { FormReportAnaliticType } from "../../../../types/document";
 import { useState } from "react";
 import { FiFilter } from "react-icons/fi";
 type Props = {
-  form: FormReportAnaliticType;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  handleSearch: () => void;
+  handleSearch: (form: FormReportAnaliticType) => void;
 };
 
-const FormReportAnalitic = ({ form, onChange, handleSearch }: Props) => {
+const FormReportAnalitic = ({ handleSearch }: Props) => {
   const [showMoreFilters, setShowMoreFilters] = useState(false);
+
+  const [formReportAnalitic, setFormReportAnalitic] = useState<FormReportAnaliticType>({
+    namaPengguna: "",
+    jenisPengajuan: "",
+    tanggalPengajuan: "",
+    peran: "",
+    instansi: "",
+  });
+
+  const handleChangeReportAnalitic = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormReportAnalitic((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-row gap-6">
-        <Field label="" value={form.namaPengguna} name="namaPengguna" type="text" placeholder="Nama Pencipta" onChange={onChange} />
+        <Field label="" value={formReportAnalitic.namaPengguna} name="namaPengguna" type="text" placeholder="Nama Pencipta" onChange={handleChangeReportAnalitic} />
         <FieldDropdown
           label=""
           name="jenisPengajuan"
           type="select"
-          value={form.jenisPengajuan}
-          onChange={onChange}
+          value={formReportAnalitic.jenisPengajuan}
+          onChange={handleChangeReportAnalitic}
           placeholder="Pilih Jenis Pengajuan"
           options={[
             { label: "Hak Cipta", value: "Hak Cipta" },
@@ -34,8 +49,8 @@ const FormReportAnalitic = ({ form, onChange, handleSearch }: Props) => {
           label=""
           name="peran"
           type="select"
-          value={form.peran}
-          onChange={onChange}
+          value={formReportAnalitic.peran}
+          onChange={handleChangeReportAnalitic}
           options={[
             { label: "Ketua", value: "Ketua" },
             { label: "Anggota", value: "Anggota" },
@@ -49,7 +64,13 @@ const FormReportAnalitic = ({ form, onChange, handleSearch }: Props) => {
               </button>
             </div>
             <div className="col-span-4">
-              <button onClick={handleSearch} type="submit" className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2">
+              <button
+                onClick={() => {
+                  handleSearch(formReportAnalitic);
+                }}
+                type="submit"
+                className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2"
+              >
                 <IoSearch />
                 <span>Cari..</span>
               </button>
@@ -60,15 +81,21 @@ const FormReportAnalitic = ({ form, onChange, handleSearch }: Props) => {
 
       {showMoreFilters && (
         <div className="flex flex-row gap-6">
-          <Field label="" name="tanggalPengajuan" value={form.tanggalPengajuan} type="date" onChange={onChange} placeholder="Tanggal Pengajuan" />
-          <Field label="" name="instansi" value={form.instansi} type="text" onChange={onChange} placeholder="Nama Instansi" />
+          <Field label="" name="tanggalPengajuan" value={formReportAnalitic.tanggalPengajuan} type="date" onChange={handleChangeReportAnalitic} placeholder="Tanggal Pengajuan" />
+          <Field label="" name="instansi" value={formReportAnalitic.instansi} type="text" onChange={handleChangeReportAnalitic} placeholder="Nama Instansi" />
           <div className="">
             <button type="button" onClick={() => setShowMoreFilters(false)} className="flex flex-row border w-full justify-center border-BORDER01 border-md bg-gray-50 gap-2 mt-2 rounded-md items-center py-2 px-4">
               <FiFilter /> Sembuyikan
             </button>
           </div>
           <div className="col-span-4">
-            <button onClick={handleSearch} type="submit" className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2">
+            <button
+              onClick={() => {
+                handleSearch(formReportAnalitic);
+              }}
+              type="submit"
+              className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2"
+            >
               <IoSearch />
               <span>Cari..</span>
             </button>

@@ -31,7 +31,7 @@ import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import { formatLabel } from "../../../../utils/toSlug";
 import usePersonalData from "../../../users/submission/hooks/usePersonalData";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { PersonalData } from "../../../../types/submissionType";
+import { FormPersonalData } from "../../../../types/submissionType";
 
 const DetailSubmission = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -89,6 +89,9 @@ const DetailSubmission = () => {
           statementLetter: null,
           letterTransferCopyright: null,
           exampleCreation: null,
+          statementName: "",
+          letterName: "",
+          exampleName: "",
         });
 
         handleChange("Dokumen Pengajuan", "Detail");
@@ -114,6 +117,7 @@ const DetailSubmission = () => {
           inventionImage: null,
           statementInventionOwnership: null,
           letterTransferRightsInvention: null,
+          draftPatentApplicationFile: null,
         });
         handleChange("Dokumen Pengajuan", "Detail");
         dispatch(getDetailSubmission(submissionId));
@@ -144,6 +148,7 @@ const DetailSubmission = () => {
           moreImages: null as File | null,
           letterTransferDesignRights: null as File | null,
           designOwnershipLetter: null as File | null,
+          draftDesainIndustriApplicationFile: null as File | null,
         });
         handleChange("Dokumen Pengajuan", "Detail");
         dispatch(getDetailSubmission(submissionId));
@@ -157,21 +162,24 @@ const DetailSubmission = () => {
     const initForm = async () => {
       if (!detailSubmission?.submission?.copyright || types !== "Ubah Hak Cipta") return;
 
-      const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
-      const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
-      const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
+      // const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
+      // const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
+      // const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
 
       setFormCopyright({
-        titleInvention: detailSubmission?.submission?.copyright.titleInvention || "",
-        typeCreation: detailSubmission?.submission?.copyright.typeCreationId || null,
-        subTypeCreation: detailSubmission?.submission?.copyright.subTypeCreationId || null,
-        countryFirstAnnounced: detailSubmission?.submission?.copyright.countryFirstAnnounced || "",
-        cityFirstAnnounced: detailSubmission?.submission?.copyright.cityFirstAnnounced || "",
-        timeFirstAnnounced: detailSubmission?.submission?.copyright.timeFirstAnnounced || "",
-        briefDescriptionCreation: detailSubmission?.submission?.copyright.briefDescriptionCreation || "",
-        statementLetter,
-        letterTransferCopyright,
-        exampleCreation,
+        titleInvention: detailSubmission?.submission?.copyright?.titleInvention || "",
+        typeCreation: detailSubmission?.submission?.copyright?.typeCreationId || null,
+        subTypeCreation: detailSubmission?.submission?.copyright?.subTypeCreationId || null,
+        countryFirstAnnounced: detailSubmission?.submission?.copyright?.countryFirstAnnounced || "",
+        cityFirstAnnounced: detailSubmission?.submission?.copyright?.cityFirstAnnounced || "",
+        timeFirstAnnounced: detailSubmission?.submission?.copyright?.timeFirstAnnounced || "",
+        briefDescriptionCreation: detailSubmission?.submission?.copyright?.briefDescriptionCreation || "",
+        statementLetter: null,
+        letterTransferCopyright: null,
+        exampleCreation: null,
+        statementName: detailSubmission?.submission?.copyright?.statementLetter || "",
+        letterName: detailSubmission?.submission?.copyright?.letterTransferCopyright || "",
+        exampleName: detailSubmission?.submission?.copyright?.exampleCreation || "",
       });
     };
 
@@ -182,23 +190,24 @@ const DetailSubmission = () => {
     const initForm = async () => {
       if (!detailSubmission?.submission?.patent || types !== "Ubah Paten") return;
 
-      const description = await processFile(detailSubmission?.submission?.patent.description);
-      const abstract = await processFile(detailSubmission?.submission?.patent.abstract);
-      const claim = await processFile(detailSubmission?.submission?.patent.claim);
-      const inventionImage = await processFile(detailSubmission?.submission?.patent.inventionImage);
-      const statement = await processFile(detailSubmission?.submission?.patent.statementInventionOwnership);
-      const letter = await processFile(detailSubmission?.submission?.patent.letterTransferRightsInvention);
+      // const description = await processFile(detailSubmission?.submission?.patent.description);
+      // const abstract = await processFile(detailSubmission?.submission?.patent.abstract);
+      // const claim = await processFile(detailSubmission?.submission?.patent.claim);
+      // const inventionImage = await processFile(detailSubmission?.submission?.patent.inventionImage);
+      // const statement = await processFile(detailSubmission?.submission?.patent.statementInventionOwnership);
+      // const letter = await processFile(detailSubmission?.submission?.patent.letterTransferRightsInvention);
 
       setFormComplatePaten({
         inventionTitle: detailSubmission?.submission?.patent.inventionTitle || "",
         patentTypeId: detailSubmission?.submission?.patent.patentTypeId || "",
         numberClaims: detailSubmission?.submission?.patent.numberClaims || "",
-        description,
-        abstract,
-        claim,
-        inventionImage,
-        statementInventionOwnership: statement,
-        letterTransferRightsInvention: letter,
+        description: null,
+        abstract: null,
+        claim: null,
+        inventionImage: null,
+        statementInventionOwnership: null,
+        letterTransferRightsInvention: null,
+        draftPatentApplicationFile: null,
       });
     };
 
@@ -209,16 +218,16 @@ const DetailSubmission = () => {
     const initForm = async () => {
       if (!detailSubmission?.submission?.industrialDesign || types !== "Ubah Desain Industri") return;
 
-      const looksPerspective = await processFile(detailSubmission?.submission?.industrialDesign.looksPerspective);
-      const frontView = await processFile(detailSubmission?.submission?.industrialDesign.frontView);
-      const backView = await processFile(detailSubmission?.submission?.industrialDesign.backView);
-      const rightSideView = await processFile(detailSubmission?.submission?.industrialDesign.rightSideView);
-      const lefttSideView = await processFile(detailSubmission?.submission?.industrialDesign.lefttSideView);
-      const topView = await processFile(detailSubmission?.submission?.industrialDesign.topView);
-      const downView = await processFile(detailSubmission?.submission?.industrialDesign.downView);
-      const moreImages = await processFile(detailSubmission?.submission?.industrialDesign.moreImages);
-      const letterTransferDesignRights = await processFile(detailSubmission?.submission?.industrialDesign.letterTransferDesignRights);
-      const designOwnershipLetter = await processFile(detailSubmission?.submission?.industrialDesign.designOwnershipLetter);
+      // const looksPerspective = await processFile(detailSubmission?.submission?.industrialDesign.looksPerspective);
+      // const frontView = await processFile(detailSubmission?.submission?.industrialDesign.frontView);
+      // const backView = await processFile(detailSubmission?.submission?.industrialDesign.backView);
+      // const rightSideView = await processFile(detailSubmission?.submission?.industrialDesign.rightSideView);
+      // const lefttSideView = await processFile(detailSubmission?.submission?.industrialDesign.lefttSideView);
+      // const topView = await processFile(detailSubmission?.submission?.industrialDesign.topView);
+      // const downView = await processFile(detailSubmission?.submission?.industrialDesign.downView);
+      // const moreImages = await processFile(detailSubmission?.submission?.industrialDesign.moreImages);
+      // const letterTransferDesignRights = await processFile(detailSubmission?.submission?.industrialDesign.letterTransferDesignRights);
+      // const designOwnershipLetter = await processFile(detailSubmission?.submission?.industrialDesign.designOwnershipLetter);
 
       setFormIndustDesign({
         titleDesign: detailSubmission?.submission?.industrialDesign.titleDesign || "",
@@ -226,16 +235,16 @@ const DetailSubmission = () => {
         typeDesignId: detailSubmission?.submission?.industrialDesign.typeDesignId || 0,
         subtypeDesignId: detailSubmission?.submission?.industrialDesign.subtypeDesignId || 0,
         claim: typeof detailSubmission?.submission?.industrialDesign.claim === "string" ? [detailSubmission?.submission?.industrialDesign.claim] : Array.isArray(detailSubmission?.submission?.industrialDesign.claim) ? detailSubmission?.submission?.industrialDesign.claim : [],
-        looksPerspective,
-        frontView,
-        backView,
-        rightSideView,
-        lefttSideView,
-        topView,
-        downView,
-        moreImages,
-        letterTransferDesignRights,
-        designOwnershipLetter,
+        looksPerspective: null,
+        frontView: null,
+        backView: null,
+        rightSideView: null,
+        lefttSideView: null,
+        topView: null,
+        downView: null,
+        moreImages: null,
+        letterTransferDesignRights: null,
+        designOwnershipLetter: null,
       });
     };
 
@@ -383,6 +392,7 @@ const DetailSubmission = () => {
           whatsapp: "",
           instagram: "",
           twitter: "",
+          ktpName: "",
         },
       ]);
       handleChange("Data Diri", "Detail");
@@ -396,9 +406,9 @@ const DetailSubmission = () => {
     const initPersonalData = async () => {
       if (!detailSubmission?.submission?.personalDatas && statusDetail !== "Ubah") {
         return;
-      } else if (statusDetail == "Ubah" && detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
+      } else if (statusDetail == "Ubah" && detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission?.submission?.personalDatas)) {
         const mappedContributors = await Promise.all(
-          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+          detailSubmission.submission.personalDatas.map(async (item: FormPersonalData) => ({
             id: item.id ?? null,
             isLeader: item.isLeader || false,
             name: item.name || "",
@@ -416,7 +426,8 @@ const DetailSubmission = () => {
             postalCode: item.postalCode || "",
             phoneNumber: item.phoneNumber || "",
             address: item.address || "",
-            ktp: item.ktp ? await processFile(item.ktp) : null,
+            ktp: item.ktp ?? null,
+            ktpName: typeof item.ktp === "string" ? item.ktp : item.ktp instanceof File ? item.ktp.name : "",
             facebook: item.facebook || "",
             whatsapp: item.whatsapp || "",
             instagram: item.instagram || "",
@@ -478,7 +489,7 @@ const DetailSubmission = () => {
                     <div className="flex flex-col gap-6  mt-10">
                       {uniquePersonalData.map((item, index) => (
                         <>
-                          <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
+                          <div key={index} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
                             <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                               <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChangePerson(e, index, "name")} error={personalDataError[index]?.name} need />
                               <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChangePerson(e, index, "email")} error={personalDataError[index]?.email} need />
@@ -527,10 +538,13 @@ const DetailSubmission = () => {
                               name={`ktp_${index}`}
                               required
                               onChange={(e) => handleChangePerson(e, index, "ktp")}
-                              accept=".jpg, .jpeg, .png, .webp"
+                              accept=".pdf"
                               error={personalDataError[index]?.ktp}
                               need
-                              placeholder={`${item.ktp ?? ""}`}
+                              placeholder={`${item.ktpName ?? ""}`}
+                              message="Format file harus berupa pdf. Max 5MB"
+                              edite={statusDetail}
+                              url={item.ktpName}
                             />
 
                             {personalData.length > 1 && index !== 0 ? (
@@ -619,9 +633,42 @@ const DetailSubmission = () => {
                       </div>
 
                       <FieldTextarea label="Uraian Singkat Ciptaan" value={formCopyright?.briefDescriptionCreation || ""} name="briefDescriptionCreation" placeholder="" required row={4} onChange={handleChangeCopyright} error={formCopyrightError?.briefDescriptionCreation} need />
-                      <InputFile label="Surat Pernyataan" value={formCopyright?.statementLetter ?? null} name="statementLetter" required onChange={handleChangeCopyright} error={formCopyrightError?.statementLetter} need />
-                      <InputFile label="Surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ?? null} name="letterTransferCopyright" required onChange={handleChangeCopyright} error={formCopyrightError?.letterTransferCopyright} need />
-                      <InputFile label="Contoh Ciptaan" value={formCopyright?.exampleCreation ?? null} name="exampleCreation" required onChange={handleChangeCopyright} error={formCopyrightError?.exampleCreation} need />
+                      <InputFile
+                        label="Surat Pernyataan"
+                        value={formCopyright?.statementLetter ?? null}
+                        name="statementLetter"
+                        required
+                        onChange={handleChangeCopyright}
+                        error={formCopyrightError?.statementLetter}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={formCopyright?.statementName}
+                      />
+                      <InputFile
+                        label="Surat Pengalihan Hak Cipta"
+                        value={formCopyright?.letterTransferCopyright ?? null}
+                        name="letterTransferCopyright"
+                        required
+                        onChange={handleChangeCopyright}
+                        error={formCopyrightError?.letterTransferCopyright}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={formCopyright?.letterName}
+                      />
+                      <InputFile
+                        label="Contoh Ciptaan"
+                        value={formCopyright?.exampleCreation ?? null}
+                        name="exampleCreation"
+                        required
+                        onChange={handleChangeCopyright}
+                        error={formCopyrightError?.exampleCreation}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={formCopyright?.exampleName}
+                      />
                     </div>
                     <div className="mt-10 flex justify-end">
                       <button
@@ -661,12 +708,90 @@ const DetailSubmission = () => {
                           <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={!!formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} need />
                         </div>
                       </div>
-                      <InputFile label="Klaim" value={formComplatePaten.claim} name="claim" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.claim} need />
-                      <InputFile label="Deskripsi" value={formComplatePaten.description} name="description" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.description} need />
-                      <InputFile label="Abstrak" value={formComplatePaten.abstract} name="abstract" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.abstract} need />
-                      <InputFile label="Gambar Invensi" value={formComplatePaten.inventionImage} name="inventionImage" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.inventionImage} need />
-                      <InputFile label="Surat Pernyataan Kepemilikan Invensi" value={formComplatePaten.statementInventionOwnership} name="statementInventionOwnership" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.statementInventionOwnership} need />
-                      <InputFile label="Surat Pengalihan Hak Invensi" value={formComplatePaten.letterTransferRightsInvention} name="letterTransferRightsInvention" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.letterTransferRightsInvention} need />
+                      <InputFile
+                        label="Draft Paten Keseluruhan"
+                        value={formComplatePaten.draftPatentApplicationFile}
+                        name="draftPatentApplicationFile"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        // error={!!formComplatePatenError.claim}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.draftPatentApplicationFile}
+                      />
+                      <InputFile
+                        label="Klaim"
+                        value={formComplatePaten.claim}
+                        name="claim"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.claim}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.claim}
+                      />
+                      <InputFile
+                        label="Deskripsi"
+                        value={formComplatePaten.description}
+                        name="description"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.description}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.description}
+                      />
+                      <InputFile
+                        label="Abstrak"
+                        value={formComplatePaten.abstract}
+                        name="abstract"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.abstract}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.abstract}
+                      />
+                      <InputFile
+                        label="Gambar Invensi"
+                        value={formComplatePaten.inventionImage}
+                        name="inventionImage"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.inventionImage}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.inventionImage}
+                      />
+                      <InputFile
+                        label="Surat Pernyataan Kepemilikan Invensi"
+                        value={formComplatePaten.statementInventionOwnership}
+                        name="statementInventionOwnership"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.statementInventionOwnership}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.statementInventionOwnership}
+                      />
+                      <InputFile
+                        label="Surat Pengalihan Hak Invensi"
+                        value={formComplatePaten.letterTransferRightsInvention}
+                        name="letterTransferRightsInvention"
+                        required
+                        onChange={handleChangeComplatePaten}
+                        error={!!formComplatePatenError.letterTransferRightsInvention}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.patent?.letterTransferRightsInvention}
+                      />
 
                       <div className="flex justify-end mt-6">
                         <button onClick={handleUpdatePaten} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
@@ -755,16 +880,150 @@ const DetailSubmission = () => {
                         </div>
                         {formIndustDesignError.claim && <p className="text-sm text-RED01 mt-2">Klaim Wajib Dipilih!</p>}
                       </div>
-                      <InputFile label="Tampak Perspektif" value={formIndustDesign.looksPerspective} name="looksPerspective" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.looksPerspective} need />
-                      <InputFile label="Tampak Depan" value={formIndustDesign.frontView} name="frontView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.frontView} need />
-                      <InputFile label="Tampak Belakang" value={formIndustDesign.backView} name="backView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.backView} need />
-                      <InputFile label="Tampak Samping Kanan" value={formIndustDesign.rightSideView} name="rightSideView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.rightSideView} need />
-                      <InputFile label="Tampak Samping Kiri" value={formIndustDesign.lefttSideView} name="lefttSideView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.lefttSideView} need />
-                      <InputFile label="Tampak Atas" value={formIndustDesign.topView} name="topView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.topView} need />
-                      <InputFile label="Tampak Bawah" value={formIndustDesign.downView} name="downView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.downView} need />
-                      <InputFile label="Gambar Lainnya" value={formIndustDesign.moreImages} name="moreImages" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.moreImages} need />
-                      <InputFile label="Surat Pengalihan Hak Desain Industri" value={formIndustDesign.designOwnershipLetter} name="designOwnershipLetter" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.designOwnershipLetter} need />
-                      <InputFile label="Surat Kepemilikan Desain Industri" value={formIndustDesign.letterTransferDesignRights} name="letterTransferDesignRights" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.letterTransferDesignRights} need />
+                      <InputFile
+                        label="Draft Keseluruhan Desain Industri"
+                        value={formIndustDesign.draftDesainIndustriApplicationFile}
+                        name="draftDesainIndustriApplicationFile"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        // error={!!formIndustDesignError.draftDesainIndustriApplicationFile}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.draftDesainIndustriApplicationFile}
+                      />
+                      <InputFile
+                        label="Tampak Perspektif"
+                        value={formIndustDesign.looksPerspective}
+                        name="looksPerspective"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.looksPerspective}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.looksPerspective}
+                      />
+                      <InputFile
+                        label="Tampak Perspektif"
+                        value={formIndustDesign.looksPerspective}
+                        name="looksPerspective"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.looksPerspective}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.looksPerspective}
+                      />
+                      <InputFile
+                        label="Tampak Depan"
+                        value={formIndustDesign.frontView}
+                        name="frontView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.frontView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.frontView}
+                      />
+                      <InputFile
+                        label="Tampak Belakang"
+                        value={formIndustDesign.backView}
+                        name="backView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.backView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.backView}
+                      />
+                      <InputFile
+                        label="Tampak Samping Kanan"
+                        value={formIndustDesign.rightSideView}
+                        name="rightSideView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.rightSideView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.rightSideView}
+                      />
+                      <InputFile
+                        label="Tampak Samping Kiri"
+                        value={formIndustDesign.lefttSideView}
+                        name="lefttSideView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.lefttSideView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.lefttSideView}
+                      />
+                      <InputFile
+                        label="Tampak Atas"
+                        value={formIndustDesign.topView}
+                        name="topView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.topView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.topView}
+                      />
+                      <InputFile
+                        label="Tampak Bawah"
+                        value={formIndustDesign.downView}
+                        name="downView"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.downView}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.downView}
+                      />
+                      <InputFile
+                        label="Gambar Lainnya"
+                        value={formIndustDesign.moreImages}
+                        name="moreImages"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.moreImages}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.moreImages}
+                      />
+                      <InputFile
+                        label="Surat Pengalihan Hak Desain Industri"
+                        value={formIndustDesign.designOwnershipLetter}
+                        name="designOwnershipLetter"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.designOwnershipLetter}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.designOwnershipLetter}
+                      />
+                      <InputFile
+                        label="Surat Kepemilikan Desain Industri"
+                        value={formIndustDesign.letterTransferDesignRights}
+                        name="letterTransferDesignRights"
+                        required
+                        onChange={handleChangeComplateIndusDesign}
+                        error={!!formIndustDesignError.letterTransferDesignRights}
+                        need
+                        message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                        edite={statusDetail}
+                        url={detailSubmission?.submission?.industrialDesign?.letterTransferDesignRights}
+                      />
 
                       <div className="flex justify-end mt-6">
                         <button onClick={handleUpdateDesignIndus} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
