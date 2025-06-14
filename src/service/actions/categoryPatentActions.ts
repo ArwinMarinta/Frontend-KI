@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryPatentDetail, setCategoryPatents } from "../reducers/categoryReducer";
+import { toast } from "sonner";
 
 export const getCategoryPatent = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -68,7 +69,7 @@ export const createCategoryPatent = (patent: string, currentPage: number, limit:
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/patent/type`,
         {
           title: patent,
@@ -82,9 +83,11 @@ export const createCategoryPatent = (patent: string, currentPage: number, limit:
       );
 
       dispatch(getCategoryPatent(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -100,7 +103,7 @@ export const updateCategoryPatent = (id: number | string, title: string, current
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/patent/type/${id}`,
         {
           title: title,
@@ -114,9 +117,11 @@ export const updateCategoryPatent = (id: number | string, title: string, current
       );
 
       dispatch(getCategoryPatent(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -132,7 +137,7 @@ export const deleteCategoryPatent = (id: number | string | null, currentPage: nu
     try {
       const { token } = getState().auth;
 
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/patent/type/${id}`,
 
         {
@@ -143,9 +148,11 @@ export const deleteCategoryPatent = (id: number | string | null, currentPage: nu
       );
 
       dispatch(getCategoryPatent(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

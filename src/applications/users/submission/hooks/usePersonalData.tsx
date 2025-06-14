@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormPersonalData } from "../../../../types/submissionType";
+import { FormPersonalData, PersonalDataError } from "../../../../types/submissionType";
 
 const usePersonalData = () => {
   const [personalData, setPersonalData] = useState<FormPersonalData[]>([
@@ -30,55 +30,57 @@ const usePersonalData = () => {
     },
   ]);
 
-  const [personalDataError, setPersonalDataError] = useState(
-    Array(personalData.length).fill({
-      name: false,
-      email: false,
-      faculty: false,
-      studyProgram: false,
-      institution: false,
-      work: false,
-      nationalState: false,
-      countryResidence: false,
-      province: false,
-      city: false,
-      subdistrict: false,
-      ward: false,
-      postalCode: false,
-      phoneNumber: false,
-      ktp: false,
-      isLeader: false,
-      facebook: false,
-      whatsapp: false,
-      instagram: false,
-      twitter: false,
-      ktpName: false,
-    })
+  const [personalDataError, setPersonalDataError] = useState<PersonalDataError[]>(
+    personalData.map(() => ({
+      id: null,
+      name: null,
+      email: null,
+      faculty: null,
+      studyProgram: null,
+      institution: null,
+      work: null,
+      nationalState: null,
+      countryResidence: null,
+      province: null,
+      city: null,
+      subdistrict: null,
+      ward: null,
+      postalCode: null,
+      phoneNumber: null,
+      ktp: null,
+      isLeader: null,
+      facebook: null,
+      whatsapp: null,
+      instagram: null,
+      twitter: null,
+      address: null,
+    }))
   );
 
   const validatePersonalData = (data: FormPersonalData) => {
     const error = {
-      id: data.id,
-      name: data.name.trim() === "",
-      email: !/\S+@\S+\.\S+/.test(data.email),
-      faculty: data.faculty === null,
-      studyProgram: data.studyProgram === null,
-      institution: data.institution.trim() === "",
-      work: data.work.trim() === "",
-      nationalState: data.nationalState.trim() === "",
-      countryResidence: data.countryResidence.trim() === "",
-      province: data.province.trim() === "",
-      city: data.city.trim() === "",
-      subdistrict: data.subdistrict.trim() === "",
-      ward: data.ward.trim() === "",
-      postalCode: data.postalCode.trim() === "",
-      phoneNumber: data.phoneNumber.trim() === "",
-      ktp: data.ktp === null,
-      facebook: false,
-      whatsapp: false,
-      instagram: false,
-      twitter: false,
-      address: data.address.trim() === "",
+      id: data.id ?? null,
+      name: data.name.trim() === "" ? "Nama wajib diisi" : null,
+      email: !/\S+@\S+\.\S+/.test(data.email) ? "Format email tidak valid" : null,
+      faculty: data.faculty === null ? "Fakultas wajib dipilih" : null,
+      studyProgram: data.studyProgram === null ? "Program studi wajib dipilih" : null,
+      institution: data.institution.trim() === "" ? "Institusi wajib diisi" : null,
+      work: data.work.trim() === "" ? "Pekerjaan wajib diisi" : null,
+      nationalState: data.nationalState.trim() === "" ? "Kewarganegaraan wajib diisi" : null,
+      countryResidence: data.countryResidence.trim() === "" ? "Negara tempat tinggal wajib diisi" : null,
+      province: data.province.trim() === "" ? "Provinsi wajib diisi" : null,
+      city: data.city.trim() === "" ? "Kota wajib diisi" : null,
+      subdistrict: data.subdistrict.trim() === "" ? "Kecamatan wajib diisi" : null,
+      ward: data.ward.trim() === "" ? "Kelurahan wajib diisi" : null,
+      postalCode: data.postalCode.trim() === "" ? "Kode pos wajib diisi" : null,
+      phoneNumber: data.phoneNumber.trim() === "" ? "Nomor telepon wajib diisi" : null,
+      ktp: data.ktp === null ? "KTP wajib diunggah" : null,
+      address: data.address?.trim() === "" ? "Alamat wajib diisi" : null,
+      isLeader: null,
+      facebook: null,
+      whatsapp: null,
+      instagram: null,
+      twitter: null,
     };
 
     return error;
@@ -86,39 +88,49 @@ const usePersonalData = () => {
 
   const handleChangePerson = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormPersonalData) => {
     const updatedData = [...personalData];
-    const updatedError = [...personalDataError]; // Copy error array to preserve immutability
+    const updatedError = [...personalDataError];
 
-    if (index < 0 || index >= updatedData.length) {
-      console.error("Invalid index:", index);
-      return;
-    }
-
-    // Handle file input
     if (e.target.type === "file") {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
-        updatedData[index] = {
-          ...updatedData[index],
-          [field]: file,
-        };
+        const maxSize = 20 * 1024 * 1024; // 20MB
+        if (file.size > maxSize) {
+          updatedError[index] = {
+            ...updatedError[index],
+            [field]: "Ukuran file maksimal 20MB",
+          };
+        } else {
+          updatedData[index] = {
+            ...updatedData[index],
+            [field]: file,
+          };
+          updatedError[index] = {
+            ...updatedError[index],
+            [field]: null,
+          };
+        }
       }
     } else {
+      const value = e.target.value;
       updatedData[index] = {
         ...updatedData[index],
-        [field]: e.target.value,
+        [field]: value,
       };
+
+      // Validasi field kosong
+      if (value.trim() === "") {
+        updatedError[index] = {
+          ...updatedError[index],
+          [field]: `${field} tidak boleh kosong`,
+        };
+      } else {
+        updatedError[index] = {
+          ...updatedError[index],
+          [field]: null,
+        };
+      }
     }
 
-    // Update error state when a field is changed
-    // Set error to false for the specific field that was changed
-    if (updatedError[index]) {
-      updatedError[index] = {
-        ...updatedError[index],
-        [field]: false, // Set specific field error to false
-      };
-    }
-
-    // Set updated data and error to state
     setPersonalData(updatedData);
     setPersonalDataError(updatedError);
   };
@@ -156,26 +168,28 @@ const usePersonalData = () => {
     setPersonalDataError([
       ...personalDataError,
       {
-        name: false,
-        email: false,
-        institution: false,
-        work: false,
-        faculty: false,
-        studyProgram: false,
-        nationalState: false,
-        countryResidence: false,
-        province: false,
-        city: false,
-        subdistrict: false,
-        ward: false,
-        postalCode: false,
-        phoneNumber: false,
-        facebook: false,
-        whatsapp: false,
-        instagram: false,
-        twitter: false,
-        address: false,
-        ktp: false,
+        id: null,
+        name: null,
+        email: null,
+        institution: null,
+        work: null,
+        faculty: null,
+        studyProgram: null,
+        nationalState: null,
+        countryResidence: null,
+        province: null,
+        city: null,
+        subdistrict: null,
+        ward: null,
+        postalCode: null,
+        phoneNumber: null,
+        facebook: null,
+        whatsapp: null,
+        instagram: null,
+        twitter: null,
+        address: null,
+        ktp: null,
+        isLeader: null,
       },
     ]);
   };

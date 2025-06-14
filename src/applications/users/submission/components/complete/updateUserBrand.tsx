@@ -25,9 +25,8 @@ const UpdateUserBrand = () => {
   const { loading, setLoading } = useLoadingProses();
   const { types, submissionId, submissionType } = useComplate();
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
-  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, validateBrandData, setFormBrandError, formBrandError, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand } =
-    useBrand();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand } = useBrand();
   const navigate = useNavigate();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
 
@@ -35,33 +34,59 @@ const UpdateUserBrand = () => {
     dispatch(getDetailSubmission(submissionId));
   }, [dispatch, submissionId]);
 
-  const handleNextStep2 = async () => {
-    const updatedErrors = personalData.map(validatePersonalData);
+  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
+    if (typeof ktp === "string" && ktp.trim() !== "") return null;
+    if (ktp instanceof File && ktp.size > 0) return null;
+    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
+    return "KTP wajib diisi";
+  }
 
-    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+  const handleNextStep2 = async () => {
+    const updatedErrors = personalData.map((data) => ({
+      name: data.name.trim() === "" ? "Nama wajib diisi" : null,
+      email: !/\S+@\S+\.\S+/.test(data.email) ? "Format email tidak valid" : null,
+      faculty: data.faculty === null ? "Fakultas wajib dipilih" : null,
+      studyProgram: data.studyProgram === null ? "Program studi wajib dipilih" : null,
+      institution: data.institution.trim() === "" ? "Institusi wajib diisi" : null,
+      work: data.work.trim() === "" ? "Pekerjaan wajib diisi" : null,
+      nationalState: data.nationalState.trim() === "" ? "Kewarganegaraan wajib diisi" : null,
+      countryResidence: data.countryResidence.trim() === "" ? "Negara tempat tinggal wajib diisi" : null,
+      province: data.province.trim() === "" ? "Provinsi wajib diisi" : null,
+      city: data.city.trim() === "" ? "Kota wajib diisi" : null,
+      subdistrict: data.subdistrict.trim() === "" ? "Kecamatan wajib diisi" : null,
+      ward: data.ward.trim() === "" ? "Kelurahan wajib diisi" : null,
+      postalCode: data.postalCode.trim() === "" ? "Kode pos wajib diisi" : null,
+      phoneNumber: data.phoneNumber.trim() === "" ? "Nomor telepon wajib diisi" : null,
+      address: data.address?.trim() === "" ? "Alamat wajib diisi" : null,
+      ktp: validateKtp(data.ktp, data.ktpName),
+    }));
+
+    const excludeFields = ["id", "isLeader", "facebook", "whatsapp", "instagram", "twitter"];
+
+    const hasError = updatedErrors.some((errorObj) =>
+      Object.entries(errorObj)
+        .filter(([key]) => !excludeFields.includes(key))
+        .some(([, value]) => value !== null)
+    );
 
     if (hasError) {
       const newErrors = updatedErrors.map((error) => ({
-        name: error.name === true,
-        email: error.email === true,
-        faculty: error.faculty === true,
-        studyProgram: error.studyProgram === true,
-        institution: error.institution === true,
-        work: error.work === true,
-        nationalState: error.nationalState === true,
-        countryResidence: error.countryResidence === true,
-        province: error.province === true,
-        city: error.city === true,
-        subdistrict: error.subdistrict === true,
-        ward: error.ward === true,
-        postalCode: error.postalCode === true,
-        phoneNumber: error.phoneNumber === true,
-        ktp: error.ktp === true,
-        facebook: error.facebook === true,
-        whatsapp: error.whatsapp === true,
-        instagram: error.instagram === true,
-        twitter: error.twitter === true,
-        address: error.address === true,
+        name: error.name || null,
+        email: error.email || null,
+        faculty: error.faculty || null,
+        studyProgram: error.studyProgram || null,
+        institution: error.institution || null,
+        work: error.work || null,
+        nationalState: error.nationalState || null,
+        countryResidence: error.countryResidence || null,
+        province: error.province || null,
+        city: error.city || null,
+        subdistrict: error.subdistrict || null,
+        ward: error.ward || null,
+        postalCode: error.postalCode || null,
+        phoneNumber: error.phoneNumber || null,
+        address: error.address || null,
+        ktp: error.ktp || null,
       }));
 
       setPersonalDataError(newErrors);
@@ -125,14 +150,6 @@ const UpdateUserBrand = () => {
   };
 
   const handleNextStep = () => {
-    const error = validateBrandData(formBrand);
-    const hasError = Object.values(error).includes(true);
-
-    if (hasError) {
-      setFormBrandError(error);
-      return;
-    }
-
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }

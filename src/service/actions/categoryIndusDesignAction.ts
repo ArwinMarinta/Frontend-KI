@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryIndustrialDesign, setCategoryIndustrialDesignDetail, setCategorySubIndustrialDesign, setCategorySubIndustrialDesignDetail } from "../reducers/categoryReducer";
+import { toast } from "sonner";
 
 export const getCategoryIndusDesign = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -69,7 +70,7 @@ export const createCategoryIndusDesign = (title: string, currentPage: number, li
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/design-industri/type`,
         {
           title: title,
@@ -83,9 +84,11 @@ export const createCategoryIndusDesign = (title: string, currentPage: number, li
       );
 
       dispatch(getCategoryIndusDesign(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -101,7 +104,7 @@ export const updateCategoryIndusDesign = (id: number | string, title: string, cu
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/design-industri/type/${id}`,
         {
           title: title,
@@ -115,9 +118,11 @@ export const updateCategoryIndusDesign = (id: number | string, title: string, cu
       );
 
       dispatch(getCategoryIndusDesign(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -133,9 +138,7 @@ export const deleteCategoryIndusDesign = (id: number | string | null, currentPag
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/design-industri/type/${id}`,
 
         {
@@ -146,9 +149,11 @@ export const deleteCategoryIndusDesign = (id: number | string | null, currentPag
       );
 
       dispatch(getCategoryIndusDesign(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -225,7 +230,7 @@ export const createCategorySubIndusDesign = (ids: string | undefined, title: str
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/design-industri/sub-type/${ids}`,
         {
           title: title,
@@ -239,9 +244,11 @@ export const createCategorySubIndusDesign = (ids: string | undefined, title: str
       );
 
       dispatch(getCategorySubIndusDesign(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -257,7 +264,7 @@ export const updateCategorySubIndusDesign = (id: number | string, ids: string | 
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/design-industri/sub-type/${id}`,
         {
           title: title,
@@ -271,9 +278,11 @@ export const updateCategorySubIndusDesign = (id: number | string, ids: string | 
       );
 
       dispatch(getCategorySubIndusDesign(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -289,9 +298,7 @@ export const deleteCategorySubIndusDesign = (id: number | string | null, ids: st
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/design-industri/sub-type/${id}`,
 
         {
@@ -302,9 +309,11 @@ export const deleteCategorySubIndusDesign = (id: number | string | null, ids: st
       );
 
       dispatch(getCategorySubIndusDesign(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

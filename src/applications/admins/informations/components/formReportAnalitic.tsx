@@ -14,9 +14,12 @@ const FormReportAnalitic = ({ handleSearch }: Props) => {
   const [formReportAnalitic, setFormReportAnalitic] = useState<FormReportAnaliticType>({
     namaPengguna: "",
     jenisPengajuan: "",
-    tanggalPengajuan: "",
+    skemaPengajuan: "",
+    progressPengajuan: "",
     peran: "",
     instansi: "",
+    startDate: "",
+    endDate: "",
   });
 
   const handleChangeReportAnalitic = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -29,10 +32,12 @@ const FormReportAnalitic = ({ handleSearch }: Props) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-row gap-6">
-        <Field label="" value={formReportAnalitic.namaPengguna} name="namaPengguna" type="text" placeholder="Nama Pencipta" onChange={handleChangeReportAnalitic} />
+      {/* Form Section */}
+      <div className={`gap-6 ${showMoreFilters ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" : "flex flex-row"}`}>
+        <Field label="Nama Pencipta" value={formReportAnalitic.namaPengguna} name="namaPengguna" type="text" placeholder="Nama Pencipta" onChange={handleChangeReportAnalitic} />
+
         <FieldDropdown
-          label=""
+          label="Jenis Pengajuan"
           name="jenisPengajuan"
           type="select"
           value={formReportAnalitic.jenisPengajuan}
@@ -45,8 +50,9 @@ const FormReportAnalitic = ({ handleSearch }: Props) => {
             { label: "Desain Industri", value: "Desain Industri" },
           ]}
         />
+
         <FieldDropdown
-          label=""
+          label="Peran"
           name="peran"
           type="select"
           value={formReportAnalitic.peran}
@@ -56,52 +62,60 @@ const FormReportAnalitic = ({ handleSearch }: Props) => {
             { label: "Anggota", value: "Anggota" },
           ]}
         />
-        {!showMoreFilters && (
+
+        {showMoreFilters && (
           <>
-            <div className="">
-              <button type="button" onClick={() => setShowMoreFilters(true)} className="flex flex-row border w-full justify-center border-BORDER01 border-md bg-gray-50 gap-2 mt-2 rounded-md items-center py-2 px-4">
-                <FiFilter /> Filter
-              </button>
-            </div>
-            <div className="col-span-4">
-              <button
-                onClick={() => {
-                  handleSearch(formReportAnalitic);
-                }}
-                type="submit"
-                className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2"
-              >
-                <IoSearch />
-                <span>Cari..</span>
-              </button>
-            </div>
+            <FieldDropdown
+              label="Skema Pengajuan"
+              name="skemaPengajuan"
+              type="select"
+              value={formReportAnalitic.skemaPengajuan}
+              onChange={handleChangeReportAnalitic}
+              placeholder="Pilih Skema Pengajuan"
+              options={[
+                { label: "Pendanaan", value: "Pendanaan" },
+                { label: "Mandiri", value: "Mandiri" },
+              ]}
+            />
+            <FieldDropdown
+              label="Progres Pengajuan"
+              name="progressPengajuan"
+              type="select"
+              value={formReportAnalitic.progressPengajuan}
+              onChange={handleChangeReportAnalitic}
+              placeholder="Pilih Skema Pengajuan"
+              options={[
+                { label: "Menunggu", value: "Menunggu" },
+                { label: "Direview", value: "Direview" },
+                { label: "Ditolak", value: "Ditolak" },
+                { label: "Revisi", value: "Revisi" },
+                { label: "Diajukan", value: "Diajukan" },
+                { label: "Skema Pendanaan", value: "Skema Pendanaan" },
+                { label: "Pembayaran", value: "Pembayaran" },
+                { label: "Lengkapi Berkas", value: "Lengkapi Berkas" },
+                { label: "Sertifikat Terbit", value: "Sertifikat Terbit" },
+              ]}
+            />
+
+            <Field label="Tanggal Awal" name="startDate" value={formReportAnalitic.startDate} type="date" onChange={handleChangeReportAnalitic} placeholder="Tanggal Awal" />
+            <Field label="Tanggal Akhir" name="endDate" value={formReportAnalitic.endDate} type="date" onChange={handleChangeReportAnalitic} placeholder="Tanggal Akhir" />
+            <Field label="Instansi" name="instansi" value={formReportAnalitic.instansi} type="text" onChange={handleChangeReportAnalitic} placeholder="Nama Instansi" />
           </>
         )}
       </div>
 
-      {showMoreFilters && (
-        <div className="flex flex-row gap-6">
-          <Field label="" name="tanggalPengajuan" value={formReportAnalitic.tanggalPengajuan} type="date" onChange={handleChangeReportAnalitic} placeholder="Tanggal Pengajuan" />
-          <Field label="" name="instansi" value={formReportAnalitic.instansi} type="text" onChange={handleChangeReportAnalitic} placeholder="Nama Instansi" />
-          <div className="">
-            <button type="button" onClick={() => setShowMoreFilters(false)} className="flex flex-row border w-full justify-center border-BORDER01 border-md bg-gray-50 gap-2 mt-2 rounded-md items-center py-2 px-4">
-              <FiFilter /> Sembuyikan
-            </button>
-          </div>
-          <div className="col-span-4">
-            <button
-              onClick={() => {
-                handleSearch(formReportAnalitic);
-              }}
-              type="submit"
-              className="bg-PRIMARY01 px-4 py-2 text-white font-base rounded-md flex flex-row justify-center mt-2 items-center gap-2"
-            >
-              <IoSearch />
-              <span>Cari..</span>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Action Buttons */}
+      <div className="flex flex-wrap gap-4">
+        <button type="button" onClick={() => setShowMoreFilters((prev) => !prev)} className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-md bg-gray-50 text-gray-700">
+          <FiFilter />
+          {showMoreFilters ? "Sembunyikan Filter" : "Tampilkan Filter"}
+        </button>
+
+        <button type="submit" onClick={() => handleSearch(formReportAnalitic)} className="flex items-center gap-2 bg-PRIMARY01 px-4 py-2 text-white rounded-md">
+          <IoSearch />
+          <span>Cari..</span>
+        </button>
+      </div>
     </div>
   );
 };

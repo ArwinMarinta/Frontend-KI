@@ -22,7 +22,7 @@ export const getUserSubmission = (currentPage: number, limit: number, id: number
 
       dispatch(
         setHistorySubmission({
-          user: response.data?.userSubmissionsSorted ?? [],
+          user: response.data?.userSubmissions ?? [],
           currentPage: response.data?.currentPage ?? 1,
           totalPages: response.data?.totalPages ?? 1,
           totalValue: response.data?.totalUserSubmissions ?? 0,

@@ -24,9 +24,9 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
         <h1 className="text-center text-3xl w-full font-bold">Formulir Pendaftaran {submissionType}</h1>
       </div>
       <div className="flex flex-col gap-6">
-        <Field label="Judul Desain Industri" value={formIndustDesign.titleDesign} name="titleDesign" type="text" placeholder="" need error={!!formIndustDesignError.titleDesign} onChange={handleChangeComplateIndusDesign} />
+        <Field label="Judul Desain Industri" value={formIndustDesign.titleDesign} name="titleDesign" type="text" placeholder="" need error={formIndustDesignError.titleDesign} onChange={handleChangeComplateIndusDesign} />
         <FieldDropdown
-          label="Jenis Desain Industri"
+          label="Tipe Desain Industri"
           name="type"
           type="select"
           value={formIndustDesign.type?.toString() || ""}
@@ -37,7 +37,7 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
               value: item.value,
             })) ?? []
           }
-          error={!!formIndustDesignError.type}
+          error={formIndustDesignError.type}
           need
         />
 
@@ -55,7 +55,7 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
                   value: item.id,
                 })) ?? []
               }
-              error={!!formIndustDesignError.typeDesignId}
+              error={formIndustDesignError.typeDesignId}
               need
             />
             <FieldDropdown
@@ -70,7 +70,7 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
                   value: item.id,
                 })) ?? []
               }
-              error={!!formIndustDesignError.subtypeDesignId}
+              error={formIndustDesignError.subtypeDesignId}
               need
             />
           </div>
@@ -91,16 +91,34 @@ const FormComplateIndustrialDesign = ({ formIndustDesign, formIndustDesignError,
           </div>
           {formIndustDesignError.claim && <p className="text-sm text-RED01 mt-2">Klaim Wajib Dipilih!</p>}
         </div>
-        <InputFile label="Tampak Perspektif" value={formIndustDesign.looksPerspective} name="looksPerspective" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.looksPerspective} need />
-        <InputFile label="Tampak Depan" value={formIndustDesign.frontView} name="frontView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.frontView} need />
-        <InputFile label="Tampak Belakang" value={formIndustDesign.backView} name="backView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.backView} need />
-        <InputFile label="Tampak Samping Kanan" value={formIndustDesign.rightSideView} name="rightSideView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.rightSideView} need />
-        <InputFile label="Tampak Samping Kiri" value={formIndustDesign.lefttSideView} name="lefttSideView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.lefttSideView} need />
-        <InputFile label="Tampak Atas" value={formIndustDesign.topView} name="topView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.topView} need />
-        <InputFile label="Tampak Bawah" value={formIndustDesign.downView} name="downView" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.downView} need />
-        <InputFile label="Gambar Lainnya" value={formIndustDesign.moreImages} name="moreImages" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.moreImages} need />
-        <InputFile label="Surat Pengalihan Hak Desain Industri" value={formIndustDesign.designOwnershipLetter} name="designOwnershipLetter" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.designOwnershipLetter} need />
-        <InputFile label="Surat Kepemilikan Desain Industri" value={formIndustDesign.letterTransferDesignRights} name="letterTransferDesignRights" required onChange={handleChangeComplateIndusDesign} error={!!formIndustDesignError.letterTransferDesignRights} need />
+        <InputFile label="Tampak Perspektif" value={formIndustDesign.looksPerspective} name="looksPerspective" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.looksPerspective} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Depan" value={formIndustDesign.frontView} name="frontView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.frontView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Belakang" value={formIndustDesign.backView} name="backView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.backView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Samping Kanan" value={formIndustDesign.rightSideView} name="rightSideView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.rightSideView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Samping Kiri" value={formIndustDesign.lefttSideView} name="lefttSideView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.lefttSideView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Atas" value={formIndustDesign.topView} name="topView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.topView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Tampak Bawah" value={formIndustDesign.downView} name="downView" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.downView} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile label="Gambar Lainnya" value={formIndustDesign.moreImages} name="moreImages" required onChange={handleChangeComplateIndusDesign} error={formIndustDesignError.moreImages} need message="Format file harus berupa pdf, doc, dan docx. Max 20 MB" />
+        <InputFile
+          label="Surat Pengalihan Hak Desain Industri"
+          value={formIndustDesign.designOwnershipLetter}
+          name="designOwnershipLetter"
+          required
+          onChange={handleChangeComplateIndusDesign}
+          error={formIndustDesignError.designOwnershipLetter}
+          need
+          message="Format file harus berupa pdf, doc, dan docx. Max 20 MB"
+        />
+        <InputFile
+          label="Surat Kepemilikan Desain Industri"
+          value={formIndustDesign.letterTransferDesignRights}
+          name="letterTransferDesignRights"
+          required
+          onChange={handleChangeComplateIndusDesign}
+          error={formIndustDesignError.letterTransferDesignRights}
+          need
+          message="Format file harus berupa pdf, doc, dan docx. Max 20 MB"
+        />
 
         <div className="flex justify-end mt-6">
           <button onClick={handleSubmitComplateIndusDesign} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">

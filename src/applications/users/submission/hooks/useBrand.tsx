@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FormAdditionalBrand, FormAdditionalBrandError, FormSubmissionBrand } from "../../../../types/brandType";
+import { FormAdditionalBrand, FormAdditionalBrandError, FormSubmissionBrand, FormSubmissionBrandError } from "../../../../types/brandType";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
@@ -17,7 +17,7 @@ const useBrand = () => {
 
   const [formBrand, setFormBrand] = useState<FormSubmissionBrand>({
     applicationType: "",
-    brandType: null,
+    brandType: 0,
     referenceName: "",
     elementColor: "",
     translate: "",
@@ -41,66 +41,136 @@ const useBrand = () => {
   });
 
   const [tempAdditionalBrandError, setTempAdditionalBrandError] = useState<FormAdditionalBrandError>({
-    additionalDescriptions: false,
-    additionalFiles: false,
+    additionalDescriptions: null,
+    additionalFiles: null,
   });
 
-  const [formBrandError, setFormBrandError] = useState<Record<keyof FormSubmissionBrand, boolean>>({
-    applicationType: false,
-    brandType: false,
-    referenceName: false,
-    elementColor: false,
-    translate: false,
-    pronunciation: false,
-    disclaimer: false,
-    description: false,
-    documentType: false,
-    information: false,
-    labelBrand: false,
-    fileUploade: false,
-    signature: false,
-    InformationLetter: false,
-    letterStatment: false,
+  const [formBrandError, setFormBrandError] = useState<FormSubmissionBrandError>({
+    applicationType: null,
+    brandType: null,
+    referenceName: null,
+    elementColor: null,
+    translate: null,
+    pronunciation: null,
+    disclaimer: null,
+    description: null,
+    documentType: null,
+    information: null,
+    labelBrand: null,
+    fileUploade: null,
+    signature: null,
+    InformationLetter: null,
+    letterStatment: null,
   });
 
-  const validateBrandData = (data: FormSubmissionBrand) => {
-    const error = {
-      applicationType: data.applicationType.trim() === "",
-      brandType: data.brandType === null,
-      referenceName: data.referenceName.trim() === "",
-      elementColor: data.elementColor.trim() === "",
-      translate: false,
-      pronunciation: false,
-      disclaimer: false,
-      description: false,
-      documentType: data.documentType.trim() === "",
-      information: false,
-      labelBrand: data.labelBrand === null || data.labelBrand === undefined,
-      fileUploade: data.fileUploade === null || data.fileUploade === undefined,
-      signature: data.signature === null || data.signature === undefined,
-      InformationLetter: data.InformationLetter === null || data.InformationLetter === undefined,
-      letterStatment: data.letterStatment === null || data.letterStatment === undefined,
+  const validateBrandData = (data: FormSubmissionBrand): FormSubmissionBrandError => {
+    return {
+      applicationType: data.applicationType.trim() === "" ? "Tipe permohonan wajib diisi" : null,
+      brandType: data.brandType === null ? "Tipe Brand wajib dipilih" : null,
+      referenceName: data.referenceName.trim() === "" ? "Refrensi Label Merek wajib diisi" : null,
+      elementColor: data.elementColor.trim() === "" ? "Warna Label Merek wajib diisi" : null,
+      translate: null,
+      pronunciation: null,
+      disclaimer: null,
+      description: null,
+      documentType: data.documentType.trim() === "" ? "Jenis dokumen wajib diisi" : null,
+      information: null,
+      labelBrand: data.labelBrand == null ? "Label Merek wajib dipilih" : null,
+      // fileUploade: data.fileUploade == null ? "Tanda Tangan Permohonan" : null,
+      signature: data.signature == null ? "Tanda tangan wajib diunggah" : null,
+      // InformationLetter: data.InformationLetter == null ? "Information Letter wajib diunggah" : null,
+      // letterStatment: data.letterStatment == null ? "Letter Statement wajib diunggah" : null,
     };
-
-    return error;
   };
-
   const handleChangeBrand = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // Type Guard untuk memastikan e.target adalah HTMLInputElement dan memiliki files
     if (e.target instanceof HTMLInputElement && e.target.type === "file") {
-      const { files } = e.target;
+      const files = e.target.files;
       const file = files ? files[0] : null;
-      setFormBrand((prev) => ({
-        ...prev,
-        [name]: file,
-      }));
-      setFormBrandError((prev) => ({
-        ...prev,
-        [name]: !file,
-      }));
+
+      if (!file) {
+        // Kalau gak ada file, set error
+        setFormBrandError((prev) => ({
+          ...prev,
+          [name]: "File tidak boleh kosong",
+        }));
+        setFormBrand((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+        return;
+      }
+
+      const maxSizeMB = name === "labelBrand" ? 5 : 25;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+      if (file.size > maxSizeBytes) {
+        setFormBrandError((prev) => ({
+          ...prev,
+          [name]: `Ukuran file maksimal ${maxSizeMB} MB`,
+        }));
+        setFormBrand((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+        return;
+      }
+
+      if (name === "labelBrand") {
+        // Validasi dimensi gambar
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+
+        img.onload = () => {
+          if (img.width !== 1024 || img.height !== 1024) {
+            setFormBrandError((prev) => ({
+              ...prev,
+              [name]: "Dimensi gambar harus 1024 x 1024 px",
+            }));
+            setFormBrand((prev) => ({
+              ...prev,
+              [name]: null,
+            }));
+          } else {
+            setFormBrandError((prev) => ({
+              ...prev,
+              [name]: null,
+            }));
+            setFormBrand((prev) => ({
+              ...prev,
+              [name]: file,
+            }));
+          }
+          URL.revokeObjectURL(objectUrl);
+        };
+
+        img.onerror = () => {
+          setFormBrandError((prev) => ({
+            ...prev,
+            [name]: "File bukan gambar yang valid",
+          }));
+          setFormBrand((prev) => ({
+            ...prev,
+            [name]: null,
+          }));
+          URL.revokeObjectURL(objectUrl);
+        };
+
+        img.src = objectUrl;
+      } else {
+        // Untuk file lain hanya cek ukuran
+        setFormBrandError((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+        setFormBrand((prev) => ({
+          ...prev,
+          [name]: file,
+        }));
+      }
     } else {
+      // Untuk input selain file
       setFormBrand((prev) => ({
         ...prev,
         [name]: value,
@@ -108,7 +178,7 @@ const useBrand = () => {
 
       setFormBrandError((prev) => ({
         ...prev,
-        [name]: value.trim() === "",
+        [name]: value.trim() === "" ? "Field tidak boleh kosong" : null,
       }));
     }
   };
@@ -120,6 +190,25 @@ const useBrand = () => {
       const input = e.target as HTMLInputElement;
       const file = input.files?.[0] || null;
 
+      if (file) {
+        const maxSizeMB = 2;
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+        if (file.size > maxSizeBytes) {
+          // Jika file melebihi batas
+          setTempAdditionalBrand((prev) => ({
+            ...prev,
+            [name]: null,
+          }));
+          setTempAdditionalBrandError((prev) => ({
+            ...prev,
+            [name]: `Ukuran file maksimal ${maxSizeMB}MB`,
+          }));
+          input.value = "";
+          return;
+        }
+      }
+
       setTempAdditionalBrand((prev) => ({
         ...prev,
         [name]: file,
@@ -127,7 +216,7 @@ const useBrand = () => {
 
       setTempAdditionalBrandError((prev) => ({
         ...prev,
-        [name]: !file,
+        [name]: file ? null : "File tidak boleh kosong",
       }));
 
       // Reset input agar bisa pilih file yang sama lagi nanti
@@ -142,15 +231,15 @@ const useBrand = () => {
 
       setTempAdditionalBrandError((prev) => ({
         ...prev,
-        [name]: value.trim() === "",
+        [name]: value.trim() === "" ? "Field tidak boleh kosong" : null,
       }));
     }
   };
 
   const addAdditionalBrand = () => {
     const errors = {
-      additionalDescriptions: tempAdditionalBrand.additionalDescriptions.trim() === "",
-      additionalFiles: tempAdditionalBrand.additionalFiles === null,
+      additionalDescriptions: tempAdditionalBrand.additionalDescriptions.trim() === "" ? "Deskripsi tambahan wajib diisi" : null,
+      additionalFiles: tempAdditionalBrand.additionalFiles === null ? "File tambahan wajib diunggah" : null,
     };
 
     setTempAdditionalBrandError(errors);
@@ -165,8 +254,8 @@ const useBrand = () => {
       additionalFiles: null,
     });
     setTempAdditionalBrandError({
-      additionalDescriptions: false,
-      additionalFiles: false,
+      additionalDescriptions: null,
+      additionalFiles: null,
     });
   };
 
@@ -176,7 +265,16 @@ const useBrand = () => {
 
   const handleSubmitRevision = async () => {
     const error = validateBrandData(formBrand);
-    const hasError = Object.values(error).includes(true);
+
+    if (types === "Revisi") {
+      error.labelBrand = null;
+      error.signature = null;
+      error.fileUploade = null;
+      error.InformationLetter = null;
+      error.letterStatment = null;
+    }
+
+    const hasError = Object.values(error).some((value) => value !== null);
 
     if (hasError) {
       setFormBrandError(error);
@@ -214,23 +312,23 @@ const useBrand = () => {
 
   const handleComplateBrand = async () => {
     const error = {
-      applicationType: false,
-      brandType: false,
-      referenceName: false,
-      elementColor: false,
-      translate: false,
-      pronunciation: false,
-      disclaimer: false,
-      description: false,
-      documentType: false,
-      information: false,
-      labelBrand: false,
-      fileUploade: !formBrand?.fileUploade,
-      signature: false,
-      InformationLetter: false,
-      letterStatment: false,
+      applicationType: null,
+      brandType: null,
+      referenceName: null,
+      elementColor: null,
+      translate: null,
+      pronunciation: null,
+      disclaimer: null,
+      description: null,
+      documentType: null,
+      information: null,
+      labelBrand: null,
+      fileUploade: formBrand.fileUploade == null ? "Surat Pernyataan dan Keterangan wajib diunggah" : null,
+      signature: null,
+      InformationLetter: null,
+      letterStatment: null,
     };
-    const hasError = Object.values(error).includes(true);
+    const hasError = Object.values(error).some((val) => val !== null);
 
     if (hasError) {
       setFormBrandError(error);
@@ -271,11 +369,11 @@ const useBrand = () => {
       if (!detailBrand || types !== "Revisi") return;
 
       // Proses file-file di formBrand
-      const labelBrand = await processFile(detailBrand.labelBrand);
-      const fileUploade = await processFile(detailBrand.fileUploade);
-      const signature = await processFile(detailBrand.signature);
-      const InformationLetter = await processFile(detailBrand.InformationLetter);
-      const letterStatment = await processFile(detailBrand.letterStatment);
+      // const labelBrand = await processFile(detailBrand.labelBrand);
+      // const fileUploade = await processFile(detailBrand.fileUploade);
+      // const signature = await processFile(detailBrand.signature);
+      // const InformationLetter = await processFile(detailBrand.InformationLetter);
+      // const letterStatment = await processFile(detailBrand.letterStatment);
 
       // Set formBrand state
       setFormBrand({
@@ -289,11 +387,11 @@ const useBrand = () => {
         description: detailBrand.description || "",
         documentType: detailBrand.documentType || "",
         information: detailBrand.information || "",
-        labelBrand,
-        fileUploade,
-        signature,
-        InformationLetter,
-        letterStatment,
+        labelBrand: null,
+        fileUploade: null,
+        signature: null,
+        InformationLetter: null,
+        letterStatment: null,
       });
 
       if (detailBrand.additionalDatas && Array.isArray(detailBrand.additionalDatas)) {

@@ -22,7 +22,7 @@ const FormComplatePatent = ({ formComplatePaten, formComplatePatenError, handleC
         <h1 className="text-center text-3xl w-full font-bold">Formulir Lengkapi Berkas Paten</h1>
       </div>
       <div className="flex flex-col gap-6">
-        <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="inventionTitle" type="text" placeholder="" need error={!!formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />
+        <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="inventionTitle" type="text" placeholder="" need error={formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />
         <div className="flex flex-row gap-6">
           <div className="flex flex-row w-full gap-6">
             <FieldDropdown
@@ -37,18 +37,36 @@ const FormComplatePatent = ({ formComplatePaten, formComplatePatenError, handleC
                   value: item.id,
                 })) ?? []
               }
-              error={!!formComplatePatenError.patentTypeId}
+              error={formComplatePatenError.patentTypeId}
               need
             />
-            <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={!!formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} need />
+            <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} need />
           </div>
         </div>
-        <InputFile label="Klaim" value={formComplatePaten.claim} name="claim" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.claim} need />
-        <InputFile label="Deskripsi" value={formComplatePaten.description} name="description" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.description} need />
-        <InputFile label="Abstrak" value={formComplatePaten.abstract} name="abstract" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.abstract} need />
-        <InputFile label="Gambar Invensi" value={formComplatePaten.inventionImage} name="inventionImage" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.inventionImage} need />
-        <InputFile label="Surat Pernyataan Kepemilikan Invensi" value={formComplatePaten.statementInventionOwnership} name="statementInventionOwnership" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.statementInventionOwnership} need />
-        <InputFile label="Surat Pengalihan Hak Invensi" value={formComplatePaten.letterTransferRightsInvention} name="letterTransferRightsInvention" required onChange={handleChangeComplatePaten} error={!!formComplatePatenError.letterTransferRightsInvention} need />
+        <InputFile label="Klaim" value={formComplatePaten.claim} name="claim" required onChange={handleChangeComplatePaten} error={formComplatePatenError.claim} need message="Format file harus berupa pdf, doc, atau docx. Max 20 MB" />
+        <InputFile label="Deskripsi" value={formComplatePaten.description} name="description" required onChange={handleChangeComplatePaten} error={formComplatePatenError.description} need message="Format file harus berupa pdf, doc, atau docx. Max 20 MB" />
+        <InputFile label="Abstrak" value={formComplatePaten.abstract} name="abstract" required onChange={handleChangeComplatePaten} error={formComplatePatenError.abstract} need message="Format file harus berupa pdf, doc, atau docx. Max 20 MB" />
+        <InputFile label="Gambar Invensi" value={formComplatePaten.inventionImage} name="inventionImage" required onChange={handleChangeComplatePaten} error={formComplatePatenError.inventionImage} need message="Format file harus berupa pdf, doc, atau docx. Max 20 MB" />
+        <InputFile
+          label="Surat Pernyataan Kepemilikan Invensi"
+          value={formComplatePaten.statementInventionOwnership}
+          name="statementInventionOwnership"
+          required
+          onChange={handleChangeComplatePaten}
+          error={formComplatePatenError.statementInventionOwnership}
+          need
+          message="Format file harus berupa pdf, doc, atau docx. Max 20 MB"
+        />
+        <InputFile
+          label="Surat Pengalihan Hak Invensi"
+          value={formComplatePaten.letterTransferRightsInvention}
+          name="letterTransferRightsInvention"
+          required
+          onChange={handleChangeComplatePaten}
+          error={formComplatePatenError.letterTransferRightsInvention}
+          need
+          message="Format file harus berupa pdf, doc, atau docx. Max 20 MB"
+        />
 
         <div className="flex justify-end mt-6">
           <button onClick={handleSubmitComplatePatent} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { deletesHelpCenter, getHelpCenter, getHelpCenterById, updateHelpCenter } from "../../../../service/actions/helpCenterAction";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormReplyHelpCenter } from "../../../../types/helpCenter";
+import useLoadingProses from "../../../../hooks/useLoadingProses";
 
 const useHelpCenter = () => {
   const { ids } = useParams<{ ids: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { token } = useSelector((state: RootState) => state.auth);
+  const { loading, setLoading } = useLoadingProses();
   const { center, limit, currentPage, totalPages } = useSelector((state: RootState) => state.information.helpCenter);
   const { helpCenterDetail } = useSelector((state: RootState) => state.information);
   const [search, setSearch] = useState("");
@@ -17,8 +19,8 @@ const useHelpCenter = () => {
     answer: "",
   });
 
-  const [errors, setErrors] = useState({
-    answer: false,
+  const [errors, setErrors] = useState<{ answer: string | null }>({
+    answer: null,
   });
 
   useEffect(() => {
@@ -51,22 +53,27 @@ const useHelpCenter = () => {
 
     setErrors((prev) => ({
       ...prev,
-      [name]: false,
+      [name]: value.trim() === "" ? "Jawaban tidak boleh kosong" : null,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newErrors = {
-      answer: form.answer.trim() === "",
+      answer: form.answer.trim() === "" ? "Jawaban tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
 
-    if (newErrors.answer) return;
-
-    dispatch(updateHelpCenter(ids, form.answer, currentPage, limit, navigate));
+    const hasErrors = Object.values(newErrors).some((err) => err !== null);
+    if (hasErrors) return;
+    setLoading(true);
+    try {
+      await dispatch(updateHelpCenter(ids, form.answer, currentPage, limit, navigate));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
@@ -86,6 +93,7 @@ const useHelpCenter = () => {
     handleSubmit,
     search,
     setSearch,
+    loading,
   };
 };
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { setCategoryFaqDetail, setCategoryFaqs, setFaqDetail, setFaqs } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
+import { toast } from "sonner";
 
 export const getCategoryFaq = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -45,7 +46,7 @@ export const createCategoryFaq = (faqs: string, currentPage: number, limit: numb
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/faq`,
         {
           type: faqs,
@@ -58,9 +59,11 @@ export const createCategoryFaq = (faqs: string, currentPage: number, limit: numb
       );
 
       dispatch(getCategoryFaq(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -76,7 +79,7 @@ export const updateCategoryFaq = (id: string | undefined, faqs: string, currentP
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/faq/type/${id}`,
         {
           oldType: id,
@@ -91,9 +94,11 @@ export const updateCategoryFaq = (id: string | undefined, faqs: string, currentP
       );
 
       dispatch(getCategoryFaq(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -109,16 +114,18 @@ export const deleteCategoryFaq = (id: number | string | null, currentPage: numbe
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/faq/type/${id}`, {
+      const response = await axios.delete(`${API_URL}/faq/type/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       dispatch(getCategoryFaq(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -171,7 +178,7 @@ export const createFaq = (question: string, answer: string, title: string | unde
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/faq/by-type/${title}`,
         {
           question: question,
@@ -185,9 +192,11 @@ export const createFaq = (question: string, answer: string, title: string | unde
       );
 
       dispatch(getFaq(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -203,7 +212,7 @@ export const updateFaq = (id: number | string, question: string, answer: string,
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/faq/${id}`,
         {
           question: question,
@@ -218,9 +227,11 @@ export const updateFaq = (id: number | string, question: string, answer: string,
       );
 
       dispatch(getFaq(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -236,15 +247,17 @@ export const deleteFaq = (id: number | string | null, title: string | undefined,
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/faq/${id}`, {
+      const response = await axios.delete(`${API_URL}/faq/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       dispatch(getFaq(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

@@ -13,7 +13,7 @@ const ModalCopyright = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      title: form.title.trim() === "",
+      title: form.title.trim() === "" ? "Jenis tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -48,7 +48,7 @@ const ModalCopyright = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors({ title: false });
+      setErrors({ title: null });
     }
   }, [modal, setErrors]);
 

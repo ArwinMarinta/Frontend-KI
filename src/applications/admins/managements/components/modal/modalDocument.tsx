@@ -13,9 +13,9 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      title: form.title.trim() === "",
-      document: form.document === null && form.documentName === "",
-      cover: form.cover === null && form.coverName === "",
+      title: form.title.trim() === "" ? "Judul tidak boleh kosong" : null,
+      document: form.document === null && form.documentName === "" ? "Dokumen tidak boleh kosong" : null,
+      cover: form.cover === null && form.coverName === "" ? "Cover tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -58,7 +58,7 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors({ title: false, document: false, cover: false });
+      setErrors({ title: null, document: null, cover: null });
     }
   }, [modal, setErrors]);
 
@@ -80,7 +80,7 @@ const ModalDocument = ({ modal, setModal, type, id, message }: ModalProps) => {
       if (documentDetail.document) {
         setErrors((prev) => ({
           ...prev,
-          document: false,
+          document: null,
         }));
       }
     } else {

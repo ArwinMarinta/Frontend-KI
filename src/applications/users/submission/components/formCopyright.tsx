@@ -5,7 +5,7 @@ import FieldTextarea from "../../../../components/input/fieldTextArea";
 import InputFile from "./field/InputFile";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getSubTypeCopyright, getTypeCopyright } from "../../../../service/actions/landingAction";
 import NextButton from "./nextButton";
 
@@ -29,6 +29,8 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
       dispatch(getSubTypeCopyright(formCopyright.typeCreation));
     }
   }, [dispatch, formCopyright?.typeCreation]);
+
+  const [creation, setCreation] = useState("");
 
   return (
     <>
@@ -100,13 +102,30 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
             onChange={handleChange}
             className={`bg-gray-50 border ${formCopyrightError?.timeFirstAnnounced ? "border-RED01 ring-RED01 focus:ring-RED01 focus:border-RED01" : "border-BORDER01 focus:ring-PRIMARY01 focus:border-PRIMARY01"} text-base rounded-md block w-full p-2`}
           />
-          {formCopyrightError?.timeFirstAnnounced && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
+          {formCopyrightError?.timeFirstAnnounced && <p className="text-sm text-RED01 mt-1">{formCopyrightError?.timeFirstAnnounced}</p>}
         </div>
 
         <FieldTextarea label="Uraian Singkat Ciptaan" value={formCopyright?.briefDescriptionCreation || ""} name="briefDescriptionCreation" placeholder="" required row={4} onChange={handleChange} error={formCopyrightError?.briefDescriptionCreation} need />
         {/* <InputFile label="Surat Pernyataan" value={formCopyright?.statementLetter ?? null} name="statementLetter" required onChange={handleChange} error={formCopyrightError?.statementLetter} need />
         <InputFile label="Surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ?? null} name="letterTransferCopyright" required onChange={handleChange} error={formCopyrightError?.letterTransferCopyright} need /> */}
-        <InputFile label="Contoh Ciptaan" value={formCopyright?.exampleCreation} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} accept="video/mp4, application/pdf, image/jpeg" message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB" />
+
+        <div className="">
+          <FieldDropdown
+            label="Contoh Ciptaan"
+            type="select"
+            value={creation}
+            onChange={(e) => setCreation(e.target.value)}
+            options={[
+              { label: "Upload File", value: "file" },
+              { label: "Masukkan URL", value: "url" },
+            ]}
+          />
+          <span className="mt-1 block"> Contoh ciptaan tidak wajib. Anda bisa memilih untuk mengunggah file atau memasukkan URL.</span>
+        </div>
+        {creation === "file" && (
+          <InputFile label="File Ciptaan" value={formCopyright?.exampleCreation} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} accept="video/mp4, application/pdf, image/jpeg" message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB" />
+        )}
+        {creation === "url" && <Field label="Url Ciptaan" value={formCopyright?.exampleCreationUrl || ""} name="exampleCreationUrl" type="text" placeholder="" onChange={handleChange} />}
       </div>
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">
         <NextButton onClick={handleNextStep} />

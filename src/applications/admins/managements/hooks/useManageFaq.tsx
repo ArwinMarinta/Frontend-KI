@@ -12,9 +12,9 @@ const useManageFaq = () => {
     question: "",
     answer: "",
   });
-  const [errors, setErrors] = useState({
-    question: false,
-    answer: false,
+  const [errors, setErrors] = useState<{ question: string | null; answer: string | null }>({
+    question: null,
+    answer: null,
   });
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqsDetail } = useSelector((state: RootState) => state.manage);

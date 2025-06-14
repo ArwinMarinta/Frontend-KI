@@ -3,7 +3,7 @@ import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setIprCount, setNotifications, setQuota, setSubmissionType, setTermsLanding, setUserDashboard } from "../reducers/landingReducer";
 
-export const getFaqLanding = (title: string | undefined, limit: number): AppThunk => {
+export const getFaqLanding = (title: string | undefined, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -14,6 +14,7 @@ export const getFaqLanding = (title: string | undefined, limit: number): AppThun
         },
         params: {
           limit: limit,
+          search: search,
         },
       });
 
@@ -65,10 +66,12 @@ export const getFaqCateoryLanding = (): AppThunk => {
     }
   };
 };
-export const getDocumentLanding = (title: string | undefined, limit: number): AppThunk => {
+export const getDocumentLanding = (title: string | undefined, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
+
+      console.log(title);
 
       const response = await axios.get(`${API_URL}/document/by-type/${title}`, {
         headers: {
@@ -76,6 +79,7 @@ export const getDocumentLanding = (title: string | undefined, limit: number): Ap
         },
         params: {
           limit: limit,
+          search: search,
         },
       });
 

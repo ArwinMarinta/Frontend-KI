@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryCopyright, setCategoryCopyrightDetail, setCategorySubCopyright, setCategorySubCopyrightDetail } from "../reducers/categoryReducer";
+import { toast } from "sonner";
 
 export const getCategoryCopyright = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -69,7 +70,7 @@ export const createCategoryCopyright = (title: string, currentPage: number, limi
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/copyright/type`,
         {
           title: title,
@@ -83,6 +84,7 @@ export const createCategoryCopyright = (title: string, currentPage: number, limi
       );
 
       dispatch(getCategoryCopyright(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -101,7 +103,7 @@ export const updateCategoryCopyright = (id: number | string, title: string, curr
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/copyright/type/${id}`,
         {
           title: title,
@@ -115,6 +117,7 @@ export const updateCategoryCopyright = (id: number | string, title: string, curr
       );
 
       dispatch(getCategoryCopyright(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -133,9 +136,7 @@ export const deleteCategoryCopyright = (id: number | string | null, currentPage:
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/copyright/type/${id}`,
 
         {
@@ -146,9 +147,11 @@ export const deleteCategoryCopyright = (id: number | string | null, currentPage:
       );
 
       dispatch(getCategoryCopyright(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -225,7 +228,7 @@ export const createCategorySubCopyright = (ids: string | undefined, title: strin
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/copyright/sub-type/${ids}`,
         {
           title: title,
@@ -239,9 +242,11 @@ export const createCategorySubCopyright = (ids: string | undefined, title: strin
       );
 
       dispatch(getCategorySubCopyright(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -257,7 +262,7 @@ export const updateCategorySubCopyright = (id: number | string, ids: string | un
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/copyright/sub-type/${id}`,
         {
           title: title,
@@ -271,9 +276,11 @@ export const updateCategorySubCopyright = (id: number | string, ids: string | un
       );
 
       dispatch(getCategorySubCopyright(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -289,9 +296,7 @@ export const deleteCategorySubCopyright = (id: number | string | null, ids: stri
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/copyright/sub-type/${id}`,
 
         {
@@ -302,6 +307,7 @@ export const deleteCategorySubCopyright = (id: number | string | null, ids: stri
       );
 
       dispatch(getCategorySubCopyright(ids, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -61,7 +61,7 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
                 value: item.value,
               })) ?? []
             }
-            error={!!statusError}
+            error={statusError}
             need
           />
         </div>

@@ -13,9 +13,12 @@ interface FormRevisionProps {
   handleChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => void;
   formCopyrightError?: FormSubmissionCopyrightError;
   handleUpdate: () => void;
+  types?: string;
 }
-const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, formCopyrightError, handleUpdate }: FormRevisionProps) => {
+const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, formCopyrightError, handleUpdate, types }: FormRevisionProps) => {
   const { typeCopy, subTypeCopy } = useSelector((state: RootState) => state.landing.submissionType.copyright);
+  const { detailSubmission } = useSelector((state: RootState) => state.submission);
+
   return (
     <div className="flex flex-col">
       <div>
@@ -34,7 +37,7 @@ const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, for
                 options={
                   typeCopy?.map((item) => ({
                     label: item.title,
-                    value: item.id,
+                    value: item.id.toString(),
                   })) ?? []
                 }
                 error={formCopyrightError?.typeCreation}
@@ -49,7 +52,7 @@ const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, for
                 options={
                   subTypeCopy?.map((item) => ({
                     label: item.title,
-                    value: item.id,
+                    value: item.id.toString(),
                   })) ?? []
                 }
                 error={formCopyrightError?.subTypeCreation}
@@ -79,9 +82,42 @@ const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, for
           </div>
 
           <FieldTextarea label="Uraian Singkat Ciptaan" value={formCopyright?.briefDescriptionCreation || ""} name="briefDescriptionCreation" placeholder="" required row={4} onChange={handleChange} error={formCopyrightError?.briefDescriptionCreation} need />
-          <InputFile label="Surat Pernyataan" value={formCopyright?.statementLetter ?? null} name="statementLetter" required onChange={handleChange} error={formCopyrightError?.statementLetter} need />
-          <InputFile label="Surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ?? null} name="letterTransferCopyright" required onChange={handleChange} error={formCopyrightError?.letterTransferCopyright} need />
-          <InputFile label="Contoh Ciptaan" value={formCopyright?.exampleCreation ?? null} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} need />
+          <InputFile
+            label="Surat Pernyataan"
+            value={formCopyright?.statementLetter ?? null}
+            name="statementLetter"
+            required
+            onChange={handleChange}
+            // error={formCopyrightError?.statementLetter}
+            need
+            message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+            edite={types}
+            url={detailSubmission?.submission?.copyright?.statementLetter}
+          />
+          <InputFile
+            label="Surat Pengalihan Hak Cipta"
+            value={formCopyright?.letterTransferCopyright ?? null}
+            name="letterTransferCopyright"
+            required
+            onChange={handleChange}
+            // error={formCopyrightError?.letterTransferCopyright}
+            need
+            message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+            edite={types}
+            url={detailSubmission?.submission?.copyright?.statementLetter}
+          />
+          <InputFile
+            label="Contoh Ciptaan"
+            value={formCopyright?.exampleCreation ?? null}
+            name="exampleCreation"
+            required
+            onChange={handleChange}
+            // error={formCopyrightError?.exampleCreation}
+            need
+            message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+            edite={types}
+            url={detailSubmission?.submission?.copyright?.statementLetter}
+          />
         </div>
         <div className="flex justify-end mt-16">
           <button onClick={handleUpdate} className="bg-PRIMARY01 px-4 py-2 flex flex-row items-center  gap-2 text-white font-medium rounded-md cursor-pointer">

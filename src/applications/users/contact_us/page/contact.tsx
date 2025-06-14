@@ -19,13 +19,28 @@ const Contact = () => {
             </div>
             <form onSubmit={handleSubmit} className="w-full shadow-md flex flex-col  border h-full lg:px-12 px-8 gap-4 py-10 rounded-md">
               <h1 className="text-[40px] font-bold mb-5 lg:mb-0 ">Butuh Bantuan Kami?</h1>
-              <p className="mb-4">Jika kamu mengalami kesulitan atau ada pertanyaan jangan ragu untuk menghubungi admin kami. </p>
+              <p className="mb-4">Jika anda mengalami kesulitan atau ada pertanyaan jangan ragu untuk menghubungi admin kami. </p>
               {message === "Help Center berhasil ditambahkan" && <div className="bg-green-300 font-medium py-3 px-4 rounded-md text-green-900">Pesan berhasil dikirim ke admin</div>}
               <Field label="Email" value={form.email} name="email" type="email" placeholder="" onChange={handleOnChange} error={errors.email} need />
-              <Field label="Nomor Telphone" value={form.phoneNumber} name="phoneNumber" type="text" placeholder="" onChange={handleOnChange} error={errors.phoneNumber} need />
+              <Field
+                label="Nomor Telphone"
+                value={form.phoneNumber}
+                name="phoneNumber"
+                type="text"
+                placeholder=""
+                onChange={(e) => {
+                  const val = e.target.value;
+                  // Hanya izinkan angka dan panjang maksimal 15 digit
+                  if (/^\d{0,15}$/.test(val)) {
+                    handleOnChange(e);
+                  }
+                }}
+                error={errors.phoneNumber}
+                need
+              />
               <Field label="Masalah" value={form.problem} name="problem" type="text" placeholder="" onChange={handleOnChange} error={errors.problem} need />
               <FieldTextarea label="Pesan" value={form.message} name="message" placeholder="" row={2} onChange={handleOnChange} error={errors.message} need />
-              <FieldFile label="Dokumen" value={form.document} name="document" onChange={handleOnChange} />
+              <FieldFile label="Dokumen" value={form.document} name="document" onChange={handleOnChange} error={errors.document} />
 
               <div className="w-full flex justify-end mt-10">
                 <button disabled={loading} type="submit" className="px-6 py-2 bg-PRIMARY01 rounded-md text-white font-semibold">

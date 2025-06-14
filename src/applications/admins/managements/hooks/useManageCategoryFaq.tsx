@@ -7,7 +7,7 @@ const useManageCategoryFaq = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [faqs, setFaqs] = useState("");
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqCategoryDetail } = useSelector((state: RootState) => state.manage);
   const { currentPage, limit } = useSelector((state: RootState) => state.manage.faqsCategoryData);

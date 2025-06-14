@@ -13,7 +13,7 @@ const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      title: form.title.trim() === "",
+      title: form.title.trim() === "" ? "Judul tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -46,7 +46,7 @@ const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors({ title: false });
+      setErrors({ title: null });
     }
   }, [modal, setErrors]);
 

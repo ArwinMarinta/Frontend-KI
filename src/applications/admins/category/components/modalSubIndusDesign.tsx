@@ -13,7 +13,7 @@ const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps)
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      title: form.title.trim() === "",
+      title: form.title.trim() === "" ? "Sub-Jenis tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -48,7 +48,7 @@ const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps)
 
   useEffect(() => {
     if (modal) {
-      setErrors({ title: false });
+      setErrors({ title: null });
     }
   }, [modal, setErrors]);
 
@@ -83,7 +83,7 @@ const ModalSubIndusDesign = ({ modal, setModal, type, id, message }: ModalProps)
     if (value.trim() !== "") {
       setErrors((prev) => ({
         ...prev,
-        [name]: false,
+        [name]: null,
       }));
     }
   };

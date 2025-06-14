@@ -1,4 +1,4 @@
-import { FormPersonalData } from "../../../../types/submissionType";
+import { FormPersonalData, PersonalDataError } from "../../../../types/submissionType";
 import Field from "../../../../components/input/fieldInput";
 import FieldTextarea from "../../../../components/input/fieldTextArea";
 import InputFile from "./field/InputFile";
@@ -16,10 +16,11 @@ export type FormStepProps = {
   addContributor: () => void;
   removeContributor: (id: number) => void;
   handleNextStep: () => void;
-  error: Array<Record<string, boolean>>;
+  error: PersonalDataError[];
+  types?: string;
 };
 
-const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error }: FormStepProps) => {
+const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error, types }: FormStepProps) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center md:mt-20 mt-10 gap-6">
@@ -32,7 +33,7 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
       <div className="flex flex-col gap-8 md:mt-24 mt-16">
         {personalData.map((item, index) => (
           <>
-            <div key={item.id} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
+            <div key={index} className="border p-6 rounded-md flex flex-col gap-4 border-PRIMARY01">
               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                 <Field label={index === 0 ? "Ketua Pencipta" : `Kontributor ${index + 0}`} value={item.name} name="name" type="text" placeholder="" onChange={(e) => handleChange(e, index, "name")} error={error[index]?.name} need />
                 <Field label="Email" value={item.email} name="email" type="email" placeholder="" onChange={(e) => handleChange(e, index, "email")} error={error[index]?.email} need />
@@ -89,7 +90,7 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
                 </>
               )}
 
-              <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index]?.address} need />
+              <FieldTextarea label="Alamat" value={item.address || ""} name="address" placeholder="" required row={4} onChange={(e) => handleChange(e, index, "address")} error={error[index]?.address} need />
               <InputFile
                 label="KTP"
                 value={item.ktp instanceof File ? item.ktp : undefined}
@@ -98,9 +99,10 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
                 onChange={(e) => handleChange(e, index, "ktp")}
                 error={error[index]?.ktp}
                 need
-                placeholder={`${item.ktp ?? ""}`}
                 message="Format file harus berupa pdf. Max 20 MB"
                 accept=".pdf"
+                url={item.ktpName}
+                edite={types}
               />
 
               {personalData.length > 1 && index !== 0 ? (

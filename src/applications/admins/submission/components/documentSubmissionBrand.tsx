@@ -28,10 +28,10 @@ const DocumentSubmissionBrand = ({ data }: DocumentType) => {
       <FieldTextarea label="Uraian Singkat" value={data?.description || "-"} name="question" placeholder="" required row={4} readOnly />
       <FieldTextarea label="Uraian Singkat" value={data?.information || "-"} name="question" placeholder="" required row={4} readOnly />
       <DetailDocument label="Label Merek" value={data?.labelBrand || ""} name="fullname" type="text" placeholder="" readOnly />
-      <DetailDocument label="Upload File" value={data?.fileUploade || ""} name="fullname" type="text" placeholder="" readOnly />
+      {/* <DetailDocument label="Upload File" value={data?.fileUploade || ""} name="fullname" type="text" placeholder="" readOnly /> */}
       <DetailDocument label="Tanda Tangan Permohonan" value={data?.signature || ""} name="fullname" type="text" placeholder="" readOnly />
-      <DetailDocument label="Surat Keterangan UMKM" value={data?.InformationLetter || ""} name="fullname" type="text" placeholder="" readOnly />
-      <DetailDocument label="Surat Pernyataan UMKM" value={data?.letterStatment || ""} name="fullname" type="text" placeholder="" readOnly />
+      <DetailDocument label="Surat Pernyataan" value={data?.fileUploade || ""} name="fullname" type="text" placeholder="" readOnly />
+      {/* <DetailDocument label="Surat Pernyataan UMKM" value={data?.letterStatment || ""} name="fullname" type="text" placeholder="" readOnly /> */}
 
       <div className="font-bold text-2xl mt-4">Data Merek Tambahan</div>
 

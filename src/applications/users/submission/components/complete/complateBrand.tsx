@@ -13,8 +13,16 @@ const ComplateBrand = ({ formBrand, handleChange, formBrandError, handleUpdate }
     <>
       <div className="mb-20 font-bold text-center text-4xl">Lengkapi Berkas Merek</div>
       <div className="flex flex-col gap-1">
-        <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChange} error={formBrandError?.fileUploade} need />
-        <label className="text-GREY04">Unggah Surat Keterangan UMKM dan Surat Keterangan UKM</label>
+        <InputFile
+          label="Surat Keterangan dan Surat Pernyataan"
+          value={formBrand?.fileUploade ?? null}
+          name="fileUploade"
+          required
+          onChange={handleChange}
+          error={formBrandError?.fileUploade}
+          need
+          message="Unggah Surat Keterangan UMKM dan Surat Keterangan UKM. Format file harus pdf, dox, docx. Max 20MB"
+        />
       </div>
       <div className="flex justify-end mt-16">
         <button onClick={handleUpdate} className="bg-PRIMARY01 px-4 py-2 flex flex-row items-center  gap-2 text-white font-medium rounded-md cursor-pointer">

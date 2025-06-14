@@ -22,10 +22,12 @@ interface FormRevisionProps {
   tempAdditionalBrandError?: FormAdditionalBrandError;
   handleDeleteAttempBrand: (index: number) => void;
   handleNextStep: () => void;
+  types?: string;
 }
 
-const RevisionBrand = ({ progresSubmission, formBrand, formBrandError, handleChange, formAdditionalBrand, tempAdditionalBrand, handleChangeAdditional, addAdditionalBrand, tempAdditionalBrandError, handleDeleteAttempBrand, handleNextStep }: FormRevisionProps) => {
+const RevisionBrand = ({ progresSubmission, formBrand, formBrandError, handleChange, formAdditionalBrand, tempAdditionalBrand, handleChangeAdditional, addAdditionalBrand, tempAdditionalBrandError, handleDeleteAttempBrand, handleNextStep, types }: FormRevisionProps) => {
   const { typeBrand } = useSelector((state: RootState) => state.landing.submissionType.brand);
+  const { detailSubmission } = useSelector((state: RootState) => state.submission);
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-6">
@@ -109,11 +111,47 @@ Jika bukan, isi dengan tanda strip -."
           />
           <FieldTextarea label="Keterangan" value={formBrand?.information ?? ""} name="information" placeholder="" required row={4} onChange={handleChange} error={formBrandError?.information} need />
 
-          <InputFile label="Label Merek" value={formBrand?.labelBrand ?? null} name="labelBrand" required onChange={handleChange} accept=".jpg" error={formBrandError?.labelBrand} need />
-          <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChange} accept=".jpg, .jpeg" error={formBrandError?.fileUploade} need />
-          <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChange} error={formBrandError?.signature} need />
-          <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChange} error={formBrandError?.InformationLetter} need />
-          <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChange} error={formBrandError?.letterStatment} need />
+          <InputFile
+            label="Label Merek"
+            value={formBrand?.labelBrand ?? null}
+            name="labelBrand"
+            required
+            onChange={handleChange}
+            accept=".jpg"
+            error={formBrandError?.labelBrand}
+            need
+            message="Format file harus berupa jpg. Ukuran 1024 x 1024. Max 20MB,"
+            edite={types}
+            url={detailSubmission?.submission?.brand?.labelBrand}
+          />
+          {/* <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChange} accept=".jpg, .jpeg" error={formBrandError?.fileUploade} need /> */}
+          <InputFile
+            label="Tanda Tangan Permohonan"
+            value={formBrand?.signature ?? null}
+            name="signature"
+            required
+            onChange={handleChange}
+            error={formBrandError?.signature}
+            need
+            message="Format file harus berupa pdf. Max 20MB,"
+            edite={types}
+            url={detailSubmission?.submission?.brand?.signature}
+            accept=".pdf"
+          />
+          <InputFile
+            label="Surat Keterangan"
+            value={formBrand?.fileUploade ?? null}
+            name="InformationLetter"
+            required
+            onChange={handleChange}
+            error={formBrandError?.fileUploade}
+            need
+            message="Gabungkan Surat Keterangan UMKM dan surat Pernyataan UKM. Format file harus berupa pdf, dox, atau docx. Max 20MB"
+            edite={types}
+            url={detailSubmission?.submission?.brand?.fileUploade}
+          />
+
+          {/* <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChange} error={formBrandError?.letterStatment} need /> */}
 
           <div className="flex flex-col mt-10 gap-6">
             <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>

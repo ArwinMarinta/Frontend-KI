@@ -11,9 +11,12 @@ const useReportAnalitic = () => {
   const [formReportAnalitic, setFormReportAnalitic] = useState<FormReportAnaliticType>({
     namaPengguna: "",
     jenisPengajuan: "",
-    tanggalPengajuan: "",
+    skemaPengajuan: "",
+    progressPengajuan: "",
     peran: "",
     instansi: "",
+    startDate: "",
+    endDate: "",
   });
 
   useEffect(() => {
@@ -28,9 +31,12 @@ const useReportAnalitic = () => {
     setFormReportAnalitic({
       namaPengguna: form.namaPengguna,
       jenisPengajuan: form.jenisPengajuan,
-      tanggalPengajuan: form.tanggalPengajuan,
+      skemaPengajuan: form.skemaPengajuan,
+      progressPengajuan: form.progressPengajuan,
       peran: form.peran,
       instansi: form.instansi,
+      startDate: form.startDate,
+      endDate: form.endDate,
     });
   };
 

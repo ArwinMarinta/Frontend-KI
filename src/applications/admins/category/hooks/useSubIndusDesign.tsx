@@ -16,8 +16,8 @@ const useSubIndusDesign = () => {
     title: "",
   });
 
-  const [errors, setErrors] = useState({
-    title: false,
+  const [errors, setErrors] = useState<{ title: string | null }>({
+    title: null,
   });
 
   useEffect(() => {

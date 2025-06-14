@@ -15,10 +15,10 @@ const useManageDocument = () => {
     documentName: "",
   });
 
-  const [errors, setErrors] = useState({
-    title: false,
-    document: false,
-    cover: false,
+  const [errors, setErrors] = useState<{ title: string | null; document: string | null; cover: string | null }>({
+    title: null,
+    document: null,
+    cover: null,
   });
   const { token } = useSelector((state: RootState) => state.auth);
   const { documentDetail } = useSelector((state: RootState) => state.manage);

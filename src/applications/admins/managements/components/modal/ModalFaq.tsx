@@ -13,8 +13,8 @@ const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      question: form.question.trim() === "",
-      answer: form.answer.trim() === "",
+      question: form.question.trim() === "" ? "Pertanyaan tidak boleh kosong" : null,
+      answer: form.answer.trim() === "" ? "Jawaban tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -51,7 +51,7 @@ const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors({ question: false, answer: false });
+      setErrors({ question: null, answer: null });
     }
   }, [modal, setErrors]);
 
@@ -84,7 +84,7 @@ const ModalFaq = ({ modal, setModal, type, id, message }: ModalProps) => {
     if (value.trim() !== "") {
       setErrors((prev) => ({
         ...prev,
-        [name]: false,
+        [name]: null,
       }));
     }
   };

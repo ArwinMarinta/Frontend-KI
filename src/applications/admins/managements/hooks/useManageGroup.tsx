@@ -13,10 +13,14 @@ const useManageGroup = () => {
     startDate: "",
     endDate: "",
   });
-  const [errors, setErrors] = useState({
-    group: false,
-    startDate: false,
-    endDate: false,
+  const [errors, setErrors] = useState<{
+    group: string | null;
+    startDate: string | null;
+    endDate: string | null;
+  }>({
+    group: null,
+    startDate: null,
+    endDate: null,
   });
   const { token } = useSelector((state: RootState) => state.auth);
   const { groupDetail } = useSelector((state: RootState) => state.manage);

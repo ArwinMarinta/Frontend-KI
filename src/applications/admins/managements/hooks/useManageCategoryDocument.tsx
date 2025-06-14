@@ -7,7 +7,7 @@ const useManageCategoryDocument = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [types, setTypes] = useState<string>("");
-  const [errors, setErrors] = useState<boolean>(false);
+  const [errors, setErrors] = useState<string | null>(null);
   const { token } = useSelector((state: RootState) => state.auth);
   const { categoryDocumentDetail } = useSelector((state: RootState) => state.manage);
   const { currentPage, limit } = useSelector((state: RootState) => state.manage.documentsCategoryData);

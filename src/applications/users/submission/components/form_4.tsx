@@ -49,9 +49,10 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
               <Field label="Kota Pertama Kali Diumumkan" value={formCopyright?.cityFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
             </div>
             <Field label="Waktu Pertama Kali Diumumkan" value={formCopyright?.timeFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
-            <Field label="Surat Pernyataan" value={formCopyright?.statementLetter ? formCopyright.statementLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
-            <Field label="surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ? formCopyright.letterTransferCopyright.name : ""} name="twitter" type="text" placeholder="" readOnly />
-            <Field label="Contoh Ciptaan" value={formCopyright?.exampleCreation ? formCopyright.exampleCreation.name : ""} name="twitter" type="text" placeholder="" readOnly />
+            {/* <Field label="Surat Pernyataan" value={formCopyright?.statementLetter ? formCopyright.statementLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
+            <Field label="surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ? formCopyright.letterTransferCopyright.name : ""} name="twitter" type="text" placeholder="" readOnly /> */}
+            {formCopyright?.exampleCreation && <Field label="File Ciptaan" value={formCopyright?.exampleCreation ? formCopyright.exampleCreation.name : ""} name="twitter" type="text" placeholder="" readOnly />}
+            {formCopyright?.exampleCreationUrl && <Field label="Url Ciptaan" value={formCopyright?.exampleCreationUrl} name="twitter" type="text" placeholder="" readOnly />}
           </div>
         )}
         {submissionType === "Merek" && (
@@ -78,10 +79,10 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
               <FieldTextarea label="Dekripsi Label Merek" value={formBrand?.description ?? "-"} name="address" placeholder="" required row={4} readOnly />
               <FieldTextarea label="Dekripsi Label Merek" value={formBrand?.information ?? "-"} name="address" placeholder="" required row={4} readOnly />
               <Field label="Label Merek" value={formBrand?.labelBrand ? formBrand?.labelBrand.name : ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="Upload File" value={formBrand?.fileUploade ? formBrand?.fileUploade.name : ""} name="twitter" type="text" placeholder="" readOnly />
+              {/* <Field label="Upload File" value={formBrand?.fileUploade ? formBrand?.fileUploade.name : ""} name="twitter" type="text" placeholder="" readOnly /> */}
               <Field label="Tanda Tangan Permohonan" value={formBrand?.signature ? formBrand?.signature.name : ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ? formBrand?.InformationLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
-              <Field label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ? formBrand?.letterStatment.name : ""} name="twitter" type="text" placeholder="" readOnly />
+              {/* <Field label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ? formBrand?.InformationLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
+              <Field label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ? formBrand?.letterStatment.name : ""} name="twitter" type="text" placeholder="" readOnly /> */}
             </div>
             <div className="flex flex-col ">
               <label className="block mb-2 text-base font-medium">Data Merek Tambahan</label>
@@ -154,7 +155,7 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
                 </>
               )}
 
-              <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} readOnly />
+              <FieldTextarea label="Alamat" value={item.address || ""} name="address" placeholder="" required row={4} readOnly />
               <Field label="KTP" value={item.ktp ? (typeof item.ktp === "string" ? item.ktp : item.ktp.name) : ""} name="twitter" type="text" placeholder="" readOnly />
             </div>
           ))}

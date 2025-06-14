@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { getTypeBrand } from "../../../../service/actions/landingAction";
 import { brandTypeOptions, brandClassOptions } from "../../../../data/brand";
 import NextButton from "./nextButton";
+import { Link } from "react-router-dom";
 
 interface FormBrandProps {
   formBrand?: FormSubmissionBrand;
@@ -81,21 +82,26 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
         </div>
         <div className="flex lg:flex-row flex-col w-full gap-6">
           <Field label="Disclaimer (Tidak dilindungin)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
-          <FieldDropdown
-            label="Jenis Dokumen"
-            name="documentType"
-            type="select"
-            value={formBrand?.documentType ?? ""}
-            onChange={handleChange}
-            options={
-              brandClassOptions?.map((item) => ({
-                label: item.label,
-                value: item.value,
-              })) ?? []
-            }
-            error={formBrandError?.documentType}
-            need
-          />
+          <div className="flex flex-col w-full">
+            <FieldDropdown
+              label="Jenis Dokumen"
+              name="documentType"
+              type="select"
+              value={formBrand?.documentType ?? ""}
+              onChange={handleChange}
+              options={
+                brandClassOptions?.map((item) => ({
+                  label: item.label,
+                  value: item.value,
+                })) ?? []
+              }
+              error={formBrandError?.documentType}
+              need
+            />
+            <Link className="mt-1 underline text-PRIMARY01" target="_blank" to={"https://skm.dgip.go.id/index.php/skm/detailkelas/35"}>
+              Jenis dokumen lihat disini
+            </Link>
+          </div>
         </div>
 
         <div className="flex lg:flex-row flex-col w-full gap-6">
@@ -125,7 +131,7 @@ Jika bukan, isi dengan tanda strip -."
 
         <div className="flex flex-col mt-10 gap-6">
           <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>
-          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} message="Format file harus berupa pdf. Max 20 MB" />
+          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} message="Format file harus berupa pdf, doc, dan docx. Max 2MB" />
           <FieldTextarea label="Keterangan" value={tempAdditionalBrand?.additionalDescriptions ?? ""} name="additionalDescriptions" placeholder="" required row={4} onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalDescriptions} />
 
           <button onClick={addAdditionalBrand} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">

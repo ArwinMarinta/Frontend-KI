@@ -32,24 +32,23 @@ export type FormAdditionalBrand = {
   additionalFiles: File | null;
 };
 export type FormAdditionalBrandError = {
-  additionalDescriptions: boolean;
-  additionalFiles: boolean;
+  additionalDescriptions: string | null;
+  additionalFiles: string | null;
 };
-
 export type FormSubmissionBrandError = {
-  applicationType: boolean;
-  brandType: boolean;
-  referenceName: boolean;
-  elementColor: boolean;
-  translate: boolean;
-  pronunciation: boolean;
-  disclaimer: boolean;
-  description: boolean;
-  documentType: boolean;
-  information: boolean;
-  labelBrand: boolean;
-  fileUploade: boolean;
-  signature: boolean;
-  InformationLetter: boolean;
-  letterStatment: boolean;
+  applicationType: string | null;
+  brandType: string | null;
+  referenceName: string | null;
+  elementColor: string | null;
+  translate: string | null;
+  pronunciation: string | null;
+  disclaimer: string | null;
+  description: string | null;
+  documentType: string | null;
+  information: string | null;
+  labelBrand: string | null;
+  fileUploade?: string | null;
+  signature: string | null;
+  InformationLetter?: string | null;
+  letterStatment?: string | null;
 };

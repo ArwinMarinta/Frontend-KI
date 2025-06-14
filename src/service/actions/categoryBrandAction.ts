@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setCategoryBrandDetail, setCategoryBrands } from "../reducers/categoryReducer";
+import { toast } from "sonner";
 
 export const getCategoryBrand = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -68,7 +69,7 @@ export const createCategoryBrand = (patent: string, currentPage: number, limit: 
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/brand/type`,
         {
           title: patent,
@@ -82,9 +83,11 @@ export const createCategoryBrand = (patent: string, currentPage: number, limit: 
       );
 
       dispatch(getCategoryBrand(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -100,7 +103,7 @@ export const updateCategoryBrand = (id: number | string, title: string, currentP
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/brand/type/${id}`,
         {
           title: title,
@@ -114,9 +117,11 @@ export const updateCategoryBrand = (id: number | string, title: string, currentP
       );
 
       dispatch(getCategoryBrand(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -132,9 +137,7 @@ export const deleteCategoryBrand = (id: number | string | null, currentPage: num
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/brand/type/${id}`,
 
         {
@@ -145,9 +148,11 @@ export const deleteCategoryBrand = (id: number | string | null, currentPage: num
       );
 
       dispatch(getCategoryBrand(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

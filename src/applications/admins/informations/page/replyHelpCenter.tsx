@@ -6,9 +6,10 @@ import FieldTextarea from "../../../../components/input/fieldTextArea";
 import CreateButton from "../../../../components/button/createButton";
 import DetailDocument from "../../../../components/input/detailDocument";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import ModalLoading from "../../../../components/modal/modalLoading";
 
 const ReplyHelpCenter = () => {
-  const { helpCenterDetail, handleChange, errors, form, handleSubmit } = useHelpCenter();
+  const { helpCenterDetail, handleChange, errors, form, handleSubmit, loading } = useHelpCenter();
   return (
     <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -43,6 +44,7 @@ const ReplyHelpCenter = () => {
             </div>
           </form>
         </div>
+        <ModalLoading show={loading} />
       </div>
     </main>
   );

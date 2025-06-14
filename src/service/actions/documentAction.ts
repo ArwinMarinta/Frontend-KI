@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { setCategoryDocumentDetail, setDocumentDetail, setDocumentsCategoryData, setDocumentsData } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
+import { toast } from "sonner";
 
 export const getCategoryDocument = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -69,7 +70,7 @@ export const createCategoryDocument = (type: string, currentPage: number, limit:
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/document`,
         {
           type: type,
@@ -82,9 +83,11 @@ export const createCategoryDocument = (type: string, currentPage: number, limit:
       );
 
       dispatch(getCategoryDocument(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -99,10 +102,7 @@ export const updateCategoryDocument = (id: string | undefined, type: string, cur
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
-
-      console.log(id);
-      console.log(type);
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/document/type`,
         {
           oldType: id,
@@ -117,9 +117,11 @@ export const updateCategoryDocument = (id: string | undefined, type: string, cur
       );
 
       dispatch(getCategoryDocument(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -135,16 +137,18 @@ export const deleteCategoryDocument = (title: number | string | null, currentPag
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/document/type/${title}`, {
+      const response = await axios.delete(`${API_URL}/document/type/${title}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       dispatch(getCategoryDocument(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -206,7 +210,7 @@ export const createDocument = (title: string, file: File | null, cover: File | n
         formData.append("cover", cover);
       }
 
-      await axios.post(`${API_URL}/document/by-type/${name}`, formData, {
+      const response = await axios.post(`${API_URL}/document/by-type/${name}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -214,9 +218,11 @@ export const createDocument = (title: string, file: File | null, cover: File | n
       });
 
       dispatch(getDocuments(name, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -241,7 +247,7 @@ export const updateDocument = (id: string | number, name: string, file: File | n
         formData.append("cover", cover);
       }
 
-      await axios.patch(`${API_URL}/document/${id}`, formData, {
+      const response = await axios.patch(`${API_URL}/document/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -249,9 +255,11 @@ export const updateDocument = (id: string | number, name: string, file: File | n
       });
 
       dispatch(getDocuments(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -267,17 +275,17 @@ export const deleteDocument = (id: number | string | null, title: string | undef
     try {
       const { token } = getState().auth;
 
-      console.log(id);
-
-      await axios.delete(`${API_URL}/document/${id}`, {
+      const response = await axios.delete(`${API_URL}/document/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       dispatch(getDocuments(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

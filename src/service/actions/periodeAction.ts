@@ -3,6 +3,7 @@ import { AppThunk } from "../store";
 import { setGroupData, setGroupDetail, setQuotaData, setQuotaDetail, setYearsData } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
 import { setHome } from "../reducers/landingReducer";
+import { toast } from "sonner";
 
 export const getPeriods = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -45,7 +46,7 @@ export const createPeriods = (year: Date | string, currentPage: number, limit: n
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/period`,
         {
           year: year,
@@ -58,9 +59,11 @@ export const createPeriods = (year: Date | string, currentPage: number, limit: n
       );
 
       dispatch(getPeriods(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -76,7 +79,7 @@ export const updatePeriods = (id: number | string | null, faqs: Date | string, c
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/faq/type/${id}`,
         {
           type: faqs,
@@ -90,9 +93,11 @@ export const updatePeriods = (id: number | string | null, faqs: Date | string, c
       );
 
       dispatch(getPeriods(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -108,16 +113,18 @@ export const deletePeriods = (id: number | string | null, currentPage: number, l
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/period/${id}`, {
+      const response = await axios.delete(`${API_URL}/period/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       dispatch(getPeriods(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -193,7 +200,7 @@ export const createGroup = (group: string, startDate: string | null, endDate: st
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/period/group/${years}`,
         {
           group: group,
@@ -208,9 +215,11 @@ export const createGroup = (group: string, startDate: string | null, endDate: st
       );
 
       dispatch(getGroup(years, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -226,7 +235,7 @@ export const updateGroup = (id: number | string, group: string, startDate: strin
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/period/group/${id}`,
         {
           group: group,
@@ -242,9 +251,11 @@ export const updateGroup = (id: number | string, group: string, startDate: strin
       );
 
       dispatch(getGroup(years, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -260,15 +271,17 @@ export const deleteGroup = (id: number | string | null, title: string | undefine
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/period/${id}`, {
+      const response = await axios.delete(`${API_URL}/period/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       dispatch(getGroup(title, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -343,7 +356,7 @@ export const updateQuota = (id: number | string, quota: number, remainingQuota: 
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/period/quota/${id}`,
         {
           quota: quota,
@@ -358,9 +371,11 @@ export const updateQuota = (id: number | string, quota: number, remainingQuota: 
       );
 
       dispatch(getQuota(group, currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

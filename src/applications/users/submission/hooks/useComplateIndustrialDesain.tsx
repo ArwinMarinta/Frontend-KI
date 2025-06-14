@@ -5,7 +5,6 @@ import { AppDispatch, RootState } from "../../../../service/store";
 import { complateSubmissionIndusDesign, revisionSubmissionIndustrialDesign } from "../../../../service/actions/submissionAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { processFile } from "../../../../utils/formatFile";
 
 const useComplateIndustrialDesain = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -53,21 +52,21 @@ const useComplateIndustrialDesain = () => {
 
   const validateIndustrialDesign = (data: FormComplateIndustDesign): FormDesignSubmissionErrors => {
     const errors: FormDesignSubmissionErrors = {
-      titleDesign: data.titleDesign.trim() === "" ? "Field Tidak Boleh Kosong!" : null,
-      type: data.type.trim() === "" ? "Field Tidak Boleh Kosong!" : null,
-      typeDesignId: data.typeDesignId === 0 ? "Field Tidak Boleh Kosong!" : null,
-      subtypeDesignId: data.subtypeDesignId === 0 ? "Field Tidak Boleh Kosong!" : null,
+      titleDesign: data.titleDesign.trim() === "" ? "Judul tidak boleh kosong!" : null,
+      type: data.type.trim() === "" ? "Type tidak boleh kosong!" : null,
+      typeDesignId: data.typeDesignId === 0 ? "Jenis tidak boleh kosong!" : null,
+      subtypeDesignId: data.subtypeDesignId === 0 ? "Sub-jenis tidak boleh kosong!" : null,
       claim: data.claim.length === 0 ? "Klaim harus diisi!" : null,
-      looksPerspective: !data.looksPerspective ? "File Tidak Boleh Kosong!" : null,
-      frontView: !data.frontView ? "File Tidak Boleh Kosong!" : null,
-      backView: !data.backView ? "File Tidak Boleh Kosong!" : null,
-      rightSideView: !data.rightSideView ? "File Tidak Boleh Kosong!" : null,
-      lefttSideView: !data.lefttSideView ? "File Tidak Boleh Kosong!" : null,
-      topView: !data.topView ? "File Tidak Boleh Kosong!" : null,
-      downView: !data.downView ? "File Tidak Boleh Kosong!" : null,
-      moreImages: !data.moreImages ? "File Tidak Boleh Kosong!" : null,
-      letterTransferDesignRights: !data.letterTransferDesignRights ? "File Tidak Boleh Kosong!" : null,
-      designOwnershipLetter: !data.designOwnershipLetter ? "File Tidak Boleh Kosong!" : null,
+      looksPerspective: !data.looksPerspective ? "Tampak perspektif tidak boleh kosong!" : null,
+      frontView: !data.frontView ? "Tampak depan tidak boleh kosong!" : null,
+      backView: !data.backView ? "Tampak belakang tidak boleh kosong!" : null,
+      rightSideView: !data.rightSideView ? "Tampak samping kanan tidak boleh kosong!" : null,
+      lefttSideView: !data.lefttSideView ? "Tampak samping kiri tidak boleh kosong!" : null,
+      topView: !data.topView ? "Tampak atas tidak boleh kosong!" : null,
+      downView: !data.downView ? "Tampak bawah tidak boleh kosong!" : null,
+      moreImages: !data.moreImages ? "Gambar lainnya tidak boleh kosong!" : null,
+      letterTransferDesignRights: !data.letterTransferDesignRights ? "Surat pengalihan tidak boleh kosong!" : null,
+      designOwnershipLetter: !data.designOwnershipLetter ? "Surat kepemilikan tidak boleh kosong!" : null,
     };
 
     return errors;
@@ -79,6 +78,25 @@ const useComplateIndustrialDesain = () => {
     // Handle input file
     if (type === "file" && e.target instanceof HTMLInputElement) {
       const file = e.target.files?.[0] || null;
+
+      if (file) {
+        const maxSizeMB = 20;
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+        if (file.size > maxSizeBytes) {
+          // File terlalu besar
+          setFormIndustDesign((prev) => ({
+            ...prev,
+            [name]: null,
+          }));
+
+          setFormIndustDesignError((prev) => ({
+            ...prev,
+            [name]: `Ukuran file maksimal ${maxSizeMB} MB`,
+          }));
+          return;
+        }
+      }
 
       setFormIndustDesign((prev) => ({
         ...prev,
@@ -106,22 +124,35 @@ const useComplateIndustrialDesain = () => {
   const handleClaimCheckboxChange = (value: string) => {
     setFormIndustDesign((prev) => {
       const exists = prev.claim.includes(value);
+      const updatedClaim = exists ? prev.claim.filter((item) => item !== value) : [...prev.claim, value];
+
+      if (updatedClaim.length === 0) {
+        setFormIndustDesignError((prevErrors) => ({
+          ...prevErrors,
+          claim: "Claim harus diisi minimal satu",
+        }));
+      } else {
+        setFormIndustDesignError((prevErrors) => ({
+          ...prevErrors,
+          claim: null,
+        }));
+      }
+
       return {
         ...prev,
-        claim: exists ? prev.claim.filter((item) => item !== value) : [...prev.claim, value],
+        claim: updatedClaim,
       };
     });
   };
 
   const handleSubmitComplateIndusDesign = async () => {
-    const errors = validateIndustrialDesign(formIndustDesign);
-    const hasErrors = Object.values(errors).some((error) => error !== null);
-    if (hasErrors) {
-      setFormIndustDesignError(errors);
-      return;
-    }
-
     if (types === "Lengkapi Berkas") {
+      const errors = validateIndustrialDesign(formIndustDesign);
+      const hasErrors = Object.values(errors).some((error) => error !== null);
+      if (hasErrors) {
+        setFormIndustDesignError(errors);
+        return;
+      }
       setLoading(true);
       try {
         await dispatch(complateSubmissionIndusDesign(designId, formIndustDesign));
@@ -149,6 +180,24 @@ const useComplateIndustrialDesain = () => {
     }
 
     if (types === "Revisi") {
+      const errors = validateIndustrialDesign(formIndustDesign);
+      if (types === "Revisi") {
+        errors.looksPerspective = null;
+        errors.frontView = null;
+        errors.backView = null;
+        errors.rightSideView = null;
+        errors.lefttSideView = null;
+        errors.topView = null;
+        errors.downView = null;
+        errors.moreImages = null;
+        errors.letterTransferDesignRights = null;
+        errors.designOwnershipLetter = null;
+      }
+      const hasErrors = Object.values(errors).some((error) => error !== null);
+      if (hasErrors) {
+        setFormIndustDesignError(errors);
+        return;
+      }
       setLoading(true);
       try {
         await dispatch(revisionSubmissionIndustrialDesign(detailDesign?.id, formIndustDesign));
@@ -180,16 +229,16 @@ const useComplateIndustrialDesain = () => {
     const initForm = async () => {
       if (!detailDesign || types !== "Revisi") return;
 
-      const looksPerspective = await processFile(detailDesign.looksPerspective);
-      const frontView = await processFile(detailDesign.frontView);
-      const backView = await processFile(detailDesign.backView);
-      const rightSideView = await processFile(detailDesign.rightSideView);
-      const lefttSideView = await processFile(detailDesign.lefttSideView);
-      const topView = await processFile(detailDesign.topView);
-      const downView = await processFile(detailDesign.downView);
-      const moreImages = await processFile(detailDesign.moreImages);
-      const letterTransferDesignRights = await processFile(detailDesign.letterTransferDesignRights);
-      const designOwnershipLetter = await processFile(detailDesign.designOwnershipLetter);
+      // const looksPerspective = await processFile(detailDesign.looksPerspective);
+      // const frontView = await processFile(detailDesign.frontView);
+      // const backView = await processFile(detailDesign.backView);
+      // const rightSideView = await processFile(detailDesign.rightSideView);
+      // const lefttSideView = await processFile(detailDesign.lefttSideView);
+      // const topView = await processFile(detailDesign.topView);
+      // const downView = await processFile(detailDesign.downView);
+      // const moreImages = await processFile(detailDesign.moreImages);
+      // const letterTransferDesignRights = await processFile(detailDesign.letterTransferDesignRights);
+      // const designOwnershipLetter = await processFile(detailDesign.designOwnershipLetter);
 
       setFormIndustDesign({
         titleDesign: detailDesign.titleDesign || "",
@@ -197,16 +246,16 @@ const useComplateIndustrialDesain = () => {
         typeDesignId: detailDesign.typeDesignId || 0,
         subtypeDesignId: detailDesign.subtypeDesignId || 0,
         claim: typeof detailDesign.claim === "string" ? [detailDesign.claim] : Array.isArray(detailDesign.claim) ? detailDesign.claim : [],
-        looksPerspective,
-        frontView,
-        backView,
-        rightSideView,
-        lefttSideView,
-        topView,
-        downView,
-        moreImages,
-        letterTransferDesignRights,
-        designOwnershipLetter,
+        looksPerspective: null,
+        frontView: null,
+        backView: null,
+        rightSideView: null,
+        lefttSideView: null,
+        topView: null,
+        downView: null,
+        moreImages: null,
+        letterTransferDesignRights: null,
+        designOwnershipLetter: null,
       });
     };
 

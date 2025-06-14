@@ -46,9 +46,9 @@ export type UserForm = {
 };
 
 export type FormUserErrors = {
-  fullname: boolean;
-  email: boolean;
-  role: boolean;
+  fullname: string | null;
+  email: string | null;
+  role: string | null;
   // faculty: boolean;
   // studyProgram: boolean;
   // institution: boolean;

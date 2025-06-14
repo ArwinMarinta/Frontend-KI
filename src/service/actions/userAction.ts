@@ -7,6 +7,7 @@ import { User3, UserForm } from "../../types/userType";
 import { NavigateFunction } from "react-router-dom";
 import { API_URL } from "../../config/config";
 import { logout } from "./authAction";
+import { toast } from "sonner";
 
 export const getMe = (): AppThunk => {
   return async (dispatch, getState) => {
@@ -43,7 +44,7 @@ export const updateProfile = (form: User3, id: string | number, onSuccess?: () =
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/user/${id}`,
 
         {
@@ -59,9 +60,11 @@ export const updateProfile = (form: User3, id: string | number, onSuccess?: () =
         }
       );
       dispatch(getMe());
+      toast.success(response?.data?.message);
       if (onSuccess) onSuccess();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -138,16 +141,18 @@ export const deleteUser = (id: number | string | null, currentPage: number, limi
     try {
       const { token } = getState().auth;
 
-      await axios.delete(`${API_URL}/user/${id}`, {
+      const response = await axios.delete(`${API_URL}/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       dispatch(getAccount(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -163,7 +168,7 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
     try {
       const { token } = getState().auth;
 
-      await axios.post(
+      const response = await axios.post(
         `${API_URL}/user`,
         {
           fullname: formUser.fullname,
@@ -184,9 +189,11 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
 
       dispatch(getAccount(currentPage, limit));
       navigate("/pengaturan/akun");
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -202,7 +209,7 @@ export const updateReviewer = (id: number | string | null, reviewerId: number): 
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/user-submission/submission-reviewer/${id}`,
         { reviewerId: reviewerId },
         {
@@ -211,10 +218,11 @@ export const updateReviewer = (id: number | string | null, reviewerId: number): 
           },
         }
       );
-
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -229,7 +237,7 @@ export const updateSubmissionStatus = (id: number | string | null, centralStatus
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/user-submission/submission-status/${id}`,
         { centralStatus: centralStatus },
         {
@@ -238,10 +246,11 @@ export const updateSubmissionStatus = (id: number | string | null, centralStatus
           },
         }
       );
-
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -264,7 +273,7 @@ export const updateAccount = (id: number | undefined, formUser: UserForm, curren
         }
       });
 
-      await axios.patch(`${API_URL}/user/${id}`, payload, {
+      const response = await axios.patch(`${API_URL}/user/${id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -272,9 +281,11 @@ export const updateAccount = (id: number | undefined, formUser: UserForm, curren
 
       dispatch(getAccount(currentPage, limit));
       navigate("/pengaturan/akun");
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

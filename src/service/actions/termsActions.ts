@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { setTerms, setTermsDetail } from "../reducers/manageReducer";
 import { API_URL } from "../../config/config";
+import { toast } from "sonner";
 
 export const getTerms = (currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
@@ -83,9 +84,11 @@ export const createTerms = (terms: string, currentPage: number, limit: number): 
 
       dispatch(setTermsDetail(response.data.terms));
       dispatch(getTerms(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -101,7 +104,7 @@ export const updateTerms = (id: number | string, terms: string, currentPage: num
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/terms/${id}`,
         {
           terms: terms,
@@ -115,9 +118,11 @@ export const updateTerms = (id: number | string, terms: string, currentPage: num
       );
 
       dispatch(getTerms(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.success(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -133,7 +138,7 @@ export const deletesTerms = (id: number | string | null, currentPage: number, li
     try {
       const { token } = getState().auth;
 
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/terms/${id}`,
 
         {
@@ -144,9 +149,11 @@ export const deletesTerms = (id: number | string | null, currentPage: number, li
       );
 
       dispatch(getTerms(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {

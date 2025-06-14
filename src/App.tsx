@@ -14,7 +14,7 @@ import UserProfile from "./applications/users/profile/userProfile";
 import SubmissionHistory from "./applications/users/submissionHistory/page/submissionHistory";
 import Assignment from "./applications/users/assignment/page/reviewerAssignment";
 import ChangePassword from "./applications/authentication/changePassoword/changePassword";
-
+import { Toaster } from "sonner";
 import SubmissionDetail from "./applications/users/submissionHistory/page/submissionDetail";
 import SubmissionComplete from "./applications/users/submission/page/submissionComplete";
 
@@ -82,6 +82,7 @@ import ProtectedToken from "./middleware/protecdToken";
 function App() {
   return (
     <BrowserRouter>
+      <Toaster richColors  position="top-center" expand={false} />
       <PageTitle />
       <ScrollBehavior />
       <Routes>

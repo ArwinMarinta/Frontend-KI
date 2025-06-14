@@ -2,10 +2,15 @@ import Navbar from "../../../../components/navigations/navbar";
 import FaqImage from "../../../../assets/images/faq.webp";
 import { Accordion } from "flowbite-react";
 import useFaq from "../hooks/useFaq";
+import { useState } from "react";
 
 const Faq = () => {
-  const { faq, category, handleCategoryChange } = useFaq();
-
+  const { faq, category, handleCategoryChange, selectedType, setSearch } = useFaq();
+  const [localSearch, setLocalSearch] = useState("");
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearch(localSearch);
+  };
   return (
     <>
       <Navbar />
@@ -26,21 +31,27 @@ const Faq = () => {
           <section id="section-2" className="flex lg:flex-row flex-col gap-10">
             <div className="flex flex-col  lg:w-[25%] w-full justify-start border p-4 shadow-md rounded-md gap-2">
               {category?.map((item) => (
-                <button key={item.id} onClick={() => handleCategoryChange(item.type)} className={`text-start px-6 py-2 ${faq?.some((faqItem) => faqItem.type === item.type) ? "bg-PRIMARY01 text-white" : "bg-white border border-PRIMARY01 text-PRIMARY01"} rounded-md font-medium`}>
+                <button key={item.id} onClick={() => handleCategoryChange(item.type)} className={`text-start px-6 py-2 ${selectedType === item.type ? "bg-PRIMARY01 text-white" : "bg-white border border-PRIMARY01 text-PRIMARY01"} rounded-md font-medium`}>
                   <span>{item.type}</span>
                 </button>
               ))}
             </div>
             <div className="lg:w-[75%] border p-4 rounded-md flex flex-col shadow-md mt-2 lg:mt-0">
-              <form className="w-full mx-auto">
+              <form className="w-full mx-auto" onSubmit={handleSubmit}>
                 <div className="flex">
                   <div className="relative w-full">
-                    <input type="search" id="search-dropdown" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-md   border-gray-300 focus:ring-PRIMARY01 focus:border-PRIMARY01" placeholder="Search Mockups, Logos, Design Templates..." required />
-                    <button type="submit" className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-PRIMARY01 rounded-e-lg border border-PRIMARY01 hover:bg-PRIMARY01 focus:ring-4 focus:outline-none focus:ring-blue-300  ">
+                    <input
+                      type="search"
+                      id="search-dropdown"
+                      className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-md border-gray-300 focus:ring-PRIMARY01 focus:border-PRIMARY01"
+                      placeholder="Cari pertanyaan"
+                      value={localSearch}
+                      onChange={(e) => setLocalSearch(e.target.value)}
+                    />
+                    <button type="submit" className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-PRIMARY01 rounded-e-lg border border-PRIMARY01 hover:bg-PRIMARY01 focus:ring-4 focus:outline-none focus:ring-blue-300">
                       <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                       </svg>
-                      <span className="sr-only">Search</span>
                     </button>
                   </div>
                 </div>

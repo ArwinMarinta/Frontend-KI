@@ -13,7 +13,7 @@ const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) =>
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     if (!faqs.trim()) {
-      setError(true);
+      setError("Kategori tidak boleh kosong");
       return;
     }
 
@@ -40,6 +40,12 @@ const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) =>
   };
 
   useEffect(() => {
+    if (modal) {
+      setError(null);
+    }
+  }, [modal, setError]);
+
+  useEffect(() => {
     if (type === "Edit" && id) {
       dispatch(getCategoryFaqById(id));
     }
@@ -57,7 +63,7 @@ const ModalCategoryFaq = ({ modal, setModal, type, id, message }: ModalProps) =>
     const value = e.target.value;
     setFaqs(value);
     if (error && value.trim() !== "") {
-      setError(false);
+      setError(null);
     }
   };
 

@@ -4,6 +4,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: ki-frontend
-    ports:
-      - "8034:80"
-      - "8035:443"
+    environment:
+      - VIRTUAL_HOST=hki-itk.wynz.site,www.hki-itk.wynz.site
+      - VIRTUAL_PORT=5173
+      - LETSENCRYPT_HOST=hki-itk.wynz.site,www.hki-itk.wynz.site
+      - LETSENCRYPT_EMAIL=septianushendra3@gmail.com
+    restart: always
+    networks: 
+      - proxy-network
+networks:
+  proxy-network:
+    external: true

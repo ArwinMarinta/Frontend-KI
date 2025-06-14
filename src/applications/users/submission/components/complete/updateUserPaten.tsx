@@ -13,9 +13,9 @@ import FormReview from "../formReview";
 import Form_2 from "../form_2";
 
 import ModalLoading from "../../../../../components/modal/modalLoading";
-import { processFile } from "../../../../../utils/formatFile";
+
 import useComplate from "../../hooks/useComplate";
-import { PersonalData } from "../../../../../types/submissionType";
+import { FormPersonalData } from "../../../../../types/submissionType";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
 import { toSlug } from "../../../../../utils/toSlug";
@@ -26,41 +26,67 @@ const UpdateUserPaten = () => {
   const navigate = useNavigate();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
   const { error, currentStep, setCurrentStep } = useSubmissionType();
-  const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
-  const { draftPatent, handleDraftPatenChange, errorDraftPatent, setErrorDraftPatent, setDraftPatent } = useDraftSubmission();
+  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
+  const { draftPatent, handleDraftPatenChange, errorDraftPatent, setDraftPatent } = useDraftSubmission();
   const { types, submissionId, submissionType } = useComplate();
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
   }, [dispatch, submissionId]);
 
-  const handleNextStep2 = async () => {
-    const updatedErrors = personalData.map(validatePersonalData);
+  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
+    if (typeof ktp === "string" && ktp.trim() !== "") return null;
+    if (ktp instanceof File && ktp.size > 0) return null;
+    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
+    return "KTP wajib diisi";
+  }
 
-    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+  const handleNextStep2 = async () => {
+    const updatedErrors = personalData.map((data) => ({
+      name: data.name.trim() === "" ? "Nama wajib diisi" : null,
+      email: !/\S+@\S+\.\S+/.test(data.email) ? "Format email tidak valid" : null,
+      faculty: data.faculty === null ? "Fakultas wajib dipilih" : null,
+      studyProgram: data.studyProgram === null ? "Program studi wajib dipilih" : null,
+      institution: data.institution.trim() === "" ? "Institusi wajib diisi" : null,
+      work: data.work.trim() === "" ? "Pekerjaan wajib diisi" : null,
+      nationalState: data.nationalState.trim() === "" ? "Kewarganegaraan wajib diisi" : null,
+      countryResidence: data.countryResidence.trim() === "" ? "Negara tempat tinggal wajib diisi" : null,
+      province: data.province.trim() === "" ? "Provinsi wajib diisi" : null,
+      city: data.city.trim() === "" ? "Kota wajib diisi" : null,
+      subdistrict: data.subdistrict.trim() === "" ? "Kecamatan wajib diisi" : null,
+      ward: data.ward.trim() === "" ? "Kelurahan wajib diisi" : null,
+      postalCode: data.postalCode.trim() === "" ? "Kode pos wajib diisi" : null,
+      phoneNumber: data.phoneNumber.trim() === "" ? "Nomor telepon wajib diisi" : null,
+      address: data.address?.trim() === "" ? "Alamat wajib diisi" : null,
+      ktp: validateKtp(data.ktp, data.ktpName),
+    }));
+
+    const excludeFields = ["id", "isLeader", "facebook", "whatsapp", "instagram", "twitter"];
+
+    const hasError = updatedErrors.some((errorObj) =>
+      Object.entries(errorObj)
+        .filter(([key]) => !excludeFields.includes(key))
+        .some(([, value]) => value !== null)
+    );
 
     if (hasError) {
       const newErrors = updatedErrors.map((error) => ({
-        name: error.name === true,
-        email: error.email === true,
-        faculty: error.faculty === true,
-        studyProgram: error.studyProgram === true,
-        institution: error.institution === true,
-        work: error.work === true,
-        nationalState: error.nationalState === true,
-        countryResidence: error.countryResidence === true,
-        province: error.province === true,
-        city: error.city === true,
-        subdistrict: error.subdistrict === true,
-        ward: error.ward === true,
-        postalCode: error.postalCode === true,
-        phoneNumber: error.phoneNumber === true,
-        ktp: error.ktp === true,
-        facebook: error.facebook === true,
-        whatsapp: error.whatsapp === true,
-        instagram: error.instagram === true,
-        twitter: error.twitter === true,
-        address: error.address === true,
+        name: error.name || null,
+        email: error.email || null,
+        faculty: error.faculty || null,
+        studyProgram: error.studyProgram || null,
+        institution: error.institution || null,
+        work: error.work || null,
+        nationalState: error.nationalState || null,
+        countryResidence: error.countryResidence || null,
+        province: error.province || null,
+        city: error.city || null,
+        subdistrict: error.subdistrict || null,
+        ward: error.ward || null,
+        postalCode: error.postalCode || null,
+        phoneNumber: error.phoneNumber || null,
+        address: error.address || null,
+        ktp: error.ktp || null,
       }));
 
       setPersonalDataError(newErrors);
@@ -107,10 +133,6 @@ const UpdateUserPaten = () => {
   };
 
   const handleNextStep1 = () => {
-    if (draftPatent === null) {
-      setErrorDraftPatent(true);
-      return;
-    }
     if (currentStep < 3 && !error) {
       setCurrentStep(currentStep + 1);
     }
@@ -127,15 +149,15 @@ const UpdateUserPaten = () => {
     const initForm = async () => {
       if (!detailSubmission?.submission?.patent && types !== "Menunggu") return;
 
-      const draftPatentApplicationFile = await processFile(detailSubmission?.submission?.patent?.draftPatentApplicationFile !== undefined ? detailSubmission.submission.patent.draftPatentApplicationFile : null);
+      // const draftPatentApplicationFile = await processFile(detailSubmission?.submission?.patent?.draftPatentApplicationFile !== undefined ? detailSubmission.submission.patent.draftPatentApplicationFile : null);
 
       // Set Form Hak Cipta
-      setDraftPatent(draftPatentApplicationFile);
+      // setDraftPatent(draftPatentApplicationFile);
 
       // Set Personal Data jika tersedia
       if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
         const mappedContributors = await Promise.all(
-          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+          detailSubmission.submission.personalDatas.map(async (item: FormPersonalData) => ({
             id: item.id,
             isLeader: item.isLeader || false,
             name: item.name || "",
@@ -153,11 +175,12 @@ const UpdateUserPaten = () => {
             postalCode: item.postalCode || "",
             phoneNumber: item.phoneNumber || "",
             address: item.address || "",
-            ktp: item.ktp ? await processFile(item.ktp) : null,
             facebook: item.facebook || "",
             whatsapp: item.whatsapp || "",
             instagram: item.instagram || "",
             twitter: item.twitter || "",
+            ktp: null,
+            ktpName: typeof item.ktp === "string" ? item.ktp : item.ktp instanceof File ? item.ktp.name : "",
           }))
         );
 
@@ -191,9 +214,20 @@ const UpdateUserPaten = () => {
               <h1 className="lg:text-[48px] font-bold lg:mb-20 mb-10 text-2xl text-center">Ubah Pengajuan Paten</h1>
             </div>
             <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
-            {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} />}
+            {currentStep === 0 && <FormReview draftPatent={draftPatent} handleChange={handleDraftPatenChange} errorDraftPatent={errorDraftPatent} handleNextStep1={handleNextStep1} url={detailSubmission?.submission?.patent?.draftPatentApplicationFile} types={types} />}
             {currentStep === 1 && (
-              <Form_2 submissionType="Paten" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />
+              <Form_2
+                submissionType="Paten"
+                error={personalDataError}
+                personalData={personalData}
+                handleChange={handleChangePerson}
+                addContributor={addContributor}
+                handleNextStep={handleNextStep2}
+                currentStep={currentStep}
+                setCurrentStep={setCurrentStep}
+                removeContributor={removeContributor}
+                types={types}
+              />
             )}
           </div>
         </div>

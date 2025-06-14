@@ -9,6 +9,7 @@ const useFaq = () => {
   const { category } = useSelector((state: RootState) => state.landing.faqCategory);
   const { faq, limit } = useSelector((state: RootState) => state.landing.faq);
   const [selectedType, setSelectedType] = useState<string>("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch(getFaqCateoryLanding());
@@ -17,13 +18,19 @@ const useFaq = () => {
   useEffect(() => {
     if (category && category.length > 0) {
       const typeToUse = selectedType || category[0].type;
-      dispatch(getFaqLanding(typeToUse, limit));
+      dispatch(getFaqLanding(typeToUse, limit, search));
     }
-  }, [category, dispatch, limit, selectedType]);
+  }, [category, dispatch, limit, selectedType, search]);
 
   const handleCategoryChange = (type: string) => {
     setSelectedType(type);
   };
+
+  useEffect(() => {
+    if (category && category.length > 0 && selectedType === "") {
+      setSelectedType(category[0].type);
+    }
+  }, [category, selectedType]);
 
   return {
     dispatch,
@@ -32,6 +39,8 @@ const useFaq = () => {
     category,
     handleCategoryChange,
     selectedType,
+    search,
+    setSearch,
   };
 };
 

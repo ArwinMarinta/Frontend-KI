@@ -20,8 +20,8 @@ const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
   const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
-    if (!terms.trim()) {
-      setErrors(true);
+    if (!terms || !terms.trim()) {
+      setErrors("S&K tidak boleh kosong");
       return;
     }
 
@@ -50,7 +50,7 @@ const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors(false);
+      setErrors(null);
     }
   }, [modal, setErrors]);
 
@@ -71,8 +71,11 @@ const ModalTerms = ({ modal, setModal, type, id, message }: ModalTermProps) => {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
     setTerms(value);
-    if (errors && value.trim() !== "") {
-      setErrors(false);
+    if (errors !== null && value.trim() !== "") {
+      setErrors(null);
+    }
+    if (value.trim() === "") {
+      setErrors("S&K tidak boleh kosong");
     }
   };
 

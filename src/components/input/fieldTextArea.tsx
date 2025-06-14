@@ -7,7 +7,7 @@ interface FieldTextareaProps {
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   row: number;
-  error?: boolean;
+  error?: string | null;
   need?: boolean;
 }
 
@@ -29,7 +29,7 @@ const FieldTextarea = ({ label, value, name, placeholder, readOnly = false, requ
         onChange={onChange}
         rows={row}
       />{" "}
-      {error && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
+      {error && <p className="text-sm text-RED01 mt-1">{error}</p>}
     </div>
   );
 };

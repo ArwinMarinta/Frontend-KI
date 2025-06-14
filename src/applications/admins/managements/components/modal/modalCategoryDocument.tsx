@@ -13,8 +13,8 @@ const ModalCategoryDocument = ({ modal, setModal, type, id, message }: ModalProp
   const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
-    if (!types.trim()) {
-      setErrors(true);
+    if (!types || !types.trim()) {
+      setErrors("Kategori tidak boleh kosong");
       return;
     }
     if (type === "Edit" && id) {
@@ -41,7 +41,7 @@ const ModalCategoryDocument = ({ modal, setModal, type, id, message }: ModalProp
 
   useEffect(() => {
     if (modal) {
-      setErrors(false);
+      setErrors(null);
     }
   }, [modal, setErrors]);
 
@@ -63,7 +63,7 @@ const ModalCategoryDocument = ({ modal, setModal, type, id, message }: ModalProp
     const value = e.target.value;
     setTypes(value);
     if (errors && value.trim() !== "") {
-      setErrors(false);
+      setErrors(null);
     }
   };
 

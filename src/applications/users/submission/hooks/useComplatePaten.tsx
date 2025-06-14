@@ -5,7 +5,6 @@ import { AppDispatch, RootState } from "../../../../service/store";
 import { complateSubmissionPatent, revisionSubmissionPaten } from "../../../../service/actions/submissionAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { processFile } from "../../../../utils/formatFile";
 
 const useComplatePaten = () => {
   const location = useLocation();
@@ -63,9 +62,21 @@ const useComplatePaten = () => {
   const handleChangeComplatePaten = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
 
-    // Handle input file
     if (type === "file" && e.target instanceof HTMLInputElement) {
       const file = e.target.files?.[0] || null;
+
+      if (file && file.size > 20 * 1024 * 1024) {
+        // 20 MB dalam bytes
+        setFormComplatePatenError((prev) => ({
+          ...prev,
+          [name]: "Ukuran file maksimal 20 MB!",
+        }));
+        setFormComplatePaten((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+        return;
+      }
 
       setFormComplatePaten((prev) => ({
         ...prev,
@@ -77,7 +88,6 @@ const useComplatePaten = () => {
         [name]: file ? null : "File Tidak Boleh Kosong!",
       }));
     } else {
-      // Handle input text/select/textarea
       setFormComplatePaten((prev) => ({
         ...prev,
         [name]: value,
@@ -91,14 +101,14 @@ const useComplatePaten = () => {
   };
 
   const handleSubmitComplatePatent = async () => {
-    const errors = validateComplatePaten(formComplatePaten);
-    const hasErrors = Object.values(errors).some((error) => error !== null);
-    if (hasErrors) {
-      setFormComplatePatenError(errors);
-      return;
-    }
-
     if (types === "Lengkapi Berkas") {
+      const errors = validateComplatePaten(formComplatePaten);
+      const hasErrors = Object.values(errors).some((error) => error !== null);
+      if (hasErrors) {
+        setFormComplatePatenError(errors);
+        return;
+      }
+
       setLoading(true);
       try {
         await dispatch(complateSubmissionPatent(patenId, formComplatePaten));
@@ -120,6 +130,21 @@ const useComplatePaten = () => {
     }
 
     if (types === "Revisi") {
+      const errors = validateComplatePaten(formComplatePaten);
+      if (types === "Revisi") {
+        errors.claim = null;
+        errors.description = null;
+        errors.abstract = null;
+        errors.inventionImage = null;
+        errors.statementInventionOwnership = null;
+        errors.letterTransferRightsInvention = null;
+      }
+      const hasErrors = Object.values(errors).some((error) => error !== null);
+
+      if (hasErrors) {
+        setFormComplatePatenError(errors);
+        return;
+      }
       setLoading(true);
       try {
         await dispatch(revisionSubmissionPaten(detailPaten?.id, formComplatePaten));
@@ -145,23 +170,23 @@ const useComplatePaten = () => {
     const initForm = async () => {
       if (!detailPaten || types !== "Revisi") return;
 
-      const description = await processFile(detailPaten.description);
-      const abstract = await processFile(detailPaten.abstract);
-      const claim = await processFile(detailPaten.claim);
-      const inventionImage = await processFile(detailPaten.inventionImage);
-      const statement = await processFile(detailPaten.statementInventionOwnership);
-      const letter = await processFile(detailPaten.letterTransferRightsInvention);
+      // const description = await processFile(detailPaten.description);
+      // const abstract = await processFile(detailPaten.abstract);
+      // const claim = await processFile(detailPaten.claim);
+      // const inventionImage = await processFile(detailPaten.inventionImage);
+      // const statement = await processFile(detailPaten.statementInventionOwnership);
+      // const letter = await processFile(detailPaten.letterTransferRightsInvention);
 
       setFormComplatePaten({
         inventionTitle: detailPaten.inventionTitle || "",
         patentTypeId: detailPaten.patentTypeId || "",
         numberClaims: detailPaten.numberClaims || "",
-        description,
-        abstract,
-        claim,
-        inventionImage,
-        statementInventionOwnership: statement,
-        letterTransferRightsInvention: letter,
+        description: null,
+        abstract: null,
+        claim: null,
+        inventionImage: null,
+        statementInventionOwnership: null,
+        letterTransferRightsInvention: null,
       });
     };
 

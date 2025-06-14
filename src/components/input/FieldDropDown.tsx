@@ -14,12 +14,12 @@ interface FieldProps {
   readOnly?: boolean;
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  error?: boolean;
+  error?: string | null;
   options?: Option[];
   need?: boolean;
 }
 
-const FieldDropdown = ({ label, value, name, type = "text", placeholder, readOnly = false, required = false, onChange, error = false, options = [], need = false }: FieldProps) => {
+const FieldDropdown = ({ label, value, name, type = "text", placeholder, readOnly = false, required = false, onChange, error, options = [], need = false }: FieldProps) => {
   const inputId = name || label;
 
   return (
@@ -36,6 +36,7 @@ const FieldDropdown = ({ label, value, name, type = "text", placeholder, readOnl
           value={value}
           onChange={onChange}
           required={required}
+          disabled={options.length === 0}
           className={`bg-gray-50 border ${error ? "border-RED01 ring-RED01 focus:ring-RED01 focus:border-RED01" : "border-BORDER01 focus:ring-PRIMARY01 focus:border-PRIMARY01"} text-base rounded-md block w-full p-2`}
         >
           <option value="" hidden>
@@ -61,7 +62,7 @@ const FieldDropdown = ({ label, value, name, type = "text", placeholder, readOnl
         />
       )}
 
-      {error && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
+      {error && <p className="text-sm text-RED01 mt-1">{error}</p>}
     </div>
   );
 };

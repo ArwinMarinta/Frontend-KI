@@ -13,8 +13,8 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
 
   const handleSubmit = async () => {
-    if (!title.trim()) {
-      setError(true);
+    if (!title || !title.trim()) {
+      setError("Tahun Pendanaan tidak boleh kosong");
       return;
     }
     if (type === "Edit" && id) {
@@ -41,7 +41,7 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setError(false);
+      setError(null);
     }
   }, [modal, setError]);
 
@@ -68,9 +68,9 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
               const value = e.target.value;
               setTitle(value);
               if (value.trim() === "") {
-                setError(true);
+                setError("Tahun Pendanaan tidak boleh kosong");
               } else {
-                setError(false);
+                setError(null);
               }
             }}
             error={error}

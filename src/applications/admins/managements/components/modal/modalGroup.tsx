@@ -14,9 +14,9 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
   const { loading, setLoading } = useLoadingProses();
   const handleSubmit = async () => {
     const newErrors = {
-      group: form.group.trim() === "",
-      startDate: form.startDate === null || form.startDate.trim() === "",
-      endDate: form.endDate === null || form.endDate.trim() === "",
+      group: form.group.trim() === "" ? "Gelombang tidak boleh kosong" : null,
+      startDate: !form.startDate || form.startDate.trim() === "" ? "Tanggal mulai tidak boleh kosong" : null,
+      endDate: !form.endDate || form.endDate.trim() === "" ? "Tanggal selesai tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);
@@ -55,7 +55,7 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
 
   useEffect(() => {
     if (modal) {
-      setErrors({ group: false, startDate: false, endDate: false });
+      setErrors({ group: null, startDate: null, endDate: null });
     }
   }, [modal, setErrors]);
 
@@ -128,7 +128,7 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
                 onChange={handleOnChange}
                 className={`bg-gray-50 border ${errors.startDate ? "border-RED01 ring-RED01 focus:ring-RED01 focus:border-RED01" : "border-BORDER01 focus:ring-PRIMARY01 focus:border-PRIMARY01"} text-base rounded-md block w-full p-2`}
               />
-              {errors.startDate && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
+              {errors.startDate && <p className="text-sm text-RED01 mt-1">{errors.startDate}</p>}
             </div>
 
             <span className="mt-6 text-gray-500">Hingga</span>
@@ -146,7 +146,7 @@ const ModalGroup = ({ modal, setModal, type, id, message }: ModalProps) => {
                 onChange={handleOnChange}
                 className={`bg-gray-50 border ${errors.endDate ? "border-RED01 ring-RED01 focus:ring-RED01 focus:border-RED01" : "border-BORDER01 focus:ring-PRIMARY01 focus:border-PRIMARY01"} text-base rounded-md block w-full p-2`}
               />
-              {errors.endDate && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
+              {errors.endDate && <p className="text-sm text-RED01 mt-1">{errors.endDate}</p>}
             </div>
           </div>
         </div>

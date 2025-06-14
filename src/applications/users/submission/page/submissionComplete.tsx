@@ -69,6 +69,8 @@ const SubmissionComplete = () => {
     dispatch(getQuotaLanding());
   }, [dispatch, submissionId]);
 
+  console.log(formCopyright);
+
   return (
     <>
       <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -104,9 +106,9 @@ const SubmissionComplete = () => {
               {types === "Skema Pendanaan" && (
                 <FormFunding qouta={qouta} terms={terms} formSchemaPayment={formSchemaPayment} formSchemaPaymentErrors={formSchemaPaymentErrors} handleChangeSchema={handleChangeSchema} handleCheckboxChange={handleCheckboxChange} handleSubmitSchema={handleSubmitSchema} />
               )}
-              {types === "Revisi" && submissionType === "Hak Cipta" && <RevisionCopyright progresSubmission={progresSubmission} formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitCopyright} />}
+              {types === "Revisi" && submissionType === "Hak Cipta" && <RevisionCopyright progresSubmission={progresSubmission} formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitCopyright} types={types} />}
               {types === "Revisi" && submissionType === "Paten" && (
-                <RevisionPaten progresSubmission={progresSubmission} formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} />
+                <RevisionPaten progresSubmission={progresSubmission} formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} types={types} />
               )}
               {types === "Revisi" && submissionType === "Merek" && (
                 <RevisionBrand
@@ -121,6 +123,7 @@ const SubmissionComplete = () => {
                   tempAdditionalBrandError={tempAdditionalBrandError}
                   handleDeleteAttempBrand={handleDeleteAttempBrand}
                   handleNextStep={handleSubmitRevision}
+                  types={types}
                 />
               )}
               {types === "Revisi" && submissionType === "Desain Industri" && (
@@ -131,6 +134,7 @@ const SubmissionComplete = () => {
                   handleChangeComplateIndusDesign={handleChangeComplateIndusDesign}
                   handleSubmitComplateIndusDesign={handleSubmitComplateIndusDesign}
                   handleClaimCheckboxChange={handleClaimCheckboxChange}
+                  types={types}
                 />
               )}
               {types === "Pembayaran" && <FormConfimPayment formConfirmPayment={formConfirmPayment} handleChange={handleChange} formConfirmPaymentErrors={formConfirmPaymentErrors} handleSubmitPayment={handleSubmitPayment} />}

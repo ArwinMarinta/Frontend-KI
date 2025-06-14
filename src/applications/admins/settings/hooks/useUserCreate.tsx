@@ -40,9 +40,9 @@ const useUserCreate = () => {
   });
 
   const [errors, setErrors] = useState<FormUserErrors>({
-    fullname: false,
-    email: false,
-    role: false,
+    fullname: null,
+    email: null,
+    role: null,
     password: null,
     confirmPassword: null,
     // faculty: false,
@@ -93,15 +93,16 @@ const useUserCreate = () => {
     e.preventDefault();
 
     const validationErrors = {
-      fullname: formUser.fullname.trim() === "",
-      email: formUser.email.trim() === "",
-      role: formUser.role.trim() === "",
+      fullname: formUser.fullname.trim() === "" ? "Nama lengkap wajib diisi" : null,
+      email: formUser.email.trim() === "" ? "Email wajib diisi" : null,
+      role: formUser.role.trim() === "" ? "Role wajib dipilih" : null,
       password: type === "create" ? (formUser.password.trim() === "" ? "Password tidak boleh kosong" : null) : null, // untuk update, password tidak wajib
       confirmPassword:
         type === "create" ? (formUser.password !== formUser.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null) : formUser.password || formUser.confirmPassword ? (formUser.password !== formUser.confirmPassword ? "Password dan konfirmasi password tidak cocok" : null) : null,
     };
 
-    const hasErrors = Object.values(validationErrors).some((error) => error !== null && error !== false);
+    const hasErrors = Object.values(validationErrors).some((error) => error !== null);
+
 
     setErrors(validationErrors);
 

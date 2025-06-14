@@ -101,13 +101,18 @@ function TableWithPagination<T extends { id: number | string }>({ columns, data,
                   </td>
                 ))}
                 {actions?.length > 0 && (
-                  <td className="border-b whitespace-nowrap w-max ">
-                    <div className="">
-                      {actions.map((action, i) => (
-                        <button key={i} onClick={() => action.onClick(item)} className={`inline-flex ${i !== actions.length - 1 ? "mr-2" : ""}`}>
-                          {action.component(item)}
-                        </button>
-                      ))}
+                  <td className="border-b whitespace-nowrap w-max px-4 py-2">
+                    <div>
+                      {actions.map((action, i) => {
+                        const component = action.component(item);
+                        if (!component) return null;
+
+                        return (
+                          <button key={i} onClick={() => action.onClick(item)} className={`inline-flex ${i !== actions.length - 1 ? "mr-2" : ""}`}>
+                            {component}
+                          </button>
+                        );
+                      })}
                     </div>
                   </td>
                 )}

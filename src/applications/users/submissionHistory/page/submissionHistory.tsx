@@ -18,6 +18,8 @@ const SubmissionHistory = () => {
   const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission, search, setSearch } = useHistorySubmission();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message } = useModal();
 
+  console.log(user);
+
   const handleModal = (id: number | null, types: string) => {
     if (types === "Delete") {
       setId(id);
@@ -180,6 +182,31 @@ const SubmissionHistory = () => {
                       },
                     },
                     {
+                      label: "Unduh Sertifikat",
+                      onClick: () => {},
+                      component: (item) => {
+                        if (item.progress.length > 0 && item.progress[0].status === "Sertifikat Terbit") {
+                          const certFile = item.progress[0].certificateFile;
+                          let filename = "";
+
+                          if (typeof certFile === "string") {
+                            filename = certFile;
+                          } else if (certFile instanceof File) {
+                            filename = certFile.name;
+                          }
+
+                          if (!filename) return null;
+
+                          return (
+                            <button onClick={() => downloadFile(`${API_FILE}/documents/${filename}`, filename)} className="py-1 px-2 border whitespace-nowrap underline overflow-hidden truncate border-green-500 rounded-md text-green-600 font-medium">
+                              Sertifikat
+                            </button>
+                          );
+                        }
+                        return null;
+                      },
+                    },
+                    {
                       label: "Revisi",
                       onClick: () => {},
                       component: (item) => {
@@ -199,22 +226,16 @@ const SubmissionHistory = () => {
                         return null;
                       },
                     },
-                    // {
-                    //   label: "Revisi Draft",
-                    //   onClick: () => {},
-                    //   component: (item) => {
-                    //     if (item.progress.length > 0 && item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === false) {
-                    //       return (
-                    //         <Link to="/histori-pengajuan/ubah" state={{ types: `${item.progress[0].status}`, submissionType: `${item.submission?.submissionType?.title}`, submissionId: `${item.id}` }}>
-                    //           <button className="py-1 px-2 border whitespace-nowrap overflow-hidden truncate border-PRIMARY03 rounded-md text-PRIMARY03 font-medium">Revisi Draft</button>
-                    //         </Link>
-                    //       );
-                    //     } else if (item.progress[0].status === "Revisi Draft" && item.progress[0].isStatus === true) {
-                    //       return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
-                    //     }
-                    //     return null;
-                    //   },
-                    // },
+                    {
+                      label: "pesan",
+                      onClick: () => {},
+                      component: (item) => {
+                        if ((item.progress.length > 0 && item.progress[0].status === "Direview") || item.progress[0].status === "Diajukan") {
+                          return <span className=" italic text-GREY04">Proses Selanjutnya</span>;
+                        }
+                        // return null;
+                      },
+                    },
                     {
                       label: "Lengkapi Berkas",
                       onClick: () => {},
@@ -257,31 +278,6 @@ const SubmissionHistory = () => {
                       component: (item) => {
                         if (item.progress.length > 0 && item.progress[0].status === "Menunggu") {
                           return <DeleteButton onClick={() => handleModal(item.id, "Delete")} />;
-                        }
-                        return null;
-                      },
-                    },
-                    {
-                      label: "Unduh Sertifikat",
-                      onClick: () => {},
-                      component: (item) => {
-                        if (item.progress.length > 0 && item.progress[0].status === "Sertifikat Terbit") {
-                          const certFile = item.progress[0].certificateFile;
-                          let filename = "";
-
-                          if (typeof certFile === "string") {
-                            filename = certFile;
-                          } else if (certFile instanceof File) {
-                            filename = certFile.name;
-                          }
-
-                          if (!filename) return null;
-
-                          return (
-                            <button onClick={() => downloadFile(`${API_FILE}/documents/${filename}`, filename)} className="py-1 px-2 border whitespace-nowrap underline overflow-hidden truncate border-green-500 rounded-md text-green-600 font-medium">
-                              Sertifikat
-                            </button>
-                          );
                         }
                         return null;
                       },

@@ -6,14 +6,14 @@ interface FileProps {
   name?: string;
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: boolean;
+  error?: string | null;
   placeholder?: string;
   accept?: string;
   message?: string;
   url?: string;
   edite?: string;
 }
-const FieldFile = ({ label, value, name, required = false, onChange, error = false, placeholder, accept = ".pdf, .doc, .docx", message, url, edite }: FileProps) => {
+const FieldFile = ({ label, value, name, required = false, onChange, error, placeholder, accept = ".pdf, .doc, .docx", message, url, edite }: FileProps) => {
   return (
     <div className="w-full relative">
       <label className="block mb-2 text-base font-medium">{label}</label>
@@ -31,7 +31,7 @@ const FieldFile = ({ label, value, name, required = false, onChange, error = fal
         <input id={name} name={name} type="file" className="hidden" required={required} onChange={onChange} accept={accept} />
       </div>
 
-      {error && <p className="text-sm text-RED01 mt-1">File Tidak Boleh Kosong!</p>}
+      {error && <p className="text-sm text-RED01 mt-1">{error}</p>}
       {edite === "Edit" && (
         <div className="mt-1 ">
           File lama :

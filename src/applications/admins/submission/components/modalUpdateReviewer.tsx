@@ -63,7 +63,7 @@ const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer, han
                 value: item.id,
               })) ?? []
             }
-            error={!!reviewerError}
+            error={reviewerError}
             need
           />
         </div>

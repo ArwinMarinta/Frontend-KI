@@ -31,17 +31,18 @@ export interface FormSubmissionCopyright {
   statementName?: string;
   letterName?: string;
   exampleName?: string;
+  exampleCreationUrl?: string | null;
 }
 
 export interface FormSubmissionCopyrightError {
-  titleInvention: boolean;
-  typeCreation: boolean;
-  subTypeCreation: boolean;
-  countryFirstAnnounced: boolean;
-  cityFirstAnnounced: boolean;
-  timeFirstAnnounced: boolean;
-  briefDescriptionCreation: boolean;
-  statementLetter: boolean;
-  letterTransferCopyright: boolean;
-  exampleCreation: boolean;
+  titleInvention: string | null;
+  typeCreation: string | null;
+  subTypeCreation: string | null;
+  countryFirstAnnounced: string | null;
+  cityFirstAnnounced: string | null;
+  timeFirstAnnounced: string | null;
+  briefDescriptionCreation: string | null;
+  statementLetter: string | null;
+  letterTransferCopyright: string | null;
+  exampleCreation: string | null;
 }

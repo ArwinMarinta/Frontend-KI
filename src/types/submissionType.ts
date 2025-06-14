@@ -294,8 +294,8 @@ export interface FormPersonalData {
   whatsapp: string | null;
   instagram: string | null;
   twitter: string | null;
-  address: string;
-  ktpName?: string;
+  address: string | null;
+  ktpName?: string | null;
 }
 
 export interface FormUpdateProgress {
@@ -420,4 +420,29 @@ export type SubTypeDesign = {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+};
+
+export type PersonalDataError = {
+  id?: number | null;
+  name: string | null;
+  email: string | null;
+  faculty: string | null;
+  studyProgram: string | null;
+  institution: string | null;
+  work: string | null;
+  nationalState: string | null;
+  countryResidence: string | null;
+  province: string | null;
+  city: string | null;
+  subdistrict: string | null;
+  ward: string | null;
+  postalCode: string | null;
+  phoneNumber: string | null;
+  ktp?: string | null;
+  isLeader?: string | null;
+  facebook?: string | null;
+  whatsapp?: string | null;
+  instagram?: string | null;
+  twitter?: string | null;
+  address: string | null;
 };

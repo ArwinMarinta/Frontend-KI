@@ -30,7 +30,10 @@ export interface ReportandAnalitic {
 export type FormReportAnaliticType = {
   namaPengguna: string;
   jenisPengajuan: string;
-  tanggalPengajuan: string;
+  skemaPengajuan: string;
+  progressPengajuan: string;
   peran: string;
   instansi: string;
+  startDate: string;
+  endDate: string;
 };

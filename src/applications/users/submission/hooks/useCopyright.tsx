@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { FormSubmissionCopyright } from "../../../../types/copyright";
+import { FormSubmissionCopyright, FormSubmissionCopyrightError } from "../../../../types/copyright";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import { complateSubmissionCopyright, revisonSubmissionCopyright } from "../../../../service/actions/submissionAction";
-import { processFile } from "../../../../utils/formatFile";
 
 const useCopyright = () => {
   const location = useLocation();
@@ -31,80 +30,94 @@ const useCopyright = () => {
     statementName: "",
     letterName: "",
     exampleName: "",
+    exampleCreationUrl: "",
   });
 
-  const [formCopyrightError, setFormCopyrightError] = useState({
-    titleInvention: false,
-    typeCreation: false,
-    subTypeCreation: false,
-    countryFirstAnnounced: false,
-    cityFirstAnnounced: false,
-    timeFirstAnnounced: false,
-    briefDescriptionCreation: false,
-    statementLetter: false,
-    letterTransferCopyright: false,
-    exampleCreation: false,
+  const [formCopyrightError, setFormCopyrightError] = useState<FormSubmissionCopyrightError>({
+    titleInvention: null,
+    typeCreation: null,
+    subTypeCreation: null,
+    countryFirstAnnounced: null,
+    cityFirstAnnounced: null,
+    timeFirstAnnounced: null,
+    briefDescriptionCreation: null,
+    statementLetter: null,
+    letterTransferCopyright: null,
+    exampleCreation: null,
   });
 
   const validateCopyrightData = (data: FormSubmissionCopyright) => {
-    const error = {
-      titleInvention: data.titleInvention.trim() === "",
-      typeCreation: data.typeCreation === null,
-      subTypeCreation: data.subTypeCreation === null,
-      countryFirstAnnounced: data.countryFirstAnnounced.trim() === "",
-      cityFirstAnnounced: data.cityFirstAnnounced.trim() === "",
-      timeFirstAnnounced: data.timeFirstAnnounced.trim() === "",
-      briefDescriptionCreation: data.briefDescriptionCreation.trim() === "",
-      statementLetter: data.statementLetter === null || data.statementLetter === undefined,
-      letterTransferCopyright: data.letterTransferCopyright === null || data.letterTransferCopyright === undefined,
-      exampleCreation: data.exampleCreation === null || data.exampleCreation === undefined,
+    return {
+      titleInvention: data.titleInvention.trim() === "" ? "Judul ciptaan wajib diisi" : null,
+      typeCreation: data.typeCreation === null ? "Jenis ciptaan wajib dipilih" : null,
+      subTypeCreation: data.subTypeCreation === null ? "Sub jenis ciptaan wajib dipilih" : null,
+      countryFirstAnnounced: data.countryFirstAnnounced.trim() === "" ? "Negara diumumkan wajib diisi" : null,
+      cityFirstAnnounced: data.cityFirstAnnounced.trim() === "" ? "Kota diumumkan wajib diisi" : null,
+      timeFirstAnnounced: data.timeFirstAnnounced.trim() === "" ? "Waktu diumumkan wajib diisi" : null,
+      briefDescriptionCreation: data.briefDescriptionCreation.trim() === "" ? "Deskripsi singkat wajib diisi" : null,
+      statementLetter: !data.statementLetter ? "Surat pernyataan wajib diunggah" : null,
+      letterTransferCopyright: !data.letterTransferCopyright ? "Surat pengalihan hak wajib diunggah" : null,
+      exampleCreation: null,
     };
-
-    return error;
   };
 
   const handleChangeCopyright = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    const numberFields = ["typeCreation", "subTypeCreation"];
-
     if (e.target instanceof HTMLInputElement && e.target.type === "file") {
       const { files } = e.target;
-      const file = files ? files[0] : null;
-      setFormCopyright((prev) => ({
-        ...prev,
-        [name]: file,
-      }));
-      setFormCopyrightError((prev) => ({
-        ...prev,
-        [name]: !file,
-      }));
+      const file = files?.[0] ?? null;
+
+      if (file && file.size > 20 * 1024 * 1024) {
+        setFormCopyright((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+        setFormCopyrightError((prev) => ({
+          ...prev,
+          [name]: "Ukuran file maksimal 20MB",
+        }));
+      } else {
+        setFormCopyright((prev) => ({
+          ...prev,
+          [name]: file,
+          ...(name === "exampleCreation" && file ? { exampleCreationUrl: "" } : {}),
+        }));
+        setFormCopyrightError((prev) => ({
+          ...prev,
+          [name]: null,
+        }));
+      }
     } else {
-      const parsedValue = numberFields.includes(name) ? Number(value) : value;
+      // Cek langsung nama field untuk tipe number
+      const parsedValue = name === "typeCreation" || name === "subTypeCreation" ? Number(value) : value;
 
       setFormCopyright((prev) => ({
         ...prev,
         [name]: parsedValue,
+        ...(name === "exampleCreationUrl" && parsedValue ? { exampleCreation: null } : {}),
       }));
 
       setFormCopyrightError((prev) => ({
         ...prev,
-        [name]: parsedValue === "" || parsedValue === null,
+        [name]: parsedValue === "" || parsedValue === null ? "Field wajib diisi" : null,
       }));
     }
   };
 
   const handleSubmitCopyright = async () => {
     const error = validateCopyrightData(formCopyright);
-    const excludeFields = ["exampleCreation"];
 
-    const hasError = Object.entries(error)
-      .filter(([key]) => !excludeFields.includes(key))
-      .some(([, value]) => value === true);
+    if (types === "Revisi") {
+      error.exampleCreation = null;
+      error.statementLetter = null;
+      error.letterTransferCopyright = null;
+    }
+
+    const hasError = Object.values(error).some((value) => value !== null);
 
     if (hasError) {
       setFormCopyrightError(error);
-
       return;
     }
 
@@ -133,19 +146,19 @@ const useCopyright = () => {
 
   const handleSubmitComplateCopyright = async () => {
     const error = {
-      titleInvention: false,
-      typeCreation: false,
-      subTypeCreation: false,
-      countryFirstAnnounced: false,
-      cityFirstAnnounced: false,
-      timeFirstAnnounced: false,
-      briefDescriptionCreation: false,
-      statementLetter: !formCopyright?.statementLetter,
-      letterTransferCopyright: !formCopyright?.letterTransferCopyright,
-      exampleCreation: false,
+      titleInvention: null,
+      typeCreation: null,
+      subTypeCreation: null,
+      countryFirstAnnounced: null,
+      cityFirstAnnounced: null,
+      timeFirstAnnounced: null,
+      briefDescriptionCreation: null,
+      statementLetter: !formCopyright.statementLetter ? "Surat pernyataan wajib diunggah" : null,
+      letterTransferCopyright: !formCopyright.letterTransferCopyright ? "Surat pengalihan wajib diunggah" : null,
+      exampleCreation: null,
     };
 
-    const hasError = Object.values(error).includes(true);
+    const hasError = Object.values(error).some((e) => e !== null);
 
     if (hasError) {
       setFormCopyrightError(error);
@@ -178,9 +191,9 @@ const useCopyright = () => {
     const initForm = async () => {
       if (!detailCopyright || types !== "Revisi") return;
 
-      const statementLetter = await processFile(detailCopyright.statementLetter);
-      const letterTransferCopyright = await processFile(detailCopyright.letterTransferCopyright);
-      const exampleCreation = await processFile(detailCopyright.exampleCreation);
+      // const statementLetter = await processFile(detailCopyright.statementLetter);
+      // const letterTransferCopyright = await processFile(detailCopyright.letterTransferCopyright);
+      // const exampleCreation = await processFile(detailCopyright.exampleCreation);
 
       setFormCopyright({
         titleInvention: detailCopyright.titleInvention || "",
@@ -190,9 +203,9 @@ const useCopyright = () => {
         cityFirstAnnounced: detailCopyright.cityFirstAnnounced || "",
         timeFirstAnnounced: detailCopyright.timeFirstAnnounced || "",
         briefDescriptionCreation: detailCopyright.briefDescriptionCreation || "",
-        statementLetter,
-        letterTransferCopyright,
-        exampleCreation,
+        statementLetter: null,
+        letterTransferCopyright: null,
+        exampleCreation: null,
       });
     };
 

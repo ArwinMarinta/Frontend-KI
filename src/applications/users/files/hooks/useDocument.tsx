@@ -9,17 +9,25 @@ const useDocument = () => {
   const { category } = useSelector((state: RootState) => state.landing.docCategory);
   const { doc, limit } = useSelector((state: RootState) => state.landing.doc);
   const [selectedType, setSelectedType] = useState<string>("");
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
     dispatch(getDocumentCateoryLanding());
-  }, [token, dispatch]);
+  }, [token, dispatch, search]);
 
   useEffect(() => {
-    if (category && category.length > 0) {
-      const typeToUse = selectedType || category[0].type;
-      dispatch(getDocumentLanding(typeToUse, limit));
+    if ((category?.length ?? 0) > 0) {
+      const typeToUse = selectedType || category?.[0]?.type;
+      if (typeToUse) {
+        dispatch(getDocumentLanding(typeToUse, limit, search));
+      }
     }
-  }, [category, dispatch, limit, selectedType]);
+  }, [category, dispatch, limit, search, selectedType]);
+
+  useEffect(() => {
+    if (category && category.length > 0 && selectedType === "") {
+      setSelectedType(category[0].type);
+    }
+  }, [category, selectedType]);
 
   const handleCategoryChange = (type: string) => {
     setSelectedType(type);
@@ -32,6 +40,8 @@ const useDocument = () => {
     handleCategoryChange,
     selectedType,
     doc,
+    search,
+    setSearch,
   };
 };
 

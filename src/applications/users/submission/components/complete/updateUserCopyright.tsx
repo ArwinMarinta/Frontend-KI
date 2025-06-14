@@ -13,8 +13,8 @@ import useSubmissionType from "../../hooks/useSubmissionType";
 import usePersonalData from "../../hooks/usePersonalData";
 import useCopyright from "../../hooks/useCopyright";
 import useComplate from "../../hooks/useComplate";
-import { processFile } from "../../../../../utils/formatFile";
-import { PersonalData } from "../../../../../types/submissionType";
+// import { processFile } from "../../../../../utils/formatFile";
+import { FormPersonalData } from "../../../../../types/submissionType";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
 import { toSlug } from "../../../../../utils/toSlug";
@@ -26,46 +26,77 @@ const UpdateUserCopyright = () => {
   const { currentStep, setCurrentStep } = useSubmissionType();
   const { types, submissionId, actionTypes, submissionType } = useComplate();
   const navigate = useNavigate();
-  const { personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
+  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData, setFormCopyright } = useCopyright();
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
   }, [dispatch, submissionId]);
 
-  const handleNextStep2 = async () => {
-    const updatedErrors = personalData.map(validatePersonalData);
+  console.log(personalData);
 
-    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
+    if (typeof ktp === "string" && ktp.trim() !== "") return null;
+    if (ktp instanceof File && ktp.size > 0) return null;
+    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
+    return "KTP wajib diisi";
+  }
+
+  const handleNextStep2 = async () => {
+    const updatedErrors = personalData.map((data) => ({
+      name: data.name.trim() === "" ? "Nama wajib diisi" : null,
+      email: !/\S+@\S+\.\S+/.test(data.email) ? "Format email tidak valid" : null,
+      faculty: data.faculty === null ? "Fakultas wajib dipilih" : null,
+      studyProgram: data.studyProgram === null ? "Program studi wajib dipilih" : null,
+      institution: data.institution.trim() === "" ? "Institusi wajib diisi" : null,
+      work: data.work.trim() === "" ? "Pekerjaan wajib diisi" : null,
+      nationalState: data.nationalState.trim() === "" ? "Kewarganegaraan wajib diisi" : null,
+      countryResidence: data.countryResidence.trim() === "" ? "Negara tempat tinggal wajib diisi" : null,
+      province: data.province.trim() === "" ? "Provinsi wajib diisi" : null,
+      city: data.city.trim() === "" ? "Kota wajib diisi" : null,
+      subdistrict: data.subdistrict.trim() === "" ? "Kecamatan wajib diisi" : null,
+      ward: data.ward.trim() === "" ? "Kelurahan wajib diisi" : null,
+      postalCode: data.postalCode.trim() === "" ? "Kode pos wajib diisi" : null,
+      phoneNumber: data.phoneNumber.trim() === "" ? "Nomor telepon wajib diisi" : null,
+      address: data.address?.trim() === "" ? "Alamat wajib diisi" : null,
+      ktp: validateKtp(data.ktp, data.ktpName),
+    }));
+
+    const excludeFields = ["id", "isLeader", "facebook", "whatsapp", "instagram", "twitter"];
+
+    const hasError = updatedErrors.some((errorObj) =>
+      Object.entries(errorObj)
+        .filter(([key]) => !excludeFields.includes(key))
+        .some(([, value]) => value !== null)
+    );
+
+    console.log(personalData);
 
     if (hasError) {
       const newErrors = updatedErrors.map((error) => ({
-        name: error.name === true,
-        email: error.email === true,
-        faculty: error.faculty === true,
-        studyProgram: error.studyProgram === true,
-        institution: error.institution === true,
-        work: error.work === true,
-        nationalState: error.nationalState === true,
-        countryResidence: error.countryResidence === true,
-        province: error.province === true,
-        city: error.city === true,
-        subdistrict: error.subdistrict === true,
-        ward: error.ward === true,
-        postalCode: error.postalCode === true,
-        phoneNumber: error.phoneNumber === true,
-        ktp: error.ktp === true,
-        facebook: error.facebook === true,
-        whatsapp: error.whatsapp === true,
-        instagram: error.instagram === true,
-        twitter: error.twitter === true,
-        address: error.address === true,
+        name: error.name || null,
+        email: error.email || null,
+        faculty: error.faculty || null,
+        studyProgram: error.studyProgram || null,
+        institution: error.institution || null,
+        work: error.work || null,
+        nationalState: error.nationalState || null,
+        countryResidence: error.countryResidence || null,
+        province: error.province || null,
+        city: error.city || null,
+        subdistrict: error.subdistrict || null,
+        ward: error.ward || null,
+        postalCode: error.postalCode || null,
+        phoneNumber: error.phoneNumber || null,
+        address: error.address || null,
+        ktp: error.ktp || null,
       }));
+      // console.log(newErrors);
 
       setPersonalDataError(newErrors);
-
       return;
     }
+
     setLoading(true);
     try {
       await dispatch(updateSubmissionCopyright(submissionId, personalData, formCopyright));
@@ -122,7 +153,7 @@ const UpdateUserCopyright = () => {
 
     const hasError = Object.entries(error)
       .filter(([key]) => !excludeFields.includes(key))
-      .some(([, value]) => value === true);
+      .some(([, value]) => value !== null);
 
     if (hasError) {
       setFormCopyrightError(error);
@@ -137,7 +168,7 @@ const UpdateUserCopyright = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "auto",
     });
   }, [currentStep]);
 
@@ -146,9 +177,9 @@ const UpdateUserCopyright = () => {
       if (!detailSubmission?.submission?.copyright && types !== "Menunggu") return;
 
       if (detailSubmission?.submission?.copyright) {
-        const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
-        const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
-        const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
+        // const statementLetter = await processFile(detailSubmission?.submission?.copyright.statementLetter);
+        // const letterTransferCopyright = await processFile(detailSubmission?.submission?.copyright.letterTransferCopyright);
+        // const exampleCreation = await processFile(detailSubmission?.submission?.copyright.exampleCreation);
 
         // Set Form Hak Cipta
         setFormCopyright({
@@ -159,15 +190,15 @@ const UpdateUserCopyright = () => {
           cityFirstAnnounced: detailSubmission?.submission?.copyright.cityFirstAnnounced || "",
           timeFirstAnnounced: detailSubmission?.submission?.copyright.timeFirstAnnounced || "",
           briefDescriptionCreation: detailSubmission?.submission?.copyright.briefDescriptionCreation || "",
-          statementLetter,
-          letterTransferCopyright,
-          exampleCreation,
+          statementLetter: null,
+          letterTransferCopyright: null,
+          exampleCreation: null,
         });
 
         if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
           // Set Personal Data jika tersedia
           const mappedContributors = await Promise.all(
-            detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
+            detailSubmission.submission.personalDatas.map(async (item: FormPersonalData) => ({
               id: item.id ?? null,
               isLeader: item.isLeader || false,
               name: item.name || "",
@@ -185,11 +216,12 @@ const UpdateUserCopyright = () => {
               postalCode: item.postalCode || "",
               phoneNumber: item.phoneNumber || "",
               address: item.address || "",
-              ktp: item.ktp ? await processFile(item.ktp) : null,
+              ktp: null,
               facebook: item.facebook || "",
               whatsapp: item.whatsapp || "",
               instagram: item.instagram || "",
               twitter: item.twitter || "",
+              ktpName: typeof item.ktp === "string" ? item.ktp : item.ktp instanceof File ? item.ktp.name : "",
             }))
           );
 
@@ -200,6 +232,8 @@ const UpdateUserCopyright = () => {
 
     initForm();
   }, [types, setFormCopyright, setPersonalData, detailSubmission, actionTypes]);
+
+  // console.log(personalData);
 
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -227,7 +261,18 @@ const UpdateUserCopyright = () => {
 
             {currentStep === 0 && <FormCopyright handleChange={handleChangeCopyright} formCopyright={formCopyright} formCopyrightError={formCopyrightError} handleNextStep={handleNextStep} />}
             {currentStep === 1 && (
-              <Form_2 submissionType="Hak Cipta" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />
+              <Form_2
+                submissionType="Hak Cipta"
+                error={personalDataError}
+                personalData={personalData}
+                handleChange={handleChangePerson}
+                addContributor={addContributor}
+                handleNextStep={handleNextStep2}
+                currentStep={currentStep}
+                setCurrentStep={setCurrentStep}
+                removeContributor={removeContributor}
+                types={types}
+              />
             )}
           </div>
         </div>

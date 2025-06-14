@@ -45,8 +45,17 @@ const DetailSubmission = () => {
   const { formComplatePaten, formComplatePatenError, handleChangeComplatePaten, setFormComplatePaten } = useComplatePaten();
   const { formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleClaimCheckboxChange, setFormIndustDesign } = useComplateIndustrialDesain();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormAdditionalBrand, setFormBrand } = useBrand();
-  const { setPersonalData, personalData, handleChangePerson, addContributor, validatePersonalData, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
 
+  console.log(formIndustDesign);
+  // console.log(formBrand);
+
+  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
+    if (typeof ktp === "string" && ktp.trim() !== "") return null;
+    if (ktp instanceof File && ktp.size > 0) return null;
+    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
+    return "KTP wajib diisi";
+  }
   useEffect(() => {
     if (name === "paten") {
       dispatch(getTypePaten());
@@ -287,11 +296,11 @@ const DetailSubmission = () => {
       if (!detailSubmission?.submission?.brand || types !== "Ubah Merek") return;
 
       // Proses file-file di formBrand
-      const labelBrand = await processFile(detailSubmission?.submission?.brand.labelBrand);
-      const fileUploade = await processFile(detailSubmission?.submission?.brand.fileUploade);
-      const signature = await processFile(detailSubmission?.submission?.brand.signature);
-      const InformationLetter = await processFile(detailSubmission?.submission?.brand.InformationLetter);
-      const letterStatment = await processFile(detailSubmission?.submission?.brand.letterStatment);
+      // const labelBrand = await processFile(detailSubmission?.submission?.brand.labelBrand);
+      // const fileUploade = await processFile(detailSubmission?.submission?.brand.fileUploade);
+      // const signature = await processFile(detailSubmission?.submission?.brand.signature);
+      // const InformationLetter = await processFile(detailSubmission?.submission?.brand.InformationLetter);
+      // const letterStatment = await processFile(detailSubmission?.submission?.brand.letterStatment);
 
       // Set formBrand state
       setFormBrand({
@@ -305,11 +314,11 @@ const DetailSubmission = () => {
         description: detailSubmission?.submission?.brand.description || "",
         documentType: detailSubmission?.submission?.brand.documentType || "",
         information: detailSubmission?.submission?.brand.information || "",
-        labelBrand,
-        fileUploade,
-        signature,
-        InformationLetter,
-        letterStatment,
+        labelBrand: null,
+        fileUploade: null,
+        signature: null,
+        InformationLetter: null,
+        letterStatment: null,
       });
 
       if (detailSubmission?.submission?.brand.additionalDatas && Array.isArray(detailSubmission?.submission?.brand.additionalDatas)) {
@@ -333,32 +342,51 @@ const DetailSubmission = () => {
   }, [detailSubmission?.submission?.brand, types, setFormAdditionalBrand, setFormBrand]);
 
   const handleUpdatePersonalData = async () => {
-    const updatedErrors = personalData.map(validatePersonalData);
+    const updatedErrors = personalData.map((data) => ({
+      name: data.name.trim() === "" ? "Nama wajib diisi" : null,
+      email: !/\S+@\S+\.\S+/.test(data.email) ? "Format email tidak valid" : null,
+      faculty: data.faculty === null ? "Fakultas wajib dipilih" : null,
+      studyProgram: data.studyProgram === null ? "Program studi wajib dipilih" : null,
+      institution: data.institution.trim() === "" ? "Institusi wajib diisi" : null,
+      work: data.work.trim() === "" ? "Pekerjaan wajib diisi" : null,
+      nationalState: data.nationalState.trim() === "" ? "Kewarganegaraan wajib diisi" : null,
+      countryResidence: data.countryResidence.trim() === "" ? "Negara tempat tinggal wajib diisi" : null,
+      province: data.province.trim() === "" ? "Provinsi wajib diisi" : null,
+      city: data.city.trim() === "" ? "Kota wajib diisi" : null,
+      subdistrict: data.subdistrict.trim() === "" ? "Kecamatan wajib diisi" : null,
+      ward: data.ward.trim() === "" ? "Kelurahan wajib diisi" : null,
+      postalCode: data.postalCode.trim() === "" ? "Kode pos wajib diisi" : null,
+      phoneNumber: data.phoneNumber.trim() === "" ? "Nomor telepon wajib diisi" : null,
+      address: data.address?.trim() === "" ? "Alamat wajib diisi" : null,
+      ktp: validateKtp(data.ktp, data.ktpName),
+    }));
 
-    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+    const excludeFields = ["id", "isLeader", "facebook", "whatsapp", "instagram", "twitter"];
+
+    const hasError = updatedErrors.some((errorObj) =>
+      Object.entries(errorObj)
+        .filter(([key]) => !excludeFields.includes(key))
+        .some(([, value]) => value !== null)
+    );
 
     if (hasError) {
       const newErrors = updatedErrors.map((error) => ({
-        name: error.name === true,
-        email: error.email === true,
-        faculty: error.faculty === true,
-        studyProgram: error.studyProgram === true,
-        institution: error.institution === true,
-        work: error.work === true,
-        nationalState: error.nationalState === true,
-        countryResidence: error.countryResidence === true,
-        province: error.province === true,
-        city: error.city === true,
-        subdistrict: error.subdistrict === true,
-        ward: error.ward === true,
-        postalCode: error.postalCode === true,
-        phoneNumber: error.phoneNumber === true,
-        ktp: error.ktp === true,
-        facebook: error.facebook === true,
-        whatsapp: error.whatsapp === true,
-        instagram: error.instagram === true,
-        twitter: error.twitter === true,
-        address: error.address === true,
+        name: error.name || null,
+        email: error.email || null,
+        faculty: error.faculty || null,
+        studyProgram: error.studyProgram || null,
+        institution: error.institution || null,
+        work: error.work || null,
+        nationalState: error.nationalState || null,
+        countryResidence: error.countryResidence || null,
+        province: error.province || null,
+        city: error.city || null,
+        subdistrict: error.subdistrict || null,
+        ward: error.ward || null,
+        postalCode: error.postalCode || null,
+        phoneNumber: error.phoneNumber || null,
+        address: error.address || null,
+        ktp: error.ktp || null,
       }));
 
       setPersonalDataError(newErrors);
@@ -531,7 +559,7 @@ const DetailSubmission = () => {
                               </>
                             )}
 
-                            <FieldTextarea label="Alamat" value={item.address} name="address" placeholder="" required row={4} onChange={(e) => handleChangePerson(e, index, "address")} error={personalDataError[index]?.address} need />
+                            <FieldTextarea label="Alamat" value={item.address || ""} name="address" placeholder="" required row={4} onChange={(e) => handleChangePerson(e, index, "address")} error={personalDataError[index]?.address} need />
                             <InputFile
                               label="KTP"
                               value={item.ktp instanceof File ? item.ktp : undefined}
@@ -687,7 +715,7 @@ const DetailSubmission = () => {
                 <>
                   {
                     <div className="flex flex-col gap-6">
-                      <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="inventionTitle" type="text" placeholder="" need error={!!formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />
+                      <Field label="Judul Invensi" value={formComplatePaten.inventionTitle} name="inventionTitle" type="text" placeholder="" need error={formComplatePatenError.inventionTitle} onChange={handleChangeComplatePaten} />
                       <div className="flex flex-row gap-6">
                         <div className="flex flex-row w-full gap-6">
                           <FieldDropdown
@@ -702,10 +730,10 @@ const DetailSubmission = () => {
                                 value: item.id,
                               })) ?? []
                             }
-                            error={!!formComplatePatenError.patentTypeId}
+                            error={formComplatePatenError.patentTypeId}
                             need
                           />
-                          <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={!!formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} need />
+                          <Field label="Jumlah Klaim" value={formComplatePaten.numberClaims?.toString() || ""} name="numberClaims" type="text" placeholder="contoh: 1,2,3 dst." error={formComplatePatenError.numberClaims} onChange={handleChangeComplatePaten} need />
                         </div>
                       </div>
                       <InputFile
@@ -714,7 +742,7 @@ const DetailSubmission = () => {
                         name="draftPatentApplicationFile"
                         required
                         onChange={handleChangeComplatePaten}
-                        // error={!!formComplatePatenError.claim}
+                        // error={formComplatePatenError.claim}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -726,7 +754,7 @@ const DetailSubmission = () => {
                         name="claim"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.claim}
+                        error={formComplatePatenError.claim}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -738,7 +766,7 @@ const DetailSubmission = () => {
                         name="description"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.description}
+                        error={formComplatePatenError.description}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -750,7 +778,7 @@ const DetailSubmission = () => {
                         name="abstract"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.abstract}
+                        error={formComplatePatenError.abstract}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -762,7 +790,7 @@ const DetailSubmission = () => {
                         name="inventionImage"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.inventionImage}
+                        error={formComplatePatenError.inventionImage}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -774,7 +802,7 @@ const DetailSubmission = () => {
                         name="statementInventionOwnership"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.statementInventionOwnership}
+                        error={formComplatePatenError.statementInventionOwnership}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -786,7 +814,7 @@ const DetailSubmission = () => {
                         name="letterTransferRightsInvention"
                         required
                         onChange={handleChangeComplatePaten}
-                        error={!!formComplatePatenError.letterTransferRightsInvention}
+                        error={formComplatePatenError.letterTransferRightsInvention}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -806,7 +834,7 @@ const DetailSubmission = () => {
                 <>
                   {
                     <div className="flex flex-col gap-6">
-                      <Field label="Judul Desain Industri" value={formIndustDesign.titleDesign} name="titleDesign" type="text" placeholder="" need error={!!formIndustDesignError.titleDesign} onChange={handleChangeComplateIndusDesign} />
+                      <Field label="Judul Desain Industri" value={formIndustDesign.titleDesign} name="titleDesign" type="text" placeholder="" need error={formIndustDesignError.titleDesign} onChange={handleChangeComplateIndusDesign} />
                       <FieldDropdown
                         label="Jenis Desain Industri"
                         name="type"
@@ -819,7 +847,7 @@ const DetailSubmission = () => {
                             value: item.value,
                           })) ?? []
                         }
-                        error={!!formIndustDesignError.type}
+                        error={formIndustDesignError.type}
                         need
                       />
 
@@ -837,7 +865,7 @@ const DetailSubmission = () => {
                                 value: item.id,
                               })) ?? []
                             }
-                            error={!!formIndustDesignError.typeDesignId}
+                            error={formIndustDesignError.typeDesignId}
                             need
                           />
                           <FieldDropdown
@@ -852,7 +880,7 @@ const DetailSubmission = () => {
                                 value: item.id,
                               })) ?? []
                             }
-                            error={!!formIndustDesignError.subtypeDesignId}
+                            error={formIndustDesignError.subtypeDesignId}
                             need
                           />
                         </div>
@@ -886,7 +914,7 @@ const DetailSubmission = () => {
                         name="draftDesainIndustriApplicationFile"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        // error={!!formIndustDesignError.draftDesainIndustriApplicationFile}
+                        // error={formIndustDesignError.draftDesainIndustriApplicationFile}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -898,7 +926,7 @@ const DetailSubmission = () => {
                         name="looksPerspective"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.looksPerspective}
+                        error={formIndustDesignError.looksPerspective}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -910,7 +938,7 @@ const DetailSubmission = () => {
                         name="looksPerspective"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.looksPerspective}
+                        error={formIndustDesignError.looksPerspective}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -922,7 +950,7 @@ const DetailSubmission = () => {
                         name="frontView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.frontView}
+                        error={formIndustDesignError.frontView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -934,7 +962,7 @@ const DetailSubmission = () => {
                         name="backView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.backView}
+                        error={formIndustDesignError.backView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -946,7 +974,7 @@ const DetailSubmission = () => {
                         name="rightSideView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.rightSideView}
+                        error={formIndustDesignError.rightSideView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -958,7 +986,7 @@ const DetailSubmission = () => {
                         name="lefttSideView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.lefttSideView}
+                        error={formIndustDesignError.lefttSideView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -970,7 +998,7 @@ const DetailSubmission = () => {
                         name="topView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.topView}
+                        error={formIndustDesignError.topView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -982,7 +1010,7 @@ const DetailSubmission = () => {
                         name="downView"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.downView}
+                        error={formIndustDesignError.downView}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -994,7 +1022,7 @@ const DetailSubmission = () => {
                         name="moreImages"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.moreImages}
+                        error={formIndustDesignError.moreImages}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -1006,7 +1034,7 @@ const DetailSubmission = () => {
                         name="designOwnershipLetter"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.designOwnershipLetter}
+                        error={formIndustDesignError.designOwnershipLetter}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -1018,7 +1046,7 @@ const DetailSubmission = () => {
                         name="letterTransferDesignRights"
                         required
                         onChange={handleChangeComplateIndusDesign}
-                        error={!!formIndustDesignError.letterTransferDesignRights}
+                        error={formIndustDesignError.letterTransferDesignRights}
                         need
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
@@ -1117,11 +1145,46 @@ const DetailSubmission = () => {
                         />
                         <FieldTextarea label="Keterangan" value={formBrand?.information ?? ""} name="information" placeholder="" required row={4} onChange={handleChangeBrand} error={formBrandError?.information} need />
 
-                        <InputFile label="Label Merek" value={formBrand?.labelBrand ?? null} name="labelBrand" required onChange={handleChangeBrand} accept=".jpg" error={formBrandError?.labelBrand} need />
-                        <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChangeBrand} accept=".jpg, .jpeg" error={formBrandError?.fileUploade} need />
-                        <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChangeBrand} error={formBrandError?.signature} need />
-                        <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChangeBrand} error={formBrandError?.InformationLetter} need />
-                        <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChangeBrand} error={formBrandError?.letterStatment} need />
+                        <InputFile
+                          label="Label Merek"
+                          value={formBrand?.labelBrand ?? null}
+                          name="labelBrand"
+                          required
+                          onChange={handleChangeBrand}
+                          accept=".jpg"
+                          error={formBrandError?.labelBrand}
+                          need
+                          message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                          edite={statusDetail}
+                          url={detailSubmission?.submission?.brand?.labelBrand}
+                        />
+                        <InputFile
+                          label="Upload File"
+                          value={formBrand?.fileUploade ?? null}
+                          name="fileUploade"
+                          required
+                          onChange={handleChangeBrand}
+                          accept=".pdf"
+                          error={formBrandError?.fileUploade}
+                          need
+                          message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                          edite={statusDetail}
+                          url={detailSubmission?.submission?.brand?.fileUploade}
+                        />
+                        <InputFile
+                          label="Tanda Tangan Permohonan"
+                          value={formBrand?.signature ?? null}
+                          name="signature"
+                          required
+                          onChange={handleChangeBrand}
+                          error={formBrandError?.signature}
+                          need
+                          message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                          edite={statusDetail}
+                          url={detailSubmission?.submission?.brand?.signature}
+                        />
+                        {/* <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChangeBrand} error={formBrandError?.InformationLetter} need />
+                        <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChangeBrand} error={formBrandError?.letterStatment} need /> */}
 
                         <div className="flex flex-col mt-10 gap-6">
                           <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>

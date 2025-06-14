@@ -5,6 +5,7 @@ import { setHelpCenter, setHelpCenterDetail, setReportAnalitic } from "../reduce
 import { NavigateFunction } from "react-router-dom";
 import { FormCreateHelpCenter } from "../../types/helpCenter";
 import { FormReportAnaliticType } from "../../types/document";
+import { toast } from "sonner";
 
 export const getHelpCenter = (currentPage: number, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -105,7 +106,7 @@ export const updateHelpCenter = (id: string | undefined, answer: string, current
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/help-center/${id}`,
         {
           answer: answer,
@@ -120,9 +121,11 @@ export const updateHelpCenter = (id: string | undefined, answer: string, current
 
       dispatch(getHelpCenter(currentPage, limit));
       navigate("/informasi/pusat-bantuan");
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -138,7 +141,7 @@ export const deletesHelpCenter = (id: number | string | null, currentPage: numbe
     try {
       const { token } = getState().auth;
 
-      await axios.delete(
+      const response = await axios.delete(
         `${API_URL}/help-center/${id}`,
 
         {
@@ -149,9 +152,11 @@ export const deletesHelpCenter = (id: number | string | null, currentPage: numbe
       );
 
       dispatch(getHelpCenter(currentPage, limit));
+      toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
@@ -176,9 +181,12 @@ export const getReportAndAnalitic = (currentPage?: number, limit?: number, form?
           limit: limit,
           namaPengguna: form?.namaPengguna,
           jenisPengajuan: form?.jenisPengajuan,
-          tanggalPengajuan: form?.jenisPengajuan,
+          skemaPengajuan: form?.skemaPengajuan,
+          progressPengajuan: form?.progressPengajuan,
           peran: form?.peran,
           instansi: form?.instansi,
+          startDate: form?.startDate,
+          endDate: form?.endDate,
         },
       });
 

@@ -90,6 +90,7 @@ const Home = () => {
             </div>
           </div>
         </section>
+
         <section id="section-4" className="w-full flex justify-center">
           <div className="w-full container flex flex-col gap-8 py-16">
             <h1 className="text-start text-[40px] font-bold text-PRIMARY01 border-b-4 border-PRIMARY02 max-w-fit">Informasi Pendanaan</h1>

@@ -8,7 +8,7 @@ const useManageYear = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [title, setTitle] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqsDetail } = useSelector((state: RootState) => state.manage);
   const { currentPage, limit } = useSelector((state: RootState) => state.manage.faqsData);

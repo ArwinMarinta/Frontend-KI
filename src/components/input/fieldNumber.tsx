@@ -26,6 +26,11 @@ const FieldNumber = ({ label, value, name, placeholder, readOnly = false, requir
         readOnly={!onChange && readOnly}
         required={required}
         onChange={onChange}
+        onKeyDown={(e) => {
+          if (["-", "e", "+", "."].includes(e.key)) {
+            e.preventDefault();
+          }
+        }}
       />
       {error && <p className="text-sm text-RED01 mt-1">Field Tidak Boleh Kosong!</p>}
     </div>
