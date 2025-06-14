@@ -30,30 +30,35 @@ const CreateSubmissionIndustrialDesign = () => {
   const handleNextStep2 = () => {
     const updatedErrors = personalData.map(validatePersonalData);
 
-    const hasError = updatedErrors.some((err) => Object.values(err).some((v) => v === true));
+    const hasError = updatedErrors.some((err) =>
+      Object.entries(err).some(([key, value]) => {
+        if (key === "id") return false; // abaikan id
+        return value !== null && value !== undefined && value !== "";
+      })
+    );
 
     if (hasError) {
       const newErrors = updatedErrors.map((error) => ({
-        name: error.name === true,
-        email: error.email === true,
-        faculty: error.faculty === true,
-        studyProgram: error.studyProgram === true,
-        institution: error.institution === true,
-        work: error.work === true,
-        nationalState: error.nationalState === true,
-        countryResidence: error.countryResidence === true,
-        province: error.province === true,
-        city: error.city === true,
-        subdistrict: error.subdistrict === true,
-        ward: error.ward === true,
-        postalCode: error.postalCode === true,
-        phoneNumber: error.phoneNumber === true,
-        ktp: error.ktp === true,
-        facebook: error.facebook === true,
-        whatsapp: error.whatsapp === true,
-        instagram: error.instagram === true,
-        twitter: error.twitter === true,
-        address: error.address === true,
+        name: error.name || null,
+        email: error.email || null,
+        faculty: error.faculty || null,
+        studyProgram: error.studyProgram || null,
+        institution: error.institution || null,
+        work: error.work || null,
+        nationalState: error.nationalState || null,
+        countryResidence: error.countryResidence || null,
+        province: error.province || null,
+        city: error.city || null,
+        subdistrict: error.subdistrict || null,
+        ward: error.ward || null,
+        postalCode: error.postalCode || null,
+        phoneNumber: error.phoneNumber || null,
+        ktp: error.ktp || null,
+        facebook: error.facebook || null,
+        whatsapp: error.whatsapp || null,
+        instagram: error.instagram || null,
+        twitter: error.twitter || null,
+        address: error.address || null,
       }));
 
       setPersonalDataError(newErrors);
@@ -75,7 +80,7 @@ const CreateSubmissionIndustrialDesign = () => {
 
   const handleNextStep1 = () => {
     if (draftPatent === null) {
-      setErrorDraftPatent(true);
+      setErrorDraftPatent("Draft desain industri wajib diunggah");
       return;
     }
     if (currentStep < 3 && !error) {

@@ -5,7 +5,7 @@ export type FormStepProps = {
   // currentStep: number;
   // setCurrentStep: (step: number) => void;
   submissionType: string;
-  error: boolean;
+  error: string | null;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void;
   handleNextStep: () => void;
 };

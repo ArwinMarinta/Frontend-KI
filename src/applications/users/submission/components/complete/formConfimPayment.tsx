@@ -23,7 +23,7 @@ const FormConfimPayment = ({ formConfirmPayment, handleChange, formConfirmPaymen
       <div className="flex flex-col gap-6">
         <Field label="Skema Pendanaan" value={paymentSchema ?? "-"} name="titleInvention" type="text" placeholder="" readOnly />
         <Field label="Kode Pembayaran Anda" value={billingCode || "-"} name="titleInvention" type="text" placeholder="" readOnly />
-        <InputFile label="Bukti Pembayaran" value={formConfirmPayment.proofPayment} onChange={handleChange} error={!!formConfirmPaymentErrors.proofPayment} name="proofPayment" required need />
+        <InputFile label="Bukti Pembayaran" value={formConfirmPayment.proofPayment} onChange={handleChange} error={formConfirmPaymentErrors.proofPayment} name="proofPayment" required need />
       </div>
       <div className="flex justify-end mt-6">
         <button onClick={handleSubmitPayment} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">

@@ -58,9 +58,9 @@ export type FormUserErrors = {
 };
 
 export type UpdateProfileErrors = {
-  fullname: boolean;
-  faculty: boolean;
-  studyProgram: boolean;
-  // institution: boolean;
-  phoneNumber: boolean;
+  fullname: string | null;
+  faculty: string | null;
+  studyProgram: string | null;
+  // institution: string | null;
+  phoneNumber: string | null;
 };

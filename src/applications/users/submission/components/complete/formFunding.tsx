@@ -34,7 +34,7 @@ const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors,
               value: item.key,
             })) ?? []
           }
-          error={!!formSchemaPaymentErrors.submissionScheme}
+          error={formSchemaPaymentErrors.submissionScheme}
           need
         />
         {formSchemaPayment.submissionScheme === "Pendanaan" && (
@@ -51,7 +51,7 @@ const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors,
                   label: `${item.group} (${formatIndonesianDate(item.startDate)} - ${formatIndonesianDate(item.endDate)})`,
                   value: `${item.id}|${item.periodId}`,
                 }))}
-              error={!!formSchemaPaymentErrors.groupId}
+              error={formSchemaPaymentErrors.groupId}
               need
             />
             <div className="mb-4">

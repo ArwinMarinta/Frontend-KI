@@ -56,11 +56,11 @@ const UpdateSubmissionProgress = () => {
                       value: item.key,
                     })) ?? []
                   }
-                  error={!!formErrors.reviewStatus}
+                  error={formErrors.reviewStatus}
                   need
                 />
-                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={!formUpdateProgress.paymentCode} onChange={handleChange} />}
-                {formUpdateProgress.reviewStatus === "Sertifikat Terbit" && <FieldFile label="Sertifikat Pengajuan" value={formUpdateProgress.certificateFile} name="certificateFile" onChange={handleChange} error={!formUpdateProgress.certificateFile} />}
+                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={formUpdateProgress.paymentCode} onChange={handleChange} />}
+                {formUpdateProgress.reviewStatus === "Sertifikat Terbit" && <FieldFile label="Sertifikat Pengajuan" value={formUpdateProgress.certificateFile} name="certificateFile" onChange={handleChange} error={formUpdateProgress.certificateFile?.name} />}
 
                 <FieldTextarea label="Komentar" value={formUpdateProgress.comments} name="comments" placeholder="" required row={4} onChange={handleChange} />
                 <div>

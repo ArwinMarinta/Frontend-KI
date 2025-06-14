@@ -23,11 +23,11 @@ const useProfile = () => {
   });
 
   const [errors, setErrors] = useState<UpdateProfileErrors>({
-    fullname: false,
-    faculty: false,
-    studyProgram: false,
-    // institution: false,
-    phoneNumber: false,
+    fullname: null,
+    faculty: null,
+    studyProgram: null,
+    // institution: null,
+    phoneNumber: null,
   });
 
   const handleStatusChange = (status: string, type: "current" | "profile" = "current") => {
@@ -37,10 +37,10 @@ const useProfile = () => {
       setProfileStatus(status as "Detail" | "Edit");
       if (status === "Edit") {
         setErrors({
-          fullname: false,
-          phoneNumber: false,
-          faculty: false,
-          studyProgram: false,
+          fullname: null,
+          phoneNumber: null,
+          faculty: null,
+          studyProgram: null,
         });
       }
     }
@@ -55,7 +55,7 @@ const useProfile = () => {
         studyProgram: user?.studyProgram || "",
       });
     }
-  }, [profileStatus, profileStatus]);
+  }, [profileStatus]);
 
   useEffect(() => {
     if (token) {
@@ -89,10 +89,10 @@ const useProfile = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newErrors = {
-      fullname: form.fullname.trim() === "",
-      phoneNumber: form.phoneNumber.trim() === "",
-      faculty: form.faculty.trim() === "",
-      studyProgram: form.studyProgram.trim() === "",
+      fullname: form.fullname.trim() === "" ? "Nama Lengkap tidak boleh kosong" : null,
+      phoneNumber: form.phoneNumber.trim() === "" ? "No.Telpon Lengkap tidak boleh kosong" : null,
+      faculty: form.faculty.trim() === "" ? "Fakultas tidak boleh kosong" : null,
+      studyProgram: form.studyProgram.trim() === "" ? "Prodi tidak boleh kosong" : null,
     };
 
     setErrors(newErrors);

@@ -55,10 +55,10 @@ const ReviewerUpdateProgres = () => {
                       value: item.key,
                     })) ?? []
                   }
-                  error={!!formErrors.reviewStatus}
+                  error={formErrors.reviewStatus}
                   need
                 />
-                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={!formUpdateProgress.paymentCode} onChange={handleChange} />}
+                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={formUpdateProgress.paymentCode} onChange={handleChange} />}
 
                 <FieldTextarea label="Komentar" value={formUpdateProgress.comments} name="comments" placeholder="" required row={4} onChange={handleChange} />
                 <div>
