@@ -73,7 +73,7 @@ const HelpCenter = () => {
                   {
                     label: "Reply",
                     onClick: () => {},
-                    component: (item) => !item.status && <ReplyButton url={`/informasi/pusat-bantuan/balas/${item.id}`} />,
+                    component: (item) => !item.status && <ReplyButton url={`/informasi/pusat-bantuan/balas/${item?.id}`} />,
                   },
 
                   {
