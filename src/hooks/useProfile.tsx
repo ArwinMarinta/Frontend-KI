@@ -55,7 +55,7 @@ const useProfile = () => {
         studyProgram: user?.studyProgram || "",
       });
     }
-  }, [profileStatus]);
+  }, [profileStatus, user]);
 
   useEffect(() => {
     if (token) {

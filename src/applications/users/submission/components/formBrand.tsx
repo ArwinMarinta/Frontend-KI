@@ -22,6 +22,7 @@ interface FormBrandProps {
   tempAdditionalBrandError?: FormAdditionalBrandError;
   handleDeleteAttempBrand: (index: number) => void;
   handleNextStep: () => void;
+  types?: string;
 }
 
 const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBrand, tempAdditionalBrand, handleChangeAdditional, addAdditionalBrand, tempAdditionalBrandError, handleDeleteAttempBrand, handleNextStep }: FormBrandProps) => {

@@ -1,10 +1,14 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import useReviewer from "../hooks/useReviewer";
 import FieldDropdown from "../../../../components/input/FieldDropDown";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { getReviewer } from "../../../../service/actions/submissionAction";
 import { updateReviewer } from "../../../../service/actions/userAction";
 import ModalLoading from "../../../../components/modal/modalLoading";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../service/store";
+import AddButtonModal from "../../../../components/button/addButtonModal";
 
 export interface ModalProps {
   modal: boolean;
@@ -18,13 +22,40 @@ export interface ModalProps {
 
 const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer, handleChange }: ModalProps) => {
   const { reviewerError, setReviewerError, dispatch, reviewerData, resetReviewer, loading, setLoading } = useReviewer();
+  const location = useLocation();
+  const lastSegment = useMemo(() => {
+    const parts = location.pathname.split("/");
+    return parts[parts.length - 1];
+  }, [location.pathname]);
+
+  const { copyrightData, patentData, brandData, industrialDesignData } = useSelector((state: RootState) => state.submission);
+
+  const paginationMap: Record<string, { currentPage: number; limit: number } | undefined> = {
+    "hak-cipta": {
+      currentPage: copyrightData.currentPage,
+      limit: copyrightData.limit,
+    },
+    paten: {
+      currentPage: patentData.currentPage,
+      limit: patentData.limit,
+    },
+    merek: {
+      currentPage: brandData.currentPage,
+      limit: brandData.limit,
+    },
+    "desain-industri": {
+      currentPage: industrialDesignData.currentPage,
+      limit: industrialDesignData.limit,
+    },
+  };
+
+  const { currentPage, limit } = paginationMap[lastSegment] ?? { currentPage: 1, limit: 10 };
 
   useEffect(() => {
     dispatch(getReviewer());
   }, [dispatch]);
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (reviewer === undefined || reviewer === null) {
       setReviewerError("Reviewer tidak boleh kosong.");
       return;
@@ -32,7 +63,7 @@ const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer, han
 
     setLoading(true);
     try {
-      await dispatch(updateReviewer(id, reviewer));
+      await dispatch(updateReviewer(id, reviewer, lastSegment, currentPage, limit));
       setModal(false);
       resetReviewer();
     } finally {
@@ -70,9 +101,7 @@ const ModalUpdateReviewer = ({ modal, setModal, type, id, message, reviewer, han
         <ModalLoading show={loading} />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white ">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
     </Modal>
   );

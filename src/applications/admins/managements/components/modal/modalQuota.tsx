@@ -84,7 +84,7 @@ const ModalQuota = ({ modal, setModal, type, id, message }: ModalProps) => {
       <Modal.Body>
         <div className="space-y-6">
           <FieldNumber label="Kuota" name="quota" value={form.quota} onChange={handleOnChange} required error={errors.quota} />
-          <FieldNumber label="Sisa Kouta" name="remainingQuota" value={form.remainingQuota} onChange={handleOnChange} required error={errors.remainingQuota} />
+          <FieldNumber label="Sisa Kouta" name="remainingQuota" value={form.remainingQuota} readOnly required error={errors.remainingQuota} />
         </div>
       </Modal.Body>
       <Modal.Footer>

@@ -296,6 +296,8 @@ export interface FormPersonalData {
   twitter: string | null;
   address: string | null;
   ktpName?: string | null;
+  uploadKtp?: boolean;
+  ktpFileIndex?: number | null;
 }
 
 export interface FormUpdateProgress {

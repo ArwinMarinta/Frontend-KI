@@ -12,17 +12,19 @@ import DeleteButton from "../../../../components/button/deleteButton";
 import ModalYears from "../components/modal/modalYears";
 import ManageButton from "../../../../components/button/manageButton";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import { useState } from "react";
 
 const ManageYearsFunding = () => {
   const { years, limit, totalPages, currentPage, dispatch, handleDeleteFaq } = useYears();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, setType, id, message, type } = useModal();
-
-  const handleModal = (id: number | null, types: string) => {
+  const [oldYears, setOldYears] = useState<string | null | undefined>("");
+  const handleModal = (id: number | null, types: string, yearsOld?: string | null | undefined) => {
     if (types === "Add") {
       handleOpenModal(null, "AddYears");
       setType(types);
       setMessage("Tambah Tahun Pendanaan");
     } else if (types === "Edit") {
+      setOldYears(yearsOld);
       setId(id);
       handleOpenModal(id, "EditYears");
       setMessage("Ubah Tahun Pendanaan");
@@ -64,22 +66,22 @@ const ManageYearsFunding = () => {
                   {
                     label: "Detail",
                     onClick: () => {},
-                    component: (item) => <ManageButton url={`/manajemen/tahun/pendanaan/${item.id}`} />,
+                    component: (item) => <ManageButton url={`/manajemen/tahun/pendanaan/${item?.id}`} />,
                   },
                   {
                     label: "Edit",
-                    onClick: (item) => handleModal(item.id, "Edit"),
-                    component: (item) => <UpdateButton onClick={() => handleModal(item.id, "Edit")} />,
+                    onClick: (item) => handleModal(item?.id, "Edit", item?.year),
+                    component: (item) => <UpdateButton onClick={() => handleModal(item?.id, "Edit", item?.year)} />,
                   },
                   {
                     label: "Delete",
                     onClick: (item) => handleModal(item.id, "Delete"),
-                    component: (item) => <DeleteButton onClick={() => handleModal(item.id, "Delete")} />,
+                    component: (item) => <DeleteButton onClick={() => handleModal(item?.id, "Delete")} />,
                   },
                 ]}
               />
             </div>
-            <ModalYears modal={activeModal === "AddYears" || activeModal === "EditYears"} setModal={handleCloseModal} type={type} id={id} message={message} />
+            <ModalYears modal={activeModal === "AddYears" || activeModal === "EditYears"} setModal={handleCloseModal} type={type} id={id} message={message} oldYears={oldYears} />
             <ModalWarning modal={activeModal === "DeleteYears" || activeModal === "DeleteYears"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteFaq} />
           </div>
         </div>

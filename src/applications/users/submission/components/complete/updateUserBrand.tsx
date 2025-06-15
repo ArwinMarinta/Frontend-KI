@@ -18,14 +18,14 @@ import { FormAdditionalBrand } from "../../../../../types/brandType";
 import { processFile } from "../../../../../utils/formatFile";
 import Breadcrumb from "../../../../../components/breadcrumb.tsx/breadcrumb";
 import { toSlug } from "../../../../../utils/toSlug";
-import { PersonalData } from "../../../../../types/submissionType";
+import { FormPersonalData } from "../../../../../types/submissionType";
 
 const UpdateUserBrand = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, setLoading } = useLoadingProses();
   const { types, submissionId, submissionType } = useComplate();
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, updateKtp } = usePersonalData();
   const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand } = useBrand();
   const navigate = useNavigate();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
@@ -96,7 +96,7 @@ const UpdateUserBrand = () => {
 
     setLoading(true);
     try {
-      await dispatch(updateSubmissionBrand(submissionId, personalData, formBrand, formAdditionalBrand));
+      await dispatch(updateSubmissionBrand(submissionId, personalData, formBrand, formAdditionalBrand, updateKtp));
       setCurrentStep(0);
       setPersonalData([
         {
@@ -159,14 +159,14 @@ const UpdateUserBrand = () => {
     const initForm = async () => {
       if (!detailSubmission?.submission?.brand || types !== "Menunggu") return;
 
-      const { applicationType, brandTypeId, referenceName, elementColor, translate, pronunciation, disclaimer, description, documentType, information, labelBrand, fileUploade, signature, InformationLetter, letterStatment } = detailSubmission.submission.brand;
+      const { applicationType, brandTypeId, referenceName, elementColor, translate, pronunciation, disclaimer, description, documentType, information } = detailSubmission.submission.brand;
 
       // Konversi file (jika ada)
-      const convertedLabelBrand = labelBrand ? await processFile(labelBrand) : null;
-      const convertedFileUploade = fileUploade ? await processFile(fileUploade) : null;
-      const convertedSignature = signature ? await processFile(signature) : null;
-      const convertedInformationLetter = InformationLetter ? await processFile(InformationLetter) : null;
-      const convertedLetterStatment = letterStatment ? await processFile(letterStatment) : null;
+      // const convertedLabelBrand = labelBrand ? await processFile(labelBrand) : null;
+      // const convertedFileUploade = fileUploade ? await processFile(fileUploade) : null;
+      // const convertedSignature = signature ? await processFile(signature) : null;
+      // const convertedInformationLetter = InformationLetter ? await processFile(InformationLetter) : null;
+      // const convertedLetterStatment = letterStatment ? await processFile(letterStatment) : null;
 
       setFormBrand({
         applicationType: applicationType || "",
@@ -179,11 +179,11 @@ const UpdateUserBrand = () => {
         description: description || "",
         documentType: documentType || "",
         information: information || "",
-        labelBrand: convertedLabelBrand,
-        fileUploade: convertedFileUploade,
-        signature: convertedSignature,
-        InformationLetter: convertedInformationLetter,
-        letterStatment: convertedLetterStatment,
+        labelBrand: null,
+        fileUploade: null,
+        signature: null,
+        InformationLetter: null,
+        letterStatment: null,
       });
 
       if (detailSubmission.submission.brand.additionalDatas && Array.isArray(detailSubmission.submission.brand.additionalDatas)) {
@@ -204,30 +204,35 @@ const UpdateUserBrand = () => {
       if (detailSubmission?.submission?.personalDatas && Array.isArray(detailSubmission.submission.personalDatas)) {
         // Set Personal Data jika tersedia
         const mappedContributors = await Promise.all(
-          detailSubmission.submission.personalDatas.map(async (item: PersonalData) => ({
-            id: item.id ?? null,
-            isLeader: item.isLeader || false,
-            name: item.name || "",
-            email: item.email || "",
-            faculty: item.faculty || "",
-            studyProgram: item.studyProgram || "",
-            institution: item.institution || "",
-            work: item.work || "",
-            nationalState: item.nationalState || "",
-            countryResidence: item.countryResidence || "",
-            province: item.province || "",
-            city: item.city || "",
-            subdistrict: item.subdistrict || "",
-            ward: item.ward || "",
-            postalCode: item.postalCode || "",
-            phoneNumber: item.phoneNumber || "",
-            address: item.address || "",
-            ktp: item.ktp ? await processFile(item.ktp) : null,
-            facebook: item.facebook || "",
-            whatsapp: item.whatsapp || "",
-            instagram: item.instagram || "",
-            twitter: item.twitter || "",
-          }))
+          detailSubmission.submission.personalDatas.map(async (item: FormPersonalData) => {
+            return {
+              id: item.id ?? null,
+              isLeader: item.isLeader || false,
+              name: item.name || "",
+              email: item.email || "",
+              faculty: item.faculty || "",
+              studyProgram: item.studyProgram || "",
+              institution: item.institution || "",
+              work: item.work || "",
+              nationalState: item.nationalState || "",
+              countryResidence: item.countryResidence || "",
+              province: item.province || "",
+              city: item.city || "",
+              subdistrict: item.subdistrict || "",
+              ward: item.ward || "",
+              postalCode: item.postalCode || "",
+              phoneNumber: item.phoneNumber || "",
+              address: item.address || "",
+              ktp: null,
+              ktpFileIndex: null,
+              uploadKtp: false,
+              ktpName: typeof item.ktp === "string" ? item.ktp : item.ktp instanceof File ? item.ktp.name : "",
+              facebook: item.facebook || "",
+              whatsapp: item.whatsapp || "",
+              instagram: item.instagram || "",
+              twitter: item.twitter || "",
+            };
+          })
         );
 
         setPersonalData(mappedContributors);
@@ -283,7 +288,18 @@ const UpdateUserBrand = () => {
               />
             )}
             {currentStep === 1 && (
-              <Form_2 submissionType="Merek" error={personalDataError} personalData={personalData} handleChange={handleChangePerson} addContributor={addContributor} handleNextStep={handleNextStep2} currentStep={currentStep} setCurrentStep={setCurrentStep} removeContributor={removeContributor} />
+              <Form_2
+                submissionType="Merek"
+                error={personalDataError}
+                personalData={personalData}
+                handleChange={handleChangePerson}
+                addContributor={addContributor}
+                handleNextStep={handleNextStep2}
+                currentStep={currentStep}
+                setCurrentStep={setCurrentStep}
+                removeContributor={removeContributor}
+                types={types}
+              />
             )}
           </div>
         </div>

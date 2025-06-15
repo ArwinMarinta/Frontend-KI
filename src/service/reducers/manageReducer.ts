@@ -19,6 +19,7 @@ interface ManageState {
   termsDetail: TermType | null;
   categoryDocumentDetail: DocumentType | null;
   documentDetail: DocumentType | null;
+  periodsDetail: YearsType | null;
   groupDetail: PeriodType | null;
   quotaDetail: QuotaItem | null;
 }
@@ -88,6 +89,7 @@ const initialState: ManageState = {
   faqCategoryDetail: null,
   groupDetail: null,
   quotaDetail: null,
+  periodsDetail: null,
 };
 
 const manageSlice = createSlice({
@@ -139,6 +141,9 @@ const manageSlice = createSlice({
     },
     setQuotaDetail: (state, action) => {
       state.quotaDetail = action.payload;
+    },
+    setPeriodsDetail: (state, action) => {
+      state.periodsDetail = action.payload;
     },
 
     setLimit: (state, action: PayloadAction<{ key: "termsData" | "faqsData" | "faqsCategoryData" | "documentsCategoryData" | "documentsData" | "periodsData" | "groupsData" | "quotasData"; limit: number }>) => {

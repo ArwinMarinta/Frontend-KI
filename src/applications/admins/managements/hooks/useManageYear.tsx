@@ -7,7 +7,7 @@ const useManageYear = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState<string | null | undefined>("");
   const [error, setError] = useState<string | null>(null);
   const { token } = useSelector((state: RootState) => state.auth);
   const { faqsDetail } = useSelector((state: RootState) => state.manage);

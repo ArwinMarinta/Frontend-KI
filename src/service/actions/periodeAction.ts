@@ -74,15 +74,16 @@ export const createPeriods = (year: Date | string, currentPage: number, limit: n
   };
 };
 
-export const updatePeriods = (id: number | string | null, faqs: Date | string, currentPage: number, limit: number): AppThunk => {
+export const updatePeriods = (oldYear: string, newYear: string, currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
 
       const response = await axios.patch(
-        `${API_URL}/faq/type/${id}`,
+        `${API_URL}/period/year`,
         {
-          type: faqs,
+          oldYear: oldYear,
+          newYear: newYear,
         },
 
         {
@@ -113,7 +114,7 @@ export const deletePeriods = (id: number | string | null, currentPage: number, l
     try {
       const { token } = getState().auth;
 
-      const response = await axios.delete(`${API_URL}/period/${id}`, {
+      const response = await axios.delete(`${API_URL}/period/year/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

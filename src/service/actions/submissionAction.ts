@@ -1159,9 +1159,9 @@ export const updateSubmissionCopyright = (id: number, formPersonalData: FormPers
         // }
       });
 
-      formPersonalData.forEach((data) => {
+      formPersonalData.forEach((data, index) => {
         if (data.ktp) {
-          formData.append(`ktpFiles`, data.ktp);
+          formData.append(`ktpFiles[${index}]`, data.ktp);
         }
       });
 
@@ -1284,20 +1284,11 @@ export const updateSubmissionIndustrialDesign = (submissionType: number, formPer
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
-      const firstId = formPersonalData?.[0]?.id ?? undefined;
 
       const formData = new FormData();
 
       formPersonalData.forEach((data, index) => {
-        if (data.id && index > 0 && firstId) {
-          const previousId = formPersonalData[index - 1]?.id;
-          if (previousId !== undefined && data.id >= firstId) {
-            formData.append(`personalDatas[${index}][id]`, data.id.toString());
-          }
-        } else if (data.id && index === 0) {
-          // index 0, kirim langsung
-          formData.append(`personalDatas[${index}][id]`, data.id.toString());
-        }
+        if (data.id) formData.append(`personalDatas[${index}][id]`, data?.id.toString());
         if (data.name) formData.append(`personalDatas[${index}][name]`, data.name);
         if (data.email) formData.append(`personalDatas[${index}][email]`, data.email);
         if (data.faculty) formData.append(`personalDatas[${index}][faculty]`, data.faculty);
@@ -1319,11 +1310,11 @@ export const updateSubmissionIndustrialDesign = (submissionType: number, formPer
         // }
       });
 
-      formPersonalData.forEach((data) => {
-        if (data.ktp) {
-          formData.append("ktpFiles", data.ktp);
-        }
-      });
+      // formPersonalData.forEach((data) => {
+      //   if (data.ktp) {
+      //     formData.append("ktpFiles", data.ktp);
+      //   }
+      // });
       if (drafDocument) {
         formData.append("draftDesainIndustriApplicationFile", drafDocument);
       }
@@ -1352,12 +1343,14 @@ export const updateSubmissionIndustrialDesign = (submissionType: number, formPer
   };
 };
 
-export const updateSubmissionBrand = (id: number | undefined, formPersonalData: FormPersonalData[], Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[]): AppThunk => {
+export const updateSubmissionBrand = (id: number | undefined, formPersonalData: FormPersonalData[], Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[], updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
       const formData = new FormData();
+
+      console.log(`Mengirim ke backend ${updateKtp.length}`);
 
       formPersonalData.forEach((data, index) => {
         if (data.id) formData.append(`personalDatas[${index}][id]`, data?.id.toString());
@@ -1376,17 +1369,38 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
+        if (data.ktpFileIndex) formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+
         // Lampirkan file KTP jika ada
         // if (data.ktp) {
         //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
         // }
       });
-
-      formPersonalData.forEach((data) => {
-        if (data.ktp) {
-          formData.append("ktpFiles", data.ktp);
+      updateKtp.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("ktpFiles", file);
         }
       });
+
+      // formData.append("ktpFiles", JSON.stringify(updateKtp));
+
+      // updateKtp.forEach((file) => {
+      //   console.log(`instanceof File? `, file instanceof File);
+      //   if (file) formData.append("ktpFiles", file);
+      // });
+      // formData.append("ktpFiles", JSON.stringify(updateKtp));
+      // updateKtp.forEach((file) => {
+      //   if (file) {
+      //     formData.append("ktpFiles", file);
+      //   }
+      // });
+
+      // formPersonalData.forEach((data) => {
+      //   if (data.ktp) {
+      //     formData.append("ktpFiles", data.ktp);
+      //   }
+      // });
 
       if (Form.applicationType) {
         formData.append("applicationType", Form.applicationType);
@@ -1535,9 +1549,9 @@ export const updatePersonalData = (id: number | undefined, formPersonalData: For
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
       });
 
-      formPersonalData.forEach((data) => {
+      formPersonalData.forEach((data, index) => {
         if (data.ktp) {
-          formData.append("ktpFiles", data.ktp);
+          formData.append(`ktpFiles[${index}]`, data.ktp);
         }
       });
 

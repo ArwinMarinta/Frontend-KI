@@ -33,7 +33,7 @@ const InputFile = ({ label, value, name, required = false, onChange, error, plac
         <input type="text" readOnly value={value?.name || ""} className={`flex-1 pl-[90px] px-3 py-2 text-sm border rounded-md bg-gray-100 ${error ? "border-RED01" : "border-BORDER01"}`} placeholder={placeholder || "Belum Ada File"} required={required} />
 
         {/* Input file tersembunyi */}
-        <input id={name} name={name} type="file" className="hidden" required={required} onChange={onChange} accept={accept} />
+        <input id={name} name={name} type="file" className="hidden" required={required} onChange={onChange} accept={accept} multiple />
       </div>
       {error && <p className="text-sm text-RED01 mt-1">{error}</p>}
       {(edite === "Ubah" || edite === "Revisi" || edite === "Menunggu") && url && (

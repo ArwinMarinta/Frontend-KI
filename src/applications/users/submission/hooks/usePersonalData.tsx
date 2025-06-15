@@ -27,8 +27,15 @@ const usePersonalData = () => {
       twitter: null,
       address: "",
       ktpName: "",
+      uploadKtp: false,
+      ktpFileIndex: null,
     },
   ]);
+
+  const [updateKtp, setUpdateKtp] = useState<File[]>([]);
+
+  console.log(personalData);
+  console.log(updateKtp);
 
   const [personalDataError, setPersonalDataError] = useState<PersonalDataError[]>(
     personalData.map(() => ({
@@ -87,53 +94,59 @@ const usePersonalData = () => {
   };
 
   const handleChangePerson = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormPersonalData) => {
+    // ----- Salin state lama -----
     const updatedData = [...personalData];
-    const updatedError = [...personalDataError];
+    const updatedError = [...personalDataError]; // jika ada validasi
 
+    // ----- Jika field bertipe file -----
     if (e.target.type === "file") {
       const file = (e.target as HTMLInputElement).files?.[0];
+
       if (file) {
-        const maxSize = 20 * 1024 * 1024; // 20MB
+        const maxSize = 20 * 1024 * 1024;
+
         if (file.size > maxSize) {
           updatedError[index] = {
             ...updatedError[index],
             [field]: "Ukuran file maksimal 20MB",
           };
         } else {
+          /* 1️⃣  perbarui personalData[index] */
+          setUpdateKtp((prev) => [...prev, file]);
+
+          // 2️⃣ Karena file ditaruh di akhir, pakai panjang sebelumnya sebagai index
+          const fileIndex = updateKtp.length;
+
+          // 3️⃣ Simpan juga ke personalData
           updatedData[index] = {
             ...updatedData[index],
-            [field]: file,
-          };
-          updatedError[index] = {
-            ...updatedError[index],
-            [field]: null,
+            [field]: file, // ktp jadi array yang isinya file
+            uploadKtp: true,
+            ktpFileIndex: fileIndex,
+            ktpName: file.name,
           };
         }
       }
-    } else {
-      const value = e.target.value;
-      updatedData[index] = {
-        ...updatedData[index],
-        [field]: value,
-      };
-
-      // Validasi field kosong
-      if (value.trim() === "") {
-        updatedError[index] = {
-          ...updatedError[index],
-          [field]: `${field} tidak boleh kosong`,
-        };
-      } else {
-        updatedError[index] = {
-          ...updatedError[index],
-          [field]: null,
-        };
-      }
     }
 
+    // ----- Jika field bertipe teks -----
+    else {
+      const value = e.target.value;
+
+      updatedData[index] = { ...updatedData[index], [field]: value };
+
+      // Contoh validasi kosong
+      updatedError[index] = {
+        ...updatedError[index],
+        [field]: value.trim() === "" ? `${field} tidak boleh kosong` : null,
+      };
+    }
+
+    // ----- Commit state -----
     setPersonalData(updatedData);
     setPersonalDataError(updatedError);
   };
+
   const addContributor = () => {
     // Tambah kontributor baru ke personalData
     setPersonalData([
@@ -154,7 +167,7 @@ const usePersonalData = () => {
         ward: "",
         postalCode: "",
         phoneNumber: "",
-        ktp: null as File | null,
+        ktp: null,
         isLeader: false,
         facebook: null,
         whatsapp: null,
@@ -212,6 +225,7 @@ const usePersonalData = () => {
     setPersonalDataError,
     setPersonalData,
     removeContributor,
+    updateKtp,
   };
 };
 

@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import useStatus from "../hooks/useStatus";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import { updateSubmissionStatus } from "../../../../service/actions/userAction";
-
-import { statusOptions } from "../../../../data/statusSubmission";
-import FieldDropdown from "../../../../components/input/FieldDropDown";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../service/store";
+import AddButtonModal from "../../../../components/button/addButtonModal";
+import FieldTextarea from "../../../../components/input/fieldTextArea";
 // Pastikan path ini sesuai
 
 export interface ModalProps {
@@ -15,14 +17,41 @@ export interface ModalProps {
   id: number | string | null;
   message: string | null;
   status?: string;
-  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, handleChange }: ModalProps) => {
   const { statusError, setStatusError, resetStatus, dispatch, loading, setLoading } = useStatus();
+  const location = useLocation();
+  const lastSegment = useMemo(() => {
+    const parts = location.pathname.split("/");
+    return parts[parts.length - 1];
+  }, [location.pathname]);
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const { copyrightData, patentData, brandData, industrialDesignData } = useSelector((state: RootState) => state.submission);
+
+  const paginationMap: Record<string, { currentPage: number; limit: number } | undefined> = {
+    "hak-cipta": {
+      currentPage: copyrightData.currentPage,
+      limit: copyrightData.limit,
+    },
+    paten: {
+      currentPage: patentData.currentPage,
+      limit: patentData.limit,
+    },
+    merek: {
+      currentPage: brandData.currentPage,
+      limit: brandData.limit,
+    },
+    "desain-industri": {
+      currentPage: industrialDesignData.currentPage,
+      limit: industrialDesignData.limit,
+    },
+  };
+
+  const { currentPage, limit } = paginationMap[lastSegment] ?? { currentPage: 1, limit: 10 };
+
+  const handleSubmit = async () => {
     if (!status || status.trim() === "") {
       setStatusError("Status tidak boleh kosong.");
       return;
@@ -30,7 +59,7 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
 
     setLoading(true);
     try {
-      await dispatch(updateSubmissionStatus(id, status));
+      await dispatch(updateSubmissionStatus(id, status, lastSegment, currentPage, limit));
       setModal(false);
       resetStatus();
     } finally {
@@ -49,7 +78,8 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
       <Modal.Header>{message}</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
-          <FieldDropdown
+          <FieldTextarea label="Status Pengajuan (DJKI)" value={status ?? ""} name="status" placeholder="Masukkan status pengajuan" required row={4} onChange={handleChange} error={statusError} need />
+          {/* <FieldDropdown
             label="Status Pengajuan (DJKI)"
             name="status"
             type="select"
@@ -63,14 +93,12 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
             }
             error={statusError}
             need
-          />
+          /> */}
         </div>
         <ModalLoading show={loading} />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit} className="bg-PRIMARY01 text-white">
-          {type === "Add" ? "Tambah" : "Ubah"}
-        </Button>
+        <AddButtonModal onClick={handleSubmit} type={type} loading={loading} />
       </Modal.Footer>
     </Modal>
   );

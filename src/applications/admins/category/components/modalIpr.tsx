@@ -94,7 +94,7 @@ const ModalIpr = ({ modal, setModal, type, id, message }: ModalProps) => {
       <Modal.Header>{message}</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
-          <Field label="Jenis Kekayaan Intelektual" value={form.title} name="title" type="text" placeholder="" onChange={handleOnChange} required error={errors.title} />
+          <Field label="Jenis Kekayaan Intelektual" value={form.title} name="title" type="text" placeholder="" required error={errors.title} readOnly />
           <div className="flex  flex-col mb-4">
             <label className="block mb-2 text-base font-medium">Publish</label>
             <input type="checkbox" name="isPublish" checked={form.isPublish} onChange={handleOnChange} className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md focus:ring-PRIMARY010 dark:focus:ring-PRIMARY01 dark:ring-offset-gray-800 focus:ring-1" />

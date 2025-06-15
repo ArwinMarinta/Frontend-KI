@@ -430,6 +430,8 @@ const DetailSubmission = () => {
     }
   };
 
+  console.log(personalData);
+
   useEffect(() => {
     const initPersonalData = async () => {
       if (!detailSubmission?.submission?.personalDatas && statusDetail !== "Ubah") {
@@ -454,7 +456,7 @@ const DetailSubmission = () => {
             postalCode: item.postalCode || "",
             phoneNumber: item.phoneNumber || "",
             address: item.address || "",
-            ktp: item.ktp ?? null,
+            ktp: null,
             ktpName: typeof item.ktp === "string" ? item.ktp : item.ktp instanceof File ? item.ktp.name : "",
             facebook: item.facebook || "",
             whatsapp: item.whatsapp || "",
@@ -920,7 +922,7 @@ const DetailSubmission = () => {
                         edite={statusDetail}
                         url={detailSubmission?.submission?.industrialDesign?.draftDesainIndustriApplicationFile}
                       />
-                      <InputFile
+                      {/* <InputFile
                         label="Tampak Perspektif"
                         value={formIndustDesign.looksPerspective}
                         name="looksPerspective"
@@ -931,7 +933,7 @@ const DetailSubmission = () => {
                         message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
                         edite={statusDetail}
                         url={detailSubmission?.submission?.industrialDesign?.looksPerspective}
-                      />
+                      /> */}
                       <InputFile
                         label="Tampak Perspektif"
                         value={formIndustDesign.looksPerspective}

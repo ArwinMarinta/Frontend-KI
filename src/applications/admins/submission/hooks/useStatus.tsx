@@ -9,7 +9,7 @@ const useStatus = () => {
   const [statusError, setStatusError] = useState<string | null>(null);
   const { setLoading, loading } = useLoadingProses();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setStatus(value);
     if (value.trim() !== "") {

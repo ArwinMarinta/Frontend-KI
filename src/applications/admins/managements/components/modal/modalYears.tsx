@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { ModalProps } from "../../../../../types/modalType";
 import useManageYear from "../../hooks/useManageYear";
 import { Modal } from "flowbite-react";
 import { createPeriods, updatePeriods } from "../../../../../service/actions/periodeAction";
@@ -8,19 +7,30 @@ import useLoadingProses from "../../../../../hooks/useLoadingProses";
 import ModalLoading from "../../../../../components/modal/modalLoading";
 import AddButtonModal from "../../../../../components/button/addButtonModal";
 
-const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
+export interface ModalProps {
+  modal: boolean;
+  setModal: (modal: boolean) => void;
+  type: string;
+  id: number | string | null;
+  message: string | null;
+  oldYears?: string | null;
+}
+
+const ModalYears = ({ modal, setModal, type, id, message, oldYears }: ModalProps) => {
   const { dispatch, title, setTitle, currentPage, limit, faqsDetail, setError, error } = useManageYear();
   const { loading, setLoading } = useLoadingProses();
+
+  console.log(oldYears);
 
   const handleSubmit = async () => {
     if (!title || !title.trim()) {
       setError("Tahun Pendanaan tidak boleh kosong");
       return;
     }
-    if (type === "Edit" && id) {
+    if (type === "Edit" && oldYears) {
       setLoading(true);
       try {
-        await dispatch(updatePeriods(id, title, currentPage, limit));
+        await dispatch(updatePeriods(oldYears, title, currentPage, limit));
         setModal(false);
       } finally {
         setLoading(false);
@@ -46,12 +56,12 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
   }, [modal, setError]);
 
   useEffect(() => {
-    if (faqsDetail && type === "Edit" && id) {
-      setTitle(faqsDetail.question);
+    if (type === "Edit" && id) {
+      setTitle(oldYears);
     } else {
       setTitle("");
     }
-  }, [faqsDetail, type, id, setTitle]);
+  }, [faqsDetail, type, id, setTitle, oldYears]);
 
   return (
     <Modal show={modal} onClose={() => setModal(false)}>
@@ -60,7 +70,7 @@ const ModalYears = ({ modal, setModal, type, id, message }: ModalProps) => {
         <div className="space-y-6">
           <Field
             label="Tahun Pendanaan"
-            value={title}
+            value={title ?? ""}
             name="text"
             type="number"
             placeholder=""

@@ -8,6 +8,7 @@ import { NavigateFunction } from "react-router-dom";
 import { API_URL } from "../../config/config";
 import { logout } from "./authAction";
 import { toast } from "sonner";
+import { getSubmissionBrand, getSubmissionCopyRight, getSubmissionIndustrialDesign, getSubmissionPatent } from "./submissionAction";
 
 export const getMe = (): AppThunk => {
   return async (dispatch, getState) => {
@@ -204,8 +205,8 @@ export const createAccount = (formUser: UserForm, currentPage: number, limit: nu
   };
 };
 
-export const updateReviewer = (id: number | string | null, reviewerId: number): AppThunk => {
-  return async (_, getState) => {
+export const updateReviewer = (id: number | string | null, reviewerId: number, type: string, currentPage: number, limit: number): AppThunk => {
+  return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -218,6 +219,19 @@ export const updateReviewer = (id: number | string | null, reviewerId: number): 
           },
         }
       );
+
+      if (type === "hak-cipta") {
+        dispatch(getSubmissionCopyRight(currentPage, limit));
+      }
+      if (type === "paten") {
+        dispatch(getSubmissionPatent(currentPage, limit));
+      }
+      if (type === "merek") {
+        dispatch(getSubmissionBrand(currentPage, limit));
+      }
+      if (type === "desain-industri") {
+        dispatch(getSubmissionIndustrialDesign(currentPage, limit));
+      }
       toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {
@@ -232,8 +246,8 @@ export const updateReviewer = (id: number | string | null, reviewerId: number): 
     }
   };
 };
-export const updateSubmissionStatus = (id: number | string | null, centralStatus: string): AppThunk => {
-  return async (_, getState) => {
+export const updateSubmissionStatus = (id: number | string | null, centralStatus: string, type: string, currentPage: number, limit: number): AppThunk => {
+  return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -246,6 +260,18 @@ export const updateSubmissionStatus = (id: number | string | null, centralStatus
           },
         }
       );
+      if (type === "hak-cipta") {
+        dispatch(getSubmissionCopyRight(currentPage, limit));
+      }
+      if (type === "paten") {
+        dispatch(getSubmissionPatent(currentPage, limit));
+      }
+      if (type === "merek") {
+        dispatch(getSubmissionBrand(currentPage, limit));
+      }
+      if (type === "desain-industri") {
+        dispatch(getSubmissionIndustrialDesign(currentPage, limit));
+      }
       toast.success(response?.data?.message);
       return Promise.resolve();
     } catch (error) {

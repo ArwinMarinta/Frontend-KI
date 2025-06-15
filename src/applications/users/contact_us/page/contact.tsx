@@ -15,7 +15,7 @@ const Contact = () => {
         <div className="container flex flex-col pt-32 pb-20">
           <section id="section-1" className="flex lg:flex-row flex-col w-full h-full justify-center items-center gap-6">
             <div className=" flex justify-end w-full">
-              <img src={CsImage} alt="..." />
+              <img src={CsImage} alt="..." loading="lazy" />
             </div>
             <form onSubmit={handleSubmit} className="w-full shadow-md flex flex-col  border h-full lg:px-12 px-8 gap-4 py-10 rounded-md">
               <h1 className="text-[40px] font-bold mb-5 lg:mb-0 ">Butuh Bantuan Kami?</h1>
