@@ -34,9 +34,6 @@ const usePersonalData = () => {
 
   const [updateKtp, setUpdateKtp] = useState<File[]>([]);
 
-  console.log(personalData);
-  console.log(updateKtp);
-
   const [personalDataError, setPersonalDataError] = useState<PersonalDataError[]>(
     personalData.map(() => ({
       id: null,
@@ -94,11 +91,9 @@ const usePersonalData = () => {
   };
 
   const handleChangePerson = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormPersonalData) => {
-    // ----- Salin state lama -----
     const updatedData = [...personalData];
-    const updatedError = [...personalDataError]; // jika ada validasi
+    const updatedError = [...personalDataError];
 
-    // ----- Jika field bertipe file -----
     if (e.target.type === "file") {
       const file = (e.target as HTMLInputElement).files?.[0];
 
@@ -111,48 +106,38 @@ const usePersonalData = () => {
             [field]: "Ukuran file maksimal 20MB",
           };
         } else {
-          /* 1️⃣  perbarui personalData[index] */
           setUpdateKtp((prev) => [...prev, file]);
 
-          // 2️⃣ Karena file ditaruh di akhir, pakai panjang sebelumnya sebagai index
           const fileIndex = updateKtp.length;
 
-          // 3️⃣ Simpan juga ke personalData
           updatedData[index] = {
             ...updatedData[index],
-            [field]: file, // ktp jadi array yang isinya file
+            [field]: file,
             uploadKtp: true,
             ktpFileIndex: fileIndex,
-            ktpName: file.name,
           };
         }
       }
-    }
-
-    // ----- Jika field bertipe teks -----
-    else {
+    } else {
       const value = e.target.value;
 
       updatedData[index] = { ...updatedData[index], [field]: value };
 
-      // Contoh validasi kosong
       updatedError[index] = {
         ...updatedError[index],
         [field]: value.trim() === "" ? `${field} tidak boleh kosong` : null,
       };
     }
 
-    // ----- Commit state -----
     setPersonalData(updatedData);
     setPersonalDataError(updatedError);
   };
 
   const addContributor = () => {
-    // Tambah kontributor baru ke personalData
     setPersonalData([
       ...personalData,
       {
-        id: personalData.length + 1,
+        id: null,
         name: "",
         email: "",
         faculty: null,

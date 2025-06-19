@@ -52,7 +52,7 @@ const ForgotPassword = () => {
   return (
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
       <div className="absolute inset-0 w-full h-full z-0">
-        <img src={BackgroundITK} alt="Background" className="w-full h-full object-cover" />
+        <img src={BackgroundITK} alt="Background" className="w-full h-full object-cover" loading="lazy" />
 
         <div className="absolute inset-0 bg-gradient bg-black/30  z-10" />
       </div>

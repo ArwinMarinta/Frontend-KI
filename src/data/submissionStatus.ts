@@ -11,14 +11,11 @@ export const statusAdminList = [
 ];
 
 export const statusReviewerList = [
-  { key: "Revisi Draft", label: "Revisi Draft" },
+  { key: "Menunggu", label: "Menunggu" },
   { key: "Direview", label: "Direview" },
   { key: "Ditolak", label: "Ditolak" },
-  { key: "Skema Pendanaan", label: "Skema Pendanaan" },
   { key: "Lengkapi Berkas", label: "Lengkapi Berkas" },
-  { key: "Pembayaran", label: "Pembayaran" },
-  { key: "Revisi", label: "Revisi" },
-  { key: "Selesai", label: "Selesai" },
+  { key: "Skema Pendanaan", label: "Skema Pendanaan" },
 ];
 
 export const statusDescriptions: Record<string, string> = {

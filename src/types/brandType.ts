@@ -28,6 +28,7 @@ export type FormSubmissionBrand = {
 };
 
 export type FormAdditionalBrand = {
+  id?: number | null;
   additionalDescriptions: string;
   additionalFiles: File | null;
 };
@@ -51,4 +52,12 @@ export type FormSubmissionBrandError = {
   signature: string | null;
   InformationLetter?: string | null;
   letterStatment?: string | null;
+};
+
+export type DetailBrand = {
+  labelBrand?: File | null;
+  fileUploade?: File | null;
+  signature?: File | null;
+  InformationLetter: File | null;
+  letterStatment?: File | null;
 };

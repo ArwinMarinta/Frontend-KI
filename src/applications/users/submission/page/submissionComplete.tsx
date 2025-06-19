@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson";
 import ModalLoading from "../../../../components/modal/modalLoading";
@@ -26,6 +26,8 @@ import FormComplateCopyright from "../components/complete/formComplateCopyright"
 import ComplateBrand from "../components/complete/complateBrand";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
 import { toSlug } from "../../../../utils/toSlug";
+import ModalWarningProgress from "../../../../components/modal/modalWarningProgress";
+import { useModal } from "../../../../hooks/useModal";
 
 const SubmissionComplete = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -38,23 +40,40 @@ const SubmissionComplete = () => {
   const { handleComplateBrand, formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, handleSubmitRevision, loading: loadingBrand } = useBrand();
   const { formConfirmPayment, handleChange, formConfirmPaymentErrors, handleSubmitPayment, loading: loadingConfirmPayment } = useConfirmPayment();
 
+  const { activeModal, handleOpenModal, handleCloseModal, message, setMessage } = useModal();
+  const [pendingSubmit, setPendingSubmit] = useState<() => void>(() => () => {});
+
+  const templateMessage = "Apakah Anda yakin ingin mengirim? Anda tidak dapat mengubah lagi jika sudah terkirim.";
+
+  const handleOpenWarningModal = (type: string, submitFn: () => void) => {
+    if (type === "LengkapiBerkasPaten") {
+      setMessage(templateMessage);
+      setPendingSubmit(() => submitFn);
+      handleOpenModal(null, "lengkapiBerkasPaten");
+    } else if (type === "SkemaPendanaan") {
+      setMessage(templateMessage);
+      setPendingSubmit(() => submitFn);
+      handleOpenModal(null, "skemaPembayaranPengguna");
+    }
+  };
+
   useEffect(() => {
     if (submissionType === "Paten") {
       dispatch(getTypePaten());
       dispatch(getDetailSubmissionLanding("Paten", submissionId));
     }
     if (submissionType === "Desain Industri") {
-      dispatch(getDetailSubmissionLanding("Desain Industri", submissionId));
       dispatch(getTypeIndusDesign());
       if (formIndustDesign?.typeDesignId) {
-        dispatch(getSubTypeIndusDesign(formIndustDesign.typeDesignId));
+        dispatch(getSubTypeIndusDesign(formIndustDesign?.typeDesignId));
       }
+      dispatch(getDetailSubmissionLanding("Desain Industri", submissionId));
     }
     if (submissionType === "Hak Cipta") {
       dispatch(getDetailSubmissionLanding("Hak Cipta", submissionId));
       dispatch(getTypeCopyright());
       if (formCopyright?.typeCreation) {
-        dispatch(getSubTypeCopyright(formCopyright.typeCreation));
+        dispatch(getSubTypeCopyright(formCopyright?.typeCreation));
       }
     }
     if (submissionType === "Merek") {
@@ -68,8 +87,6 @@ const SubmissionComplete = () => {
     dispatch(getDetailSubmission(submissionId));
     dispatch(getQuotaLanding());
   }, [dispatch, submissionId]);
-
-  console.log(formCopyright);
 
   return (
     <>
@@ -101,18 +118,29 @@ const SubmissionComplete = () => {
                   handleSubmitComplateIndusDesign={handleSubmitComplateIndusDesign}
                 />
               )}
-              {types === "Lengkapi Berkas" && submissionType === "Hak Cipta" && <FormComplateCopyright formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitComplateCopyright} />}
+              {types === "Lengkapi Berkas" && submissionType === "Hak Cipta" && <FormComplateCopyright formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitComplateCopyright} openWarningModal={handleOpenWarningModal} />}
               {types === "Lengkapi Berkas" && submissionType === "Merek" && <ComplateBrand formBrand={formBrand} handleChange={handleChangeBrand} formBrandError={formBrandError} handleUpdate={handleComplateBrand} />}
               {types === "Skema Pendanaan" && (
-                <FormFunding qouta={qouta} terms={terms} formSchemaPayment={formSchemaPayment} formSchemaPaymentErrors={formSchemaPaymentErrors} handleChangeSchema={handleChangeSchema} handleCheckboxChange={handleCheckboxChange} handleSubmitSchema={handleSubmitSchema} />
+                <FormFunding
+                  qouta={qouta}
+                  terms={terms}
+                  formSchemaPayment={formSchemaPayment}
+                  formSchemaPaymentErrors={formSchemaPaymentErrors}
+                  handleChangeSchema={handleChangeSchema}
+                  handleCheckboxChange={handleCheckboxChange}
+                  handleSubmitSchema={handleSubmitSchema}
+                  openWarningModal={handleOpenWarningModal}
+                />
               )}
-              {types === "Revisi" && submissionType === "Hak Cipta" && <RevisionCopyright progresSubmission={progresSubmission} formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitCopyright} types={types} />}
+              {types === "Revisi" && submissionType === "Hak Cipta" && (
+                <RevisionCopyright progresSubmission={progresSubmission?.progress ?? null} formCopyright={formCopyright} handleChange={handleChangeCopyright} formCopyrightError={formCopyrightError} handleUpdate={handleSubmitCopyright} types={types} />
+              )}
               {types === "Revisi" && submissionType === "Paten" && (
-                <RevisionPaten progresSubmission={progresSubmission} formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} types={types} />
+                <RevisionPaten progresSubmission={progresSubmission?.progress ?? null} formComplatePaten={formComplatePaten} formComplatePatenError={formComplatePatenError} handleChangeComplatePaten={handleChangeComplatePaten} handleSubmitComplatePatent={handleSubmitComplatePatent} types={types} />
               )}
               {types === "Revisi" && submissionType === "Merek" && (
                 <RevisionBrand
-                  progresSubmission={progresSubmission}
+                  progresSubmission={progresSubmission?.progress ?? null}
                   formBrand={formBrand}
                   handleChange={handleChangeBrand}
                   formBrandError={formBrandError}
@@ -128,7 +156,7 @@ const SubmissionComplete = () => {
               )}
               {types === "Revisi" && submissionType === "Desain Industri" && (
                 <RevisionIndusDesign
-                  progresSubmission={progresSubmission}
+                  progresSubmission={progresSubmission?.progress ?? null}
                   formIndustDesign={formIndustDesign}
                   formIndustDesignError={formIndustDesignError}
                   handleChangeComplateIndusDesign={handleChangeComplateIndusDesign}
@@ -142,6 +170,16 @@ const SubmissionComplete = () => {
           </div>
         </div>
         <ModalLoading show={loadingPaten || loadingDesign || loadingSchema || loadingBrand || loadingConfirmPayment || loadingCopyright} />
+        <ModalWarningProgress
+          modal={activeModal === "lengkapiBerkasPaten" || activeModal === "skemaPembayaranPengguna"}
+          setModal={handleCloseModal}
+          message={message}
+          handleNext={() => {
+            handleCloseModal();
+            pendingSubmit();
+          }}
+          handleClose={handleCloseModal}
+        />
       </div>
     </>
   );

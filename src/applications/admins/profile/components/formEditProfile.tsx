@@ -1,4 +1,4 @@
-import { FiArrowLeftCircle } from "react-icons/fi";
+// import { FiArrowLeftCircle } from "react-icons/fi";
 import Field from "../../../../components/input/fieldInput";
 import { UpdateProfileErrors, User2, User3 } from "../../../../types/userType";
 interface FormDetailProfileProps {
@@ -23,7 +23,7 @@ const FormEditProfile = ({ user, handleStatusChange, form, handleChange, handleS
       </div>
       <div className="flex flex-row gap-4 justify-end mt-10">
         <button onClick={() => handleStatusChange("Detail", "profile")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
-          <FiArrowLeftCircle className="text-xl" />
+          {/* <FiArrowLeftCircle className="text-xl" /> */}
           Kembali
         </button>
         <button

@@ -16,10 +16,12 @@ const useProfile = () => {
   const [currentStatus, setCurrentStatus] = useState("Profile");
   const [profileStatus, setProfileStatus] = useState("Detail");
   const [form, setForm] = useState<User3>({
+    image: null,
     fullname: "",
     phoneNumber: "",
     faculty: "",
     studyProgram: "",
+    imageUrl: "",
   });
 
   const [errors, setErrors] = useState<UpdateProfileErrors>({

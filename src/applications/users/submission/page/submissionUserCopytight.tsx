@@ -155,6 +155,7 @@ const SubmissionUserCopytight = () => {
       behavior: "auto",
     });
   }, [currentStep]);
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white ">

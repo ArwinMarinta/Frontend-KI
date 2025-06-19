@@ -9,7 +9,7 @@ const SideProfile = () => {
   return (
     <div className="flex flex-col border p-8 rounded-md shadow-md w-full min-h-full ">
       <div className="flex w-full flex-col items-center p-4 gap-4">
-        <img src={ProfileImage} alt="image" className="h-28 rounded-full" />
+        <img src={ProfileImage} alt="image" className="h-28 rounded-full" loading="lazy" />
         <span className="font-semibold text-black text-xl">Arwin Marinta</span>
       </div>
       <div className="flex flex-col gap-2 mt-8">

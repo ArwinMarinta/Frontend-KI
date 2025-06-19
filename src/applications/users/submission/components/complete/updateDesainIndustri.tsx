@@ -7,7 +7,7 @@ import usePersonalData from "../../hooks/usePersonalData";
 import useDraftSubmission from "../../hooks/useDraftSubmission";
 import useComplate from "../../hooks/useComplate";
 import { useEffect } from "react";
-import { getDetailSubmission, updateSubmissionIndustrialDesign } from "../../../../../service/actions/submissionAction";
+import { deletePersonalData, getDetailSubmission, updateSubmissionIndustrialDesign } from "../../../../../service/actions/submissionAction";
 import { FormPersonalData } from "../../../../../types/submissionType";
 import SideSubmisson from "../../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../../components/adminNavigation/headerNavigation";
@@ -24,9 +24,10 @@ const UpdateDesainIndustri = () => {
   const navigate = useNavigate();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
+  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData, updateKtp } = usePersonalData();
   const { draftPatent, handleDraftPatenChange, errorDraftPatent, setDraftPatent } = useDraftSubmission();
   const { types, submissionId, submissionType } = useComplate();
+  const { token } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
@@ -94,7 +95,7 @@ const UpdateDesainIndustri = () => {
 
     setLoading(true);
     try {
-      await dispatch(updateSubmissionIndustrialDesign(submissionId, personalData, draftPatent));
+      await dispatch(updateSubmissionIndustrialDesign(submissionId, personalData, draftPatent, updateKtp));
       setCurrentStep(0);
       setPersonalData([
         {
@@ -189,6 +190,17 @@ const UpdateDesainIndustri = () => {
     initForm();
   }, [types, setPersonalData, detailSubmission, setDraftPatent]);
 
+  const handleDeletePermanen = async (id: number | null) => {
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      await dispatch(deletePersonalData(id, submissionId));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -225,6 +237,8 @@ const UpdateDesainIndustri = () => {
                 setCurrentStep={setCurrentStep}
                 removeContributor={removeContributor}
                 types={types}
+                deleteContributor={handleDeletePermanen}
+                update={true}
               />
             )}
           </div>

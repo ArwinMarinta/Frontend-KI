@@ -49,7 +49,7 @@ const Navbar = () => {
         <div className="hidden lg:block">
           <div className="flex flex-row justify-center items-center gap-24 ">
             <Link to="/" className="flex flex-row justify-center items-center gap-[6px]">
-              <img src={Logo} alt="Logo KI" className=" h-14" />
+              <img src={Logo} alt="Logo KI" className=" h-14" loading="lazy" />
               <h1 className="font-bold text-xl text-PRIMARY01 hidden md:block">Sentra KI ITK</h1>
             </Link>
             <div className="">

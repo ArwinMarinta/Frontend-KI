@@ -14,9 +14,12 @@ interface FormCopyrightProps {
   handleChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => void;
   formCopyrightError?: FormSubmissionCopyrightError;
   handleNextStep: () => void;
+  exampleCreation?: string | null | undefined;
+  types?: string;
+  update?: boolean;
 }
 
-const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handleNextStep }: FormCopyrightProps) => {
+const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handleNextStep, exampleCreation, types, update = false }: FormCopyrightProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { typeCopy, subTypeCopy } = useSelector((state: RootState) => state.landing.submissionType.copyright);
 
@@ -31,6 +34,23 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
   }, [dispatch, formCopyright?.typeCreation]);
 
   const [creation, setCreation] = useState("");
+
+  useEffect(() => {
+    if (exampleCreation) {
+      if (typeof exampleCreation === "string") {
+        const isURL = /^(https?:\/\/|www\.)/i.test(exampleCreation);
+        const isFile = /\.(pdf|jpg|jpeg|mp4)$/i.test(exampleCreation);
+
+        if (isURL) {
+          setCreation("url");
+        } else if (isFile) {
+          setCreation("file");
+        }
+      }
+    }
+  }, [exampleCreation]);
+
+  console.log(exampleCreation);
 
   return (
     <>
@@ -122,10 +142,45 @@ const FormCopyright = ({ formCopyright, formCopyrightError, handleChange, handle
           />
           <span className="mt-1 block"> Contoh ciptaan tidak wajib. Anda bisa memilih untuk mengunggah file atau memasukkan URL.</span>
         </div>
-        {creation === "file" && (
-          <InputFile label="File Ciptaan" value={formCopyright?.exampleCreation} name="exampleCreation" required onChange={handleChange} error={formCopyrightError?.exampleCreation} accept="video/mp4, application/pdf, image/jpeg" message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB" />
+
+        {update === true && (
+          <>
+            {creation === "file" && exampleCreation && (
+              <InputFile
+                label="File Ciptaan"
+                value={formCopyright?.exampleCreation}
+                name="exampleCreation"
+                required
+                onChange={handleChange}
+                error={formCopyrightError?.exampleCreation}
+                accept="video/mp4, application/pdf, image/jpeg"
+                message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB"
+                url={exampleCreation}
+                edite={types}
+              />
+            )}
+            {creation === "url" && exampleCreation && <Field label="Url Ciptaan" value={formCopyright?.exampleCreationUrl || ""} name="exampleCreationUrl" type="text" placeholder="" onChange={handleChange} />}
+          </>
         )}
-        {creation === "url" && <Field label="Url Ciptaan" value={formCopyright?.exampleCreationUrl || ""} name="exampleCreationUrl" type="text" placeholder="" onChange={handleChange} />}
+        {update === false && (
+          <>
+            {creation === "file" && (
+              <InputFile
+                label="File Ciptaan"
+                value={formCopyright?.exampleCreation}
+                name="exampleCreation"
+                required
+                onChange={handleChange}
+                error={formCopyrightError?.exampleCreation}
+                accept="video/mp4, application/pdf, image/jpeg"
+                message="Format file harus berupa pdf, jpg, atau mp4. Max 20 MB"
+                url={exampleCreation}
+                edite="Ubah"
+              />
+            )}
+            {creation === "url" && <Field label="Url Ciptaan" value={typeof formCopyright?.exampleCreation === "string" ? formCopyright.exampleCreation : exampleCreation ?? ""} name="exampleCreation" type="url" onChange={handleChange} placeholder="https://contoh.com" />}
+          </>
+        )}
       </div>
       <div className="mt-20 w-full flex-row gap-6 flex justify-end">
         <NextButton onClick={handleNextStep} />

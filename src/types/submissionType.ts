@@ -259,6 +259,7 @@ export interface SubmissionBrand {
   createdAt: string;
   updatedAt: string;
   additionalDatas: BrandFile[];
+  brandType: BrandType | null;
 }
 
 export interface BrandFile {
@@ -448,3 +449,11 @@ export type PersonalDataError = {
   twitter?: string | null;
   address: string | null;
 };
+
+interface BrandType {
+  id: number;
+  title: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  deletedAt: string | null;
+}

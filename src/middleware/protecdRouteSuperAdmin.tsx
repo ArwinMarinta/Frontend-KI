@@ -17,10 +17,10 @@ export const ProtectedRouteSuperAdmin: FC = () => {
       try {
         const decodedData = decodeJwt(token) as DecodedToken;
         if (decodedData.role !== "superAdmin") {
-          navigate("/*"); // Jika bukan superadmin, arahkan ke not found
+          navigate("/");
         }
       } catch {
-        navigate("/*"); // Jika token error saat decode
+        navigate("/");
       }
     }
   }, [token, navigate]);
@@ -32,11 +32,11 @@ export const ProtectedRouteSuperAdmin: FC = () => {
   try {
     const decodedData = decodeJwt(token) as DecodedToken;
     if (decodedData.role === "superAdmin") {
-      return <Outlet />; // Jika superadmin, izinkan akses
+      return <Outlet />;
     } else {
-      return <Navigate to="/*" />; // Jika bukan, redirect
+      return <Navigate to="/" />;
     }
   } catch {
-    return <Navigate to="/*" />; // Jika token tidak valid
+    return <Navigate to="/" />; // Jika token tidak valid
   }
 };

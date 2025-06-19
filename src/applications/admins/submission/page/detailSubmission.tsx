@@ -12,14 +12,14 @@ import FieldTextarea from "../../../../components/input/fieldTextArea";
 import InputFile from "../../../users/submission/components/field/InputFile";
 import Field from "../../../../components/input/fieldInput";
 import FieldDropdown from "../../../../components/input/FieldDropDown";
-import { getSubTypeCopyright, getSubTypeIndusDesign, getTypeBrand, getTypeCopyright, getTypeIndusDesign, getTypePaten } from "../../../../service/actions/landingAction";
+import { getQuotaLanding, getSubTypeCopyright, getSubTypeIndusDesign, getTypeBrand, getTypeCopyright, getTypeIndusDesign, getTypePaten } from "../../../../service/actions/landingAction";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import useCopyright from "../../../users/submission/hooks/useCopyright";
 import { processFile } from "../../../../utils/formatFile";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { getDetailSubmission, revisionSubmissionIndustrialDesign, revisionSubmissionPaten, revisonSubmissionBrand, revisonSubmissionCopyright, updatePersonalData } from "../../../../service/actions/submissionAction";
+import { deletePersonalData, getDetailSubmission, revisionSubmissionIndustrialDesign, revisionSubmissionPaten, revisonSubmissionBrand, revisonSubmissionCopyright, updatePersonalData, updateSubmissionSchema } from "../../../../service/actions/submissionAction";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import useComplatePaten from "../../../users/submission/hooks/useComplatePaten";
 import useComplateIndustrialDesain from "../../../users/submission/hooks/useComplateIndustrialDesain";
@@ -32,6 +32,9 @@ import { formatLabel } from "../../../../utils/toSlug";
 import usePersonalData from "../../../users/submission/hooks/usePersonalData";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { FormPersonalData } from "../../../../types/submissionType";
+import useSchemaPayment from "../../../users/submission/hooks/useSchemaPayment";
+import { formatIndonesianDate } from "../../../../utils/formatDate";
+import { SchemaPayment } from "../../../../data/funding";
 
 const DetailSubmission = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,23 +42,21 @@ const DetailSubmission = () => {
   const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing.submissionType.indusDesign);
   const { setLoading, loading } = useLoadingProses();
   const { typeBrand } = useSelector((state: RootState) => state.landing.submissionType.brand);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { qouta } = useSelector((state: RootState) => state.landing);
   const { detailSubmission, current, handleChange, terms, statusDetail, name, types, submissionId } = useDetailSubmussion();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyright } = useCopyright();
   const { typeCopy, subTypeCopy } = useSelector((state: RootState) => state.landing.submissionType.copyright);
   const { formComplatePaten, formComplatePatenError, handleChangeComplatePaten, setFormComplatePaten } = useComplatePaten();
   const { formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleClaimCheckboxChange, setFormIndustDesign } = useComplateIndustrialDesain();
-  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormAdditionalBrand, setFormBrand } = useBrand();
-  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor } = usePersonalData();
+  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, formBrandError, setFormAdditionalBrand, setFormBrand, deletePermanentAdditiona, createAdditionalBrand } = useBrand();
+  const { formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, validate, setFormSchemaPayment, setFormSchemaPaymentErrors } = useSchemaPayment();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, updateKtp } = usePersonalData();
 
-  console.log(formIndustDesign);
-  // console.log(formBrand);
+  useEffect(() => {
+    dispatch(getQuotaLanding());
+  }, [dispatch]);
 
-  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
-    if (typeof ktp === "string" && ktp.trim() !== "") return null;
-    if (ktp instanceof File && ktp.size > 0) return null;
-    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
-    return "KTP wajib diisi";
-  }
   useEffect(() => {
     if (name === "paten") {
       dispatch(getTypePaten());
@@ -77,6 +78,34 @@ const DetailSubmission = () => {
       dispatch(getTypeBrand());
     }
   }, [dispatch, name, formCopyright.typeCreation, formIndustDesign.typeDesignId]);
+  function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
+    if (typeof ktp === "string" && ktp.trim() !== "") return null;
+    if (ktp instanceof File && ktp.size > 0) return null;
+    if (typeof ktpName === "string" && ktpName.trim() !== "") return null;
+    return "KTP wajib diisi";
+  }
+
+  const handleSubmitSchema = async () => {
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFormSchemaPaymentErrors(errors);
+      return;
+    }
+    setLoading(true);
+    try {
+      await dispatch(updateSubmissionSchema(submissionId, formSchemaPayment, detailSubmission?.id));
+      setFormSchemaPayment({
+        periodId: null,
+        groupId: null,
+        submissionScheme: "",
+        termsConditionId: [],
+      });
+      // navigate(`/permohonan/${name}/detail`);
+      handleChange("Informasi Umum", "Detail");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
@@ -326,6 +355,7 @@ const DetailSubmission = () => {
           detailSubmission?.submission?.brand.additionalDatas.map(async (item) => {
             const processedFile = await processFile(item.file);
             return {
+              id: item?.id,
               additionalDescriptions: item.description || "",
               additionalFiles: processedFile,
             };
@@ -395,7 +425,7 @@ const DetailSubmission = () => {
     }
     setLoading(true);
     try {
-      await dispatch(updatePersonalData(detailSubmission?.submission?.id, personalData));
+      await dispatch(updatePersonalData(detailSubmission?.submission?.id, personalData, updateKtp));
       setPersonalData([
         {
           id: 1,
@@ -429,8 +459,6 @@ const DetailSubmission = () => {
       setLoading(false);
     }
   };
-
-  console.log(personalData);
 
   useEffect(() => {
     const initPersonalData = async () => {
@@ -474,6 +502,30 @@ const DetailSubmission = () => {
 
   const uniquePersonalData = Array.from(new Map(personalData.map((item) => [item.id, item])).values());
 
+  const handleDeletePermanen = async (id: number | null) => {
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      await dispatch(deletePersonalData(id, submissionId));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const idSubmissionDetail = detailSubmission?.id;
+  const idSubmissionBrandDetail = detailSubmission?.submission?.brand?.id;
+
+  const currentTitle = formatLabel(name);
+
+  console.log(currentTitle);
+
+  // console.log("Skema saat ini:", formSchemaPayment.submissionScheme);
+  // console.log(
+  //   "Quota yang bisa dipilih:",
+  //   qouta?.filter((item: Group) => item.quota.some((q) => q.title === formSchemaPayment.name && q.remainingQuota > 0))
+  // );
+
   return (
     <main className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white">
@@ -502,7 +554,7 @@ const DetailSubmission = () => {
                 <Button label="Dokumen Pengajuan" isActive={current === "Dokumen Pengajuan"} onClick={() => handleChange("Dokumen Pengajuan", "Detail")} />
               </div>
               <div>
-                {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} terms={terms} />}
+                {current === "Informasi Umum" && <GeneralInformation data={detailSubmission} terms={terms} status={statusDetail} />}
                 {current === "Data Diri" && statusDetail === "Detail" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
 
                 {current === "Dokumen Pengajuan" && statusDetail === "Detail" && (
@@ -579,7 +631,17 @@ const DetailSubmission = () => {
 
                             {personalData.length > 1 && index !== 0 ? (
                               <div className="flex justify-end mt-10">
-                                <button onClick={() => removeContributor(index)} className="bg-RED01 py-1 px-4 text-white rounded-md">
+                                <button
+                                  onClick={() => {
+                                    if (item?.id === null) {
+                                      removeContributor?.(index);
+                                      // deleteContributor?.(item.id);
+                                    } else {
+                                      handleDeletePermanen?.(item.id);
+                                    }
+                                  }}
+                                  className="bg-RED01 py-1 px-4 text-white rounded-md"
+                                >
                                   Hapus
                                 </button>
                               </div>
@@ -595,9 +657,13 @@ const DetailSubmission = () => {
                         <span className="text-PRIMARY01 font-bold md:text-xl text-lg">Tambah Pencipta</span>
                       </button>
                     </div>
-                    <div className="flex justify-end mt-6">
+
+                    <div className="flex justify-end mt-6 gap-6">
+                      <button onClick={() => handleChange("Data Diri", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                        Kembali
+                      </button>
                       <button onClick={handleUpdatePersonalData} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
-                        Simpan Perubahan
+                        Simpan
                       </button>
                     </div>
                   </>
@@ -700,14 +766,17 @@ const DetailSubmission = () => {
                         url={formCopyright?.exampleName}
                       />
                     </div>
-                    <div className="mt-10 flex justify-end">
+                    <div className="mt-10 flex justify-end gap-6">
+                      <button onClick={() => handleChange("Dokumen Pengajuan", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                        Kembali
+                      </button>
                       <button
                         onClick={async () => {
                           await handleUpdateCopyright();
                         }}
                         className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer"
                       >
-                        Simpan Perubahan
+                        Simpan
                       </button>
                     </div>
                   </>
@@ -823,9 +892,12 @@ const DetailSubmission = () => {
                         url={detailSubmission?.submission?.patent?.letterTransferRightsInvention}
                       />
 
-                      <div className="flex justify-end mt-6">
+                      <div className="flex justify-end mt-6 gap-6">
+                        <button onClick={() => handleChange("Dokumen Pengajuan", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                          Kembali
+                        </button>
                         <button onClick={handleUpdatePaten} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
-                          Simpan Perubahan
+                          Simpan
                         </button>
                       </div>
                     </div>
@@ -1055,7 +1127,10 @@ const DetailSubmission = () => {
                         url={detailSubmission?.submission?.industrialDesign?.letterTransferDesignRights}
                       />
 
-                      <div className="flex justify-end mt-6">
+                      <div className="flex justify-end mt-6 gap-6">
+                        <button onClick={() => handleChange("Dokumen Pengajuan", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                          Kembali
+                        </button>
                         <button onClick={handleUpdateDesignIndus} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
                           Kirim
                         </button>
@@ -1185,15 +1260,21 @@ const DetailSubmission = () => {
                           edite={statusDetail}
                           url={detailSubmission?.submission?.brand?.signature}
                         />
-                        {/* <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChangeBrand} error={formBrandError?.InformationLetter} need />
-                        <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChangeBrand} error={formBrandError?.letterStatment} need /> */}
 
                         <div className="flex flex-col mt-10 gap-6">
                           <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>
-                          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditionalBrand} error={tempAdditionalBrandError?.additionalFiles} />
+                          <InputFile
+                            label="Upload Label Tambahan"
+                            value={tempAdditionalBrand?.additionalFiles ?? null}
+                            name="additionalFiles"
+                            required
+                            onChange={handleChangeAdditionalBrand}
+                            error={tempAdditionalBrandError?.additionalFiles}
+                            message="Format file harus berupa pdf, dox, atau docx. Max 20MB"
+                          />
                           <FieldTextarea label="Keterangan" value={tempAdditionalBrand?.additionalDescriptions ?? ""} name="additionalDescriptions" placeholder="" required row={4} onChange={handleChangeAdditionalBrand} error={tempAdditionalBrandError?.additionalDescriptions} />
 
-                          <button onClick={addAdditionalBrand} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">
+                          <button onClick={() => createAdditionalBrand(idSubmissionDetail!, idSubmissionBrandDetail!)} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">
                             Tambah
                           </button>
                         </div>
@@ -1210,31 +1291,110 @@ const DetailSubmission = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {formAdditionalBrand?.map((item, index) => (
-                                  <tr key={index} className="bg-white hover:bg-gray-50 h-full">
-                                    <td className="px-4 py-2 border-b">{index + 1}</td>
-                                    <td className="px-4 py-2 border-b">{item.additionalFiles?.name ?? null}</td>
-                                    <td className="px-4 py-2 border-b">{item.additionalDescriptions}</td>
-                                    <td className="px-4 py-2 border-b">
-                                      {" "}
-                                      <button onClick={() => handleDeleteAttempBrand(index)} className="bg-RED01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
-                                        Hapus
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
+                                {formAdditionalBrand?.map((item, index) => {
+                                  const fileName = item?.additionalFiles?.name ?? "-";
+                                  const description = item?.additionalDescriptions ?? "-";
+                                  const itemId = item?.id;
+
+                                  const isDeletable = typeof deletePermanentAdditiona === "function" && typeof idSubmissionDetail === "number" && typeof itemId === "number";
+
+                                  return (
+                                    <tr key={index} className="bg-white hover:bg-gray-50 h-full">
+                                      <td className="px-4 py-2 border-b">{index + 1}</td>
+                                      <td className="px-4 py-2 border-b">{fileName}</td>
+                                      <td className="px-4 py-2 border-b">{description}</td>
+                                      <td className="px-4 py-2 border-b">
+                                        <button onClick={() => isDeletable && deletePermanentAdditiona(idSubmissionDetail, itemId)} className={`px-4 py-1 font-medium rounded-md cursor-pointer ${isDeletable ? "bg-RED01 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>
+                                          Hapus
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
                               </tbody>
                             </table>
                           </div>
                         )}
                       </div>
-                      <div className="flex justify-end mt-6">
+                      <div className="flex justify-end mt-6 gap-6">
+                        <button onClick={() => handleChange("Dokumen Pengajuan", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                          Kembali
+                        </button>
                         <button onClick={handleUpdateMerek} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
                           Kirim
                         </button>
                       </div>
                     </>
                   }
+                </>
+              )}
+              {current === "Informasi Umum" && statusDetail === "Ubah" && (
+                <>
+                  <div className="flex flex-col gap-6 mt-6">
+                    <FieldDropdown
+                      label="Skema Pengajuan"
+                      name="submissionScheme"
+                      type="select"
+                      value={formSchemaPayment.submissionScheme}
+                      onChange={handleChangeSchema}
+                      options={
+                        SchemaPayment?.map((item) => ({
+                          label: item.label,
+                          value: item.key,
+                        })) ?? []
+                      }
+                      error={formSchemaPaymentErrors.submissionScheme}
+                      need
+                    />
+                    {formSchemaPayment.submissionScheme === "Pendanaan" && (
+                      <>
+                        <FieldDropdown
+                          label="Periode Pengajuan"
+                          name="groupId"
+                          type="select"
+                          value={formSchemaPayment.groupId !== null && formSchemaPayment.periodId !== null ? `${formSchemaPayment.groupId}|${formSchemaPayment.periodId}` : ""}
+                          onChange={handleChangeSchema}
+                          /* ---------- LOGIKA FILTER ---------- */
+                          options={(qouta ?? [])
+                            .filter((group) => group.quota.some((q) => q.title === currentTitle && q.remainingQuota > 0))
+                            .map((group) => ({
+                              label: `${group.group} (${formatIndonesianDate(group.startDate)} - ${formatIndonesianDate(group.endDate)})`,
+                              value: `${group.id}|${group.periodId}`,
+                            }))}
+                          error={formSchemaPaymentErrors.groupId}
+                          need
+                        />
+                        <div className="mb-4">
+                          <label className="block mb-2 text-base font-medium">
+                            Prasyarat Penerimaan Pendanaan
+                            <span className="text-RED01 ml-1">*</span>
+                          </label>
+
+                          <ol className=" ">
+                            {(terms ?? []).map((term, index) => (
+                              <li key={term.id} className="flex items-center space-x-2 mb-1">
+                                <span>{index + 1}.</span>
+                                <span>{term.terms}</span>
+                              </li>
+                            ))}
+                          </ol>
+                          <label className="flex items-center space-x-2 mt-4">
+                            <input type="checkbox" className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md focus:ring-PRIMARY01 focus:ring-1" checked={formSchemaPayment.termsConditionId.length === (terms?.length || 0)} onChange={handleCheckboxChange} />
+                            <span className="text-black">Saya menyetujui semua syarat dan ketentuan</span>
+                          </label>
+                          {formSchemaPaymentErrors.termsConditionId && <p className="text-sm text-RED01 mt-2">{formSchemaPaymentErrors.termsConditionId}</p>}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex justify-end mt-10 gap-6">
+                    <button onClick={() => handleChange("Informasi Umum", "Detail")} className="bg-GREY01 px-4 py-2 flex flex-row items-center gap-2 text-GREY02 font-medium rounded-md">
+                      Kembali
+                    </button>
+                    <button onClick={handleSubmitSchema} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+                      Kirim
+                    </button>
+                  </div>
                 </>
               )}
             </div>
@@ -1246,9 +1406,16 @@ const DetailSubmission = () => {
                 </button>
               )}
             </div>
-            <div className="mt-12 flex justify-end">
+            <div className=" flex justify-end">
               {current === "Data Diri" && statusDetail === "Detail" && (
                 <button onClick={() => handleChange("Data Diri", "Ubah")} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+                  Ubah
+                </button>
+              )}
+            </div>
+            <div className=" flex justify-end">
+              {current === "Informasi Umum" && statusDetail === "Detail" && (
+                <button onClick={() => handleChange("Informasi Umum", "Ubah")} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
                   Ubah
                 </button>
               )}

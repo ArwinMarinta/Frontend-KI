@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
-import { complateSubmissionBrand, revisonSubmissionBrand } from "../../../../service/actions/submissionAction";
+import { complateSubmissionBrand, createAdditional, deleteAdditional, revisonSubmissionBrand } from "../../../../service/actions/submissionAction";
 import { processFile } from "../../../../utils/formatFile";
 
 const useBrand = () => {
@@ -36,6 +36,7 @@ const useBrand = () => {
   const [formAdditionalBrand, setFormAdditionalBrand] = useState<FormAdditionalBrand[]>([]);
 
   const [tempAdditionalBrand, setTempAdditionalBrand] = useState<FormAdditionalBrand>({
+    id: null,
     additionalDescriptions: "",
     additionalFiles: null,
   });
@@ -259,6 +260,34 @@ const useBrand = () => {
     });
   };
 
+  const createAdditionalBrand = async (id: number, idBrand: number) => {
+    const errors = {
+      additionalDescriptions: tempAdditionalBrand.additionalDescriptions.trim() === "" ? "Deskripsi tambahan wajib diisi" : null,
+      additionalFiles: tempAdditionalBrand.additionalFiles === null ? "File tambahan wajib diunggah" : null,
+    };
+
+    setTempAdditionalBrandError(errors);
+
+    const hasError = Object.values(errors).some((val) => val);
+    if (hasError) return;
+
+    setLoading(true);
+    try {
+      await dispatch(createAdditional(id, idBrand, tempAdditionalBrand));
+
+      setTempAdditionalBrand({
+        additionalDescriptions: "",
+        additionalFiles: null,
+      });
+      setTempAdditionalBrandError({
+        additionalDescriptions: null,
+        additionalFiles: null,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteAttempBrand = (index: number) => {
     setFormAdditionalBrand((prev) => prev.filter((_, i) => i !== index));
   };
@@ -414,6 +443,15 @@ const useBrand = () => {
     initFormBrand();
   }, [detailBrand, types]);
 
+  const deletePermanentAdditiona = async (idSubmission: number, idBrand: number) => {
+    setLoading(true);
+    try {
+      await dispatch(deleteAdditional(idSubmission, idBrand));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     formBrand,
     formAdditionalBrand,
@@ -432,6 +470,8 @@ const useBrand = () => {
     loading,
     setTempAdditionalBrand,
     handleComplateBrand,
+    createAdditionalBrand,
+    deletePermanentAdditiona,
   };
 };
 

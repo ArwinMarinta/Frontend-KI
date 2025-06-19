@@ -18,12 +18,12 @@ const DashboardUser = () => {
             <Breadcrumb title="DASHBOARD" items={[{ label: "Dashboard", url: `` }]} />
           </div>
           <div className="grid md:grid-cols-3 grid-cols-2 gap-6">
-            <Section_1 label={"Hak Cipta"} total={userDashboard?.totalPengajuan?.hakCipta} description={"Total Pengajuan"} />
-            <Section_1 label={"Paten"} total={userDashboard?.totalPengajuan?.paten} description={"Total Pengajuan"} />
-            <Section_1 label={"Merek"} total={userDashboard?.totalPengajuan?.merek} description={"Total Pengajuan"} />
-            <Section_1 label={"Desain Industri"} total={userDashboard?.totalPengajuan?.desainIndustri} description={"Total Pengajuan"} />
-            <Section_1 label={"Pendanaan"} total={userDashboard?.totalPendanaan?.pendanaan} description={"Total Pengajuan"} />
-            <Section_1 label={"Mandiri"} total={userDashboard?.totalPendanaan?.mandiri} description={"Total Pengajuan"} />
+            <Section_1 label={"Hak Cipta"} total={userDashboard?.totalPengajuan?.hakCipta ?? 0} description={"Total Pengajuan"} />
+            <Section_1 label={"Paten"} total={userDashboard?.totalPengajuan?.paten ?? 0} description={"Total Pengajuan"} />
+            <Section_1 label={"Merek"} total={userDashboard?.totalPengajuan?.merek ?? 0} description={"Total Pengajuan"} />
+            <Section_1 label={"Desain Industri"} total={userDashboard?.totalPengajuan?.desainIndustri ?? 0} description={"Total Pengajuan"} />
+            <Section_1 label={"Pendanaan"} total={userDashboard?.totalPendanaan?.pendanaan ?? 0} description={"Total Pengajuan"} />
+            <Section_1 label={"Mandiri"} total={userDashboard?.totalPendanaan?.mandiri ?? 0} description={"Total Pengajuan"} />
           </div>
           <div className="mt-10">
             <div className="flex flex-col bg-whit lg:p-16 p-4 shadow-md bg-white rounded-md gap-6">

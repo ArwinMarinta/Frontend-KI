@@ -2,6 +2,7 @@ import axios from "axios";
 import { AppThunk } from "../store";
 import { API_URL } from "../../config/config";
 import { setDetailBrand, setDetailCopyright, setDetailDesign, setDetailPaten, setDoc, setDocCategory, setFaq, setFaqCategory, setIprCount, setNotifications, setQuota, setSubmissionType, setTermsLanding, setUserDashboard } from "../reducers/landingReducer";
+import { toast } from "sonner";
 
 export const getFaqLanding = (title: string | undefined, limit: number, search?: string): AppThunk => {
   return async (dispatch, getState) => {
@@ -413,7 +414,9 @@ export const getQuotaLanding = (): AppThunk => {
         },
       });
 
-      dispatch(setQuota(responseType.data.periods[0].group ?? null));
+      console.log(responseType.data.periods.group);
+
+      dispatch(setQuota(responseType?.data?.periods[0]?.group ?? null));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -498,7 +501,7 @@ export const updateNotification = (limit: number): AppThunk => {
     try {
       const { token } = getState().auth;
 
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/notification`,
         {},
         {
@@ -507,15 +510,16 @@ export const updateNotification = (limit: number): AppThunk => {
           },
         }
       );
-
+      toast.success(response?.data?.message);
       dispatch(getNotification(limit));
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          console.log(error.response.data.message);
-        } else {
-          console.log("No response received:", error.message);
-        }
+        toast.success(error?.response?.data?.message);
+        // if (error.response?.status === 401) {
+        //   console.log(error.response.data.message);
+        // } else {
+        //   console.log("No response received:", error.message);
+        // }
       }
     }
   };

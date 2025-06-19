@@ -33,13 +33,13 @@ const VerifySuccess = () => {
     <main id="section-1" className="relative w-full min-h-screen overflow-hidden">
       {/* Background Gambar */}
       <div className="absolute inset-0 z-0">
-        <img src={BackgroundITK} alt="Background" className="w-full h-full object-cover" />
+        <img src={BackgroundITK} alt="Background" className="w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
       {/* Konten Form di kanan */}
       <div className="relative z-10 w-full min-h-screen flex items-center justify-end  ">
-        <div className="bg-GREY03 w-[40%] min-h-screen flex justify-center items-center flex-col">
+        <div className="bg-GREY03 px-6 w-full lg:w-[40%] min-h-screen flex justify-center items-center flex-col">
           <div className="mb-10">
             <Logo />
           </div>

@@ -13,9 +13,10 @@ interface FormComplateTermsProps {
   handleChangeSchema: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleCheckboxChange: () => void;
   handleSubmitSchema: () => void;
+  openWarningModal: (type: string, submitFn: () => void) => void;
 }
 
-const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, handleSubmitSchema }: FormComplateTermsProps) => {
+const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors, handleChangeSchema, handleCheckboxChange, handleSubmitSchema, openWarningModal }: FormComplateTermsProps) => {
   return (
     <>
       <div className="flex items-center h-24">
@@ -78,7 +79,7 @@ const FormFunding = ({ qouta, terms, formSchemaPayment, formSchemaPaymentErrors,
         )}
       </div>
       <div className="flex justify-end mt-6">
-        <button onClick={handleSubmitSchema} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
+        <button onClick={() => openWarningModal("SkemaPendanaan", handleSubmitSchema)} className="bg-PRIMARY01 px-6 py-2 text-white font-medium rounded-md cursor-pointer">
           Kirim
         </button>
       </div>

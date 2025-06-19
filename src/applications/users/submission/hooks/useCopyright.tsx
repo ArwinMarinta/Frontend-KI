@@ -89,18 +89,14 @@ const useCopyright = () => {
         }));
       }
     } else {
-      // Cek langsung nama field untuk tipe number
-      const parsedValue = name === "typeCreation" || name === "subTypeCreation" ? Number(value) : value;
-
       setFormCopyright((prev) => ({
         ...prev,
-        [name]: parsedValue,
-        ...(name === "exampleCreationUrl" && parsedValue ? { exampleCreation: null } : {}),
+        [name]: value,
       }));
 
       setFormCopyrightError((prev) => ({
         ...prev,
-        [name]: parsedValue === "" || parsedValue === null ? "Field wajib diisi" : null,
+        [name]: value.trim() ? null : "Field Tidak Boleh Kosong!",
       }));
     }
   };

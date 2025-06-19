@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PaginationType } from "../../types/paginationType";
-import { Review, SubmissionProgress } from "../../types/submissionType";
+import { Review } from "../../types/submissionType";
 import { DashboardData } from "../../types/dashboard";
 
 interface SubmissionState {
@@ -9,7 +9,7 @@ interface SubmissionState {
   brandData: PaginationType & { brand: Review[] };
   industrialDesignData: PaginationType & { design: Review[] };
   detailSubmission: Review | null;
-  progresSubmission: SubmissionProgress[] | null;
+  progresSubmission: Review | null;
   dashboard: DashboardData | null;
 }
 

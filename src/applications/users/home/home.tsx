@@ -51,18 +51,18 @@ const Home = () => {
                   user?.role === "superAdmin" || user?.role === "admin" ? (
                     <Link to="/dashboard" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
                       <span>Dashboard</span>
-                      <FiArrowRightCircle />
+                      <FiArrowRightCircle className="font-bold" />
                     </Link>
                   ) : (
                     <Link to="/dashboard/pengajuan" className="text-PRIMARY01 font-semibold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
                       <span>Ajukan</span>
-                      <FiArrowRightCircle />
+                      <FiArrowRightCircle className="font-bold" />
                     </Link>
                   )
                 ) : (
                   <Link to="/login" className="text-PRIMARY01 font-bold text-xl py-2 px-6 bg-white rounded-md flex flex-row gap-2 items-center">
                     <span>Ajukan</span>
-                    <FiArrowRightCircle />
+                    <FiArrowRightCircle className="font-bold" />
                   </Link>
                 )}
               </div>
@@ -73,7 +73,7 @@ const Home = () => {
           </div> */}
         </section>
         <section id="section-2" className="w-full flex justify-center">
-          <div className="w-full items-center container flex justify-center py-16">
+          <div className="w-full items-center container flex justify-center pt-16">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full">
               {Section2.map((data) => (
                 <div key={data.id} className="flex flex-col rounded-md border w-full p-4 justify-center items-center gap-8">
@@ -92,7 +92,7 @@ const Home = () => {
         </section>
 
         <section id="section-4" className="w-full flex justify-center">
-          <div className="w-full container flex flex-col gap-8 py-16">
+          <div className="w-full container flex flex-col gap-8 pt-16">
             <h1 className="text-start text-[40px] font-bold text-PRIMARY01 border-b-4 border-PRIMARY02 max-w-fit">Informasi Pendanaan</h1>
             <p className="text-start text-lg font-normal w-[60%]">
               Pengajuan HKI pada tahun 2025 akan dilakukan dengan sistem gelombang (batch), di mana akan dilakukan 3 (tiga) batch dan 1 (satu) batch tambahan dengan status opsional (yang merujuk pada pendanaan yang tersedia), jadwal pendanaan akan diatur sebagai berikut

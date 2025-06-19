@@ -35,7 +35,7 @@ const ReviewerProgress = () => {
                 <TimelineHistory data={progresSubmission} />
               </div>
               <div className="flex justify-end">
-                <Link to={`/penugasan/progress/ubah`} state={{ submissionId: submissionId }}>
+                <Link to={`/penugasan/progress/ubah`} state={{ submissionId: submissionId, name: submissionType }}>
                   <button className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">Ubah Progress</button>
                 </Link>
               </div>

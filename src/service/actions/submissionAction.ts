@@ -214,7 +214,7 @@ export const getProgresSubmission = (id: string | undefined): AppThunk => {
         },
       });
 
-      dispatch(setProgresSubmission(response.data?.userSubmission.progress ?? null));
+      dispatch(setProgresSubmission(response.data?.userSubmission ?? null));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -744,8 +744,8 @@ export const updateReviewerSubmissionProgress = (id: string | undefined, form: F
   };
 };
 
-export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk => {
-  return async (_, getState) => {
+export const updateSubmissionSchema = (id: number, form: FormSchema, idSubmission?: number): AppThunk => {
+  return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
 
@@ -765,6 +765,9 @@ export const updateSubmissionSchema = (id: number, form: FormSchema): AppThunk =
       );
 
       toast.success(response?.data?.message);
+      if (idSubmission) {
+        dispatch(getDetailSubmission(idSubmission.toString()));
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error?.response?.data?.message);
@@ -888,11 +891,11 @@ export const revisonSubmissionCopyright = (submissionType: number | undefined, f
       }
 
       if (formCopyright.typeCreation) {
-        formData.append("typeCreation", formCopyright.typeCreation.toString());
+        formData.append("typeCreationId", formCopyright.typeCreation.toString());
       }
 
       if (formCopyright.subTypeCreation) {
-        formData.append("subTypeCreation", formCopyright.subTypeCreation.toString());
+        formData.append("subTypeCreationId", formCopyright.subTypeCreation.toString());
       }
 
       if (formCopyright.countryFirstAnnounced) {
@@ -985,7 +988,7 @@ export const revisonSubmissionBrand = (id: number | undefined, Form: FormSubmiss
       }
 
       if (Form.brandType) {
-        formData.append("brandType", Form.brandType.toString());
+        formData.append("brandTypeId", Form.brandType.toString());
       }
 
       if (Form.referenceName) {
@@ -1128,11 +1131,10 @@ export const getDashboardAdmin = (): AppThunk => {
   };
 };
 
-export const updateSubmissionCopyright = (id: number, formPersonalData: FormPersonalData[], formCopyright: FormSubmissionCopyright): AppThunk => {
+export const updateSubmissionCopyright = (id: number, formPersonalData: FormPersonalData[], formCopyright: FormSubmissionCopyright, updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
-      // const firstId = formPersonalData?.[0]?.id ?? null;
 
       const formData = new FormData();
 
@@ -1153,15 +1155,18 @@ export const updateSubmissionCopyright = (id: number, formPersonalData: FormPers
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
+        if (data.ktpFileIndex !== null && data.ktpFileIndex !== undefined) {
+          formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+        }
         // Lampirkan file KTP jika ada
         // if (data.ktp) {
         //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
         // }
       });
-
-      formPersonalData.forEach((data, index) => {
-        if (data.ktp) {
-          formData.append(`ktpFiles[${index}]`, data.ktp);
+      updateKtp.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("ktpFiles", file);
         }
       });
 
@@ -1192,9 +1197,14 @@ export const updateSubmissionCopyright = (id: number, formPersonalData: FormPers
       if (formCopyright.briefDescriptionCreation) {
         formData.append("briefDescriptionCreation", formCopyright.briefDescriptionCreation);
       }
-      if (formCopyright.statementLetter) formData.append("statementLetter", formCopyright.statementLetter);
-      if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
-      if (formCopyright.exampleCreation) formData.append("exampleCreation", formCopyright.exampleCreation);
+      // if (formCopyright.statementLetter) formData.append("statementLetter", formCopyright.statementLetter);
+      // if (formCopyright.letterTransferCopyright) formData.append("letterTransferCopyright", formCopyright.letterTransferCopyright);
+      if (formCopyright.exampleCreation) {
+        formData.append("exampleCreation", formCopyright.exampleCreation);
+      }
+      //  else if (typeof formCopyright.exampleCreationUrl === "string") {
+      //   formData.append("exampleCreation", formCopyright.exampleCreationUrl);
+      // }
 
       const response = await axios.patch(`${API_URL}/submission/personal-data-copyright/${id}`, formData, {
         headers: {
@@ -1216,7 +1226,7 @@ export const updateSubmissionCopyright = (id: number, formPersonalData: FormPers
   };
 };
 
-export const updateSubmissionPatenPending = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
+export const updateSubmissionPatenPending = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null, updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
@@ -1240,15 +1250,15 @@ export const updateSubmissionPatenPending = (submissionType: number, formPersona
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
-        // Lampirkan file KTP jika ada
-        // if (data.ktp) {
-        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
-        // }
+        if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
+        if (data.ktpFileIndex !== null && data.ktpFileIndex !== undefined) {
+          formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+        }
       });
 
-      formPersonalData.forEach((data) => {
-        if (data.ktp) {
-          formData.append("ktpFiles", data.ktp);
+      updateKtp.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("ktpFiles", file);
         }
       });
       if (drafDocument) {
@@ -1280,7 +1290,7 @@ export const updateSubmissionPatenPending = (submissionType: number, formPersona
   };
 };
 
-export const updateSubmissionIndustrialDesign = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null): AppThunk => {
+export const updateSubmissionIndustrialDesign = (submissionType: number, formPersonalData: FormPersonalData[], drafDocument: File | null, updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
@@ -1304,17 +1314,17 @@ export const updateSubmissionIndustrialDesign = (submissionType: number, formPer
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
-        // Lampirkan file KTP jika ada
-        // if (data.ktp) {
-        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
-        // }
+        if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
+        if (data.ktpFileIndex !== null && data.ktpFileIndex !== undefined) {
+          formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+        }
       });
 
-      // formPersonalData.forEach((data) => {
-      //   if (data.ktp) {
-      //     formData.append("ktpFiles", data.ktp);
-      //   }
-      // });
+      updateKtp.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("ktpFiles", file);
+        }
+      });
       if (drafDocument) {
         formData.append("draftDesainIndustriApplicationFile", drafDocument);
       }
@@ -1343,14 +1353,14 @@ export const updateSubmissionIndustrialDesign = (submissionType: number, formPer
   };
 };
 
-export const updateSubmissionBrand = (id: number | undefined, formPersonalData: FormPersonalData[], Form: FormSubmissionBrand, formAdditionalBrand: FormAdditionalBrand[], updateKtp: (File | null)[]): AppThunk => {
+export const updateSubmissionBrand = (id: number | undefined, formPersonalData: FormPersonalData[], Form: FormSubmissionBrand, updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
 
-      const formData = new FormData();
+      console.log(Form);
 
-      console.log(`Mengirim ke backend ${updateKtp.length}`);
+      const formData = new FormData();
 
       formPersonalData.forEach((data, index) => {
         if (data.id) formData.append(`personalDatas[${index}][id]`, data?.id.toString());
@@ -1369,13 +1379,14 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        if (data.facebook) formData.append(`personalDatas[${index}][facebook]`, data.facebook);
+        if (data.instagram) formData.append(`personalDatas[${index}][instagram]`, data.instagram);
+        if (data.twitter) formData.append(`personalDatas[${index}][twitter]`, data.twitter);
+        if (data.whatsapp) formData.append(`personalDatas[${index}][whatsapp]`, data.whatsapp);
         if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
-        if (data.ktpFileIndex) formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
-
-        // Lampirkan file KTP jika ada
-        // if (data.ktp) {
-        //   formData.append(`personalDatas[${index}][ktp]`, data.ktp);
-        // }
+        if (data.ktpFileIndex !== null && data.ktpFileIndex !== undefined) {
+          formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+        }
       });
       updateKtp.forEach((file) => {
         if (file instanceof File) {
@@ -1406,7 +1417,7 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
         formData.append("applicationType", Form.applicationType);
       }
       if (Form.brandType) {
-        formData.append("brandType", Form.brandType.toString());
+        formData.append("brandTypeId", Form.brandType.toString());
       }
 
       if (Form.referenceName) {
@@ -1461,18 +1472,6 @@ export const updateSubmissionBrand = (id: number | undefined, formPersonalData: 
         formData.append("letterStatment", Form.letterStatment);
       }
 
-      formAdditionalBrand.forEach((data, index) => {
-        if (data.additionalDescriptions) {
-          formData.append(`additionalDescriptions[${index}][description]`, data.additionalDescriptions);
-        }
-      });
-
-      formAdditionalBrand.forEach((data) => {
-        if (data.additionalFiles) {
-          formData.append("additionalFiles", data.additionalFiles);
-        }
-      });
-
       const response = await axios.patch(`${API_URL}/submission/personal-data-brand/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -1524,7 +1523,7 @@ export const complateSubmissionBrand = (id: number | undefined, Form: FormSubmis
   };
 };
 
-export const updatePersonalData = (id: number | undefined, formPersonalData: FormPersonalData[]): AppThunk => {
+export const updatePersonalData = (id: number | undefined, formPersonalData: FormPersonalData[], updateKtp: (File | null)[]): AppThunk => {
   return async (_, getState) => {
     try {
       const { token } = getState().auth;
@@ -1547,11 +1546,15 @@ export const updatePersonalData = (id: number | undefined, formPersonalData: For
         if (data.postalCode) formData.append(`personalDatas[${index}][postalCode]`, data.postalCode);
         if (data.phoneNumber) formData.append(`personalDatas[${index}][phoneNumber]`, data.phoneNumber);
         if (data.address) formData.append(`personalDatas[${index}][address]`, data.address);
+        if (data.uploadKtp) formData.append(`personalDatas[${index}][uploadKtp]`, data.uploadKtp ? "true" : "false");
+        if (data.ktpFileIndex !== null && data.ktpFileIndex !== undefined) {
+          formData.append(`personalDatas[${index}][ktpFileIndex]`, data.ktpFileIndex.toString());
+        }
       });
 
-      formPersonalData.forEach((data, index) => {
-        if (data.ktp) {
-          formData.append(`ktpFiles[${index}]`, data.ktp);
+      updateKtp.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("ktpFiles", file);
         }
       });
 
@@ -1564,11 +1567,96 @@ export const updatePersonalData = (id: number | undefined, formPersonalData: For
       toast.success(response?.data?.message);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
         if (error.response?.status === 401) {
           console.log(error.response.data.message);
         } else {
           console.log("No response received:", error.message);
         }
+      }
+    }
+  };
+};
+
+export const deletePersonalData = (id: number | null, submissionId: string): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.delete(`${API_URL}/submission/personal-data/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast.success(response?.data?.message);
+      dispatch(getDetailSubmission(submissionId));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+        // if (error.response?.status === 401) {
+        //   console.log(error.response.data.message);
+        // } else {
+        //   console.log("No response received:", error.message);
+        // }
+      }
+    }
+  };
+};
+
+export const createAdditional = (id: number, idBrand: number, form: FormAdditionalBrand): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const formData = new FormData();
+      formData.append("description", form.additionalDescriptions);
+      if (form.additionalFiles) {
+        formData.append("newFile", form.additionalFiles);
+      }
+
+      const response = await axios.post(`${API_URL}/brand/additional-data/${idBrand}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast.success(response?.data?.message);
+      dispatch(getDetailSubmission(id.toString()));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+        // if (error.response?.status === 401) {
+        //   console.log(error.response.data.message);
+        // } else {
+        //   console.log("No response received:", error.message);
+        // }
+      }
+    }
+  };
+};
+
+export const deleteAdditional = (idSubmission: number, idBrand: number): AppThunk => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth;
+
+      const response = await axios.delete(`${API_URL}/brand/additional-data/${idBrand}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast.success(response?.data?.message);
+      dispatch(getDetailSubmission(idSubmission.toString()));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+        // if (error.response?.status === 401) {
+        //   console.log(error.response.data.message);
+        // } else {
+        //   console.log("No response received:", error.message);
+        // }
       }
     }
   };

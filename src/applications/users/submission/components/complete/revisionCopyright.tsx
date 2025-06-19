@@ -18,7 +18,7 @@ interface FormRevisionProps {
 const RevisionCopyright = ({ progresSubmission, formCopyright, handleChange, formCopyrightError, handleUpdate, types }: FormRevisionProps) => {
   const { typeCopy, subTypeCopy } = useSelector((state: RootState) => state.landing.submissionType.copyright);
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
-
+  // console.log(formCopyright);
   return (
     <div className="flex flex-col">
       <div>

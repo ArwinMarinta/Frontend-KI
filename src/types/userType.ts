@@ -27,10 +27,12 @@ export interface User2 {
 }
 
 export interface User3 {
+  image?: File | null;
   fullname: string;
   phoneNumber: string;
   faculty: string;
   studyProgram: string;
+  imageUrl?: string;
 }
 
 export type UserForm = {

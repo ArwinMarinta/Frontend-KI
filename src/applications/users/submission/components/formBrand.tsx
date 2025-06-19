@@ -23,11 +23,34 @@ interface FormBrandProps {
   handleDeleteAttempBrand: (index: number) => void;
   handleNextStep: () => void;
   types?: string;
+  createAdditionalBrand?: (idSubmission: number, idBrand: number) => void;
+  deleteAdditionalBrand?: (idSubmission: number, idBrand: number) => void;
+  update?: boolean;
+  id?: number | undefined;
+  idBrand?: number;
 }
 
-const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBrand, tempAdditionalBrand, handleChangeAdditional, addAdditionalBrand, tempAdditionalBrandError, handleDeleteAttempBrand, handleNextStep }: FormBrandProps) => {
+const FormBrand = ({
+  formBrand,
+  deleteAdditionalBrand,
+  formBrandError,
+  id,
+  createAdditionalBrand,
+  handleChange,
+  formAdditionalBrand,
+  tempAdditionalBrand,
+  handleChangeAdditional,
+  addAdditionalBrand,
+  tempAdditionalBrandError,
+  handleDeleteAttempBrand,
+  handleNextStep,
+  types,
+  update = false,
+  idBrand,
+}: FormBrandProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { typeBrand } = useSelector((state: RootState) => state.landing.submissionType.brand);
+  const { detailSubmission } = useSelector((state: RootState) => state.submission);
 
   useEffect(() => {
     dispatch(getTypeBrand());
@@ -82,7 +105,7 @@ const FormBrand = ({ formBrand, formBrandError, handleChange, formAdditionalBran
           <Field label="Unsur Warna Dalam Label Merek" value={formBrand?.elementColor || ""} name="elementColor" type="text" placeholder="Contoh: Hitam, Putih dan Biru, Kuning, Merah" need error={formBrandError?.elementColor} onChange={handleChange} />
         </div>
         <div className="flex lg:flex-row flex-col w-full gap-6">
-          <Field label="Disclaimer (Tidak dilindungin)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
+          <Field label="Disclaimer (Tidak dilindungi)" value={formBrand?.disclaimer || ""} name="disclaimer" type="text" placeholder="Contoh: Kata 'Halal', 'Menyehatkan', 'Dijamin Mutu' " error={formBrandError?.disclaimer} onChange={handleChange} />
           <div className="flex flex-col w-full">
             <FieldDropdown
               label="Jenis Dokumen"
@@ -124,20 +147,42 @@ Jika bukan, isi dengan tanda strip -."
         />
         <FieldTextarea label="Keterangan" value={formBrand?.information ?? ""} name="information" placeholder="" required row={4} onChange={handleChange} error={formBrandError?.information} />
 
-        <InputFile label="Label Merek" value={formBrand?.labelBrand ?? null} name="labelBrand" required onChange={handleChange} accept=".jpg" error={formBrandError?.labelBrand} need message="Format file harus berupa jpg. Max 5 MB. 1024 x 1024 pixel" />
+        <InputFile
+          label="Label Merek"
+          value={formBrand?.labelBrand ?? null}
+          name="labelBrand"
+          required
+          onChange={handleChange}
+          accept=".jpg"
+          error={formBrandError?.labelBrand}
+          need
+          message="Format file harus berupa jpg. Max 5 MB. 1024 x 1024 pixel"
+          edite={types}
+          url={detailSubmission?.submission?.brand?.labelBrand}
+        />
         {/* <InputFile label="Upload File" value={formBrand?.fileUploade ?? null} name="fileUploade" required onChange={handleChange} accept=".jpg, .jpeg" error={formBrandError?.fileUploade} need /> */}
-        <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChange} error={formBrandError?.signature} need message="Format file harus berupa pdf. Max 20 MB." />
+        <InputFile label="Tanda Tangan Permohonan" value={formBrand?.signature ?? null} name="signature" required onChange={handleChange} error={formBrandError?.signature} need message="Format file harus berupa pdf. Max 20 MB." edite={types} url={detailSubmission?.submission?.brand?.signature} />
         {/* <InputFile label="Surat Keterangan UMKM" value={formBrand?.InformationLetter ?? null} name="InformationLetter" required onChange={handleChange} error={formBrandError?.InformationLetter} need />
         <InputFile label="Surat Pernyataan UMKM" value={formBrand?.letterStatment ?? null} name="letterStatment" required onChange={handleChange} error={formBrandError?.letterStatment} need /> */}
 
         <div className="flex flex-col mt-10 gap-6">
-          <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>
-          <InputFile label="Upload Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} message="Format file harus berupa pdf, doc, dan docx. Max 2MB" />
+          <div>
+            <h1 className="font-semibold text-3xl">Data Merek Tambahan</h1>
+            <p>(Data merek tambahan wajib diisi untuk merek tiga dimensi, hologram, dan suara)</p>
+          </div>
+          <InputFile label="Label Tambahan" value={tempAdditionalBrand?.additionalFiles ?? null} name="additionalFiles" required onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalFiles} message="Format file harus berupa pdf, doc, dan docx. Max 2MB" />
           <FieldTextarea label="Keterangan" value={tempAdditionalBrand?.additionalDescriptions ?? ""} name="additionalDescriptions" placeholder="" required row={4} onChange={handleChangeAdditional} error={tempAdditionalBrandError?.additionalDescriptions} />
 
-          <button onClick={addAdditionalBrand} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">
-            Tambah
-          </button>
+          {update === false && (
+            <button onClick={addAdditionalBrand} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">
+              Tambah
+            </button>
+          )}
+          {update === true && (
+            <button onClick={() => createAdditionalBrand?.(id!, idBrand!)} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer max-w-fit">
+              Tambah
+            </button>
+          )}
         </div>
 
         {(formAdditionalBrand ?? []).length > 0 && (
@@ -158,10 +203,16 @@ Jika bukan, isi dengan tanda strip -."
                     <td className="px-4 py-2 border-b">{item.additionalFiles?.name ?? null}</td>
                     <td className="px-4 py-2 border-b">{item.additionalDescriptions}</td>
                     <td className="px-4 py-2 border-b">
-                      {" "}
-                      <button onClick={() => handleDeleteAttempBrand(index)} className="bg-RED01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
-                        Hapus
-                      </button>
+                      {update === false && (
+                        <button onClick={() => handleDeleteAttempBrand(index)} className="bg-RED01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
+                          Hapus
+                        </button>
+                      )}
+                      {update === true && (
+                        <button onClick={() => deleteAdditionalBrand?.(id!, item.id!)} className="bg-RED01 px-4 py-1 text-white font-medium rounded-md cursor-pointer">
+                          Hapus
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

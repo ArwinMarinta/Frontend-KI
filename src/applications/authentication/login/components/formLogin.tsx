@@ -28,17 +28,17 @@ const FormLogin = ({ formLogin, handleChange, handleLogin, loading, errors }: Fo
           value={formLogin.email}
           onChange={handleChange}
         />
-        {errors.email && <p className="text-sm text-RED01 mt-1">{errors.email}</p>}
+        {errors.email && <p className="text-sm text-RED01 mt-1">{errors?.email}</p>}
       </div>
-      <FieldPassword value={formLogin.password} name="password" type="password" placeholder="Password" onChange={handleChange} error={errors.password} />
+      <FieldPassword value={formLogin.password} name="password" type="password" placeholder="Password" onChange={handleChange} error={errors?.password} />
 
-      <div className="flex flex-row w-full justify-between">
-        <div className="flex items-center mb-4">
+      <div className="flex flex-row w-full justify-end">
+        {/* <div className="flex items-center mb-4">
           <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-PRIMARY01 bg-gray-100 border-gray-300 rounded-md  focus:ring-PRIMARY010 dark:focus:ring-PRIMARY01 dark:ring-offset-gray-800 focus:ring-1 " />
           <label htmlFor="default-checkbox" className="ms-2 text-sm  text-gray-900 ">
             Ingat Saya
           </label>
-        </div>
+        </div> */}
         <Link to="/lupa-kata-sandi" className="text-PRIMARY01 hover:underline ">
           Lupa kata Sandi?
         </Link>

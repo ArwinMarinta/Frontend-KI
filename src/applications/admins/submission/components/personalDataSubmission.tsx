@@ -5,9 +5,11 @@ import { PersonalData } from "../../../../types/submissionType";
 
 interface GeneralType {
   data: PersonalData[] | null | undefined;
+  status?: string;
 }
 
-const PersonalDataSubmission = ({ data }: GeneralType) => {
+const PersonalDataSubmission = ({ data, status }: GeneralType) => {
+  console.log(status);
   return (
     <div className="flex flex-col mt-10 gap-10">
       {data?.map((item, index) => (
@@ -36,15 +38,19 @@ const PersonalDataSubmission = ({ data }: GeneralType) => {
             <Field label="Kode Pos" value={item.postalCode || "-"} name="fullname" type="text" placeholder="" readOnly />
             <Field label="Nomor Handphone" value={item.phoneNumber || "-"} name="fullname" type="text" placeholder="" readOnly />
           </div>
-          <div className="flex flex-col lg:flex-row gap-6">
-            <Field label="Facebook" value={item.facebook || "-"} name="fullname" type="text" placeholder="" readOnly />
-            <Field label="Whatsapp" value={item?.whatsapp || "-"} name="fullname" type="text" placeholder="" readOnly />
-          </div>
-          <div className="flex flex-col lg:flex-row gap-6">
-            <Field label="Instagram" value={item.instagram || "-"} name="fullname" type="text" placeholder="" readOnly />
-            <Field label="Twitter" value={item?.twitter || "-"} name="fullname" type="text" placeholder="" readOnly />
-          </div>
 
+          {(status === "Merek" || status === "merek") && (
+            <>
+              <div className="flex flex-col lg:flex-row gap-6">
+                <Field label="Facebook" value={item.facebook || "-"} name="fullname" type="text" placeholder="" readOnly />
+                <Field label="Whatsapp" value={item?.whatsapp || "-"} name="fullname" type="text" placeholder="" readOnly />
+              </div>
+              <div className="flex flex-col lg:flex-row gap-6">
+                <Field label="Instagram" value={item.instagram || "-"} name="fullname" type="text" placeholder="" readOnly />
+                <Field label="Twitter" value={item?.twitter || "-"} name="fullname" type="text" placeholder="" readOnly />
+              </div>
+            </>
+          )}
           <FieldTextarea label="Alamat" value={item.address || "-"} name="question" placeholder="" required row={4} readOnly />
           <DetailDocument label="KTP" value={item.ktp || ""} name="fullname" type="image" placeholder="" readOnly />
         </div>

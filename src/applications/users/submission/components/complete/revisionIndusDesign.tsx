@@ -18,8 +18,11 @@ interface FormRevisionProps {
 }
 
 const RevisionIndusDesign = ({ progresSubmission, formIndustDesign, formIndustDesignError, handleChangeComplateIndusDesign, handleSubmitComplateIndusDesign, handleClaimCheckboxChange, types }: FormRevisionProps) => {
-  const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing.submissionType.indusDesign);
+  const { typeDesign, subtypeDesain } = useSelector((state: RootState) => state.landing?.submissionType?.indusDesign);
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
+  console.log(detailSubmission);
+  console.log(formIndustDesign);
+
   return (
     <div className="flex flex-col">
       <div className="flex gap-6 flex-col">
@@ -30,7 +33,7 @@ const RevisionIndusDesign = ({ progresSubmission, formIndustDesign, formIndustDe
             label="Jenis Desain Industri"
             name="type"
             type="select"
-            value={formIndustDesign.type?.toString() || ""}
+            value={formIndustDesign?.type?.toString() || ""}
             onChange={handleChangeComplateIndusDesign}
             options={
               designTypes?.map((item) => ({
@@ -48,7 +51,7 @@ const RevisionIndusDesign = ({ progresSubmission, formIndustDesign, formIndustDe
                 label="Jenis Desain Industri"
                 name="typeDesignId"
                 type="select"
-                value={formIndustDesign.typeDesignId?.toString() || ""}
+                value={formIndustDesign?.typeDesignId?.toString()}
                 onChange={handleChangeComplateIndusDesign}
                 options={
                   typeDesign?.map((item) => ({
@@ -63,7 +66,7 @@ const RevisionIndusDesign = ({ progresSubmission, formIndustDesign, formIndustDe
                 label="Sub-Jenis Desain Industri"
                 name="subtypeDesignId"
                 type="select"
-                value={formIndustDesign.subtypeDesignId?.toString() || ""}
+                value={formIndustDesign.subtypeDesignId?.toString()}
                 onChange={handleChangeComplateIndusDesign}
                 options={
                   subtypeDesain?.map((item) => ({

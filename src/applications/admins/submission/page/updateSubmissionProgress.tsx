@@ -15,10 +15,13 @@ import ModalLoading from "../../../../components/modal/modalLoading";
 import FieldFile from "../../../../components/input/fieldFile";
 import { formatLabel } from "../../../../utils/toSlug";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import ModalWarningProgress from "../../../../components/modal/modalWarningProgress";
+
+// import { useModal } from "../../../../hooks/useModal";
 
 const UpdateSubmissionProgress = () => {
   const { name } = useParams<{ name: string }>();
-  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, loading, handleUpdateProgressAdmin } = useUpdateProgress();
+  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, loading, handleUpdateProgressAdmin, handleSaveClick, pendingType, setPendingType, handleCloseModal, activeModal, message } = useUpdateProgress();
 
   return (
     <>
@@ -59,13 +62,13 @@ const UpdateSubmissionProgress = () => {
                   error={formErrors.reviewStatus}
                   need
                 />
-                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={formUpdateProgress.paymentCode} onChange={handleChange} />}
-                {formUpdateProgress.reviewStatus === "Sertifikat Terbit" && <FieldFile label="Sertifikat Pengajuan" value={formUpdateProgress.certificateFile} name="certificateFile" onChange={handleChange} error={formUpdateProgress.certificateFile?.name} />}
+                {formUpdateProgress.reviewStatus === "Pembayaran" && <Field label="Kode Pembayaran" value={formUpdateProgress.paymentCode} name="paymentCode" type="text" placeholder="" need error={formErrors.paymentCode} onChange={handleChange} />}
+                {formUpdateProgress.reviewStatus === "Sertifikat Terbit" && <FieldFile label="Sertifikat Pengajuan" value={formUpdateProgress.certificateFile} name="certificateFile" onChange={handleChange} error={formErrors.files} />}
 
                 <FieldTextarea label="Komentar" value={formUpdateProgress.comments} name="comments" placeholder="" required row={4} onChange={handleChange} />
                 <div>
                   <label className="block mb-2 text-base font-medium">File</label>
-                  <div className={`w-full relative rounded-md border border-dashed ${formErrors.files ? "border-RED01" : "border-BORDER01"}`}>
+                  <div className={`w-full relative rounded-md border border-dashed border-BORDER01`}>
                     <input type="file" id="fileUpload" name="fileUpload" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={handleFileChange} accept=".pdf, .doc, .docx" />
                     <button type="button" className="w-full bg-gray-100 gap-2  flex flex-col items-center  text-gray-500 py-6 px-4 rounded-md ">
                       <FiUploadCloud className="text-[50px]" />
@@ -73,7 +76,7 @@ const UpdateSubmissionProgress = () => {
                       <span className="text-sm">PDF atau Word, ukuran file tidak lebih dari 5MB</span>
                     </button>
                   </div>
-                  {formErrors.files && <p className="text-sm text-RED01 mt-1">{formErrors.files}</p>}
+                  {/* {formErrors.files && <p className="text-sm text-RED01 mt-1">{formErrors.files}</p>} */}
 
                   <div className="flex flex-col">
                     {formUpdateProgress.files.length > 0 && (
@@ -101,7 +104,7 @@ const UpdateSubmissionProgress = () => {
                   </div>
                 </div>
                 <div className="flex justify-end mt-10">
-                  <button onClick={() => handleUpdateProgressAdmin(name)} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
+                  <button onClick={() => handleSaveClick(name)} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
                     Simpan Perubahan
                   </button>
                 </div>
@@ -109,6 +112,17 @@ const UpdateSubmissionProgress = () => {
             </div>
           </div>
           <ModalLoading show={loading} />
+          <ModalWarningProgress
+            modal={activeModal === "warningUpdateProgressAdmin"}
+            setModal={handleCloseModal}
+            message={message}
+            handleNext={() => {
+              handleCloseModal();
+              handleUpdateProgressAdmin(pendingType);
+              setPendingType(undefined);
+            }}
+            handleClose={handleCloseModal}
+          />
         </div>
       </div>
     </>

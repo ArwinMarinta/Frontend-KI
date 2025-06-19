@@ -17,10 +17,10 @@ export const ProtectedRouteReviewer: FC = () => {
       try {
         const decodedData = decodeJwt(token) as DecodedToken;
         if (decodedData.role !== "reviewer") {
-          navigate("/*");
+          navigate("/");
         }
       } catch {
-        navigate("/*");
+        navigate("/");
       }
     }
   }, [token, navigate]);
@@ -34,9 +34,9 @@ export const ProtectedRouteReviewer: FC = () => {
     if (decodedData.role === "reviewer") {
       return <Outlet />;
     } else {
-      return <Navigate to="/*" />;
+      return <Navigate to="/" />;
     }
   } catch {
-    return <Navigate to="/*" />;
+    return <Navigate to="/" />;
   }
 };

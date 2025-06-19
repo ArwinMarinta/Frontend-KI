@@ -6,7 +6,7 @@ import useSubmissionType from "../../hooks/useSubmissionType";
 import usePersonalData from "../../hooks/usePersonalData";
 import useBrand from "../../hooks/useBrand";
 import { useEffect } from "react";
-import { getDetailSubmission, updateSubmissionBrand } from "../../../../../service/actions/submissionAction";
+import { deletePersonalData, getDetailSubmission, updateSubmissionBrand } from "../../../../../service/actions/submissionAction";
 import { useNavigate } from "react-router-dom";
 import useComplate from "../../hooks/useComplate";
 import SideSubmisson from "../../../../../components/adminNavigation/sideSubmisson";
@@ -25,10 +25,26 @@ const UpdateUserBrand = () => {
   const { loading, setLoading } = useLoadingProses();
   const { types, submissionId, submissionType } = useComplate();
   const { currentStep, setCurrentStep } = useSubmissionType();
-  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, updateKtp } = usePersonalData();
-  const { formBrand, formAdditionalBrand, handleChangeAdditionalBrand, handleChangeBrand, tempAdditionalBrandError, tempAdditionalBrand, addAdditionalBrand, handleDeleteAttempBrand, formBrandError, setFormBrand, setFormAdditionalBrand, setTempAdditionalBrand } = useBrand();
+  const { setPersonalData, personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, updateKtp, removeContributor } = usePersonalData();
+  const {
+    formBrand,
+    formAdditionalBrand,
+    handleChangeAdditionalBrand,
+    handleChangeBrand,
+    tempAdditionalBrandError,
+    tempAdditionalBrand,
+    addAdditionalBrand,
+    handleDeleteAttempBrand,
+    formBrandError,
+    setFormBrand,
+    setFormAdditionalBrand,
+    setTempAdditionalBrand,
+    createAdditionalBrand,
+    deletePermanentAdditiona,
+  } = useBrand();
   const navigate = useNavigate();
   const { detailSubmission } = useSelector((state: RootState) => state.submission);
+  const { token } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
@@ -96,7 +112,7 @@ const UpdateUserBrand = () => {
 
     setLoading(true);
     try {
-      await dispatch(updateSubmissionBrand(submissionId, personalData, formBrand, formAdditionalBrand, updateKtp));
+      await dispatch(updateSubmissionBrand(submissionId, personalData, formBrand, updateKtp));
       setCurrentStep(0);
       setPersonalData([
         {
@@ -191,6 +207,7 @@ const UpdateUserBrand = () => {
           detailSubmission.submission.brand.additionalDatas.map(async (item) => {
             const processedFile = await processFile(item.file);
             return {
+              id: item.id,
               additionalDescriptions: item.description || "",
               additionalFiles: processedFile,
             };
@@ -249,6 +266,19 @@ const UpdateUserBrand = () => {
     });
   }, [currentStep]);
 
+  const handleDeletePermanen = async (id: number | null) => {
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      await dispatch(deletePersonalData(id, submissionId));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log(formBrand);
+
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
       <div className="min-h-full lg:w-[16%] hidden lg:block bg-white ">
@@ -285,8 +315,15 @@ const UpdateUserBrand = () => {
                 tempAdditionalBrandError={tempAdditionalBrandError}
                 handleDeleteAttempBrand={handleDeleteAttempBrand}
                 handleNextStep={handleNextStep}
+                types={types}
+                createAdditionalBrand={createAdditionalBrand}
+                id={detailSubmission?.id}
+                idBrand={detailSubmission?.submission?.brand?.id}
+                update={true}
+                deleteAdditionalBrand={deletePermanentAdditiona}
               />
             )}
+
             {currentStep === 1 && (
               <Form_2
                 submissionType="Merek"
@@ -297,8 +334,11 @@ const UpdateUserBrand = () => {
                 handleNextStep={handleNextStep2}
                 currentStep={currentStep}
                 setCurrentStep={setCurrentStep}
+                deleteContributor={handleDeletePermanen}
                 removeContributor={removeContributor}
                 types={types}
+                update={true}
+                // deletePermanent={true}
               />
             )}
           </div>

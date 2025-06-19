@@ -40,14 +40,14 @@ const SubmissionDetail = () => {
                 <Button label="Dokumen Pengajuan" isActive={current === "Dokumen Pengajuan"} onClick={() => handleChange("Dokumen Pengajuan")} />
               </div>
               <div>
-                {current === "Informasi Umum" && <GeneralInformation terms={terms} data={detailSubmission} />}
-                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} />}
+                {current === "Informasi Umum" && <GeneralInformation terms={terms} data={detailSubmission} status="Detail" />}
+                {current === "Data Diri" && <PersonalDataSubmission data={detailSubmission?.submission?.personalDatas} status={detailSubmission?.submission?.submissionType?.title} />}
                 {current === "Dokumen Pengajuan" && (
                   <>
-                    {detailSubmission?.submission?.patent && <DocumentSubmissionPatent data={detailSubmission.submission.patent} />}
-                    {detailSubmission?.submission?.copyright && <DocumentSubmissionCopyright data={detailSubmission.submission.copyright} />}
-                    {detailSubmission?.submission?.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission.submission.industrialDesign} />}
-                    {detailSubmission?.submission?.brand && <DocumentSubmissionBrand data={detailSubmission.submission.brand} />}
+                    {detailSubmission?.submission?.patent && <DocumentSubmissionPatent data={detailSubmission?.submission?.patent} />}
+                    {detailSubmission?.submission?.copyright && <DocumentSubmissionCopyright data={detailSubmission?.submission?.copyright} />}
+                    {detailSubmission?.submission?.industrialDesign && <DocumentSubmissionIndutrialDesign data={detailSubmission?.submission?.industrialDesign} />}
+                    {detailSubmission?.submission?.brand && <DocumentSubmissionBrand data={detailSubmission?.submission?.brand} />}
                   </>
                 )}
               </div>

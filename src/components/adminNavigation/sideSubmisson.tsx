@@ -18,7 +18,7 @@ const SideSubmisson = () => {
     <div className="overflow-y-scroll top-0 sticky left-0  ">
       <div className="flex flex-col px-8 pt-8  w-full h-screen  ">
         <Link to="/" className="flex w-full flex-col items-center p-4 gap-4">
-          <img src={LogoKI} alt="image" className="h-28 rounded-full" />
+          <img src={LogoKI} alt="image" className="h-28 rounded-full" loading="lazy" />
           <span className="font-bold text-PRIMARY01 text-2xl">
             Sentra <br /> KI ITK
           </span>

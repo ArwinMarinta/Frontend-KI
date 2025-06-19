@@ -133,7 +133,7 @@ const CreateSubmissionPaten = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "auto",
     });
   }, [currentStep]);
 

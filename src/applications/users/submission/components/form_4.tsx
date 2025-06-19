@@ -51,8 +51,9 @@ const Form_4 = ({ currentStep, setCurrentStep, submissionType, personalData, dra
             <Field label="Waktu Pertama Kali Diumumkan" value={formCopyright?.timeFirstAnnounced ?? ""} name="twitter" type="text" placeholder="" readOnly />
             {/* <Field label="Surat Pernyataan" value={formCopyright?.statementLetter ? formCopyright.statementLetter.name : ""} name="twitter" type="text" placeholder="" readOnly />
             <Field label="surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright ? formCopyright.letterTransferCopyright.name : ""} name="twitter" type="text" placeholder="" readOnly /> */}
-            {formCopyright?.exampleCreation && <Field label="File Ciptaan" value={formCopyright?.exampleCreation ? formCopyright.exampleCreation.name : ""} name="twitter" type="text" placeholder="" readOnly />}
-            {formCopyright?.exampleCreationUrl && <Field label="Url Ciptaan" value={formCopyright?.exampleCreationUrl} name="twitter" type="text" placeholder="" readOnly />}
+            {formCopyright?.exampleCreation instanceof File && <Field label="File Ciptaan" value={formCopyright.exampleCreation.name} name="fileName" type="text" placeholder="" readOnly />}
+
+            {typeof formCopyright?.exampleCreation === "string" && <Field label="URL Ciptaan" value={formCopyright.exampleCreation} name="exampleCreation" type="text" placeholder="" readOnly />}
           </div>
         )}
         {submissionType === "Merek" && (

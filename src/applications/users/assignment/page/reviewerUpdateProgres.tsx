@@ -12,9 +12,10 @@ import SideSubmisson from "../../../../components/adminNavigation/sideSubmisson"
 import HeaderNavigation from "../../../../components/adminNavigation/headerNavigation";
 import ModalLoading from "../../../../components/modal/modalLoading";
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb";
+import ModalWarningProgress from "../../../../components/modal/modalWarningProgress";
 
 const ReviewerUpdateProgres = () => {
-  const { formUpdateProgress, formErrors, handleChange, handleFileChange, handleRemoveFile, handleUpdateProgress, loading } = useUpdateProgress();
+  const { formUpdateProgress, handleSaveClickReviewer, formErrors, handleChange, handleFileChange, handleRemoveFile, loading, handleUpdateProgress, setPendingType, handleCloseModal, activeModal, message } = useUpdateProgress();
 
   return (
     <>
@@ -99,7 +100,7 @@ const ReviewerUpdateProgres = () => {
                   </div>
                 </div>
                 <div className="flex justify-end mt-10">
-                  <button onClick={handleUpdateProgress} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
+                  <button onClick={handleSaveClickReviewer} className="bg-PRIMARY01 px-4 py-2 text-white font-medium rounded-md cursor-pointer">
                     Simpan Perubahan
                   </button>
                 </div>
@@ -107,6 +108,17 @@ const ReviewerUpdateProgres = () => {
             </div>
           </div>
           <ModalLoading show={loading} />
+          <ModalWarningProgress
+            modal={activeModal === "warningUpdateProgressReviewer"}
+            setModal={handleCloseModal}
+            message={message}
+            handleNext={() => {
+              handleCloseModal();
+              handleUpdateProgress();
+              setPendingType(undefined);
+            }}
+            handleClose={handleCloseModal}
+          />
         </div>
       </div>
     </>

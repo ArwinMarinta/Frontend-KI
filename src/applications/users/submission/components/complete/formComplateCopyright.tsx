@@ -6,9 +6,10 @@ interface FormComplaCopyright {
   handleChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => void;
   formCopyrightError?: FormSubmissionCopyrightError;
   handleUpdate: () => void;
+  openWarningModal: (type: string, submitFn: () => void) => void;
 }
 
-const FormComplateCopyright = ({ formCopyright, handleChange, formCopyrightError, handleUpdate }: FormComplaCopyright) => {
+const FormComplateCopyright = ({ formCopyright, handleChange, formCopyrightError, handleUpdate, openWarningModal }: FormComplaCopyright) => {
   return (
     <>
       <div className="mb-20 font-bold text-center text-4xl">Lengkapi Berkas Hak Cipta</div>
@@ -17,7 +18,7 @@ const FormComplateCopyright = ({ formCopyright, handleChange, formCopyrightError
         <InputFile label="Surat Pengalihan Hak Cipta" value={formCopyright?.letterTransferCopyright} name="letterTransferCopyright" required onChange={handleChange} error={formCopyrightError?.letterTransferCopyright} need message="Format file harus berupa pdf. Max 20 MB" accept=".pdf" />
       </div>
       <div className="flex justify-end mt-16">
-        <button onClick={handleUpdate} className="bg-PRIMARY01 px-4 py-2 flex flex-row items-center  gap-2 text-white font-medium rounded-md cursor-pointer">
+        <button onClick={() => openWarningModal("LengkapiBerkasPaten", handleUpdate)} className="bg-PRIMARY01 px-4 py-2 flex flex-row items-center  gap-2 text-white font-medium rounded-md cursor-pointer">
           Kirim
         </button>
       </div>

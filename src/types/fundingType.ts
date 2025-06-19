@@ -64,3 +64,26 @@ export interface PeriodQouta {
   updatedAt: string;
   group: Group[];
 }
+
+export interface QuotaLanding {
+  id: number;
+  groupId: number;
+  title: string;
+  quota: number;
+  remainingQuota: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface GroupLanding {
+  id: number;
+  periodId: number;
+  group: string;
+  startDate: string | null;
+  endDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  quota: QuotaLanding[];
+}

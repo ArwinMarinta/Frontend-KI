@@ -18,8 +18,6 @@ const SubmissionHistory = () => {
   const { user, limit, currentPage, totalPages, dispatch, type, handleDeleteSubmission, search, setSearch } = useHistorySubmission();
   const { activeModal, handleOpenModal, handleCloseModal, setId, setMessage, id, message } = useModal();
 
-  console.log(user);
-
   const handleModal = (id: number | null, types: string) => {
     if (types === "Delete") {
       setId(id);
@@ -82,20 +80,48 @@ const SubmissionHistory = () => {
                   search={search}
                   onSearchChange={setSearch}
                   columns={[
-                    ...(type !== "Merek"
+                    ...(type === "desain-industri"
                       ? [
                           {
-                            label: "Judul Ciptaan",
+                            label: "Judul Desain Industri",
+                            accessor: "submission",
+                            render: (item: Review) => item?.submission?.industrialDesign?.titleDesign ?? "-",
+                            width: "w-1/3",
+                          },
+                        ]
+                      : type === "hak-cipta"
+                      ? [
+                          {
+                            label: "Judul Hak Cipta",
                             accessor: "submission",
                             render: (item: Review) => item?.submission?.copyright?.titleInvention ?? "-",
                             width: "w-1/3",
                           },
                         ]
-                      : [
+                      : type === "paten"
+                      ? [
                           {
-                            label: "Tipe Merek",
+                            label: "Judul Paten",
                             accessor: "submission",
-                            render: (item: Review) => item?.submission?.brand?.brandTypeId ?? "-",
+                            render: (item: Review) => item?.submission?.patent?.inventionTitle ?? "-",
+                            width: "w-1/3",
+                          },
+                        ]
+                      : // : type === "merek"
+                        // ? [
+                        //     {
+                        //       label: "Tipe Merek",
+                        //       accessor: "submission",
+                        //       render: (item: Review) => item?.submission?.brand?.brandTypeId ?? "-",
+                        //     },
+                        //   ]
+                        // :
+                        [
+                          {
+                            label: "Judul Merek",
+                            accessor: "submission",
+                            render: (item: Review) => item?.submission?.copyright?.titleInvention ?? "-",
+                            width: "w-1/3",
                           },
                         ]),
                     { label: "Status Pengajuan", accessor: "submission", render: (item) => item?.centralStatus, width: "w-1/3" },

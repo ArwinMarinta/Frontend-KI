@@ -16,7 +16,7 @@ export const register = (fullname: string, email: string, password: string, navi
       });
 
       if (response.status === 201) {
-        navigate("/verify-email");
+        navigate("/verify-email", { state: { email: email } });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

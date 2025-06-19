@@ -1,9 +1,7 @@
 import { Dropdown } from "flowbite-react";
-import ProfileImage from "../../assets/images/profile.webp";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSettings, IoMdNotificationsOutline } from "react-icons/io";
-// import { RiHistoryLine } from "react-icons/ri";
-// import { BiTask } from "react-icons/bi";
+import profileImage from "../../assets/images/profile_blank.svg";
 import { FiLogOut } from "react-icons/fi";
 import useProfile from "../../hooks/useProfile";
 import { FaCaretDown } from "react-icons/fa";
@@ -22,6 +20,7 @@ import LogoKI from "../../assets/logo_ki.webp";
 import { BiTask } from "react-icons/bi";
 import { RiHistoryLine } from "react-icons/ri";
 import { FaAnglesLeft } from "react-icons/fa6";
+import { API_FILE } from "../../config/config";
 
 const HeaderNavigation = () => {
   const { user, handleLogout, token } = useProfile();
@@ -129,7 +128,7 @@ const HeaderNavigation = () => {
             dismissOnClick={false}
             renderTrigger={() => (
               <button className="flex flex-row items-center gap-2">
-                <img src={ProfileImage} alt="image" className="h-10  rounded-full" />
+                <img src={user?.image ? `${API_FILE}/image/${user.image}` : profileImage} alt="image" className="h-10  rounded-full" />
                 <span className="font-medium hidden  lg:block">{truncateText2(user?.fullname)}</span>
                 <FaCaretDown />
               </button>
@@ -138,7 +137,7 @@ const HeaderNavigation = () => {
           >
             <div className="flex flex-col w-full ">
               <div className="flex w-full flex-row items-center py-2 px-4 gap-4">
-                <img src={ProfileImage} alt="image" className="h-10 rounded-full" />
+                <img src={user?.image ? `${API_FILE}/image/${user.image}` : profileImage} alt="image" className="h-10 rounded-full" />
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="font-semibold text-black overflow-hidden whitespace-nowrap truncate">{user?.fullname ?? "-"}</span>
                   <span className="text-sm text-[#B2B2B2] overflow-hidden whitespace-nowrap truncate">{user?.email ?? "-"}</span>

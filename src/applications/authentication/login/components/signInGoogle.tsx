@@ -10,9 +10,9 @@ const GoogleLogin = () => {
   const navigate = useNavigate();
 
   const loginGoogle = useGoogleLogin({
-    onSuccess: (responseGoogle) => dispatch(loginWithGoogleAction(responseGoogle.access_token, navigate)),
+    onSuccess: (responseGoogle) => dispatch(loginWithGoogleAction(responseGoogle?.access_token, navigate)),
     onError: (errorResponse) => {
-      alert(errorResponse.error_description);
+      alert(errorResponse?.error_description);
     },
   });
   return (

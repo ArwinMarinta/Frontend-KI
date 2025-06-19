@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Group } from "../../types/fundingType";
+import { Group, GroupLanding } from "../../types/fundingType";
 import { FaqCategoryType, FaqType } from "../../types/faqType";
 import { DocumentCategoryType, DocumentType } from "../../types/document";
 import { CopyrightType, SubCopyrightType } from "../../types/copyright";
@@ -48,7 +48,7 @@ interface LandingState {
     };
   };
   terms: TermType[] | null;
-  qouta: Group[] | null;
+  qouta: GroupLanding[] | null;
   detailPaten: PatentType | null;
   detailCopyright: SubmissionCopyrightType | null;
   detailBrand: SubmissionBrand | null;

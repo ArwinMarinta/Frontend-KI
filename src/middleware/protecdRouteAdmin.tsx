@@ -17,10 +17,10 @@ export const ProtectedRouteAdmin: FC = () => {
       try {
         const decodedData = decodeJwt(token) as DecodedToken;
         if (decodedData.role !== "admin" && decodedData.role !== "superAdmin") {
-          navigate("/*");
+          navigate("/");
         }
       } catch {
-        navigate("/*");
+        navigate("/");
       }
     }
   }, [token, navigate]);
@@ -34,9 +34,9 @@ export const ProtectedRouteAdmin: FC = () => {
     if (decodedData.role === "admin" || decodedData.role === "superAdmin") {
       return <Outlet />;
     } else {
-      return <Navigate to="/*" />;
+      return <Navigate to="/" />;
     }
   } catch {
-    return <Navigate to="/*" />;
+    return <Navigate to="/" />;
   }
 };

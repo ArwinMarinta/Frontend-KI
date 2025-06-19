@@ -14,13 +14,15 @@ export type FormStepProps = {
   // setPersonalData: React.Dispatch<React.SetStateAction<FormPersonalData[]>>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof FormPersonalData) => void;
   addContributor: () => void;
-  removeContributor: (id: number) => void;
+  removeContributor?: (id: number) => void;
+  deleteContributor?: (id: number | null) => void;
   handleNextStep: () => void;
   error: PersonalDataError[];
   types?: string;
+  update?: boolean;
 };
 
-const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error, types }: FormStepProps) => {
+const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, handleChange, addContributor, removeContributor, handleNextStep, error, types, deleteContributor, update = false }: FormStepProps) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center md:mt-20 mt-10 gap-6">
@@ -81,7 +83,21 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
                 <>
                   <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                     <Field label="Facebook" value={item.facebook || ""} name="facebook" type="text" placeholder="" onChange={(e) => handleChange(e, index, "facebook")} error={error[index]?.facebook} />
-                    <Field label="Whatsapp" value={item.whatsapp || ""} name="whatsapp" type="text" placeholder="" onChange={(e) => handleChange(e, index, "whatsapp")} error={error[index]?.whatsapp} />
+                    <Field
+                      label="Whatsapp"
+                      value={item.whatsapp || ""}
+                      name="whatsapp"
+                      type="tel"
+                      placeholder=""
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        // Hanya izinkan angka dan panjang 10-15
+                        if (/^\d{0,15}$/.test(val)) {
+                          handleChange(e, index, "whatsapp");
+                        }
+                      }}
+                      error={error[index]?.whatsapp}
+                    />
                   </div>
                   <div className="flex flex-col lg:flex-row lg:gap-6 gap-4">
                     <Field label="Instagram" value={item.instagram || ""} name="instagram" type="text" placeholder="" onChange={(e) => handleChange(e, index, "instagram")} error={error[index]?.instagram} />
@@ -105,13 +121,23 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
                 edite={types}
               />
 
-              {personalData.length > 1 && index !== 0 ? (
+              {personalData.length > 1 && index !== 0 && (
                 <div className="flex justify-end mt-10">
-                  <button onClick={() => removeContributor(index)} className="bg-RED01 py-1 px-4 text-white rounded-md">
+                  <button
+                    onClick={() => {
+                      if (item?.id === null) {
+                        removeContributor?.(index);
+                        // deleteContributor?.(item.id);
+                      } else {
+                        deleteContributor?.(item.id);
+                      }
+                    }}
+                    className="bg-RED01 py-1 px-4 text-white rounded-md"
+                  >
                     Hapus
                   </button>
                 </div>
-              ) : null}
+              )}
             </div>
           </>
         ))}
@@ -126,7 +152,7 @@ const Form_2 = ({ submissionType, currentStep, setCurrentStep, personalData, han
 
       <div className="mt-20 w-full flex flex-row md:justify-end justify-center gap-6">
         <PrevButton onClick={() => setCurrentStep(currentStep - 1)} />
-        <NextButton onClick={handleNextStep} />
+        <NextButton onClick={handleNextStep} type={update} />
       </div>
     </div>
   );

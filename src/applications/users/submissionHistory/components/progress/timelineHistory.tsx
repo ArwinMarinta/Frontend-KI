@@ -1,19 +1,19 @@
 import { statusDescriptions } from "../../../../../data/submissionStatus";
-import { SubmissionProgress } from "../../../../../types/submissionType";
+import { Review } from "../../../../../types/submissionType";
 import { getStatusColor } from "../../../../../utils/colorsTimeline";
 import { getHrefByFileName } from "../../../../../utils/detecdtedFile";
 import { formatIndonesianDateTime } from "../../../../../utils/formatDate";
 import { FaCheck } from "react-icons/fa";
 
 interface TimelineHistoryProps {
-  data?: SubmissionProgress[] | null;
+  data?: Review | null;
 }
 
 const TimelineHistory = ({ data }: TimelineHistoryProps) => {
   const validStatuses = ["Revisi", "Skema Pendanaan", "Pembayaran", "Lengkapi Berkas"];
   return (
     <div>
-      {data?.map((item, id) => (
+      {data?.progress?.map((item, id) => (
         <div key={id} className="flex items-start space-x-2">
           {/* Column 1: Status */}
           {/* <div className="w-[15%] mt-4 flex items-center justify-center font-semibold text-center py-2 bg-GREY01 rounded-md">{item.status}</div> */}

@@ -5,7 +5,7 @@ import FormCopyright from "../formCopyright";
 import Form_2 from "../form_2";
 import SideSubmisson from "../../../../../components/adminNavigation/sideSubmisson";
 import HeaderNavigation from "../../../../../components/adminNavigation/headerNavigation";
-import { getDetailSubmission, updateSubmissionCopyright } from "../../../../../service/actions/submissionAction";
+import { deletePersonalData, getDetailSubmission, updateSubmissionCopyright } from "../../../../../service/actions/submissionAction";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../service/store";
 import useLoadingProses from "../../../../../hooks/useLoadingProses";
@@ -26,14 +26,13 @@ const UpdateUserCopyright = () => {
   const { currentStep, setCurrentStep } = useSubmissionType();
   const { types, submissionId, actionTypes, submissionType } = useComplate();
   const navigate = useNavigate();
-  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData } = usePersonalData();
+  const { personalData, handleChangePerson, addContributor, setPersonalDataError, personalDataError, removeContributor, setPersonalData, updateKtp } = usePersonalData();
   const { formCopyright, handleChangeCopyright, formCopyrightError, setFormCopyrightError, validateCopyrightData, setFormCopyright } = useCopyright();
+  const { token } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(getDetailSubmission(submissionId));
   }, [dispatch, submissionId]);
-
-  console.log(personalData);
 
   function validateKtp(ktp: string | File | null | undefined, ktpName: string | null | undefined) {
     if (typeof ktp === "string" && ktp.trim() !== "") return null;
@@ -91,7 +90,6 @@ const UpdateUserCopyright = () => {
         address: error.address || null,
         ktp: error.ktp || null,
       }));
-      // console.log(newErrors);
 
       setPersonalDataError(newErrors);
       return;
@@ -99,7 +97,7 @@ const UpdateUserCopyright = () => {
 
     setLoading(true);
     try {
-      await dispatch(updateSubmissionCopyright(submissionId, personalData, formCopyright));
+      await dispatch(updateSubmissionCopyright(submissionId, personalData, formCopyright, updateKtp));
       setCurrentStep(0);
       setPersonalData([
         {
@@ -233,7 +231,16 @@ const UpdateUserCopyright = () => {
     initForm();
   }, [types, setFormCopyright, setPersonalData, detailSubmission, actionTypes]);
 
-  // console.log(personalData);
+  const handleDeletePermanen = async (id: number | null) => {
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      await dispatch(deletePersonalData(id, submissionId));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-row w-full h-full bg-[#F6F9FF]">
@@ -259,7 +266,7 @@ const UpdateUserCopyright = () => {
             </div>
             <Stepper currentStep={currentStep} steps={[{ label: "Dokumen Pengajuan" }, { label: "Data Diri" }]} />
 
-            {currentStep === 0 && <FormCopyright handleChange={handleChangeCopyright} formCopyright={formCopyright} formCopyrightError={formCopyrightError} handleNextStep={handleNextStep} />}
+            {currentStep === 0 && <FormCopyright handleChange={handleChangeCopyright} formCopyright={formCopyright} formCopyrightError={formCopyrightError} handleNextStep={handleNextStep} exampleCreation={detailSubmission?.submission?.copyright?.exampleCreation} types={types} />}
             {currentStep === 1 && (
               <Form_2
                 submissionType="Hak Cipta"
@@ -272,6 +279,8 @@ const UpdateUserCopyright = () => {
                 setCurrentStep={setCurrentStep}
                 removeContributor={removeContributor}
                 types={types}
+                deleteContributor={handleDeletePermanen}
+                update={true}
               />
             )}
           </div>

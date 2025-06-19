@@ -5,14 +5,19 @@ import { useState } from "react";
 import { FormUpdateProgress, FormUpdateProgressErrors } from "../types/submissionType";
 import { updateReviewerSubmissionProgress } from "../service/actions/submissionAction";
 import useLoadingProses from "./useLoadingProses";
+import { toast } from "sonner";
+import { useModal } from "./useModal";
 
 const useUpdateProgress = () => {
   const location = useLocation();
   const { loading, setLoading } = useLoadingProses();
-  const { submissionId } = location.state || {};
+  const { submissionId, name } = location.state || {};
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.auth);
+  const { progresSubmission } = useSelector((state: RootState) => state.submission);
+  const { handleOpenModal, setMessage, activeModal, handleCloseModal, message } = useModal();
+  const [pendingType, setPendingType] = useState<string | undefined>();
 
   const [formUpdateProgress, setFormUpdateProgress] = useState<FormUpdateProgress>({
     reviewStatus: "",
@@ -40,20 +45,29 @@ const useUpdateProgress = () => {
         [name]: file,
       }));
 
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: file ? null : "File tidak boleh kosong",
-      }));
+      if (name === "certificateFile") {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          files: file ? null : "Sertifikat wajib diunggah saat status Sertifikat Terbit",
+        }));
+      }
     } else {
       setFormUpdateProgress((prev) => ({
         ...prev,
         [name]: value,
       }));
 
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: value.trim() === "" ? "Field tidak boleh kosong" : null,
-      }));
+      setFormErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+
+        if (name === "reviewStatus") {
+          newErrors.reviewStatus = value.trim() === "" ? "Status tidak boleh kosong" : null;
+        } else if (name === "paymentCode" && formUpdateProgress.reviewStatus === "Pembayaran") {
+          newErrors.paymentCode = value.trim() === "" ? "Payment code wajib diisi" : null;
+        }
+
+        return newErrors;
+      });
     }
   };
 
@@ -93,11 +107,36 @@ const useUpdateProgress = () => {
     }));
   };
 
+  const handleSaveClick = (type: string | undefined) => {
+    const isCommentEmpty = formUpdateProgress.comments.trim() === "";
+    const isFilesEmpty = formUpdateProgress.files.length === 0;
+
+    if (isCommentEmpty && isFilesEmpty) {
+      handleOpenModal(null, "warningUpdateProgressAdmin");
+      setMessage("Apakah Anda yakin ingin mengubah status tanpa mengirim komentar atau file?");
+      setPendingType(type);
+
+      return;
+    }
+  };
+
+  const handleSaveClickReviewer = () => {
+    const isCommentEmpty = formUpdateProgress.comments.trim() === "";
+    const isFilesEmpty = formUpdateProgress.files.length === 0;
+
+    if (isCommentEmpty && isFilesEmpty) {
+      handleOpenModal(null, "warningUpdateProgressReviewer");
+      setMessage("Apakah Anda yakin ingin mengubah status tanpa mengirim komentar atau file?");
+
+      return;
+    }
+  };
+
   const handleUpdateProgress = async () => {
     const validationErrors = {
       reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
       paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
-      certificateFile: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
+      files: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
     };
     const hasErrors = Object.values(validationErrors).some((error) => error !== null);
     setFormErrors(validationErrors);
@@ -126,13 +165,25 @@ const useUpdateProgress = () => {
   const handleUpdateProgressAdmin = async (type: string | undefined) => {
     const validationErrors = {
       reviewStatus: formUpdateProgress.reviewStatus?.trim() === "" ? "Status tidak boleh kosong" : null,
-      paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Payment code wajib diisi untuk status Pembayaran" : null,
-      certificateFile: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
+      paymentCode: formUpdateProgress.reviewStatus === "Pembayaran" && formUpdateProgress.paymentCode.trim() === "" ? "Kode Pembayaran wajib diisi untuk status Pembayaran" : null,
+      files: formUpdateProgress.reviewStatus === "Sertifikat Terbit" && !formUpdateProgress.certificateFile ? "Sertifikat wajib diunggah saat status Sertifikat Terbit" : null,
     };
+
     const hasErrors = Object.values(validationErrors).some((error) => error !== null);
     setFormErrors(validationErrors);
 
     if (hasErrors) return;
+
+    if (formUpdateProgress.reviewStatus === "Pembayaran" && progresSubmission?.submission?.submissionScheme === null) {
+      toast.warning("Pengajuan ini belum memilih skema pendanaan");
+      return;
+    } else if (formUpdateProgress?.reviewStatus === "Sertifikat Terbit" && progresSubmission?.submission?.submissionScheme === null) {
+      toast.warning("Pengajuan ini belum memilih skema pendanaan dan belum melengkapi berkas ");
+      return;
+    } else if (formUpdateProgress?.reviewStatus === "Pembayaran" && progresSubmission?.submission?.submissionScheme === "Pendanaan") {
+      toast.warning("Pengajuan ini skema pendanaan");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -165,6 +216,14 @@ const useUpdateProgress = () => {
     handleUpdateProgress,
     loading,
     handleUpdateProgressAdmin,
+    handleSaveClick,
+    pendingType,
+    setPendingType,
+    activeModal,
+    handleCloseModal,
+    message,
+    name,
+    handleSaveClickReviewer,
   };
 };
 

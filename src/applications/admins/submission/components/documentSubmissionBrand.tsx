@@ -11,7 +11,7 @@ const DocumentSubmissionBrand = ({ data }: DocumentType) => {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Tipe Permohonan" value={data?.applicationType ?? "-"} name="fullname" type="text" placeholder="" readOnly />
-        <Field label="Tipe Merek" value={data?.brandTypeId?.toString() ?? "-"} name="fullname" type="text" placeholder="" readOnly />
+        <Field label="Tipe Merek" value={data?.brandType?.title ?? ""} name="fullname" type="text" placeholder="" readOnly />
       </div>
       <div className="flex flex-col lg:flex-row gap-6">
         <Field label="Nama Refrensi Label Merek" value={data?.referenceName ?? "-"} name="fullname" type="text" placeholder="" readOnly />

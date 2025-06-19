@@ -30,12 +30,12 @@ const useSchemaPayment = () => {
     const isPendanaan = formSchemaPayment.submissionScheme === "Pendanaan";
 
     if (!formSchemaPayment.submissionScheme.trim()) {
-      errors.submissionScheme = "Submission Scheme wajib diisi.";
+      errors.submissionScheme = "Jenis skema pendanaan tidak boleh kosong.";
     }
 
     if (isPendanaan) {
       if (!formSchemaPayment.groupId) {
-        errors.groupId = "Group ID wajib diisi untuk pendanaan.";
+        errors.groupId = "Gelombang pendanaan tidak boleh kosong";
       }
       if (formSchemaPayment.termsConditionId.length === 0) {
         errors.termsConditionId = "Prasyarat pendanaan wajib di centang";
@@ -90,8 +90,6 @@ const useSchemaPayment = () => {
     });
   };
 
-  console.log(formSchemaPayment.termsConditionId);
-
   const handleSubmitSchema = async () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) {
@@ -124,6 +122,8 @@ const useSchemaPayment = () => {
     qouta,
     navigate,
     loading,
+    setFormSchemaPayment,
+    setFormSchemaPaymentErrors,
   };
 };
 
