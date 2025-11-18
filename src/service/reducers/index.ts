@@ -7,6 +7,7 @@ import InformationReducer from "./informationReducer";
 import LandingReducer from "./landingReducer";
 import SubmissionReducer from "./submissionReducer";
 import HistoryReducer from "./historyReducer";
+import StatusReducer from "./statusReducer";
 
 export default combineReducers({
   auth: AuthReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   landing: LandingReducer,
   submission: SubmissionReducer,
   history: HistoryReducer,
+  status: StatusReducer,
 });

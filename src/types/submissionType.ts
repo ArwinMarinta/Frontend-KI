@@ -457,3 +457,12 @@ interface BrandType {
   updatedAt: string; // ISO date string
   deletedAt: string | null;
 }
+
+
+export type StatusCentral =  {
+  id: number;
+  name: string;
+  type: string;
+  updatedAt: string; // ISO date string
+  deletedAt: string | null;
+}

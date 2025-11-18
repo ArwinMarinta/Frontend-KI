@@ -132,7 +132,7 @@ const SubmissionCopyright = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusCopyright" || activeModal === "updateStatusCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusCopyright" || activeModal === "updateStatusCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} statusType={"hakcipta"}/>
               <ModalUpdateReviewer modal={activeModal === "updateReviewerCopyright" || activeModal === "updateReviewerCopyright"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionCopyright" || activeModal === "DeleteSubmissionPatent"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
               {/* <ModalLoading show={loading} /> */}

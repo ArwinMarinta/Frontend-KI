@@ -53,6 +53,16 @@ const SideNavigation = () => {
             <Button text={"Pendanaan"} icon={<LuFileSliders className="text-lg" />} url={"/manajemen/tahun/pendanaan"} location={location} />
             <Button text={"S&K Pendanaan"} icon={<TbContract className="text-lg" />} url={"/manajemen/syarat-ketentuan-pendanaan"} location={location} />
           </div>
+
+          <div className="mb-2 flex flex-col gap-1">
+            <h1 className="font-bold text-GREY02 mb-2">STATUS DJKI</h1>
+            <Button text={"Status Hak Cipta"} icon={<HiOutlineMusicNote className="text-lg" />} url={"/status-hak-cipta"} location={location} />
+            <Button text={"Status Paten"} icon={<LuAtom className="text-lg" />}  url={"/status-paten"} location={location} />
+            <Button text={"Status Merek"} icon={<LiaTagSolid className="text-lg" />} url={"/status-brand"} location={location} />
+            <Button text={"Status Desain Industri"} icon={<RxCube className="text-lg" />} url={"/status-industrial-design"} location={location} />
+          </div>
+
+
           <div className="mb-2 flex flex-col gap-1">
             <h1 className="font-bold text-GREY02 mb-2">INFORMASI</h1>
             <Button text={"Laporan & Analisis"} icon={<TbBrandGoogleAnalytics className="text-lg" />} url={"/informasi/laporan-analisis"} location={location} />

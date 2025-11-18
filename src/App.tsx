@@ -73,6 +73,10 @@ import UpdateUserCopyright from "./applications/users/submission/components/comp
 import UpdateUserPaten from "./applications/users/submission/components/complete/updateUserPaten";
 import UpdateDesainIndustri from "./applications/users/submission/components/complete/updateDesainIndustri";
 import UpdateUserBrand from "./applications/users/submission/components/complete/updateUserBrand";
+import StatusBrand from "./applications/admins/status/pages/statusBrand";
+import StatusHakCipta from "./applications/admins/status/pages/statusHakCipta";
+import StatusIndustrialDesign from "./applications/admins/status/pages/statusIndustrialDesign";
+import StatusPatent from "./applications/admins/status/pages/statusPatent";
 import { ProtectedRouteUser } from "./middleware/protectRouteUser";
 import { ProtectedRouteReviewer } from "./middleware/protecdRouteReviewer";
 import { ProtectedRouteAdmin } from "./middleware/protecdRouteAdmin";
@@ -92,6 +96,18 @@ function App() {
         <Route path="/unduhan" element={<Files />} />
         <Route path="/frequently-asked-question" element={<Faq />} />
         <Route path="/hubungi-kami" element={<Contact />} />
+
+{/* 
+        <Route
+          path="/status-paten"
+          element={
+            // <NoAccessToken>
+            //   <StatusPatent />
+            // </NoAccessToken>
+
+            <StatusPatent />
+          }
+        /> */}
         {/* <Route path="/notifikasi" element={<Notification />} /> */}
         <Route
           path="/login"
@@ -309,7 +325,7 @@ function App() {
           />
         </Route>
 
-        <Route element={<ProtectedRouteAdmin />}>
+        <Route >
           <Route
             path="/ubah-password"
             element={
@@ -577,6 +593,45 @@ function App() {
             element={
               <NoAccessToken>
                 <ReportsAnalitic />
+              </NoAccessToken>
+            }
+          />
+
+          {/* Status DJKI */}
+
+          <Route
+            path="/status-paten"
+            element={
+              <NoAccessToken>
+                <StatusPatent/>
+              </NoAccessToken>
+            }
+          />
+
+          <Route
+            path="/status-hak-cipta"
+            element={
+              <NoAccessToken>
+                <StatusHakCipta/>
+              </NoAccessToken>
+            }
+          />
+
+          <Route
+            path="/status-brand"
+            element={
+              <NoAccessToken>
+                <StatusBrand/>
+              </NoAccessToken>
+            }
+          />
+
+
+          <Route
+            path="/status-industrial-design"
+            element={
+              <NoAccessToken>
+                <StatusIndustrialDesign/>
               </NoAccessToken>
             }
           />

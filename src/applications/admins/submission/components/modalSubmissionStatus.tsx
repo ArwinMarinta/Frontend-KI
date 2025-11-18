@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect} from "react";
 import useStatus from "../hooks/useStatus";
 import { Modal } from "flowbite-react";
 import ModalLoading from "../../../../components/modal/modalLoading";
@@ -18,10 +18,11 @@ export interface ModalProps {
   message: string | null;
   status?: string;
   handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  statusType?: string;
 }
 
-const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, handleChange }: ModalProps) => {
-  const { statusError, setStatusError, resetStatus, dispatch, loading, setLoading } = useStatus();
+const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, handleChange , statusType}: ModalProps) => {
+  const { statusError, setStatusError, resetStatus, dispatch, loading, setLoading, setStatusType } = useStatus();
   const location = useLocation();
   const lastSegment = useMemo(() => {
     const parts = location.pathname.split("/");
@@ -48,6 +49,13 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
       limit: industrialDesignData.limit,
     },
   };
+
+
+  useEffect(() => {
+    if (statusType) {
+      setStatusType(statusType);
+    }
+  }, [statusType]);
 
   const { currentPage, limit } = paginationMap[lastSegment] ?? { currentPage: 1, limit: 10 };
 
