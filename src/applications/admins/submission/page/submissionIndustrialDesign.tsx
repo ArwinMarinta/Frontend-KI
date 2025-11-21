@@ -132,7 +132,7 @@ const SubmissionIndustrialDesign = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusIndustrialDesign" || activeModal === "updateStatusIndustrialDesign"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusIndustrialDesign" || activeModal === "updateStatusIndustrialDesign"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} statusType={"desainIndustri"} />
               <ModalUpdateReviewer modal={activeModal === "updateReviewerIndustrialDesign" || activeModal === "updateReviewerIndustrialDesign"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionIndutrialDesign" || activeModal === "DeleteSubmissionIndutrialDesign"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>

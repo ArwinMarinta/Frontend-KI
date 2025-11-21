@@ -132,7 +132,7 @@ const SubmissionBrand = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusBrand" || activeModal === "updateStatusBrand"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} statusType={"brand"} />
               <ModalUpdateReviewer modal={activeModal === "updateReviewerBrand" || activeModal === "updateReviewerBrand"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionBrand" || activeModal === "DeleteSubmissionBrand"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>

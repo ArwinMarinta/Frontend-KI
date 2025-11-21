@@ -77,6 +77,7 @@ export const exportBrandToExcel = (trademark: Review[]) => {
     "Status Pengajuan": item?.centralStatus ?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
+    
   }));
 
   exportDataToExcel(dataToExport, "Permohonan Merek", "Permohonan_Merek.xlsx");

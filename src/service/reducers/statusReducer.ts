@@ -84,10 +84,10 @@ const statusSlice = createSlice({
         case "patent":
           state.patentAll = payload;
           break;
-        case "hakCipta":
+        case "hakcipta":
           state.copyrightAll = payload;
           break;
-        case "merek":
+        case "brand":
           state.brandAll = payload;
           break;
         case "desainIndustri":

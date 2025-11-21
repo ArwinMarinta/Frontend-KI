@@ -132,7 +132,7 @@ const SubmissionPatent = () => {
                   ]}
                 />
               </div>
-              <ModalSubmissionStatus modal={activeModal === "updateStatusPaten" || activeModal === "updateStatusPaten"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} />
+              <ModalSubmissionStatus modal={activeModal === "updateStatusPaten" || activeModal === "updateStatusPaten"} setModal={handleCloseModal} type={type} id={id} message={message} status={status} handleChange={handleChange} statusType={"patent"} />
               <ModalUpdateReviewer modal={activeModal === "updateReviewerPaten" || activeModal === "updateReviewerPaten"} setModal={handleCloseModal} type={type} id={id} message={message} reviewer={reviewer} handleChange={handleChangeReviewer} />
               <ModalWarning modal={activeModal === "DeleteSubmissionPatent" || activeModal === "DeleteSubmissionPatent"} setModal={handleCloseModal} id={id} message={message} handleDelete={handleDeleteSubmission} />
             </div>

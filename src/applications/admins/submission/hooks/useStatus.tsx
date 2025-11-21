@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../service/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../service/store";
 import useLoadingProses from "../../../../hooks/useLoadingProses";
 import { getAllStatusByType } from "../../../../service/actions/statusIprAction";
 
@@ -10,8 +10,10 @@ const useStatus = () => {
   const [statusError, setStatusError] = useState<string | null>(null);
   const { setLoading, loading } = useLoadingProses();
   const [statusTy, setStatusTy] = useState<string>("");
+  const {  patentAll, copyrightAll, desainIndustriAll, brandAll} = useSelector((state: RootState) => state.status);
+  
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = e.target.value;
     setStatus(value);
     if (value.trim() !== "") {
@@ -44,7 +46,11 @@ const useStatus = () => {
     dispatch,
     loading,
     setLoading,
-    setStatusType
+    setStatusType,
+    patentAll, 
+    copyrightAll, 
+    desainIndustriAll, 
+    brandAll
   };
 };
 

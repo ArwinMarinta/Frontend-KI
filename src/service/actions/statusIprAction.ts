@@ -45,7 +45,7 @@ export const getStatusIpr = (currentPage: number, limit: number, type: string, s
 };
 
 
-export const getAllStatusByType = (  type: string): AppThunk => {
+export const getAllStatusByType = (  type: string | undefined): AppThunk => {
   return async (dispatch, getState) => {
     try {
       const { token } = getState().auth;
@@ -56,6 +56,8 @@ export const getAllStatusByType = (  type: string): AppThunk => {
         },
       
       });
+
+      console.log("All Status Response:", response.data);
 
       dispatch(
         getStatusAllByType({
