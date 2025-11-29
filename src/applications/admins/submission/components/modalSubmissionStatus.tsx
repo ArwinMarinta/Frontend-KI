@@ -19,7 +19,7 @@ export interface ModalProps {
   type: string;
   id: number | string | null;
   message: string | null;
-  status?: string;
+  status?: number | string | null;
   handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   statusType?: string;
 }
@@ -31,6 +31,8 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
     const parts = location.pathname.split("/");
     return parts[parts.length - 1];
   }, [location.pathname]);
+
+  console.log("cek status di modal", status)
 
   const statusMap = {
     patent: patentAll,
@@ -70,7 +72,7 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
   const { currentPage, limit } = paginationMap[lastSegment] ?? { currentPage: 1, limit: 10 };
 
   const handleSubmit = async () => {
-    if (!status || status.trim() === "") {
+    if (!status) {
       setStatusError("Status tidak boleh kosong.");
       return;
     }
@@ -101,12 +103,12 @@ const ModalSubmissionStatus = ({ modal, setModal, type, id, message, status, han
             label="Status Pengajuan (DJKI)"
             name="status"
             type="select"
-            value={status ?? ""}
+            value={status?.toString()?? ""}
             onChange={handleChange}
             options={
               selectedStatusData.map((item) => ({
                 label: item.name,
-                value: item.name,
+                value: item.id,
               }))
             }
             error={statusError}

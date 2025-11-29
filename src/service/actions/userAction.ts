@@ -246,14 +246,16 @@ export const updateReviewer = (id: number | string | null, reviewerId: number, t
     }
   };
 };
-export const updateSubmissionStatus = (id: number | string | null, centralStatus: string, type: string, currentPage: number, limit: number): AppThunk => {
+export const updateSubmissionStatus = (id: number | string | null, centralStatus: number | string | null, type: string, currentPage: number, limit: number): AppThunk => {
   return async (dispatch, getState) => {
     try {
+
+      console.log("centralStatus", centralStatus )
       const { token } = getState().auth;
 
       const response = await axios.patch(
         `${API_URL}/user-submission/submission-status/${id}`,
-        { centralStatus: centralStatus },
+        { centralStatusId: centralStatus },
         {
           headers: {
             Authorization: `Bearer ${token}`,

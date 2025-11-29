@@ -124,7 +124,7 @@ const SubmissionHistory = () => {
                             width: "w-1/3",
                           },
                         ]),
-                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item?.centralStatus, width: "w-1/3" },
+                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item?.centralStatus?.name, width: "w-1/3" },
                     {
                       label: "Progres Pengajuan",
                       accessor: "submission",

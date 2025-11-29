@@ -6,7 +6,7 @@ import { getAllStatusByType } from "../../../../service/actions/statusIprAction"
 
 const useStatus = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [status, setStatus] = useState<string | undefined>("");
+  const [status, setStatus] = useState<number | string>("");
   const [statusError, setStatusError] = useState<string | null>(null);
   const { setLoading, loading } = useLoadingProses();
   const [statusTy, setStatusTy] = useState<string>("");

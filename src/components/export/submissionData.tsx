@@ -42,11 +42,12 @@ const exportDataToExcel = (data: ExportRow[], sheetName: string, fileName: strin
 
 // Fungsi khusus untuk export Hak Cipta
 export const exportCopyrightToExcel = (copyright: Review[]) => {
+  console.log("cek exportnya", copyright)
   const dataToExport = copyright.map((item) => ({
     "Nama Pemohon": item?.user?.fullname ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
-    "Status Pengajuan": item?.centralStatus ?? "-",
+    "Status Pengajuan": item?.centralStatus?.name ?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
   }));
@@ -60,7 +61,7 @@ export const exportPatentToExcel = (patent: Review[]) => {
     "Nama Pemohon": item?.user?.fullname ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
-    "Status Pengajuan": item?.centralStatus ?? "-",
+    "Status Pengajuan": item?.centralStatus?.name?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
   }));
@@ -74,7 +75,7 @@ export const exportBrandToExcel = (trademark: Review[]) => {
     "Nama Pemohon": item?.user?.fullname ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
-    "Status Pengajuan": item?.centralStatus ?? "-",
+    "Status Pengajuan": item?.centralStatus?.name?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
     
@@ -89,7 +90,7 @@ export const exportIndustrialDesignToExcel = (industrialDesign: Review[]) => {
     "Nama Pemohon": item?.user?.fullname ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
-    "Status Pengajuan": item?.centralStatus ?? "-",
+    "Status Pengajuan": item?.centralStatus?.name ?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
   }));

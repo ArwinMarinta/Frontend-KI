@@ -6,7 +6,7 @@ export interface Review {
   userId: number;
   reviewerId: number | null;
   submissionId: number;
-  centralStatus: string;
+  centralStatus: CentralStatus | null;
   reviewStatus: string;
   createdAt: string;
   updatedAt: string;
@@ -464,5 +464,13 @@ export type StatusCentral =  {
   name: string;
   type: string;
   updatedAt: string; // ISO date string
+  deletedAt: string | null;
+}
+
+export type CentralStatus = {
+  id: number | string;
+  name: string;
+  type: string;
+  updatedAt: string | null;
   deletedAt: string | null;
 }

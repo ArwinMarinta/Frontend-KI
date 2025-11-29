@@ -88,8 +88,8 @@ const SubmissionBrand = () => {
                       label: "Status Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Status", item.centralStatus)} title={item.centralStatus} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
-                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item.centralStatus)}</span>
+                        <button onClick={() => handleModal(item.id, "Status", item?.centralStatus?.name)} title={item?.centralStatus?.name} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
+                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item?.centralStatus?.name)}</span>
                         </button>
                       ),
                     },

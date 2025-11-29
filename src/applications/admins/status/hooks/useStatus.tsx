@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../service/store";
-import { FormBrand } from "../../../../types/brandType";
-import { deleteCategoryCopyright, getCategoryCopyright } from "../../../../service/actions/categoryCopyrightAction";
-import { deleteStatusIpr } from "../../../../service/actions/statusIprAction";
+// import { FormBrand } from "../../../../types/brandType";
+// import { deleteCategoryCopyright, getCategoryCopyright } from "../../../../service/actions/categoryCopyrightAction";
+// import { deleteStatusIpr } from "../../../../service/actions/statusIprAction";
 
 type FormStatus = {
   title: string;

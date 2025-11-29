@@ -24,7 +24,7 @@ const SubmissionCopyright = () => {
   const { setStatus, status, handleChange } = useStatus();
   const { reviewer, setReviewer, handleChange: handleChangeReviewer } = useReviewer();
 
-  const handleModal = (id: number | null, types: string, status?: string | null | undefined, reviewerId?: number) => {
+  const handleModal = (id: number | null, types: string, status?: string | number, reviewerId?: number) => {
     if (types === "Delete") {
       setId(id);
       handleOpenModal(id, "DeleteSubmissionCopyright");
@@ -38,7 +38,7 @@ const SubmissionCopyright = () => {
       setId(id);
       handleOpenModal(id, "updateStatusCopyright");
       setMessage("Ubah Status Pengajuan");
-      setStatus(status ?? "Draft");
+      setStatus(status ?? "");
     }
   };
 
@@ -79,7 +79,7 @@ const SubmissionCopyright = () => {
                       label: "Reviewer",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item.id, "Reviewer", null, item.reviewer?.id)} title="Klik untuk mengubah Reviewer" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
+                        <button onClick={() => handleModal(item.id, "Reviewer", item.reviewer?.id)} title="Klik untuk mengubah Reviewer" className="py-1 px-4 w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center whitespace-nowrap">
                           {item.reviewer?.fullname ?? "-"}
                         </button>
                       ),
@@ -88,8 +88,8 @@ const SubmissionCopyright = () => {
                       label: "Status Pengajuan",
                       accessor: "submission",
                       render: (item) => (
-                        <button onClick={() => handleModal(item?.id, "Status", item?.centralStatus)} title={item?.centralStatus} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
-                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item?.centralStatus)?? "-"}</span>
+                        <button onClick={() => handleModal(item?.id, "Status", item?.centralStatus?.id)} title={item?.centralStatus?.name} className="py-1 px-4 w-full max-w-full bg-white border border-GREY04 hover:bg-GREY04 hover:text-white rounded-md flex items-center justify-center">
+                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap  text-center">{truncateText(item?.centralStatus?.name)?? "-"}</span>
                         </button>
                       ),
                     },
