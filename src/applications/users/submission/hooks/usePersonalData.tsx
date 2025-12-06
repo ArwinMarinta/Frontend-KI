@@ -98,12 +98,12 @@ const usePersonalData = () => {
       const file = (e.target as HTMLInputElement).files?.[0];
 
       if (file) {
-        const maxSize = 20 * 1024 * 1024;
+        const maxSize = 5 * 1024 * 1024;
 
         if (file.size > maxSize) {
           updatedError[index] = {
             ...updatedError[index],
-            [field]: "Ukuran file maksimal 20MB",
+            [field]: "Ukuran file maksimal 5MB",
           };
         } else {
           setUpdateKtp((prev) => [...prev, file]);

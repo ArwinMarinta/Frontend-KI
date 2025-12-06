@@ -4,6 +4,15 @@ import { Review } from "../../types/submissionType";
 
 type ExportRow = { [key: string]: string | number | undefined };
 
+export const parseISO = (value?: string | null) => {
+  if (!value || typeof value !== "string") return "-";
+
+  const iso = value.trim();
+  if (!iso.includes("T")) return iso; 
+
+  return iso.replace("T", " ").replace("Z", "");
+};
+
 // Fungsi export umum
 const exportDataToExcel = (data: ExportRow[], sheetName: string, fileName: string) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
@@ -42,14 +51,17 @@ const exportDataToExcel = (data: ExportRow[], sheetName: string, fileName: strin
 
 // Fungsi khusus untuk export Hak Cipta
 export const exportCopyrightToExcel = (copyright: Review[]) => {
-  console.log("cek exportnya", copyright)
-  const dataToExport = copyright.map((item) => ({
+  const dataToExport = copyright.map((item, index) => ({
+    "id": index + 1,
     "Nama Pemohon": item?.user?.fullname ?? "-",
+    "Judul Hak Cipta": item?.submission?.copyright?.titleInvention ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
     "Status Pengajuan": item?.centralStatus?.name ?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
+    "Terakhir Diperbarui": parseISO(item?.updatedAt) ?? "-",
+    "Dibuat": parseISO(item?.createdAt )?? "-",
   }));
 
   exportDataToExcel(dataToExport, "Permohonan Hak Cipta", "Permohonan_Hak_Cipta.xlsx");
@@ -57,13 +69,18 @@ export const exportCopyrightToExcel = (copyright: Review[]) => {
 
 // Fungsi khusus untuk export Paten
 export const exportPatentToExcel = (patent: Review[]) => {
-  const dataToExport = patent.map((item) => ({
+  // console.log("cek exportnya", copyright)
+  const dataToExport = patent.map((item, index) => ({
+    "id": index + 1,
     "Nama Pemohon": item?.user?.fullname ?? "-",
+    "Judul Paten": item?.submission?.patent?.inventionTitle ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
     "Status Pengajuan": item?.centralStatus?.name?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
+    "Terakhir Diperbarui": parseISO(item?.updatedAt) ?? "-",
+    "Dibuat": parseISO(item?.createdAt) ?? "-",
   }));
 
   exportDataToExcel(dataToExport, "Permohonan Paten", "Permohonan_Paten.xlsx");
@@ -71,14 +88,16 @@ export const exportPatentToExcel = (patent: Review[]) => {
 
 // Fungsi khusus untuk export Merek
 export const exportBrandToExcel = (trademark: Review[]) => {
-  const dataToExport = trademark.map((item) => ({
+  const dataToExport = trademark.map((item, index) => ({
+    "id": index + 1,
     "Nama Pemohon": item?.user?.fullname ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
     "Status Pengajuan": item?.centralStatus?.name?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
-    
+    "Terakhir Diperbarui": parseISO(item?.updatedAt) ?? "-",
+    "Dibuat": parseISO(item?.createdAt) ?? "-",
   }));
 
   exportDataToExcel(dataToExport, "Permohonan Merek", "Permohonan_Merek.xlsx");
@@ -86,13 +105,17 @@ export const exportBrandToExcel = (trademark: Review[]) => {
 
 // Fungsi khusus untuk export Desain Industri
 export const exportIndustrialDesignToExcel = (industrialDesign: Review[]) => {
-  const dataToExport = industrialDesign.map((item) => ({
+  const dataToExport = industrialDesign.map((item, index) => ({
+    "id": index + 1,
     "Nama Pemohon": item?.user?.fullname ?? "-",
+    "Judul Desain Industri": item?.submission?.industrialDesign?.titleDesign ?? "-",
     Pembayaran: item?.submission?.submissionScheme ?? "-",
     Reviewer: item?.reviewer?.fullname ?? "-",
     "Status Pengajuan": item?.centralStatus?.name ?? "-",
     "Progres Pengajuan": item?.progress?.[0]?.status ?? "-",
     Anggota: item?.submission?.personalDatas ? item.submission.personalDatas.map((user) => user.name).join(", ") : "-",
+    "Terakhir Diperbarui": parseISO(item?.updatedAt) ?? "-",
+    "Dibuat": parseISO(item?.createdAt) ?? "-",
   }));
 
   exportDataToExcel(dataToExport, "Permohonan Desain Industri", "Permohonan_Desain_Industri.xlsx");
