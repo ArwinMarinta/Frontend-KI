@@ -3,7 +3,7 @@ import SideNavigation from "../../../../components/adminNavigation/sideNavigatio
 import Breadcrumb from "../../../../components/breadcrumb.tsx/breadcrumb"
 import AddButton from "../../../../components/button/addButton";
 import DeleteButton from "../../../../components/button/deleteButton";
-import ManageButton from "../../../../components/button/manageButton";
+// import ManageButton from "../../../../components/button/manageButton";
 import UpdateButton from "../../../../components/button/updateButton";
 import ModalWarning from "../../../../components/modal/modalWarning";
 import TableWithPagination from "../../../../components/table/tableComponent";
@@ -11,7 +11,7 @@ import { useModal } from "../../../../hooks/useModal";
 import { setCurrentPage, setLimit } from "../../../../service/reducers/statusReducer";
 import { StatusCentral } from "../../../../types/submissionType";
 import ModalStatus from "../components/modalStatus";
-import useStatus from "../hooks/useStatus";
+// import useStatus from "../hooks/useStatus";
 import useStatusIndutrial from "../hooks/useStatusIndustrialDesign";
 
 const statusIndustrialDesign = () => {

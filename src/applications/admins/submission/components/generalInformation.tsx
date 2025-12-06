@@ -15,7 +15,7 @@ const GeneralInformation = ({ data, terms, status }: GeneralType) => {
   return (
     <div className="flex flex-col gap-6">
       <Field label="Jenis Pengajuan" value={data?.submission?.submissionType?.title || "-"} name="fullname" type="text" placeholder="" readOnly />
-      <Field label="Status Terakhir" value={data?.centralStatus || "-"} name="fullname" type="text" placeholder="" readOnly />
+      <Field label="Status Terakhir" value={String(data?.centralStatus ?? "-")} name="fullname" type="text" placeholder="" readOnly />
       <Field label="Progres Terakhir" value={data?.progress[0].status || "-"} name="fullname" type="text" placeholder="" readOnly />
 
       <div className="flex lg:flex-row flex-col w-full gap-6">

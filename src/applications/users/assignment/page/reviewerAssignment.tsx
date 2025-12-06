@@ -46,7 +46,7 @@ const ReviewerAssignment = () => {
                         }
                       },
                     },
-                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item.centralStatus },
+                    { label: "Status Pengajuan", accessor: "submission", render: (item) => item?.centralStatus?.name },
                     {
                       label: "Progres Pengajuan",
                       accessor: "submission",

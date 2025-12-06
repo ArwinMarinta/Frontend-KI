@@ -79,7 +79,7 @@ import StatusIndustrialDesign from "./applications/admins/status/pages/statusInd
 import StatusPatent from "./applications/admins/status/pages/statusPatent";
 import { ProtectedRouteUser } from "./middleware/protectRouteUser";
 import { ProtectedRouteReviewer } from "./middleware/protecdRouteReviewer";
-import { ProtectedRouteAdmin } from "./middleware/protecdRouteAdmin";
+// import { ProtectedRouteAdmin } from "./middleware/protecdRouteAdmin";
 import { ProtectedRouteSuperAdmin } from "./middleware/protecdRouteSuperAdmin";
 import ProtectedToken from "./middleware/protecdToken";
 
